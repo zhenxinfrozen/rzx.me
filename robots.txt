@@ -1,0 +1,10 @@
+user-agent:*
+
+
+Disallow:/lab
+Disallow:/blog/wp-admin
+Disallow:/blog/wp-includes
+Disallow:/blog/wp-content/plugins
+Disallow:/blog/wp-content/cache
+Disallow:/blog/wp-content/themes
+Disallow:/blog/wp-login.php
