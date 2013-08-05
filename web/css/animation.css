@@ -1,0 +1,92 @@
+@charset "utf-8";
+/* CSS Document */
+
+.title{
+	text-align:center;
+	color:#999999;
+	font-size:30px;
+	font-weight:800;
+	font-family:Tahoma, Geneva, sans-serif;
+}
+.anim_pic{
+	margin:10px auto;
+	width:840px;
+	height:360px;
+}
+.pi1, .pi2, .pi3, .pi4{
+	width:200px;
+	height:360px;
+	float:left;
+	margin:0 5px;
+}
+
+.pi1{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat 0 0;
+}
+.pi1:hover{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat 0 -360px;
+}
+.pi1:active{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat 0 -720px;
+}
+.pi2{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat -200px 0;
+}
+.pi2:hover{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat -200px -360px;
+}
+.pi2:active{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat -200px -720px;
+}
+.pi3{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat -400px 0;
+}
+.pi3:hover{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat -400px -360px;
+}
+.pi3:active{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat -400px -720px;
+}
+.pi4{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat -600px 0;
+}
+.pi4:hover{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat -600px -360px;
+}
+.pi4:active{
+	background:url(http://pic.rzx.me/rzxme/web/images/anim.jpg) no-repeat -600px -720px;
+}
+
+
+.vider-1{
+	width:840px;
+	margin:5px auto;
+}
+.video{
+	background:#FFF;
+	width:840px;
+	margin:0 auto;
+}
+.video-x{
+	background:url(http://pic.rzx.me/rzxme/web/images/grid-loading.gif) no-repeat center center;
+	width:356px;
+	height:233px;
+	float:left;
+	margin:10px 30px;
+}
+.video-y{
+	background:url(http://pic.rzx.me/rzxme/web/images/grid-loading.gif) no-repeat center center;
+	width:260px;
+	float:left;
+	margin:10px 10px;
+	overflow:hidden;
+}
+.html5-tip{
+	background:#C90;
+	padding:3px 10px;
+	text-align:center;
+	font-size:10px;
+	font-weight:800;
+	color:#FFF;
+}
+
