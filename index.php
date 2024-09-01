@@ -6,7 +6,8 @@
   <title>我的简单网站</title>
 </head>
 <body>
-  <h1>欢迎来到我的简单网站！</h1>
-  <p>这是一个简单的 GitHub Pages 网站。</p>
+  <h1>光阴似箭，转瞬即逝，若不把握当下，便只能怀念过去</h1>
+  <p>这是一个简单的 GitHub Pages 网站。github.rzx.me</p>
+  <p>Frome https://rzx.me/ </p>
 </body>
 </html>
