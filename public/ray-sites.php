@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
@@ -8,12 +9,13 @@
 <meta name="description" content="颓废动画人的个人网站，涂鸦和作品练习.扯淡的东西. This site is a portfolio of Ray art. Hope you enjoy it!" />
 <meta name="author" content="ray,ruizhenxin,rzx.me">
 <link href="/assets/css/sites.css" type="text/css" rel="stylesheet" />
+<link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-3gJwYp8U+Y3f9C5v+XgYh2i1Yl3M7u1l9+8n8F0Y3Yg=" crossorigin="anonymous"></script>
 </head>
 
 
 <body>
-<?php include_once(__DIR__ . '/../includes/config.php') ?>
+<?php require_once $INCLUDE_HEADER; ?>
 	<div id="wrap">
 		<a href="#" id="title"><div class="title">目录</div></a>
 		<div id="box">
@@ -36,5 +38,6 @@
 	-->
 <script src="/assets/js/sites.js" type="text/javascript">
 </script>
+<?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

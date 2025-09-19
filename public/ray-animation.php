@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -8,11 +9,12 @@
 <meta name="description" content="作为动画专业的身份,还是有动画的练习和认真作品的.虽然不是真心感兴趣" />
 <meta name="author" content="ray,ruizhenxin,rzx.me">
 <link href="assets/css/animation.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
 </head>
 
 
 <body>
-<?php include_once(__DIR__ . '/../includes/config.php') ?>
+<?php require_once $INCLUDE_HEADER; ?>
 <div class="title">
 动画Animation
 </div>
@@ -78,5 +80,6 @@
               </div>
           	</div>
 </div>
+<?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

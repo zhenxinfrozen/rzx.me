@@ -1,22 +1,19 @@
+<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8" />
-<title>速写本 | SketchBooks</title>
-<meta name="copyright" content="All images copyright Ray.© Ray" />
-<meta name="keywords" content="颓废动画人,sketch,漫画,速写本,速写,分镜头,动漫,游戏,原画" />
-<meta name="description" content="My SketchBook of Ray" />
-<meta name="author" content="ray,ruizhenxin,rzx.me">
-<link rel="stylesheet" type="text/css" href="/assets/css/sketch.css" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<!-- jQuery Migrate for legacy compatibility during transition -->
+<title>SketchBooks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="assets/css/sketch.css" rel="stylesheet" type="text/css" />
+<!-- jQuery core must be loaded before jquery-migrate and any code that uses $ -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/jquery-migrate-3.4.1.min.js"></script>
 <script type="text/javascript" src="/assets/js/cufon-yui.js"></script>
 </head>
 
 
 <body>
-<?php include_once(__DIR__ . '/../includes/config.php') ?>
+<?php require_once $INCLUDE_HEADER; ?>
         <div id="pp_gallery" class="pp_gallery">
 			<div id="pp_loading" class="pp_loading"></div>
 			<div id="pp_next" class="pp_next"></div>
@@ -633,5 +630,6 @@
 				}
             });
         </script>
+<?php // require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

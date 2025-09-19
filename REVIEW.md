@@ -78,3 +78,16 @@
 结论
 
 这是一个经典的个人作品集站点，代码基础简单但带有历史痕迹（多个 jQuery 版本、老旧 doctype、http 引用）。短期可通过关闭错误显示、切换到 HTTPS、清理备份与升级库显著提升安全性与可靠性；中长期建议逐步引入构建和依赖管理，或迁移到现代静态站点用于更好地维护与性能优化。
+
+## 本次代码修改摘要
+
+- 将公共 includes 结构标准化：新建 `includes/bootstrap.php`（运行时引导）和 `includes/config.php`（配置）。
+- 将 `includes/header.php`/`includes/footer.php` 的备份移动到 `includes/legacy/`，并使用 `includes/views/header.php` / `includes/views/footer.php` 作为片段（已创建占位）。
+- 修复并统一了 `public/` 下多个页面的引导方式：把 `require_once __DIR__ . '/../includes/bootstrap.php';` 移到页面最顶部（避免 header already sent），并在 `<body>` 内使用 `require_once $INCLUDE_HEADER;`，在 `</body>` 前使用 `require_once $INCLUDE_FOOTER;`。
+- 新增 `includes/wallpaper.php` 提供 `get_random_wallpaper()`，用于修复 `_debug_docroot.php` 中的未定义函数错误。
+- 标注 `public/testcss(1)/index.php` 为纯前端 demo，不进行 bootstrap 引导以保留原有行为。
+- 新增语义化、响应式的导航栏于 `includes/views/header.php`。
+- 导航样式位于 `includes/css/header.css`，并由 `header.php` 内联（如文件存在，遵循与 `includes/views/footer.php` 相同的模式）。
+- 导航具备响应式（移动端切换）、可访问性（ARIA 角色）及简约设计。
+
+如需回滚：`includes/legacy/` 中保留了被删除的 header/footer 备份，可按需恢复。

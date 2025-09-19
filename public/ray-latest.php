@@ -1,18 +1,16 @@
-﻿<!DOCTYPE html>
+﻿<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8" />
-<title>最新绘制 | LATEST</title>
-<meta name="copyright" content="All images copyright Ray.© Ray" />
-<meta name="keywords" content="动画，漫画，图片，电影，动漫，芮真心，分镜头台本，颓废的动画人" />
-<meta name="description" content="颓废动画人的个人网站，动画，漫画，电影，涂鸦和作品练习.扯淡的东西..." />
-<meta name="author" content="ray,ruizhenxin,rzx.me">
-<link href="/assets/css/latest.css" rel="stylesheet" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Latest</title>
+<link href="assets/css/latest.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
 </head>
 
 
 <body>
-<?php include_once(__DIR__ . '/../includes/config.php') ?>
+<?php require_once $INCLUDE_HEADER; ?>
 <div class="latest_main">
 	<div class="latest_show">
 	</div>
@@ -38,5 +36,6 @@
 </div>
 </div>
 </div>
+<?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

@@ -1,17 +1,13 @@
+<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8" />
-<title>斑斓色彩 | COLORFUL</title>
-<meta name="copyright" content="All images copyright Ray.© Ray" />
-<meta name="keywords" content="动画，漫画，图片，电影，动漫，芮真心，分镜头台本，颓废的动画人" />
 <meta name="description" content="我不太喜欢也不太擅长的色彩作品" />
 <meta name="author" content="ray,ruizhenxin,rzx.me">
 <link rel="stylesheet" href="/assets/css/pictures.css" type="text/css" media="screen" title="prettyPhoto main stylesheet" charset="utf-8" />
-<script src="http://www.google.com/jsapi" type="text/javascript"></script>
-<script type="text/javascript" charset="utf-8">
-			google.load("jquery", "1.3");
-</script>
+<link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
+<!-- Load a compatible jQuery core for prettyPhoto (local copy 1.9.1 available in Scripts/) -->
+<script src="/Scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="/assets/js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>	
 	<style type="text/css" media="screen">
 			* { margin: 0; padding: 0;border:none; }
@@ -33,7 +29,7 @@
 
 
 <body>
-<?php include_once(__DIR__ . '/../includes/config.php') ?>
+<?php require_once $INCLUDE_HEADER; ?>
 <h2>&nbsp;</h2>
 <h2>&nbsp;</h2>
 <h2>图片,游戏,同人,插画</h2>
@@ -98,5 +94,6 @@
 			$(".gallery a[rel^='prettyPhoto']").prettyPhoto({theme:'dark_square'});
 		});
 		</script>
+<?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

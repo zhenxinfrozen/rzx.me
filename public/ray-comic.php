@@ -1,18 +1,16 @@
+<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8" />
-<title>漫画书 | COMIC</title>
-<meta name="copyright" content="All images copyright Ray.© Ray" />
-<meta name="keywords" content="Ray漫画,颓废动画人漫画,四格漫画" />
-<meta name="description" content="漫画,四格漫画,随笔漫画,以及即将要画的连环漫画." />
-<meta name="author" content="ray,ruizhenxin,rzx.me">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Comic</title>
 <link href="assets/css/comic.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
 </head>
 
 
 <body>
-<?php include_once(__DIR__ . '/../includes/config.php') ?>
+<?php require_once $INCLUDE_HEADER; ?>
 <div class="comic_title">
 	<font face="Tahoma, Geneva, sans-serif" color="#999999" size="7"><b>漫画Comic</b></font>
 </div>
@@ -28,5 +26,6 @@
 </div>
 <div class="comic_show">
 </div>
+<?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

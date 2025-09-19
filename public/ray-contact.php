@@ -1,18 +1,16 @@
+<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8" />
-<title>关于我 | CONTACT</title>
-<meta name="copyright" content="All images copyright Ray.© Ray" />
-<meta name="keywords" content="Ray,Ray漫画,漫画，芮真心，颓废的动画人" />
-<meta name="description" content="联系我,以及关于我的一些说明" />
-<meta name="author" content="ray,ruizhenxin,rzx.me">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>About me</title>
+<meta name="description" content="Contact & About"/>
 <link href="assets/css/contact.css" rel="stylesheet" type="text/css" />
 </head>
 
 
 <body>
-<?php include_once(__DIR__ . '/../includes/config.php') ?>
+<?php require_once $INCLUDE_HEADER; ?>
 <div class="center">
 	<div class="c-table">
             	<div class="email">
@@ -33,5 +31,6 @@
            	  </div>
 	</div>
 </div>
+<?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

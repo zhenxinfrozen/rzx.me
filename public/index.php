@@ -1,6 +1,4 @@
-<?php
-include_once(__DIR__ . '/../includes/config.php');
-?>
+<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -14,16 +12,15 @@ include_once(__DIR__ . '/../includes/config.php');
 <link rel="icon" href="favicon.ico" type="image/png" />
 <link rel="shortcut icon" href="favicon.ico" type="image/png" />
 <link href="assets/css/home_style.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-3gJwYp8U+Y3f9C5v+XgYh2i1Yl3M7u1l9+8n8F0Y3Yg=" crossorigin="anonymous"></script>
 <link href="testcss(1)/style/csslab.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-<?php 
-// Analytics removed - no inline tracking. Use server-side config to enable analytics if needed.
-?>
+<?php require_once $INCLUDE_HEADER; ?>
 <div class="wrap">
-    <div class="header"></div>
+  
     <div class="main">
         <div id="wallpaper">
             <?php
@@ -92,6 +89,6 @@ include_once(__DIR__ . '/../includes/config.php');
         <a href="ray-contact.php" target="_self"><div class="menu_box"><div class="f7"></div><div class="t7">About Me</div></div></a>
     </div>
 </div>
-<div class="flooter"></div>
+<?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

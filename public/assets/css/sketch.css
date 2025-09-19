@@ -12,6 +12,7 @@ body{
 	background-image: url(/assets/images/album1/bg.jpg);
 	background-repeat: no-repeat;
 	background-position: center bottom;
+	background-position-y: 80%;
 }
 h2.title_name {
      font-family: normal Georgia,'Times New Roman',Times,serif;
@@ -222,7 +223,7 @@ h2.title_name small {
 	left: 50% !important;
 	/* Do NOT force transform here — allow the .pp_preview initial + .enter rules to control translate/rotate so animations run.
 	   Keeping transform with !important prevented the slide-from-bottom initial state from taking effect. */
-	z-index: 9999 !important;
+	z-index: 8888 !important;
 	box-shadow: 0 5px 12px rgba(0,0,0,0.35) !important;
 	-webkit-transition: -webkit-transform 420ms cubic-bezier(.2,.8,.2,1) !important;
 	transition: transform 420ms cubic-bezier(.2,.8,.2,1), opacity 300ms ease !important;

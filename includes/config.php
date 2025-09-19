@@ -1,11 +1,12 @@
 <?php
-// Simple config for environment and common includes
-// Set APP_ENV to 'development' to enable debug, otherwise 'production'
+// includes/config.php
+// 仅负责配置（环境变量、错误级别、路径等），不执行启动逻辑。
+
 if (!defined('APP_ENV')) {
     define('APP_ENV', getenv('APP_ENV') ?: 'production');
 }
 
-// Turn off display errors in production
+// 根据环境设置错误显示与级别
 if (APP_ENV === 'production') {
     ini_set('display_errors', 0);
     error_reporting(0);
@@ -14,11 +15,8 @@ if (APP_ENV === 'production') {
     error_reporting(E_ALL);
 }
 
-// Common header/footer include variables (optional)
-$INCLUDE_HEADER = __DIR__ . '/../public/includes/header.php';
-$INCLUDE_FOOTER = __DIR__ . '/../public/includes/footer.php';
+// 指向模板片段的绝对路径（位于 includes/views/ 或 includes/templates/）
+$INCLUDE_HEADER = __DIR__ . '/views/header.php';
+$INCLUDE_FOOTER = __DIR__ . '/views/footer.php';
 
-// Placeholder - create includes/header.php or override in future
-// ...existing code...
-
-?>
+// 其他全局配置变量可在此处添加（数据库 DSN、站点名等），但不要在此执行会话或自动加载逻辑。

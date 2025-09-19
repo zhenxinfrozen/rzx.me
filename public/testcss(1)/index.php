@@ -1,3 +1,8 @@
+<?php
+// This is a pure frontend demo page (CSS/JS). It is intentionally
+// not bootstrapped by includes/bootstrap.php and can be included
+// by other pages (for example from index.php). Keep as-is.
+?>
 
 <head>
 <link href="style/csslab.css" rel="stylesheet" type="text/css" />
