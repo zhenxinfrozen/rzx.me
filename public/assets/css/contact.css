@@ -4,6 +4,7 @@
 body {
 	background-image:url(/assets/images/try.jpg);
 	background-repeat: no-repeat;
+	background-position-y: 40%;
 }
 .center{
 	width:500px;
@@ -14,6 +15,7 @@ body {
 	text-align:center;
 }
 .center-pic{
+	color: #fff;
 }
 .email{
 	background:url(/assets/images/email.jpg);
@@ -58,4 +60,5 @@ body {
 	background:url(/assets/images/follow.jpg) no-repeat -150px -50px;
 }
 .note{
+	color: #fff;
 }

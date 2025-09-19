@@ -51,9 +51,15 @@
 
 <?php
 // Inline header CSS like footer.php to keep a single source of truth under includes/css
-$cssPath = __DIR__ . '/../css/header.css';
-if (file_exists($cssPath)) {
-    echo "<style>\n" . file_get_contents($cssPath) . "\n</style>\n";
+// Prefer public asset for caching; fallback to includes inline if missing.
+$publicCss = __DIR__ . '/../../public/assets/css/header.css';
+if (file_exists($publicCss)) {
+    echo '<link rel="stylesheet" href="/assets/css/header.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
+} else {
+    $cssPath = __DIR__ . '/../css/header.css';
+    if (file_exists($cssPath)) {
+        echo "<style>\n" . file_get_contents($cssPath) . "\n</style>\n";
+    }
 }
 ?>
 <script>

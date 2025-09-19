@@ -24,11 +24,13 @@
                   </a>
                	  <a href="http://wpa.qq.com/msgrd?v=3&uin=327456910&site=qq&menu=yes" target="_blank" ><div class="follow4"></div>
                   </a>
-       			<div class="note"><p onclick="MM_effectShake('CollapsiblePanel1')"><br />
-              <font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><font color="#999999">闲,忙,无聊,<font color="#CC3300">受不了</font>....<br />
-              Beta:2.3 _ 11.07.15</font></font></p>
-              	</div>
-           	  </div>
+           	  	</div>
+				
+	</div>
+	<div class="note"><p onclick="MM_effectShake('CollapsiblePanel1')">
+		<br />
+		<font color="#666666" size="2" face="Arial, Helvetica, sans-serif"><font color="#999999">闲,忙,无聊,<font color="#CC3300">受不了</font>....<br />
+		Beta:2.3 _ 11.07.15</font></font></p>
 	</div>
 </div>
 <?php require_once $INCLUDE_FOOTER; ?>
