@@ -1,0 +1,7 @@
+# Ignore local backups and editor/temp files
+includes_css_backup.zip
+*.zip
+*.log
+.DS_Store
+.vscode/
+node_modules/
