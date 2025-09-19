@@ -1,0 +1,17 @@
+{
+    // PHP Xdebug launch configuration for VS Code
+    // 使用 "Listen for XDebug" 在 VS Code 中接收来自 PHP 的 Xdebug 连接
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for XDebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9003,
+            "pathMappings": {
+                // 本地项目路径 -> 服务器上的路径（内建 server 就是一样的）
+                "D:/OneDrive/Backup-online/99-Websites/Backup-2017-01-09/个人网站备份/rzx.me-2017-03-13": "${workspaceFolder}"
+            }
+        }
+    ]
+}

@@ -1,0 +1,242 @@
+/******** CONTAINER ********/
+*{
+	 margin: 0;
+	 padding: 0;
+}
+body{
+	font-family: "Myriad Pro", "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 12px;
+	color: #fff;
+	overflow: hidden;
+	background-attachment: fixed;
+	background-image: url(/assets/images/album1/bg.jpg);
+	background-repeat: no-repeat;
+	background-position: center bottom;
+}
+h2.title_name {
+     font-family: normal Georgia,'Times New Roman',Times,serif;
+	 font-weight: normal;
+     font-size: 4em;
+	 margin: 0;
+     padding: 50px 0 20px 0;
+     text-align: center;
+}
+h2.title_name span {
+	 font-family: normal Georgia,'Times New Roman',Times,serif;
+     color: #f9f66d;
+     font-size: 0.9em;
+}
+h2.title_name small {
+     color: #AAAAAA;
+     display: block;
+     font-family: normal Verdana,Arial,Helvetica,sans-serif;
+     font-size: 0.2em;
+     letter-spacing: 1.0em;
+     text-transform: uppercase;
+}
+#pp_gallery {
+	width: 100%;
+	overflow: hidden;
+	/* make positioned ancestor for absolute preview centering */
+	position: relative;
+	/* ensure gallery has a height so absolute-centered previews can use top:50% */
+	min-height: 100vh;
+}
+.pp_loading{
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -35px 0px 0px -35px;
+	background: #fff url(/assets/images/album1/loader.gif) no-repeat center center;
+	width: 70px;
+	height: 70px;
+	z-index: 999;
+	opacity: 0.7;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+.pp_next, .pp_prev{
+	width: 100px;
+	height: 57px;
+	cursor: pointer;
+	top: 50%;
+	margin: 40px;
+	position: absolute;
+	text-align: center;
+	color: #fff;
+}
+.pp_next {
+	right: 0;
+	background: url(/assets/images/album1/next.gif) no-repeat 0 0;
+	position: fixed;
+	_position: absolute;
+}
+.pp_next:hover {
+	background: url(/assets/images/album1/next.gif) no-repeat 10px 0;
+}
+.pp_next:active {
+	background: url(/assets/images/album1/next.gif) no-repeat 20px 0;
+}
+.pp_prev {
+	/* left: -100px; */
+	background: url(/assets/images/album1/next.gif) no-repeat 0 -57px;
+	position: fixed;
+	_position: absolute;
+}
+.pp_prev:hover {
+	background: url(/assets/images/album1/next.gif) no-repeat -10px -57px;
+}
+.pp_prev:active {
+	background: url(/assets/images/album1/next.gif) no-repeat -20px -57px;
+}
+#pp_thumbContainer{
+	position: fixed;
+	_position: absolute;
+	bottom: 0px;
+	left: 0px;
+	height: 165px;
+	width: 100%;
+	overflow: hidden;
+    /* ensure thumbnails overlay the preview when needed (exit animation) */
+    z-index: 10010;
+}
+#pp_thumbContainer .album{
+	width: 200px;
+	height: 90px;
+	position: absolute;
+}
+.album .descr,
+.pp_back{
+	position: absolute;
+	bottom: 0px;
+	left: -16px;
+	background: #4e83f6;
+	text-align: center;
+	/* border: 1px solid #333; */
+	padding: 5px;
+	cursor: pointer;
+	width: 169px;
+	color: #fff;
+	cursor: pointer;
+	text-shadow: 0px 0px 1px #fff;
+	-moz-box-shadow: 1px 1px 4px #000;
+	-webkit-box-shadow: 1px 1px 4px #000;
+	box-shadow: 1px 1px 4px #000;
+}
+.pp_back{
+	text-transform: uppercase;
+	bottom: 120px;
+	left: -100px;
+	width: 80px;
+}
+#pp_thumbContainer .content{
+	position: absolute;
+	top: 0px;
+	height: 155px;
+	cursor: pointer;
+}
+#pp_thumbContainer img{
+	border: 5px solid #fff;
+	-moz-box-shadow: 1px 1px 7px #000;
+	-webkit-box-shadow: 1px 1px 7px #000;
+	box-shadow: 1px 1px 7px #000;
+	/* allow smooth rotation via CSS transform */
+	-webkit-transition: -webkit-transform 0.4s ease;
+	transition: transform 0.4s ease;
+}
+#pp_thumbContainer .content span{
+	display:none;
+}
+.pp_preview{
+	/* position absolute so preview centers relative to #pp_gallery
+	   which is the intended container (sibling to prev/next) */
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	/* default: start off-screen at the bottom and transparent; rotation controlled by CSS variable */
+	--pp-rot: 0deg;
+	-webkit-transform: translateX(-50%) translateY(100vh) rotate(var(--pp-rot));
+	transform: translateX(-50%) translateY(100vh) rotate(var(--pp-rot));
+	opacity: 0;
+	/* slightly lower than thumbnail container so thumbs can appear above during exit */
+	z-index: 10000;
+	/* subtle gradient-like shadow and smooth transitions for entry */
+	box-shadow: 0 5px 12px rgba(0,0,0,0.35);
+	-webkit-transition: -webkit-transform 420ms cubic-bezier(.2,.8,.2,1), opacity 300ms ease;
+	transition: transform 420ms cubic-bezier(.2,.8,.2,1), opacity 300ms ease;
+	will-change: transform, opacity;
+}
+
+/* Exit state: slide upward out of view (from current position to above) while rotating and fading */
+.pp_preview.exit{
+	-webkit-transform: translateX(-50%) translateY(-150%) rotate(var(--pp-rot));
+	transform: translateX(-50%) translateY(-150%) rotate(var(--pp-rot));
+	opacity: 0;
+	/* keep z-index lower than thumb container so thumbs overlay */
+	z-index: 10000;
+}
+
+/* When .enter is added, move to centered position and become opaque; rotation uses the --pp-rot variable */
+.pp_preview.enter{
+	-webkit-transform: translateX(-50%) translateY(-50%) rotate(var(--pp-rot));
+	transform: translateX(-50%) translateY(-50%) rotate(var(--pp-rot));
+	opacity: 1;
+}
+.pp_preview{
+	/* allow clicks on inner controls; wrapper itself shouldn't block pointer events except its children */
+	pointer-events: none;
+}
+.pp_preview > img, .pp_preview img{
+	pointer-events: auto;
+}
+.pp_preview img{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	/* white frame */
+	border: 10px solid #fff;
+	border-bottom: 45px solid #fff; /* space for description */
+	/* subtle gray short shadow */
+	box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+}
+.pp_descr{
+	font-size: 20px;
+	width: 100%;
+	bottom: 10px;
+	left: 0px;
+	position: absolute;
+	text-align: center;
+	color: #00021c;
+}
+
+/* ensure description text sits above the white border */
+.pp_preview .pp_descr{z-index:2}
+.pp_preview img{z-index:1}
+
+/* Stronger, ID-based fallback rules to ensure styles apply even if class rules are missed or overridden */
+#pp_preview, .pp_preview {
+	position: absolute !important;
+	top: 50% !important;
+	left: 50% !important;
+	/* Do NOT force transform here — allow the .pp_preview initial + .enter rules to control translate/rotate so animations run.
+	   Keeping transform with !important prevented the slide-from-bottom initial state from taking effect. */
+	z-index: 9999 !important;
+	box-shadow: 0 5px 12px rgba(0,0,0,0.35) !important;
+	-webkit-transition: -webkit-transform 420ms cubic-bezier(.2,.8,.2,1) !important;
+	transition: transform 420ms cubic-bezier(.2,.8,.2,1), opacity 300ms ease !important;
+	will-change: transform, opacity !important;
+}
+#pp_preview img, .pp_preview img {
+	border: 10px solid #fff !important;
+	border-bottom: 45px solid #fff !important;
+	box-shadow: 0 6px 12px rgba(0,0,0,0.25) !important;
+}
+#pp_preview .pp_descr, .pp_preview .pp_descr {
+	position: absolute !important;
+	bottom: 10px !important;
+	left: 0 !important;
+	width: 100% !important;
+	z-index: 2 !important;
+}
