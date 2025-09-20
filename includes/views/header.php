@@ -19,7 +19,6 @@
             <?php
             // Determine current request path for active state detection.
             $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-            // Strip query string and trailing slash (except root)
             $path = parse_url($requestUri, PHP_URL_PATH);
             if ($path !== '/') {
                 $path = rtrim($path, '/');
@@ -36,15 +35,25 @@
                 'Pictures' => '/ray-pictures.php',
                 'About' => '/ray-contact.php',
             ];
-            ?>
-            <ul class="site-nav__list">
-                <?php foreach ($navItems as $label => $href):
-                    $isActive = ($href === $path) || ($href === '/' && $path === '/');
-                    $class = 'site-nav__link' . ($isActive ? ' site-nav__link--active' : '');
+
+            // Render nav component via render_template when available, fallback to inline list
+            $navComponent = __DIR__ . '/components/nav.php';
+            if (function_exists('render_template')) {
+                echo render_template($navComponent, ['navItems' => $navItems, 'path' => $path]);
+            } else {
+                // fallback: render inline list
                 ?>
-                <li class="site-nav__item"><a class="<?php echo $class ?>" href="<?php echo $href ?>"><?php echo $label ?></a></li>
-                <?php endforeach; ?>
-            </ul>
+                <ul class="site-nav__list">
+                    <?php foreach ($navItems as $label => $href):
+                        $isActive = ($href === $path) || ($href === '/' && $path === '/');
+                        $class = 'site-nav__link' . ($isActive ? ' site-nav__link--active' : '');
+                    ?>
+                    <li class="site-nav__item"><a class="<?php echo $class ?>" href="<?php echo $href ?>"><?php echo $label ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php
+            }
+            ?>
         </nav>
     </div>
 </header>
