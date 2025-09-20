@@ -18,15 +18,15 @@
 // This inlines the single source of truth from includes/css/footer.css so there's
 // no duplication between include and public asset.
 // Prefer public asset for caching; fallback to includes inline if missing.
-$publicCss = __DIR__ . '/../../public/assets/css/footer.css';
-if (file_exists($publicCss)) {
-    echo '<link rel="stylesheet" href="/assets/css/footer.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
-} else {
-    $cssPath = __DIR__ . '/../css/footer.css';
-    if (file_exists($cssPath)) {
-        echo "<style>\n" . file_get_contents($cssPath) . "\n</style>\n";
+    $publicCss = __DIR__ . '/../../public/assets/css/footer.css';
+    if (file_exists($publicCss)) {
+        echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/footer.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
+    } else {
+        $cssPath = __DIR__ . '/../css/footer.css';
+        if (file_exists($cssPath)) {
+            echo "<style>\n" . file_get_contents($cssPath) . "\n</style>\n";
+        }
     }
-}
 ?>
 
 

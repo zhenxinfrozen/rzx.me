@@ -27,4 +27,15 @@ if (!defined('INCLUDE_FOOTER')) {
     define('INCLUDE_FOOTER', __DIR__ . '/views/footer.php');
 }
 
+// 站点路径/资源基址：可在环境中覆盖（例如部署到子目录或 CDN）
+if (!defined('BASE_URL')) {
+    // 默认站点根
+    define('BASE_URL', '/');
+}
+
+if (!defined('ASSET_URL')) {
+    // 资源默认放在 BASE_URL 下的 assets 目录；允许云端/CDN 前缀覆盖
+    define('ASSET_URL', rtrim(BASE_URL, '/') . '/assets/');
+}
+
 // 其他全局配置变量可在此处添加（数据库 DSN、站点名等），但不要在此执行会话或自动加载逻辑。

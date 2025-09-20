@@ -9,7 +9,7 @@ $title = 'Comic';
 <head>
     <meta charset="utf-8">
     <title><?php echo htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></title>
-    <link href="/assets/css/comic.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo htmlspecialchars(ASSET_URL, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>css/comic.css" rel="stylesheet" type="text/css" />
     <?php
     // render header include which also injects header CSS
     echo render_template(__DIR__ . '/../includes/views/header.php', ['title' => $title]);

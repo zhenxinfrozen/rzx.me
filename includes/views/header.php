@@ -52,15 +52,15 @@
 <?php
 // Inline header CSS like footer.php to keep a single source of truth under includes/css
 // Prefer public asset for caching; fallback to includes inline if missing.
-$publicCss = __DIR__ . '/../../public/assets/css/header.css';
-if (file_exists($publicCss)) {
-    echo '<link rel="stylesheet" href="/assets/css/header.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
-} else {
-    $cssPath = __DIR__ . '/../css/header.css';
-    if (file_exists($cssPath)) {
-        echo "<style>\n" . file_get_contents($cssPath) . "\n</style>\n";
+    $publicCss = __DIR__ . '/../../public/assets/css/header.css';
+    if (file_exists($publicCss)) {
+        echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/header.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
+    } else {
+        $cssPath = __DIR__ . '/../css/header.css';
+        if (file_exists($cssPath)) {
+            echo "<style>\n" . file_get_contents($cssPath) . "\n</style>\n";
+        }
     }
-}
 ?>
 <script>
 // Make header fixed and toggle scrolled opacity on scroll (lightweight, no dependencies)
