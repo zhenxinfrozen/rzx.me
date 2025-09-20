@@ -1,35 +1,27 @@
-<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
-<!DOCTYPE html>
+<?php
+require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../includes/view_renderer.php';
+
+$title = 'Comic';
+
+?><!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>Comic</title>
-<link href="/assets/css/comic.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8">
+    <title><?php echo htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></title>
+    <link href="/assets/css/comic.css" rel="stylesheet" type="text/css" />
+    <?php
+    // render header include which also injects header CSS
+    echo render_template(__DIR__ . '/../includes/views/header.php', ['title' => $title]);
+    ?>
 </head>
-
-
 <body>
-<?php require_once (defined('INCLUDE_HEADER') ? INCLUDE_HEADER : $INCLUDE_HEADER); ?>
-<div class="comic_title">
-    <span class="comic-title-text"><b>漫画 Comic</b></span>
-</div>
-<a href="#"><div class="comic_dog">
-</div></a>
-<p align="center"><font face="Comic Sans MS, cursive" color="#999999" size="3"> Test page<font size="-1">（<b>测试</b>）</font> </font></p>
-<div id="ray-comic-menu">
-	<a href="/sketch-dream.html"><div id="c1" class="ray-comic-menu-icon"></div></a>
-    <a href="/gzjy.html"><div id="c2" class="ray-comic-menu-icon"></div></a>
-	<a href="/Wine.html"><div id="c3" class="ray-comic-menu-icon"></div></a>
-    <a href="/MagicUbuntu.html"><div id="c4" class="ray-comic-menu-icon"></div></a>
-    <a href="/ice-fire.html">
-    <div id="c5" class="ray-comic-menu-icon">
-        <img class="default-img" src="/assets/images/ray-comic-icefire-01.png" alt="comic 5">
-        <img class="hover-img" src="/assets/images/ray-comic-icefire-02.png" alt="comic 5 hover">
-    </div>
-    </a>
-</div>
-<div class="comic_show">
-</div>
-<?php require_once (defined('INCLUDE_FOOTER') ? INCLUDE_FOOTER : $INCLUDE_FOOTER); ?>
+    <?php
+    // main body
+    echo render_template(__DIR__ . '/../includes/views/ray-comic-body.php');
+
+    // render footer include (also injects footer CSS)
+    echo render_template(__DIR__ . '/../includes/views/footer.php');
+    ?>
 </body>
 </html>
