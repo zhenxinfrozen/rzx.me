@@ -10,6 +10,13 @@ $title = 'Comic';
     <meta charset="utf-8">
     <title><?php echo htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></title>
     <link href="<?php echo htmlspecialchars(ASSET_URL, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>css/comic.css" rel="stylesheet" type="text/css" />
+    <?php
+    // Preload header CSS in head so navigation styles apply before header markup is inserted.
+    $publicHeaderCss = __DIR__ . '/../assets/css/header.css';
+    if (file_exists($publicHeaderCss)) {
+        echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/header.css?v=' . filemtime($publicHeaderCss) . '">' . PHP_EOL;
+    }
+    ?>
 </head>
 <body>
     <?php
