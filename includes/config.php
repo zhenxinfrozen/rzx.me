@@ -19,4 +19,12 @@ if (APP_ENV === 'production') {
 $INCLUDE_HEADER = __DIR__ . '/views/header.php';
 $INCLUDE_FOOTER = __DIR__ . '/views/footer.php';
 
+// 向后兼容地提供常量形式的包含路径，便于在模板中使用常量而不是全局变量。
+if (!defined('INCLUDE_HEADER')) {
+    define('INCLUDE_HEADER', __DIR__ . '/views/header.php');
+}
+if (!defined('INCLUDE_FOOTER')) {
+    define('INCLUDE_FOOTER', __DIR__ . '/views/footer.php');
+}
+
 // 其他全局配置变量可在此处添加（数据库 DSN、站点名等），但不要在此执行会话或自动加载逻辑。

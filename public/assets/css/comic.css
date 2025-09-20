@@ -5,6 +5,11 @@
 	margin:0 auto;
 	text-align:center;
 }
+.comic-title-text{
+	font-family: Tahoma, Geneva, sans-serif;
+	color: #999999;
+	font-size: 2.5rem; /* 与原来 size="7" 的视觉相近，可能需微调 */
+}
 .comic_dog{
 	background:url(/assets/images/dog.jpg) no-repeat 0 0;
 	width:300px;

@@ -2,17 +2,16 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
 <title>Comic</title>
-<link href="assets/css/comic.css" rel="stylesheet" type="text/css" />
-<link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
+<link href="/assets/css/comic.css" rel="stylesheet" type="text/css" />
 </head>
 
 
 <body>
-<?php require_once $INCLUDE_HEADER; ?>
+<?php require_once (defined('INCLUDE_HEADER') ? INCLUDE_HEADER : $INCLUDE_HEADER); ?>
 <div class="comic_title">
-	<font face="Tahoma, Geneva, sans-serif" color="#999999" size="7"><b>漫画Comic</b></font>
+    <span class="comic-title-text"><b>漫画 Comic</b></span>
 </div>
 <a href="#"><div class="comic_dog">
 </div></a>
@@ -31,6 +30,6 @@
 </div>
 <div class="comic_show">
 </div>
-<?php require_once $INCLUDE_FOOTER; ?>
+<?php require_once (defined('INCLUDE_FOOTER') ? INCLUDE_FOOTER : $INCLUDE_FOOTER); ?>
 </body>
 </html>
