@@ -18,67 +18,85 @@
 <div class="title">
 动画Animation
 </div>
-<div class="anim_pic">
-	<a href="#"><div class="pi1"></div></a>
-	<a href="#"><div class="pi2"></div></a>
-	<a href="#"><div class="pi3"></div></a>
-	<a href="#"><div class="pi4"></div></a>
+
+<div id="ray-anim-wapper">
+	<div id="ray-anim-showbox" aria-label="Ray Comic Showbox">
+		<div class="anim-item" id="anim-1">
+			<img src="../../assets/images/anim-001.png" alt="comic 1">
+		</div>
+		<div class="anim-item" id="anim-2">
+			<img src="../../assets/images/anim-002.png" alt="comic 2">
+		</div>
+		<div class="anim-item" id="anim-3">
+			<img src="../../assets/images/anim-003.png" alt="comic 3">
+		</div>
+		<div class="anim-item" id="anim-4">
+			<img src="../../assets/images/anim-004.png" alt="comic 4">
+		</div>
+	</div>
 </div>
-<div class="vider-1">
-            <div class="video-x">
-            	  <div class="video-x">
-            	  <div class="shipin00">
-            		<video poster="/assets/movie/shooting-01.jpg" id="movie" preload controls  width=355 height=200>
- <source src='/assets/movie/shooting-01.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='/assets/movie/shooting-01.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
-					</video>
-             		</div>
-            	  </div>
-             	  <div class="video-x"> 
-              	<div id="shipin05">
-             	<video poster="/assets/movie/flower.jpg" id="movie" preload controls  width=355 height=200>
- <source src='/assets/movie/flower.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='/assets/movie/flower.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
- <div class="html5-tip"><p><img src="/assets/movie/html5-150.png" /></p>
- <p>本页面视频采用HTML5标准</p>
- <p>请使用<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh">Chrome</a>,Firefox,或者Safari浏览该网页.</p>
- </div>
-            	</video>
-            	</div>
-              </div>	
-           	  <div class="video-x">
-              	<div class="shipin05">
-			<video poster="/assets/movie/dragonfire.jpg" id="movie" preload controls  width=355 height=200>
- <source src='/assets/movie/dragonfire.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='/assets/movie/dragonfire.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
+
+<div id="ray-anim-videobox" aria-label="Ray Animation Video Showbox">
+	<div class="title">
+	视频Video
+	</div>
+
+	<div class="video-row">
+		<div class="video-x">
+				<video class="movie" poster="/assets/movie/shooting-01.jpg" preload controls width="355" height="200">
+					<source src="/assets/movie/shooting-01.mp4" type="video/mp4" />
+					<source src="/assets/movie/shooting-01.webm" type="video/webm" />
 				</video>
-            	</div>
-              </div>
-              <div class="video-x">
-              	<div class="shipin00">
-			<video poster="/assets/movie/begin-01.jpg" id="movie" preload controls  width=355 height=200>
- <source src='/assets/movie/begin-01.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='/assets/movie/begin-01.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
+				<p>biu biu biu</p>
+		</div>
+
+		<div class="video-x">
+				<video class="movie" poster="/assets/movie/flower.jpg" preload controls width="355" height="200">
+					<source src="/assets/movie/flower.mp4" type="video/mp4" />
+					<source src="/assets/movie/flower.webm" type="video/webm" />
 				</video>
-            	</div>
-              </div>
-              <div class="video-x">
-              	<div class="shipin00">
-			<video poster="/assets/movie/Gunman.jpg" id="movie" preload controls  width=355 height=200>
- <source src='/assets/movie/Gunman.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='/assets/movie/Gunman.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
+				<p>flower</p>
+		</div>
+
+		<div class="video-x">
+				<video class="movie" poster="/assets/movie/dragonfire.jpg" preload controls width="355" height="200">
+					<source src="/assets/movie/dragonfire.mp4" type="video/mp4" />
+					<source src="/assets/movie/dragonfire.webm" type="video/webm" />
 				</video>
-            	</div>
-              </div>
-              <div class="video-x">
-              	<div class="shipin00">
-			<video poster="/assets/movie/gun-shooting.jpg" id="movie" preload controls  width=355 height=200>
- <source src='/assets/movie/gun-shooting.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='/assets/movie/gun-shooting.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
+				<p>dragonfire</p>
+		</div>
+
+		<div class="video-x">
+				<video class="movie" poster="/assets/movie/begin-01.jpg" preload controls width="355" height="200">
+					<source src="/assets/movie/begin-01.mp4" type="video/mp4" />
+					<source src="/assets/movie/begin-01.webm" type="video/webm" />
 				</video>
-            	</div>
-              </div>
-          	</div>
+				<p>动画片段 1</p>
+		</div>
+
+		<div class="video-x">
+				<video class="movie" poster="/assets/movie/Gunman.jpg" preload controls width="355" height="200">
+					<source src="/assets/movie/Gunman.mp4" type="video/mp4" />
+					<source src="/assets/movie/Gunman.webm" type="video/webm" />
+				</video>
+				<p>dragonfire</p>
+		</div>
+
+		<div class="video-x">
+				<video class="movie" poster="/assets/movie/gun-shooting.jpg" preload controls width="355" height="200">
+					<source src="/assets/movie/gun-shooting.mp4" type="video/mp4" />
+					<source src="/assets/movie/gun-shooting.webm" type="video/webm" />
+				</video>
+				<p>dragonfire</p>
+		</div>
+			<div class="html5-tip">
+		<p><img src="/assets/movie/html5-150.png" alt="HTML5" /></p>
+		<p>本页面视频采用HTML5标准</p>
+		<p>请使用<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh">Chrome</a>, Firefox, 或者 Safari 浏览该网页.</p>
+	</div>
+	</div>
+	
+
 </div>
 <?php require_once $INCLUDE_FOOTER; ?>
 </body>

@@ -8,84 +8,121 @@
 	font-weight:800;
 	font-family:Tahoma, Geneva, sans-serif;
 }
-.anim_pic{
-	margin:10px auto;
-	width:840px;
-	height:360px;
-}
-.pi1, .pi2, .pi3, .pi4{
-	width:200px;
-	height:360px;
-	float:left;
-	margin:0 5px;
-}
 
-.pi1{
-	background:url(/assets/images/anim.jpg) no-repeat 0 0;
-}
-.pi1:hover{
-	background:url(/assets/images/anim.jpg) no-repeat 0 0;
-}
-.pi1:active{
-	background:url(/assets/images/anim.jpg) no-repeat 0 -360px;
-}
-.pi2{
-	background:url(/assets/images/anim.jpg) no-repeat 0 -720px;
-}
-.pi2:hover{
-	background:url(/assets/images/anim.jpg) no-repeat -200px 0;
-}
-.pi2:active{
-	background:url(/assets/images/anim.jpg) no-repeat -200px -360px;
-}
-.pi3{
-	background:url(/assets/images/anim.jpg) no-repeat -200px -720px;
-}
-.pi3:hover{
-	background:url(/assets/images/anim.jpg) no-repeat -400px 0;
-}
-.pi3:active{
-	background:url(/assets/images/anim.jpg) no-repeat -400px -360px;
-}
-.pi4{
-	background:url(/assets/images/anim.jpg) no-repeat -400px -720px;
-}
-.pi4:hover{
-	background:url(/assets/images/anim.jpg) no-repeat -600px 0;
-}
-.pi4:active{
-	background:url(/assets/images/anim.jpg) no-repeat -600px -360px;
-}
-
-.vider-1{
-	width:840px;
-	margin:5px auto;
-}
-.video{
-	background:#FFF;
-	width:840px;
+#ray-anim-videobox{
+	display: block;
+	width:80vw;
 	margin:0 auto;
 }
-.video-x{
-	background:url(/assets/images/grid-loading.gif) no-repeat center center;
-	width:356px;
-	height:233px;
-	float:left;
-	margin:10px 30px;
+
+.video-row {
+  display: flex; /* 建议使用 flex 而不是 inline-flex */
+  flex-wrap: wrap; /* 核心：允许子元素换行 */
+  gap: 40px;
+  width:60vw;
+  margin: 20px auto;
+  justify-content: center; /* <-- 新增此行以实现内部居中 */
 }
-.video-y{
-	background:url(/assets/images/grid-loading.gif) no-repeat center center;
-	width:260px;
-	float:left;
-	margin:10px 10px;
-	overflow:hidden;
+.video-x {
+  /* float: left; <-- 移除此行 */
+  /* margin: 10px 30px; <-- 移除此行，由父级的 gap 控制间距 */
+
+  /* 保留的样式 */
+  background: url(/assets/images/grid-loading.gif) no-repeat center center;
+  width: 356px;
+  overflow: hidden;
+  /* (可选) display: inline-flex; 如果内部没有flex布局，也可以移除 */
 }
+.video-x > p {
+	font-size: 12px;
+	text-align: center;
+}
+
 .html5-tip{
-	background:#C90;
-	padding:3px 10px;
+	border-radius: 5px;
+	background:rgb(197, 148, 3);
+	padding:30px 50px;
 	text-align:center;
+	margin:auto
 	font-size:10px;
 	font-weight:800;
 	color:#FFF;
 }
 
+
+
+
+#ray-anim-wapper{
+display: flex;
+justify-content: center;
+}
+#ray-anim-showbox {
+display: inline-flex;
+margin: 20px 0;
+gap: 10px;
+}
+#ray-anim-showbox .anim-item {
+width: 200px;
+height: 363px;
+border: #444 solid 2px;
+background: #fff;
+overflow: hidden;
+flex: 0 0 auto;
+box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+position: relative;
+/* 为卡片浮动增加 transition */
+transition: transform 0.4s ease, box-shadow 0.4s ease, z-index 0.4s;
+z-index: 1; /* 默认的层级 */
+}
+/* 为图片缩放增加 transition */
+#ray-anim-showbox .anim-item img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block;
+transition: transform 0.4s ease, filter 0.4s ease;
+}
+
+/* 滤镜效果保持不变 */
+.anim-item::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 2;
+-webkit-backdrop-filter: blur(1px);
+backdrop-filter: blur(1px);
+opacity: 1;
+transition: opacity 0.4s ease;
+}
+
+#anim-1::before { background-color: rgba(133, 0, 126, 0.3); }
+#anim-2::before { background-color: rgba(0, 113, 173, 0.3); }
+#anim-3::before { background-color: rgba(0, 115, 0, 0.3); }
+#anim-4::before { background-color: rgba(176, 76, 0, 0.3); }
+
+
+/* --- 修改后的 Hover 效果 --- */
+
+/* 滤镜层渐隐消失 */
+.anim-item:hover::before {
+opacity: 0;
+}
+
+/* 图片放大效果减弱 */
+.anim-item:hover img {
+transform: scale(1.05); /* 放大效果从 1.1 减为 1.05 */
+filter: brightness(1.1);
+}
+
+/* 统一的、无旋转的浮出效果 */
+.anim-item:hover {
+/* 增强的阴影效果 (保留) */
+box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+/* 移除旋转，只保留轻微放大来模拟 Z 轴提升 */
+transform: scale(1.05);
+/* 关键：提高层级，确保当前卡片在最上层 */
+z-index: 10;
+}

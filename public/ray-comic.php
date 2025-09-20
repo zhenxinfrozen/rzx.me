@@ -17,12 +17,17 @@
 <a href="#"><div class="comic_dog">
 </div></a>
 <p align="center"><font face="Comic Sans MS, cursive" color="#999999" size="3"> Test page<font size="-1">（<b>测试</b>）</font> </font></p>
-<div class="comic_pic">
-	<a href="/sketch-dream.html"><div class="c1"></div></a>
-    <a href="/gzjy.html"><div class="c2"></div></a>
-	<a href="/Wine.html"><div class="c3"></div></a>
-    <a href="/MagicUbuntu.html"><div class="c4"></div></a>
-    <a href="/ice-fire.html"><div class="c5"></div></a>
+<div id="ray-comic-menu">
+	<a href="/sketch-dream.html"><div id="c1" class="ray-comic-menu-icon"></div></a>
+    <a href="/gzjy.html"><div id="c2" class="ray-comic-menu-icon"></div></a>
+	<a href="/Wine.html"><div id="c3" class="ray-comic-menu-icon"></div></a>
+    <a href="/MagicUbuntu.html"><div id="c4" class="ray-comic-menu-icon"></div></a>
+    <a href="/ice-fire.html">
+    <div id="c5" class="ray-comic-menu-icon">
+        <img class="default-img" src="/assets/images/ray-comic-icefire-01.png" alt="comic 5">
+        <img class="hover-img" src="/assets/images/ray-comic-icefire-02.png" alt="comic 5 hover">
+    </div>
+    </a>
 </div>
 <div class="comic_show">
 </div>

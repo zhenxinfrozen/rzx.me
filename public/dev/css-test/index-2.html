@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CSS Test - Ray Comic Showbox</title>
+    <style>
+      html,body{height:100%;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f3f3f3}
+
+      /* 1. 外层布局和居中样式 (保持不变) */
+      #ray-anim-wapper{
+        display: flex;
+        justify-content: center;
+      }
+      #ray-anim-showbox {
+        display: inline-flex;
+        margin: 400px 0;
+        gap: 10px;
+      }
+      #ray-anim-showbox .anim-item {
+        width: 200px;
+        height: 363px;
+        border: #444 solid 2px;
+        background: #fff;
+        overflow: hidden; /* 隐藏超出伪元素 */
+        flex: 0 0 auto;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        position: relative; /* 关键：为伪元素的绝对定位提供基准 */
+      }
+      #ray-anim-showbox .anim-item img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
+      }
+
+      /* 2. 新的滤镜和模糊效果 */
+      
+      /* 为每个 anim-item 创建一个伪元素作为滤镜层 */
+      .anim-item::before {
+        content: ''; /* 伪元素必须有 content 属性 */
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2; /* 确保在图片上层 */
+        
+        /* 默认的模糊效果 */
+        -webkit-backdrop-filter: blur(1px);
+        backdrop-filter: blur(1px);
+        
+        /* 默认可见，并设置渐变动画 */
+        opacity: 1;
+        transition: opacity 0.4s ease;
+      }
+
+      /* 为每个滤镜层设置各自的默认颜色 */
+      #anim-1::before {
+        background-color: rgba(133, 0, 126, 0.3);
+      }
+      #anim-2::before {
+        background-color: rgba(0, 113, 173, 0.3);
+      }
+      #anim-3::before {
+        background-color: rgba(0, 115, 0, 0.3);
+      }
+      #anim-4::before {
+        background-color: rgba(176, 76, 0, 0.3);
+      }
+
+      /* 3. 鼠标悬停时，让滤镜层渐隐消失 */
+      .anim-item:hover::before {
+        opacity: 0;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="ray-anim-wapper">
+      <div id="ray-anim-showbox" aria-label="Ray Comic Showbox">
+        <div class="anim-item" id="anim-1">
+          <img src="../../assets/images/anim-001.png" alt="comic 1">
+        </div>
+        <div class="anim-item" id="anim-2">
+          <img src="../../assets/images/anim-002.png" alt="comic 2">
+        </div>
+        <div class="anim-item" id="anim-3">
+          <img src="../../assets/images/anim-003.png" alt="comic 3">
+        </div>
+        <div class="anim-item" id="anim-4">
+          <img src="../../assets/images/anim-004.png" alt="comic 4">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

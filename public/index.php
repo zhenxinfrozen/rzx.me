@@ -12,8 +12,6 @@
 <link rel="icon" href="favicon.ico" type="image/png" />
 <link rel="shortcut icon" href="favicon.ico" type="image/png" />
 <link href="assets/css/home_style.css" rel="stylesheet" type="text/css" />
-<link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-3gJwYp8U+Y3f9C5v+XgYh2i1Yl3M7u1l9+8n8F0Y3Yg=" crossorigin="anonymous"></script>
 <link href="testcss(1)/style/csslab.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -24,55 +22,60 @@
     <div class="main">
         <div id="wallpaper">
             <?php
-                $haha = ''; // 先初始化
-                $img_folder = "assets/images/home/";
-                $imglist = array();
+                $haha = '';
+                $img_folder = 'assets/images/home/'; // web-relative URL prefix
+                $img_dir = __DIR__ . '/' . $img_folder; // filesystem path
+                $imglist = [];
 
-                // 检查目录是否存在
-                if (is_dir($img_folder)) {
-                    if ($dh = opendir($img_folder)) {
-                        while (($file = readdir($dh)) !== false) {
-                            if (preg_match('/\.(gif|jpg|png)$/i', $file)) {
-                                $imglist[] = $file;
+                // 使用 DirectoryIterator 更可靠地列出图片文件
+                if (is_dir($img_dir)) {
+                    try {
+                        foreach (new DirectoryIterator($img_dir) as $fileinfo) {
+                            if ($fileinfo->isFile()) {
+                                $ext = strtolower($fileinfo->getExtension());
+                                if (in_array($ext, ['gif', 'jpg', 'jpeg', 'png'], true)) {
+                                    $imglist[] = $fileinfo->getFilename();
+                                }
                             }
                         }
-                        closedir($dh);
+                    } catch (Exception $e) {
+                        // 如果出现异常，保留 $imglist 为空并在下面显示占位
                     }
                 }
 
-                $no = count($imglist) - 1;
-                if ($no >= 0) {
-                    // 为避免从 float 隐式转换到 int 的警告，显式转换为 int
-                    // 在 PHP 7+ 中实际上不需要手动 seed，但保留兼容性代码
-                    mt_srand((int)(microtime(true) * 1000));
-                    $random = mt_rand(0, $no);
+                $count = count($imglist);
+                if ($count > 0) {
+                    // 使用更现代的 random_int，如果不可用则回退到 mt_rand
+                    if (function_exists('random_int')) {
+                        $random = random_int(0, $count - 1);
+                    } else {
+                        mt_srand((int)(microtime(true) * 1000));
+                        $random = mt_rand(0, $count - 1);
+                    }
                     $image = $imglist[$random];
 
-                    if ($image == "fin12-11-9.jpg") {
+                    if ($image === 'fin12-11-9.jpg') {
                         $haha = '<div style="background:#fff; height:550px;width:100%;"></div>';
-                        if (file_exists('testcss(1)/index.php')) {
-                            include 'testcss(1)/index.php';
+                        if (file_exists(__DIR__ . '/testcss(1)/index.php')) {
+                            include __DIR__ . '/testcss(1)/index.php';
                         }
                     }
-                    if ($image == "frog1.jpg") {
+
+                    if ($image === 'frog1.jpg') {
                         $haha = '<div style="background:url(' . $img_folder . 'haha/fly.gif) no-repeat 70% 20%;height:550px;width:100%;"></div>';
                     }
 
-                    // 优先使用本地相对路径，如果本地不存在再回退到远程服务器
-                    $localPath = $img_folder . $image;
-                    if (file_exists($localPath)) {
-                        $bgUrl = $localPath;
+                    // 以 web 相对路径作为背景 URL（但通过文件系统检查本地文件是否存在）
+                    $localPath = $img_dir . $image;
+                    if (is_file($localPath)) {
+                        $bgUrl = $img_folder . $image;
                     } else {
-                        // Prefer local path if image exists in assets/images
-                        $localPath = '' . $img_folder . $image;
-                        if (file_exists($localPath)) {
-                            $bgUrl = $localPath;
-                        } else {
-                            $bgUrl = '' . $img_folder . $image;
-                        }
+                        // 回退到相同的相对 URL（保持原有行为）
+                        $bgUrl = $img_folder . $image;
                     }
 
-                    echo '<div style="background:url('. $bgUrl .') no-repeat center;height:550px;width:100%;">'.$haha.'</div>';
+                    $bgUrlEsc = htmlspecialchars($bgUrl, ENT_QUOTES | ENT_HTML5);
+                    echo '<div style="background:url('. $bgUrlEsc .') no-repeat center;height:550px;width:100%;">'.$haha.'</div>';
                 } else {
                     echo '<div style="background:#eee; height:550px; width:100%; text-align:center; line-height:550px;">没有找到图片</div>';
                 }
@@ -83,12 +86,37 @@
         <a href="ray-animation.php" target="_self"><div class="menu_box"><div class="f1"></div><div class="t1">Animation</div></div></a>
         <a href="ray-latest.php" target="_self"><div class="menu_box"><div class="f2"></div><div class="t2">Latest</div></div></a>
         <a href="ray-comic.php" target="_self"><div class="menu_box"><div class="f3"></div><div class="t3">Comic</div></div></a>
-        <a href="ray-sites.php" target="_self"><div class="menu_box"><div class="f4"></div><div class="t4">Blog</div></div></a>
+        <a href="ray-sites.php" target="_self">
+            <div class="menu_box">
+                <div class="menu_icon_wrapper">
+                    <img src="assets/images/menu-cion-blog-wordpress-logo.png" alt="Blog" class="menu_icon" width="100" height="100">
+                </div>
+                <div class="t4">Blog</div>
+            </div>
+        </a>
         <a href="ray-sketch.php" target="_self"><div class="menu_box"><div class="f5"></div><div class="t5">SketchBooks</div></div></a>
         <a href="ray-pictures.php" target="_self"><div class="menu_box"><div class="f6"></div><div class="t6">Pictures</div></div></a>
         <a href="ray-contact.php" target="_self"><div class="menu_box"><div class="f7"></div><div class="t7">About Me</div></div></a>
     </div>
 </div>
+    <script>
+    // Small vanilla JS to trigger click feedback for menu boxes (no jQuery)
+    (function(){
+        document.addEventListener('click', function(ev){
+            var el = ev.target;
+            // find closest .menu_box
+            while(el && el !== document.body){
+                if (el.classList && el.classList.contains('menu_box')){
+                    el.classList.add('clicked');
+                    // remove after 600ms
+                    setTimeout(function(){ el.classList.remove('clicked'); }, 600);
+                    return;
+                }
+                el = el.parentNode;
+            }
+        }, false);
+    })();
+    </script>
 <?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

@@ -41,7 +41,7 @@ a{
 }
 .menu_box{
 	width:100px;
-	height:120px;
+	height:135px;
 	margin:0 21px;
 	float:left;
 }
@@ -123,3 +123,72 @@ a{
 	color:#999;
 }
 /*menu ,css结束*/
+
+/* Fix for menu <img> baseline gap and sizing when using <img> instead of sprite */
+.menu_icon_wrapper{
+	width:100px;
+	height:100px;
+	margin:0 auto;
+	overflow:hidden;
+	line-height:0; /* remove descender gap caused by inline images */
+	display:block;
+}
+.menu_icon{
+	display:block;      /* remove inline baseline gap */
+	width:100%;
+	height:100%;
+	object-fit:cover;   /* preserve aspect and fill box */
+}
+
+/* Default rotated state and smooth hover transition */
+.menu_icon{
+	transform: rotate(20deg); /* default clockwise 20deg */
+	transform-origin: 50% 50%;
+	transition: transform 150ms ease-in-out;
+}
+.menu_box:hover .menu_icon{
+	transform: rotate(0deg); /* on hover, return to upright */
+}
+
+/* Reflection and click animation styles */
+.menu_box{ position:relative; }
+
+/* Click shock animation: quick scale up then settle */
+.menu_box.clicked .menu_icon{
+	/* Hint browser to optimize these properties for animation */
+	will-change: transform, filter;
+	animation: icon-shock 100ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes icon-shock{
+	/*
+	主要帧说明：
+	- 0%: 起始状态，保持当前旋转/缩放。
+	- 20%: 快速放大到 peak（1.18），此时我们也轻微增加模糊以模拟冲击感。
+	- 60%: 回弹到略小于原始的尺寸（0.98），同时减少模糊，形成回弹效果。
+	- 100%: 回到原始尺寸并清除模糊。
+	*/
+	0% {
+		transform: rotate(0deg) scale(1);
+		filter: blur(0px);
+	}
+	20% {
+		transform: rotate(0deg) scale(1.18);
+		/* 在放大峰值时增加一点模糊，制造冲击瞬间的光学失焦感 */
+		filter: blur(1.6px);
+	}
+	60% {
+		transform: rotate(0deg) scale(0.58);
+		/* 回弹时快速减小模糊 */
+		filter: blur(0.6px);
+	}
+	100% {
+		transform: rotate(0deg) scale(1);
+		filter: blur(0px);
+	}
+}
+
+/* 当 menu_box 被点击时，允许 wrapper 溢出以免放大时被裁剪 */
+.menu_box.clicked .menu_icon_wrapper{
+	overflow: visible;
+}
