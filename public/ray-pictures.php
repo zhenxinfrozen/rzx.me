@@ -90,12 +90,38 @@
 
 		
 <!-- Load scripts at the end of body to avoid render-blocking -->
-<script src="/Scripts/jquery-1.9.1.min.js"></script>
-<script src="/assets/js/jquery.prettyPhoto.js"></script>
 <script>
-    jQuery(function($){
-        $(".gallery a[rel^='prettyPhoto']").prettyPhoto({theme:'dark_square'});
-    });
+// Defer loading of prettyPhoto until a modern jQuery (from footer.php) is available.
+// This avoids loading multiple jQuery versions and prevents conflicts.
+(function waitForjQueryAndLoad(){
+    function loadPrettyPhoto(){
+        // ensure jQuery exists
+        if (window.jQuery) {
+            // Shim $.browser for prettyPhoto which expects it (old plugin).
+            if (typeof jQuery.browser === 'undefined') {
+                jQuery.browser = { msie: false, version: '0' };
+            }
+            // Dynamically insert plugin script
+            var s = document.createElement('script');
+            s.src = '/assets/js/jquery.prettyPhoto.js';
+            s.onload = function(){
+                // Initialize when plugin is ready
+                jQuery(function($){
+                    $(".gallery a[rel^='prettyPhoto']").prettyPhoto({theme: 'dark_square'});
+                });
+            };
+            s.onerror = function(){
+                // Failed to load plugin; fail silently
+                console.warn('Failed to load prettyPhoto plugin');
+            };
+            document.body.appendChild(s);
+        } else {
+            // Retry after short delay; footer.php loads jQuery with a fallback so allow some time
+            setTimeout(loadPrettyPhoto, 200);
+        }
+    }
+    loadPrettyPhoto();
+})();
 </script>
 <?php require_once $INCLUDE_FOOTER; ?>
 </body>
