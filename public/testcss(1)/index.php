@@ -157,147 +157,121 @@
     </main>
 
     <script>
-    // 动画改进：多组冲击效果（更多方块、更快、更有冲击感）
-    (function (){
+    // 恢复并增强“初始方块”方式：周期性正弦运动（X/Y/Z），容器宽度为 100vw，BOX_COUNT 可调整
+    (function(){
+        var BOX_COUNT = 12; // 初始方块数量，可调整
         var boxes = [];
         var container = document.getElementById('wutai');
 
-        function getMaxHeight() { return Math.max(0, Math.round(window.innerHeight * 0.40)); }
-        function applyContainerStyle() { container.style.position = 'relative'; container.style.height = '40vh'; container.style.overflow = 'hidden'; }
-        function rand(min, max) { return Math.random() * (max - min) + min; }
-        function randInt(max) { return Math.floor(Math.random() * max); }
+        function getMaxHeight(){ return Math.max(0, Math.round(window.innerHeight * 0.40)); }
+        function applyContainerStyle(){
+            container.style.position = 'relative';
+            container.style.height = '40vh';
+            container.style.width = '100vw'; // 不限制宽度，使用视口宽度
+            container.style.overflow = 'hidden';
+            container.style.perspective = '900px';
+            container.style.perspectiveOrigin = '50% 50%';
+        }
 
-        function hsl2color(hsl) {
-            if (hsl[0] > 360 || hsl[0] < 0 || hsl[1] > 100 || hsl[1] < 0 || hsl[2] > 100 || hsl[2] < 0) return "#000000";
-            var rgb = [0,0,0];
-            if (hsl[0] <= 60) { rgb[0]=255; rgb[1]=Math.floor(255/60*hsl[0]); }
-            else if (hsl[0] <= 120) { rgb[0]=Math.floor(255-(255/60)*(hsl[0]-60)); rgb[1]=255; }
-            else if (hsl[0] <= 180) { rgb[1]=255; rgb[2]=Math.floor((255/60)*(hsl[0]-120)); }
-            else if (hsl[0] <= 240) { rgb[1]=Math.floor(255-(255/60)*(hsl[0]-180)); rgb[2]=255; }
-            else if (hsl[0] <= 300) { rgb[0]=Math.floor((255/60)*(hsl[0]-240)); rgb[2]=255; }
-            else { rgb[0]=255; rgb[2]=Math.floor(255-(255/60)*(hsl[0]-300)); }
-            var sat = Math.abs((hsl[1]-100)/100);
-            rgb[0]=Math.floor(rgb[0]-(rgb[0]-128)*sat);
-            rgb[1]=Math.floor(rgb[1]-(rgb[1]-128)*sat);
-            rgb[2]=Math.floor(rgb[2]-(rgb[2]-128)*sat);
+        function rand(min,max){ return Math.random()*(max-min)+min; }
+        function randInt(max){ return Math.floor(Math.random()*max); }
+
+        function hsl2color(hsl){
+            if (hsl[0] > 360 || hsl[0] < 0 || hsl[1] > 100 || hsl[1] < 0 || hsl[2] > 100 || hsl[2] < 0) return '#000000';
+            var rgb=[0,0,0];
+            if(hsl[0]<=60){rgb[0]=255;rgb[1]=Math.floor(255/60*hsl[0]);}
+            else if(hsl[0]<=120){rgb[0]=Math.floor(255-(255/60)*(hsl[0]-60));rgb[1]=255;}
+            else if(hsl[0]<=180){rgb[1]=255;rgb[2]=Math.floor((255/60)*(hsl[0]-120));}
+            else if(hsl[0]<=240){rgb[1]=Math.floor(255-(255/60)*(hsl[0]-180));rgb[2]=255;}
+            else if(hsl[0]<=300){rgb[0]=Math.floor((255/60)*(hsl[0]-240));rgb[2]=255;}else{rgb[0]=255;rgb[2]=Math.floor(255-(255/60)*(hsl[0]-300));}
+            var sat=Math.abs((hsl[1]-100)/100);
+            rgb[0]=Math.floor(rgb[0]-(rgb[0]-128)*sat);rgb[1]=Math.floor(rgb[1]-(rgb[1]-128)*sat);rgb[2]=Math.floor(rgb[2]-(rgb[2]-128)*sat);
             var lum=(hsl[2]-50)/50;
-            if (lum>0){ rgb[0]=Math.floor(rgb[0]+(255-rgb[0])*lum); rgb[1]=Math.floor(rgb[1]+(255-rgb[1])*lum); rgb[2]=Math.floor(rgb[2]+(255-rgb[2])*lum); }
-            else if (lum<0){ rgb[0]=Math.floor(rgb[0]+rgb[0]*lum); rgb[1]=Math.floor(rgb[1]+rgb[1]*lum); rgb[2]=Math.floor(rgb[2]+rgb[2]*lum); }
-            return "#" + (0x1000000 + rgb[0]*0x010000 + rgb[1]*0x000100 + rgb[2]).toString(16).substring(1);
+            if(lum>0){rgb[0]=Math.floor(rgb[0]+(255-rgb[0])*lum);rgb[1]=Math.floor(rgb[1]+(255-rgb[1])*lum);rgb[2]=Math.floor(rgb[2]+(255-rgb[2])*lum);}else if(lum<0){rgb[0]=Math.floor(rgb[0]+rgb[0]*lum);rgb[1]=Math.floor(rgb[1]+rgb[1]*lum);rgb[2]=Math.floor(rgb[2]+rgb[2]*lum);}            
+            return '#'+(0x1000000+rgb[0]*0x010000+rgb[1]*0x000100+rgb[2]).toString(16).substring(1);
         }
 
-        function createBoxElement(size){
-            var el = document.createElement('div');
-            el.className = 'box';
-            el.style.width = size + 'px';
-            el.style.height = size + 'px';
-            el.style.position = 'absolute';
-            el.style.pointerEvents = 'none';
-            container.appendChild(el);
-            return el;
-        }
-
-        function spawnBox(opts){
-            var size = Math.round(rand(opts.sizeMin || 30, opts.sizeMax || 120));
-            var el = createBoxElement(size);
+        function createInitialBoxes(){
             var containerW = container.clientWidth || window.innerWidth;
             var maxH = getMaxHeight();
+            var period = 16000; // 全局周期 16s，开始和结束同状态
+            var omega = 2 * Math.PI / period;
 
-            var spawnEdge = opts.spawnEdge || 'top';
-            var x, y, angle, speed, vx, vy;
+            for(var i=0;i<BOX_COUNT;i++){
+                var el = document.createElement('div');
+                el.className = 'box';
+                var size = Math.round(rand(40,120));
+                el.style.width = size + 'px';
+                el.style.height = size + 'px';
+                el.style.position = 'absolute';
+                el.style.pointerEvents = 'none';
+                el.style.opacity = '0.92'; // 透明度不高
+                el.style.willChange = 'transform, opacity';
 
-            // spawn off-screen depending on edge and aim towards inside
-            if (spawnEdge === 'top'){
-                x = rand(0, Math.max(1, containerW - size));
-                y = -size - rand(0, 200);
-                angle = rand(Math.PI*0.25, Math.PI*0.75); // mostly downward
-            } else if (spawnEdge === 'bottom'){
-                x = rand(0, Math.max(1, containerW - size));
-                y = maxH + size + rand(0,200);
-                angle = rand(-Math.PI*0.75, -Math.PI*0.25); // mostly upward
-            } else if (spawnEdge === 'left'){
-                x = -size - rand(0,200);
-                y = rand(0, Math.max(1, maxH - size));
-                angle = rand(-Math.PI*0.25, Math.PI*0.25); // mostly rightward
-            } else { // right
-                x = (containerW + size + rand(0,200));
-                y = rand(0, Math.max(1, maxH - size));
-                angle = rand(Math.PI*0.75, Math.PI*1.25); // mostly leftward
+                // 基准位置
+                var baseX = rand(0, Math.max(1, containerW - size));
+                var baseY = rand(0, Math.max(1, maxH - size));
+
+                // 振幅：X/Y 取容器一部分，Z 取更大范围以增强 3D 感
+                var ampX = rand(20, Math.max(40, containerW * 0.15));
+                var ampY = rand(10, Math.max(20, maxH * 0.15));
+                var ampZ = rand(60, 360); // px in Z axis
+
+                // 相位随机化以增加差异但全局周期一致
+                var phase = rand(0, Math.PI * 2);
+
+                // 存储状态
+                boxes.push({ el: el, baseX: baseX, baseY: baseY, ampX: ampX, ampY: ampY, ampZ: ampZ, phase: phase, size: size, period: period, omega: omega });
+                container.appendChild(el);
+
+                // 立即设置位置
+                var x = baseX + ampX * Math.sin(phase + 0);
+                var y = baseY + ampY * Math.sin(phase + 0);
+                var z = ampZ * Math.sin(phase + 0);
+                el.style.transform = 'translate3d(' + Math.round(x) + 'px, ' + Math.round(y) + 'px, ' + Math.round(z) + 'px)';
+                el.style.backgroundColor = hsl2color([randInt(360), 100, 70]);
+                el.style.borderRadius = Math.round(rand(0,30)) + 'px';
             }
-
-            speed = rand(opts.minSpeed || 200, opts.maxSpeed || 600);
-            vx = Math.cos(angle) * speed;
-            vy = Math.sin(angle) * speed;
-
-            el.style.backgroundColor = hsl2color([randInt(360), 100, 60]);
-            el.style.borderRadius = Math.round(rand(0, 40)) + 'px';
-
-            boxes.push({ el: el, x: x, y: y, vx: vx, vy: vy, size: size, hidden: false });
-            el.style.transform = 'translate(' + Math.round(x) + 'px, ' + Math.round(y) + 'px)';
         }
 
-        function spawnGroup(group){
-            for (var i=0;i<group.count;i++) spawnBox(group);
-        }
-
-        // Example groups: more boxes, faster speeds, different edges => 冲击感
-        var GROUPS = [
-            { count: 10, spawnEdge: 'top', minSpeed: 300, maxSpeed: 700, sizeMin: 30, sizeMax: 80, delay: 0 },
-            { count: 8, spawnEdge: 'left', minSpeed: 350, maxSpeed: 800, sizeMin: 30, sizeMax: 100, delay: 400 },
-            { count: 12, spawnEdge: 'right', minSpeed: 300, maxSpeed: 700, sizeMin: 40, sizeMax: 120, delay: 900 }
-        ];
-
-        var lastTs = null;
+        var startTs = null;
         function step(ts){
-            if (!lastTs) lastTs = ts;
-            var dt = (ts - lastTs) / 1000; lastTs = ts;
+            if (!startTs) startTs = ts;
+            var t = ts - startTs; // ms since start
             var maxH = getMaxHeight();
             var containerW = container.clientWidth || window.innerWidth;
 
-            for (var i=boxes.length-1;i>=0;i--){
-                var b = boxes[i];
-                b.x += b.vx * dt;
-                b.y += b.vy * dt;
+            boxes.forEach(function(b){
+                var omega = b.omega;
+                var phase = b.phase;
+                var x = b.baseX + b.ampX * Math.sin(phase + omega * t);
+                var y = b.baseY + b.ampY * Math.sin(phase + omega * t + Math.PI/6);
+                var z = b.ampZ * Math.sin(phase + omega * t + Math.PI/3);
 
-                // horizontal wrap for drama
-                if (b.x < -b.size*2) b.x = containerW + b.size;
-                if (b.x > containerW + b.size*2) b.x = -b.size;
-
-                // hide if vertical out of allowed area
-                if (b.y < 0 || (b.y + b.size) > maxH){
-                    if (!b.hidden){ b.el.style.visibility = 'hidden'; b.hidden = true; }
+                // 如果竖直位置超出限制则隐藏
+                if (y < 0 || (y + b.size) > maxH){
+                    b.el.style.visibility = 'hidden';
                 } else {
-                    if (b.hidden){ b.el.style.visibility = 'visible'; b.hidden = false; }
-                    b.el.style.transform = 'translate(' + Math.round(b.x) + 'px, ' + Math.round(b.y) + 'px)';
+                    b.el.style.visibility = 'visible';
                 }
 
-                // optional: cleanup boxes that are far outside both horizontally and vertically to avoid DOM growth
-                if (Math.abs(b.x) > containerW*3 || Math.abs(b.y) > window.innerHeight*3){
-                    // remove element and compact array
-                    try { b.el.parentNode.removeChild(b.el); } catch(e){}
-                    boxes.splice(i,1);
-                }
-            }
+                b.el.style.transform = 'translate3d(' + Math.round(x) + 'px, ' + Math.round(y) + 'px, ' + Math.round(z) + 'px)';
+            });
 
             window.requestAnimationFrame(step);
         }
-
-        // periodic bursts (每隔一段时间再制造冲击)
-        function scheduleBursts(){
-            GROUPS.forEach(function(g){ setTimeout(function(){ spawnGroup(g); }, g.delay || 0); });
-            // 每 4 秒重复一次冲击
-            setInterval(function(){ GROUPS.forEach(function(g){ spawnGroup(g); }); }, 4000);
-        }
-
-        function onResize(){ /* nothing special for now */ }
 
         document.addEventListener('DOMContentLoaded', function(){
             applyContainerStyle();
-            // initial small fallback: create a few boxes so page isn't empty on very small screens
-            spawnGroup({ count: 5, spawnEdge: 'top', minSpeed: 150, maxSpeed: 400, sizeMin:40, sizeMax:90, delay:0 });
-            scheduleBursts();
-            window.addEventListener('resize', onResize);
+            createInitialBoxes();
             window.requestAnimationFrame(step);
+            window.addEventListener('resize', function(){
+                // 重新布局基础位置以响应宽度变化
+                boxes.forEach(function(b){
+                    var containerW = container.clientWidth || window.innerWidth;
+                    b.baseX = Math.min(b.baseX, Math.max(1, containerW - b.size));
+                });
+            });
         });
     })();
     </script>
