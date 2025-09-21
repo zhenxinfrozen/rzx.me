@@ -476,7 +476,6 @@ body {
 	#ray-pic-sidebar {
 		float: left;
 		padding: 10px;
-		min-height: 80vw;
 		background: rgba(255, 255, 255, 0);
 		border: 1px solid #ff0000;
 		/* border-radius: 5px; */
@@ -487,6 +486,7 @@ body {
 	#ray-pic-display-area{
 		float: left;
 		width: 60vw;
+
 		min-height: 800px;
 		padding: 10px;
 		margin: 0 30px;
@@ -496,6 +496,17 @@ body {
 		/* box-shadow: 12px rgb(255, 0, 0); */
 		font-size: 0.9rem;
 		color: #333;
+		display: flex;
+		align-items: center; /* vertical center */
+		justify-content: center; /* horizontal center */
+	}
+
+	#ray-pic-display-shell{ /* ensure inner shell fills area and centers final box */
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	#ray-pic-final{
 			min-width: 50px;

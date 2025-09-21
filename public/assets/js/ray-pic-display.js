@@ -55,12 +55,8 @@
       showInDisplayArea(href, el.getAttribute('title') || el.querySelector('img')?.alt || '');
     }, false);
 
-    // Optionally, load the first thumbnail into display area
-    var first = container.querySelector('a[href]');
-    if (first) {
-      // small timeout so page layout stabilizes
-      setTimeout(function () { showInDisplayArea(first.getAttribute('href'), first.getAttribute('title') || first.querySelector('img')?.alt || ''); }, 120);
-    }
+    // Do NOT auto-load any thumbnail on page open.
+    // The display area should show the instruction until the user clicks a thumbnail.
   }
 
   // init on DOMContentLoaded
