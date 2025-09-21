@@ -14,22 +14,41 @@ a{
 	overflow:hidden;
 	margin:0 auto;
 }
+.main{
+	margin:0 auto;
+	background:#ffffff00;
+	+background:url(../images/IE6-7.jpg) no-repeat center;
+	_background:url(../images/IE6-7.jpg) no-repeat center;
+}
+
+#wallpaper{
+	float: center;
+	margin:0 auto;
+	height:700px;
+}
+#ray-home-wallpaper-item{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin:0 auto;
+	height:100%;
+}
+#ray-home-wallpaper-item >img{
+	display: block;
+	margin: 0 auto;
+	height:100%;
+}
 .header{
 	margin:0 auto;
 	/*height:20px;*/
 	+height:300px; /*IE7*/ 
 	_height:300px; /*IE6*/
-	background:#FFF;
+	background:#ffffff00;
 	+background:url(../images/IE6-7.jpg) no-repeat center;
 	_background:url(../images/IE6-7.jpg) no-repeat center;
 }
 
 
-#wallpaper{
-	text-align:center;
-	margin:0 auto;
-	height:550px;
-}
 
 	
 
@@ -37,7 +56,7 @@ a{
 .menu{
 	width:1000px;
 	height:100px;
-	margin:10px auto;
+	margin: 30px auto;
 }
 .menu_box{
 	width:100px;

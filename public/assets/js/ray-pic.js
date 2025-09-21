@@ -43,7 +43,8 @@
     var finalBox = document.getElementById('ray-pic-final');
     if (!finalBox) return;
 
-    // 清空并显示 loader
+    // 清空并显示 overlay loader（添加 loading 类用于 CSS 控制）
+    finalBox.classList.add('loading');
     finalBox.innerHTML = '';
     var loader = document.createElement('div');
     loader.className = 'ray-pic-loader';
@@ -53,15 +54,18 @@
     var tmp = new Image();
     tmp.onload = function () {
       var dom = createImageElement(href, alt || '');
-      // 用 DOM 元素替换 loader
+      // 插入图片并触发入场动画
       finalBox.innerHTML = '';
       finalBox.appendChild(dom);
-      // 触发一次重绘后添加 show 类以启动 CSS 过渡（如果存在）
+      // 强制重排后添加 show 类
       // eslint-disable-next-line no-unused-expressions
       dom.offsetWidth;
       dom.classList.add('show');
+      // 移除 loading 状态（以隐藏 loader 并还原图片不透明）
+      finalBox.classList.remove('loading');
     };
     tmp.onerror = function () {
+      finalBox.classList.remove('loading');
       finalBox.innerHTML = '<p class="ray-pic-error">无法加载图片。</p>';
     };
     tmp.src = href;

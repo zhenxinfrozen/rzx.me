@@ -20,7 +20,7 @@
     -webkit-perspective:900px;
     -webkit-perspective-origin:50% 50%;
     position:relative;
-    overflow:hidden;
+    /* overflow:hidden; */
   }
 
   .box{
@@ -126,10 +126,10 @@
 
   /* per-box animation setup (standard + webkit), start paused */
   #box1{ z-index:100; opacity:0.92; transform: rotateY(0deg); -webkit-transform: rotateY(0deg); animation-name: myfirst4; animation-timing-function: linear; animation-duration: 5s; animation-delay: 0s; animation-iteration-count: infinite; animation-direction: alternate; animation-play-state: paused; -webkit-animation-name: myfirst4; -webkit-animation-timing-function: linear; -webkit-animation-duration: 5s; -webkit-animation-delay:0s; -webkit-animation-iteration-count: infinite; -webkit-animation-direction: alternate; -webkit-animation-play-state: paused; }
-  #box2{ z-index:100; opacity:0.92; transform: rotateX(32deg); -webkit-transform: rotateX(32deg); animation-name: myfirst2; animation-duration:5s; animation-timing-function:linear; animation-delay:0s; animation-iteration-count: infinite; animation-direction: alternate; animation-play-state: paused; -webkit-animation-name: myfirst2; -webkit-animation-duration:5s; -webkit-animation-timing-function:linear; -webkit-animation-delay:0s; -webkit-animation-iteration-count: infinite; -webkit-animation-direction: alternate; -webkit-animation-play-state: paused; }
-  #box3{ z-index:100; opacity:0.92; transform: rotateY(32deg); -webkit-transform: rotateY(32deg); animation-name: myfirst; animation-duration:5s; animation-timing-function:linear; animation-delay:2s; animation-iteration-count: infinite; animation-direction: alternate; animation-play-state: paused; -webkit-animation-name: myfirst; -webkit-animation-duration:5s; -webkit-animation-timing-function:linear; -webkit-animation-delay:2s; -webkit-animation-iteration-count: infinite; -webkit-animation-direction: alternate; -webkit-animation-play-state: paused; }
-  #box4{ z-index:100; opacity:0.92; transform: rotateY(123deg) rotateZ(34deg) translateY(552px) translateZ(552px); -webkit-transform: rotateY(123deg) rotateZ(34deg) translateY(552px) translateZ(552px); animation-name: myfirst5; animation-duration:5s; animation-timing-function:linear; animation-delay:2s; animation-iteration-count: infinite; animation-direction: alternate; animation-play-state: paused; -webkit-animation-name: myfirst5; -webkit-animation-duration:5s; -webkit-animation-timing-function:linear; -webkit-animation-delay:2s; -webkit-animation-iteration-count: infinite; -webkit-animation-direction: alternate; -webkit-animation-play-state: paused; }
-  #box5{ z-index:100; opacity:0.92; transform: rotateY(120deg); -webkit-transform: rotateY(120deg); }
+  #box2{ z-index:100; opacity:0.92; transform: rotateX(0eg); -webkit-transform: rotateX(0deg); animation-name: myfirst2; animation-duration:5s; animation-timing-function:linear; animation-delay:0s; animation-iteration-count: infinite; animation-direction: alternate; animation-play-state: paused; -webkit-animation-name: myfirst2; -webkit-animation-duration:5s; -webkit-animation-timing-function:linear; -webkit-animation-delay:0s; -webkit-animation-iteration-count: infinite; -webkit-animation-direction: alternate; -webkit-animation-play-state: paused; }
+  #box3{ z-index:100; opacity:0.92; transform: rotateY(0deg); -webkit-transform: rotateY(0deg); animation-name: myfirst; animation-duration:5s; animation-timing-function:linear; animation-delay:2s; animation-iteration-count: infinite; animation-direction: alternate; animation-play-state: paused; -webkit-animation-name: myfirst; -webkit-animation-duration:5s; -webkit-animation-timing-function:linear; -webkit-animation-delay:2s; -webkit-animation-iteration-count: infinite; -webkit-animation-direction: alternate; -webkit-animation-play-state: paused; }
+  #box4{ z-index:100; opacity:0.92; transform: rotateY(0deg) rotateZ(0deg) translateY(0px) translateZ(0px); -webkit-transform: rotateY(0eg) rotateZ(0deg) translateY(0px) translateZ(00px); animation-name: myfirst5; animation-duration:5s; animation-timing-function:linear; animation-delay:2s; animation-iteration-count: infinite; animation-direction: alternate; animation-play-state: paused; -webkit-animation-name: myfirst5; -webkit-animation-duration:5s; -webkit-animation-timing-function:linear; -webkit-animation-delay:2s; -webkit-animation-iteration-count: infinite; -webkit-animation-direction: alternate; -webkit-animation-play-state: paused; }
+  #box5{ z-index:100; opacity:0.92; transform: rotateY(0deg); -webkit-transform: rotateY(0deg); }
 
   #box1, #box2 li{ list-style-type:none; }
 

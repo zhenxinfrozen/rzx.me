@@ -99,15 +99,14 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 	<section id="ray-pic-display-area" class="ray-pic-display-area">
 		<div id="ray-pic-display-shell" class="ray-pic-display-shell">
 			<div id="ray-pic-final" class="ray-pic-final" role="region" aria-label="展示区">
-				<p class="ray-pic-instruction">请选择左侧缩略图以在此处预览。</p>
+				<p class="ray-pic-instruction"></p>
 			</div>
 		</div>
 	</section>
 </div>
 
 <?php require_once $INCLUDE_FOOTER; ?>
-<!-- 页面脚本：simple-lightbox 为可选 overlay，ray-pic.js 为本页预览脚本（已清理并格式化） -->
-<script src="/assets/js/simple-lightbox.js"></script>
+<!-- 页面脚本：ray-pic.js 为本页预览脚本（已清理并格式化） -->
 <script src="/assets/js/ray-pic.js"></script>
 
 </body>
