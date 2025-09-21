@@ -159,56 +159,148 @@
     </main>
 
     <script>
-    // 现代化的 DOM 就绪处理：保持原有功能（随机 HSL 颜色填充）但使用更现代的 API
-    document.addEventListener('DOMContentLoaded', function () {
-        var boxes = document.querySelectorAll('.box');
-        boxes.forEach(function (el) {
-            el.style.backgroundColor = hsl2color([radomFuc(360), 100, 70]);
+    // 动画改进：使用 requestAnimationFrame 进行更平滑的运动，盒子初始位置/速度/尺寸随机化
+    (function (){
+        var BOX_COUNT = 5;
+        var boxes = [];
+        var container = document.getElementById('wutai');
+
+        // 限制高度为视口的 40vh
+        function getMaxHeight() {
+            return Math.max(0, Math.round(window.innerHeight * 0.40));
+        }
+
+        // 初始化样式：容器限制高度并隐藏溢出
+        function applyContainerStyle() {
+            container.style.position = 'relative';
+            container.style.height = '40vh';
+            container.style.overflow = 'hidden';
+        }
+
+        function rand(min, max) { return Math.random() * (max - min) + min; }
+
+        function randInt(max) { return Math.floor(Math.random() * max); }
+
+        function hsl2color(hsl) {
+            if (hsl[0] > 360 || hsl[0] < 0 || hsl[1] > 100 || hsl[1] < 0 || hsl[2] > 100 || hsl[2] < 0) return "#000000";
+            var rgb = [0, 0, 0];
+            if (hsl[0] <= 60) {
+                rgb[0] = 255;
+                rgb[1] = Math.floor(255 / 60 * hsl[0]);
+            } else if (hsl[0] <= 120) {
+                rgb[0] = Math.floor(255 - (255 / 60) * (hsl[0] - 60));
+                rgb[1] = 255;
+            } else if (hsl[0] <= 180) {
+                rgb[1] = 255;
+                rgb[2] = Math.floor((255 / 60) * (hsl[0] - 120));
+            } else if (hsl[0] <= 240) {
+                rgb[1] = Math.floor(255 - (255 / 60) * (hsl[0] - 180));
+                rgb[2] = 255;
+            } else if (hsl[0] <= 300) {
+                rgb[0] = Math.floor((255 / 60) * (hsl[0] - 240));
+                rgb[2] = 255;
+            } else if (hsl[0] <= 360) {
+                rgb[0] = 255;
+                rgb[2] = Math.floor(255 - (255 / 60) * (hsl[0] - 300));
+            }
+            var sat = Math.abs((hsl[1] - 100) / 100);
+            rgb[0] = Math.floor(rgb[0] - (rgb[0] - 128) * sat);
+            rgb[1] = Math.floor(rgb[1] - (rgb[1] - 128) * sat);
+            rgb[2] = Math.floor(rgb[2] - (rgb[2] - 128) * sat);
+            var lum = (hsl[2] - 50) / 50;
+            if (lum > 0) {
+                rgb[0] = Math.floor(rgb[0] + (255 - rgb[0]) * lum);
+                rgb[1] = Math.floor(rgb[1] + (255 - rgb[1]) * lum);
+                rgb[2] = Math.floor(rgb[2] + (255 - rgb[2]) * lum);
+            } else if (lum < 0) {
+                rgb[0] = Math.floor(rgb[0] + rgb[0] * lum);
+                rgb[1] = Math.floor(rgb[1] + rgb[1] * lum);
+                rgb[2] = Math.floor(rgb[2] + rgb[2] * lum);
+            }
+            return "#" + (0x1000000 + rgb[0] * 0x010000 + rgb[1] * 0x000100 + rgb[2]).toString(16).substring(1);
+        }
+
+        function createBoxes() {
+            for (var i = 1; i <= BOX_COUNT; i++) {
+                var el = document.getElementById('box' + i);
+                // 随机尺寸，宽高在 40..120px
+                var size = Math.round(rand(40, 120));
+                el.style.width = size + 'px';
+                el.style.height = size + 'px';
+                el.style.position = 'absolute';
+
+                // 初始随机位置：水平在容器宽的 0..100%，垂直在 0..maxHeight
+                var containerW = container.clientWidth || window.innerWidth;
+                var maxH = getMaxHeight();
+                var x = rand(0, Math.max(1, containerW - size));
+                var y = rand(0, Math.max(1, maxH - size));
+
+                // 随机速度：每秒 px/s，水平和垂直速度 -range..range（更随机）
+                var speedRange = rand(30, 180); // px per second
+                var angle = rand(0, Math.PI * 2);
+                var vx = Math.cos(angle) * speedRange;
+                var vy = Math.sin(angle) * speedRange;
+
+                // 颜色随机化
+                el.style.backgroundColor = hsl2color([randInt(360), 100, 70]);
+                el.style.borderRadius = Math.round(rand(0, 30)) + 'px';
+
+                // 保存状态
+                boxes.push({ el: el, x: x, y: y, vx: vx, vy: vy, size: size, hidden: false });
+                // 立刻设置位置
+                el.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+            }
+        }
+
+        var lastTs = null;
+        function step(ts) {
+            if (!lastTs) lastTs = ts;
+            var dt = (ts - lastTs) / 1000; // seconds
+            lastTs = ts;
+            var maxH = getMaxHeight();
+            var containerW = container.clientWidth || window.innerWidth;
+
+            boxes.forEach(function (b) {
+                b.x += b.vx * dt;
+                b.y += b.vy * dt;
+
+                // 边界反弹（水平），使飞行更有戏剧性
+                if (b.x < -b.size) b.x = containerW; // wrap-around from left
+                if (b.x > containerW) b.x = -b.size; // wrap-around from right
+
+                // 垂直超出限制时隐藏（并停止渲染位置）
+                if (b.y < 0 || (b.y + b.size) > maxH) {
+                    if (!b.hidden) {
+                        b.el.style.visibility = 'hidden';
+                        b.hidden = true;
+                    }
+                } else {
+                    if (b.hidden) {
+                        b.el.style.visibility = 'visible';
+                        b.hidden = false;
+                    }
+                    b.el.style.transform = 'translate(' + Math.round(b.x) + 'px, ' + Math.round(b.y) + 'px)';
+                }
+            });
+            window.requestAnimationFrame(step);
+        }
+
+        function onResize() {
+            // 当容器大小变化时，确保盒子 x,y 不会永久不可见
+            boxes.forEach(function (b) {
+                var containerW = container.clientWidth || window.innerWidth;
+                if (b.x > containerW) b.x = containerW / 2;
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function (){
+            applyContainerStyle();
+            createBoxes();
+            window.addEventListener('resize', onResize);
+            window.requestAnimationFrame(step);
         });
-    });
-
-    function radomFuc(value) { // 取随机数（保留原名以避免外部依赖变化）
-        return Math.floor(value * Math.random());
-    }
-
-    function hsl2color(hsl) { // HSL -> Hex 颜色算法（保留实现）
-        if (hsl[0] > 360 || hsl[0] < 0 || hsl[1] > 100 || hsl[1] < 0 || hsl[2] > 100 || hsl[2] < 0) return "#000000";
-        var rgb = [0, 0, 0];
-        if (hsl[0] <= 60) {
-            rgb[0] = 255;
-            rgb[1] = Math.floor(255 / 60 * hsl[0]);
-        } else if (hsl[0] <= 120) {
-            rgb[0] = Math.floor(255 - (255 / 60) * (hsl[0] - 60));
-            rgb[1] = 255;
-        } else if (hsl[0] <= 180) {
-            rgb[1] = 255;
-            rgb[2] = Math.floor((255 / 60) * (hsl[0] - 120));
-        } else if (hsl[0] <= 240) {
-            rgb[1] = Math.floor(255 - (255 / 60) * (hsl[0] - 180));
-            rgb[2] = 255;
-        } else if (hsl[0] <= 300) {
-            rgb[0] = Math.floor((255 / 60) * (hsl[0] - 240));
-            rgb[2] = 255;
-        } else if (hsl[0] <= 360) {
-            rgb[0] = 255;
-            rgb[2] = Math.floor(255 - (255 / 60) * (hsl[0] - 300));
-        }
-        var sat = Math.abs((hsl[1] - 100) / 100);
-        rgb[0] = Math.floor(rgb[0] - (rgb[0] - 128) * sat);
-        rgb[1] = Math.floor(rgb[1] - (rgb[1] - 128) * sat);
-        rgb[2] = Math.floor(rgb[2] - (rgb[2] - 128) * sat);
-        var lum = (hsl[2] - 50) / 50;
-        if (lum > 0) {
-            rgb[0] = Math.floor(rgb[0] + (255 - rgb[0]) * lum);
-            rgb[1] = Math.floor(rgb[1] + (255 - rgb[1]) * lum);
-            rgb[2] = Math.floor(rgb[2] + (255 - rgb[2]) * lum);
-        } else if (lum < 0) {
-            rgb[0] = Math.floor(rgb[0] + rgb[0] * lum);
-            rgb[1] = Math.floor(rgb[1] + rgb[1] * lum);
-            rgb[2] = Math.floor(rgb[2] + rgb[2] * lum);
-        }
-        return "#" + (0x1000000 + rgb[0] * 0x010000 + rgb[1] * 0x000100 + rgb[2]).toString(16).substring(1);
-    }
+    })();
     </script>
 
 </body>
