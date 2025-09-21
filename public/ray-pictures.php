@@ -1,17 +1,16 @@
 <?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
 <!--
-	NOTE: Local prettyPhoto JS plugin was removed from this repository per user request.
-	The page previously dynamically loaded the plugin; if you want to restore the plugin files
-	you can recover them from the previous commit (the commit before d3b15fe which removed the files).
+	说明：根据用户要求，本仓库已移除本地的 prettyPhoto 插件 JS 文件。
+	该页面之前通过动态方式加载该插件；如果需要恢复这些文件，可以从删除它们的前一个提交中恢复。
 
-	Example rollback (from repository root):
+	恢复示例（从仓库根目录执行）：
 		git checkout d3b15fe^ -- public/assets/js/jquery.prettyPhoto.js
 		git checkout d3b15fe^ -- "public/dev/demo/js/新建文件夹/jquery.prettyPhoto.js"
 		git add public/assets/js/jquery.prettyPhoto.js "public/dev/demo/js/新建文件夹/jquery.prettyPhoto.js"
 		git commit -m "chore(pictures): restore prettyPhoto plugin"
 
-	After restoring the files you can re-enable the loader/initialization code in this file if needed.
- -->
+	恢复文件后，如果需要可以在此文件中重新启用插件的加载与初始化代码。
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -102,38 +101,45 @@
 </div>
 
 		
-<!-- Load scripts at the end of body to avoid render-blocking -->
+<!-- 在 body 末尾加载脚本以避免阻塞渲染 -->
 <script>
-// Defer loading of prettyPhoto until a modern jQuery (from footer.php) is available.
-// This avoids loading multiple jQuery versions and prevents conflicts.
+/*
+ 说明：此脚本负责在站点页脚（footer.php）提供现代 jQuery 之后，延迟加载旧的 prettyPhoto 插件并初始化。
+ 目的：
+   - 避免同时加载多个 jQuery 版本导致冲突。
+   - 只在 jQuery 可用时动态插入插件脚本并初始化画廊（lightbox）。
+
+ 如果你已经从仓库中删除了 `/assets/js/jquery.prettyPhoto.js`，该脚本将尝试加载但会在控制台记录错误（不会中断页面）。
+ 恢复插件后可取消注释此段或保留以实现非阻塞的动态加载。
+*/
 (function waitForjQueryAndLoad(){
-    function loadPrettyPhoto(){
-        // ensure jQuery exists
-        if (window.jQuery) {
-            // Shim $.browser for prettyPhoto which expects it (old plugin).
-            if (typeof jQuery.browser === 'undefined') {
-                jQuery.browser = { msie: false, version: '0' };
-            }
-            // Dynamically insert plugin script
-            var s = document.createElement('script');
-            s.src = '/assets/js/jquery.prettyPhoto.js';
-            s.onload = function(){
-                // Initialize when plugin is ready
-                jQuery(function($){
-                    $(".gallery a[rel^='prettyPhoto']").prettyPhoto({theme: 'dark_square'});
-                });
-            };
-            s.onerror = function(){
-                // Failed to load plugin; fail silently
-                console.warn('Failed to load prettyPhoto plugin');
-            };
-            document.body.appendChild(s);
-        } else {
-            // Retry after short delay; footer.php loads jQuery with a fallback so allow some time
-            setTimeout(loadPrettyPhoto, 200);
-        }
-    }
-    loadPrettyPhoto();
+	function loadPrettyPhoto(){
+		// 检查 jQuery 是否已加载
+		if (window.jQuery) {
+			// 为 old prettyPhoto 插件提供必要的 $.browser shim（旧插件依赖此值）
+			if (typeof jQuery.browser === 'undefined') {
+				jQuery.browser = { msie: false, version: '0' };
+			}
+			// 动态插入插件脚本
+			var s = document.createElement('script');
+			s.src = '/assets/js/jquery.prettyPhoto.js';
+			s.onload = function(){
+				// 插件加载完成后初始化画廊
+				jQuery(function($){
+					$(".gallery a[rel^='prettyPhoto']").prettyPhoto({theme: 'dark_square'});
+				});
+			};
+			s.onerror = function(){
+				// 无法加载插件时在控制台输出警告（沉默失败，避免影响用户）
+				console.warn('无法加载 prettyPhoto 插件');
+			};
+			document.body.appendChild(s);
+		} else {
+			// 如果 jQuery 还未出现，短暂等待后重试；页脚可能有延迟加载逻辑
+			setTimeout(loadPrettyPhoto, 200);
+		}
+	}
+	loadPrettyPhoto();
 })();
 </script>
 <?php require_once $INCLUDE_FOOTER; ?>
