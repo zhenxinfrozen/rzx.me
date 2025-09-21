@@ -1,15 +1,15 @@
-<!-- includes/views/header.php - semantic header + responsive nav -->
+<!-- includes/views/header.php - 语义化页眉 + 响应式导航 -->
 <header class="site-header" role="banner">
     <div class="site-header__inner">
         <a class="site-brand" href="/">
-            <!-- optional logo image if available -->
+            <!-- 可选的 logo 图片（如果存在） -->
             <?php if (file_exists(__DIR__ . '/../../public/assets/images/Avatar100X100.jpg')): ?>
                 <img src="/assets/images/Avatar100X100.jpg" alt="Ray avatar">
             <?php endif; ?>
             rzx.me
         </a>
 
-        <!-- checkbox toggle for small screens (no JS required) -->
+    <!-- 用于小屏幕的复选切换（无须 JS） -->
         <input id="nav-toggle" class="nav-toggle" type="checkbox" aria-hidden="true">
         <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
             <span aria-hidden="true"></span>
@@ -17,14 +17,16 @@
 
         <nav class="site-nav" role="navigation" aria-label="Primary">
             <?php
-            // Determine current request path for active state detection.
+            // 确定当前请求路径，用于导航高亮（active）判断。
+            
+            
             $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
             $path = parse_url($requestUri, PHP_URL_PATH);
             if ($path !== '/') {
                 $path = rtrim($path, '/');
             }
 
-            // Nav items: label => path
+            // 导航项： 标签 => 路径
             $navItems = [
                 'Home' => '/',
                 'Animation' => '/ray-animation.php',
@@ -36,12 +38,12 @@
                 'About' => '/ray-contact.php',
             ];
 
-            // Render nav component via render_template when available, fallback to inline list
+            // 优先通过 render_template 渲染导航组件；若不可用则回退到内联列表渲染
             $navComponent = __DIR__ . '/components/nav.php';
             if (function_exists('render_template')) {
                 echo render_template($navComponent, ['navItems' => $navItems, 'path' => $path]);
             } else {
-                // fallback: render inline list
+                // 回退：直接渲染内联列表
                 ?>
                 <ul class="site-nav__list">
                     <?php foreach ($navItems as $label => $href):
@@ -59,8 +61,8 @@
 </header>
 
 <?php
-// Inline header CSS like footer.php to keep a single source of truth under includes/css
-// Prefer public asset for caching; fallback to includes inline if missing.
+// 与 footer.php 一样尝试使用公共样式文件以保持单一样式来源
+// 优先使用 public 下的资源以获得缓存；若不存在则回退到 includes 目录下的内联样式。
     $publicCss = __DIR__ . '/../../public/assets/css/header.css';
     if (file_exists($publicCss)) {
         echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/header.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
@@ -72,11 +74,13 @@
     }
 ?>
 <script>
-// Make header fixed and toggle scrolled opacity on scroll (lightweight, no dependencies)
+// 使页眉固定，并在滚动时切换 .scrolled 类以调整透明度（轻量实现，无依赖）
 (function(){
+    // 如果没有找到页眉则直接返回
     var header = document.querySelector('.site-header');
     if (!header) return;
-    // mark header as fixed and ensure body has top padding to avoid content jump
+
+    // 将页眉标记为固定，并为 body 添加顶部内边距以避免内容跳动
     header.classList.add('fixed');
     document.body.classList.add('has-fixed-header');
 
@@ -97,7 +101,7 @@
     }
 
     window.addEventListener('scroll', onScroll, {passive:true});
-    // run once to set initial state
+    // 运行一次以设置初始状态
     onScroll();
 })();
 </script>
