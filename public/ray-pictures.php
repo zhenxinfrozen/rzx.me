@@ -29,15 +29,25 @@
 						<li><a href="/assets/images/fullscreen/a_3.jpg" rel="gallery1"><img src="/assets/images/thumbnails/a_3.gif" width="60" height="60" alt="Nice Night" /></a></li>
 						<li><a href="/assets/images/fullscreen/a_4.jpg" rel="gallery1"><img src="/assets/images/thumbnails/a_4.gif" width="60" height="60" alt="Darksiders" /></a></li>
 						<li><a href="/assets/images/fullscreen/a_5.jpg" rel="gallery1"><img src="/assets/images/thumbnails/a_5.gif" width="60" height="60" alt="Dante horses" /></a></li>
+						<li><a href="/assets/images/fullscreen/a_6.jpg" rel="gallery1"><img src="/assets/images/thumbnails/a_6.gif" width="60" height="60" alt="Footman Human" /></a></li>
+						<li><a href="/assets/images/fullscreen/a_7.jpg" rel="gallery1"><img src="/assets/images/thumbnails/a_7.gif" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/a_8.jpg" rel="gallery1"><img src="/assets/images/thumbnails/a_8.gif" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/a_9.jpg" rel="gallery1"><img src="/assets/images/thumbnails/a_9.gif" width="60" height="60" alt="" /></a></li>
 					</ul>
 				</section>
 
 				<section class="ray-pic-section">
 					<h2 class="ray-pic-section-title">Games</h2>
 					<ul class="ray-pic-list clearfix">
-						<li><a href="/assets/images/fullscreen/1.jpg" rel="gallery1" title="都是些老图了"><img src="/assets/images/thumbnails/t_1.jpg" width="60" height="60" alt="World of Warcraft" /></a></li>
+						<li><a href="/assets/images/fullscreen/1.jpg" rel="gallery1" title="都是些老图了,彩图数量有限(一半都是鼠绘)充数."><img src="/assets/images/thumbnails/t_1.jpg" width="60" height="60" alt="World of Warcraft" /></a></li>
 						<li><a href="/assets/images/fullscreen/2.jpg" rel="gallery1"><img src="/assets/images/thumbnails/t_2.jpg" width="60" height="60" alt="Nice Night" /></a></li>
 						<li><a href="/assets/images/fullscreen/3.jpg" rel="gallery1"><img src="/assets/images/thumbnails/t_3.gif" width="60" height="60" alt="Darksiders" /></a></li>
+						<li><a href="/assets/images/fullscreen/4.jpg" rel="gallery1"><img src="/assets/images/thumbnails/t_4.jpg" width="60" height="60" alt="Sylvanas Windrunner" /></a></li>
+						<li><a href="/assets/images/fullscreen/5.jpg" rel="gallery1"><img src="/assets/images/thumbnails/t_5.jpg" width="60" height="60" alt="Dante horses" /></a></li>
+						<li><a href="/assets/images/fullscreen/6.jpg" rel="gallery1"><img src="/assets/images/thumbnails/t_6.jpg" width="60" height="60" alt="Footman Human" /></a></li>
+						<li><a href="/assets/images/fullscreen/7.jpg" rel="gallery1"><img src="/assets/images/thumbnails/t_7.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/p01.jpg" rel="gallery1"><img src="/assets/images/thumbnails/p_1.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/8.jpg" rel="gallery1"><img src="/assets/images/thumbnails/t_8.jpg" width="60" height="60" alt="" /></a></li>
 					</ul>
 				</section>
 
@@ -46,13 +56,21 @@
 					<ul class="ray-pic-list clearfix">
 						<li><a href="/assets/images/fullscreen/c01.jpg" rel="gallery2"><img src="/assets/images/thumbnails/c_1.jpg" width="60" height="60" alt="" /></a></li>
 						<li><a href="/assets/images/fullscreen/c02.jpg" rel="gallery2"><img src="/assets/images/thumbnails/c_2.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/d01.jpg" rel="gallery2"><img src="/assets/images/thumbnails/d_1.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/c03.jpg" rel="gallery2"><img src="/assets/images/thumbnails/c_3.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/c04.jpg" rel="gallery2"><img src="/assets/images/thumbnails/c_4.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/c05.jpg" rel="gallery2"><img src="/assets/images/thumbnails/c_5.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/c06.jpg" rel="gallery2"><img src="/assets/images/thumbnails/c_6.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/c07.jpg" rel="gallery2"><img src="/assets/images/thumbnails/c_7.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/c08.jpg" rel="gallery2"><img src="/assets/images/thumbnails/c_8.jpg" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/s01.jpg" rel="gallery2" title="&lt;a href=&#x27;http://www.ruizhenxin.com/blog&#x27; target=&#x27;_blank&#x27; &gt;This will open [My Blog] in a new window&lt;/a&gt;"><img src="/assets/images/thumbnails/s_1.jpg" width="60" height="60" alt="" /></a></li>
 					</ul>
 				</section>
 
 				<section class="ray-pic-section">
 					<h2 class="ray-pic-section-title">Special zone</h2>
 					<ul class="ray-pic-list clearfix">
-						<li><a href="/assets/images/fullscreen/s02.jpg" rel="gallery-special"><img src="/assets/images/thumbnails/s_2.gif" width="60" height="60" alt="" /></a></li>
+						<li><a href="/assets/images/fullscreen/s02.jpg" rel="gallery-special" title="&lt;a href=&#x27;http://www.ruizhenxin.com/blog&#x27; target=&#x27;_blank&#x27; &gt;This will open [My Blog] in a new window&lt;/a&gt;"><img src="/assets/images/thumbnails/s_2.gif" width="60" height="60" alt="" /></a></li>
 					</ul>
 				</section>
 			</nav>
