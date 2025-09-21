@@ -16,8 +16,9 @@
 }
 
 .video-row {
-  display: flex; /* 建议使用 flex 而不是 inline-flex */
+  display: grid; /* 建议使用 flex 而不是 inline-flex */
   flex-wrap: wrap; /* 核心：允许子元素换行 */
+  grid-template-columns: repeat(auto-fit, minmax(356px, 1fr)); /* 响应式列布局 */
   gap: 40px;
   width:60vw;
   margin: 20px auto;

@@ -9,7 +9,7 @@
             rzx.me
         </a>
 
-    <!-- 用于小屏幕的复选切换（无须 JS） -->
+        <!-- 用于小屏幕的复选切换（无须 JS） -->
         <input id="nav-toggle" class="nav-toggle" type="checkbox" aria-hidden="true">
         <label for="nav-toggle" class="nav-toggle-label" aria-hidden="true">
             <span aria-hidden="true"></span>
@@ -38,24 +38,18 @@
                 'About' => '/ray-about.php',
             ];
 
-            // 优先通过 render_template 渲染导航组件；若不可用则回退到内联列表渲染
-            // 现在使用更明确命名的组件 ray-top-nav.php（顶部导航）
-            $navComponent = __DIR__ . '/components/ray-top-nav.php';
-            if (function_exists('render_template')) {
-                echo render_template($navComponent, ['navItems' => $navItems, 'path' => $path]);
-            } else {
-                // 回退：直接渲染内联列表
+            // 直接在 header 中渲染导航（不通过独立组件）。
+            // 这样 header 自包含，页面只需 include header.php 即可获得完整导航功能。
+            ?>
+            <ul class="site-nav__list">
+                <?php foreach ($navItems as $label => $href):
+                    $isActive = ($href === $path) || ($href === '/' && $path === '/');
+                    $class = 'site-nav__link' . ($isActive ? ' site-nav__link--active' : '');
                 ?>
-                <ul class="site-nav__list">
-                    <?php foreach ($navItems as $label => $href):
-                        $isActive = ($href === $path) || ($href === '/' && $path === '/');
-                        $class = 'site-nav__link' . ($isActive ? ' site-nav__link--active' : '');
-                    ?>
-                    <li class="site-nav__item"><a class="<?php echo $class ?>" href="<?php echo $href ?>"><?php echo $label ?></a></li>
-                    <?php endforeach; ?>
-                </ul>
-                <?php
-            }
+                <li class="site-nav__item"><a class="<?php echo $class ?>" href="<?php echo htmlspecialchars($href, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>"><?php echo htmlspecialchars($label, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a></li>
+                <?php endforeach; ?>
+            </ul>
+            <?php
             ?>
         </nav>
     </div>

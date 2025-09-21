@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>About me</title>
 <meta name="description" content="Contact & About"/>
-<link href="assets/css/contact.css" rel="stylesheet" type="text/css" />
+<link href="assets/css/about.css" rel="stylesheet" type="text/css" />
 </head>
 
 
