@@ -38,7 +38,7 @@
     // Insert CDN script tag
     var cdn = document.createElement('script');
     cdn.src = 'https://code.jquery.com/jquery-3.7.1.min.js';
-    cdn.integrity = 'sha256-3gJwYp8U+Y3f9C5v+XgYh2i1Yl3M7u1l9+8n8F0Y3Yg=';
+    cdn.integrity = 'sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=';
     cdn.crossOrigin = 'anonymous';
     cdn.onload = function(){ /* CDN loaded successfully */ };
     cdn.onerror = function(){ loadLocal(); };

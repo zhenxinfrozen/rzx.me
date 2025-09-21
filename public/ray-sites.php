@@ -9,35 +9,26 @@
 <meta name="description" content="颓废动画人的个人网站，涂鸦和作品练习.扯淡的东西. This site is a portfolio of Ray art. Hope you enjoy it!" />
 <meta name="author" content="ray,ruizhenxin,rzx.me">
 <link href="/assets/css/sites.css" type="text/css" rel="stylesheet" />
-<link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-3gJwYp8U+Y3f9C5v+XgYh2i1Yl3M7u1l9+8n8F0Y3Yg=" crossorigin="anonymous"></script>
 </head>
-
 
 <body>
 <?php require_once $INCLUDE_HEADER; ?>
 	<div id="wrap">
 		<a href="#" id="title"><div class="title">目录</div></a>
 		<div id="box">
-			<a href="http://blog.rzx.me/" title="Blog-杂文杂图杂念"><div id="site1"></div></a>
-			<a href="http://instagram.com/rzxme" title="instargam Photos"><div id="site2"></div></a>
-			<a href="http://www.storyboardworld.com/" title="分镜世界"><div id="site3"></div></a>
-			<a href="#"><div id="site4"></div></a>
-			<a href="http://tumblr.rzx.me/" title="Tumblr-文艺装逼回忆图"><div id="site5"></div></a>
-			<a href="#"><div id="site6"></div></a>
-			<a href="http://fuck.rzx.me/" title="VPN"><div id="site7"></div></a>
-			<a href="#"><div id="site8"></div></a>
-			<a href="#" title="Lab-实验室"><div id="site9"></div></a>
+			<a href="http://blog.rzx.me/" title="Blog-杂文杂图杂念"><div class="site-item" id="site1"></div></a>
+			<a href="https://instagram.com/rzxme" title="instargam Photos"><div class="site-item" id="site2"></div></a>
+			<a href="https://www.storyboardworld.com/" title="分镜世界"><div class="site-item" id="site3"></div></a>
+			<a href="#"><div class="site-item" id="site4"></div></a>
+			<a href="https://tumblr.rzx.me/" title="Tumblr-文艺装逼回忆图"><div class="site-item" id="site5"></div></a>
+			<a href="#"><div class="site-item" id="site6"></div></a>
+			<a href="https://fuck.rzx.me/" title="VPN"><div class="site-item" id="site7"></div></a>
+			<a href="#"><div class="site-item" id="site8"></div></a>
+			<a href="#" title="Lab-实验室"><div class="site-item" id="site9"></div></a>
 		</div>
 	</div>
 
-	<!--
-	<div id="home_menu"></div>
-	<div id="home_menu2"></div>
-	<div id="home_menu3"></div>
-	-->
-<script src="/assets/js/sites.js" type="text/javascript">
-</script>
+	<script src="/assets/js/sites.js" type="text/javascript"></script>
 <?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>
