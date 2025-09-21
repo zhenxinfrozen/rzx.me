@@ -101,47 +101,9 @@
 </div>
 
 		
-<!-- 在 body 末尾加载脚本以避免阻塞渲染 -->
-<script>
-/*
- 说明：此脚本负责在站点页脚（footer.php）提供现代 jQuery 之后，延迟加载旧的 prettyPhoto 插件并初始化。
- 目的：
-   - 避免同时加载多个 jQuery 版本导致冲突。
-   - 只在 jQuery 可用时动态插入插件脚本并初始化画廊（lightbox）。
-
- 如果你已经从仓库中删除了 `/assets/js/jquery.prettyPhoto.js`，该脚本将尝试加载但会在控制台记录错误（不会中断页面）。
- 恢复插件后可取消注释此段或保留以实现非阻塞的动态加载。
-*/
-(function waitForjQueryAndLoad(){
-	function loadPrettyPhoto(){
-		// 检查 jQuery 是否已加载
-		if (window.jQuery) {
-			// 为 old prettyPhoto 插件提供必要的 $.browser shim（旧插件依赖此值）
-			if (typeof jQuery.browser === 'undefined') {
-				jQuery.browser = { msie: false, version: '0' };
-			}
-			// 动态插入插件脚本
-			var s = document.createElement('script');
-			s.src = '/assets/js/jquery.prettyPhoto.js';
-			s.onload = function(){
-				// 插件加载完成后初始化画廊
-				jQuery(function($){
-					$(".gallery a[rel^='prettyPhoto']").prettyPhoto({theme: 'dark_square'});
-				});
-			};
-			s.onerror = function(){
-				// 无法加载插件时在控制台输出警告（沉默失败，避免影响用户）
-				console.warn('无法加载 prettyPhoto 插件');
-			};
-			document.body.appendChild(s);
-		} else {
-			// 如果 jQuery 还未出现，短暂等待后重试；页脚可能有延迟加载逻辑
-			setTimeout(loadPrettyPhoto, 200);
-		}
-	}
-	loadPrettyPhoto();
-})();
-</script>
+<!-- 使用无依赖的现代 lightbox 实现 -->
+<!-- simple-lightbox.js 为原生 JS 实现，自动在 DOMContentLoaded 时绑定 .gallery 下的链接 -->
+<script src="/assets/js/simple-lightbox.js"></script>
 <?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>
