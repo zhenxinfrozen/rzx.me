@@ -1,4 +1,17 @@
 <?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
+<!--
+	NOTE: Local prettyPhoto JS plugin was removed from this repository per user request.
+	The page previously dynamically loaded the plugin; if you want to restore the plugin files
+	you can recover them from the previous commit (the commit before d3b15fe which removed the files).
+
+	Example rollback (from repository root):
+		git checkout d3b15fe^ -- public/assets/js/jquery.prettyPhoto.js
+		git checkout d3b15fe^ -- "public/dev/demo/js/新建文件夹/jquery.prettyPhoto.js"
+		git add public/assets/js/jquery.prettyPhoto.js "public/dev/demo/js/新建文件夹/jquery.prettyPhoto.js"
+		git commit -m "chore(pictures): restore prettyPhoto plugin"
+
+	After restoring the files you can re-enable the loader/initialization code in this file if needed.
+ -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>

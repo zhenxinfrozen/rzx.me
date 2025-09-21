@@ -1,6 +1,11 @@
 /* ------------------------------------------------------------------------
 	This you can edit.
 ------------------------------------------------------------------------- */
+/* NOTE: prettyPhoto JS plugin files were removed from the repository by user request.
+	The CSS below still contains theme rules for prettyPhoto; removing the JS will
+	make many of these rules unused. Keep them if you plan to restore the plugin,
+	or remove/trim them to reduce CSS size.
+*/
 body {
 	font: 62.5%/1.2 Arial, Verdana, Sans-Serif;
 	padding: 0 20px;
