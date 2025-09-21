@@ -477,7 +477,7 @@ body {
 		float: left;
 		padding: 10px;
 		background: rgba(255, 255, 255, 0);
-		border: 1px solid #ff0000;
+		/* border: 1px solid #ff0000; */
 		/* border-radius: 5px; */
 		/* box-shadow: 12px rgb(255, 0, 0); */
 		font-size: 0.9rem;
@@ -486,12 +486,13 @@ body {
 	#ray-pic-display-area{
 		float: left;
 		width: 60vw;
+		height: 800px;
 
 		min-height: 800px;
 		padding: 10px;
-		margin: 0 30px;
+		margin: 200px 50px;
 		background: rgba(255, 255, 255, 0);
-		border: 1px solid #0048ef;
+		/* border: 1px solid #0048ef; */
 		/* border-radius: 5px; */
 		/* box-shadow: 12px rgb(255, 0, 0); */
 		font-size: 0.9rem;
@@ -523,8 +524,21 @@ body {
 	}
 
 	.ray-pic-loader {
-	  font-size: 0.95rem;
-	  color: #666;
+		font-size: 0.95rem;
+		color: #666;
+		width: 40px;
+		height: 40px;
+		border-radius: 50%;
+		margin: 0 auto;
+		border: 4px solid rgba(0,0,0,0.08);
+		border-top-color: rgba(0,0,0,0.28);
+		box-sizing: border-box;
+		animation: ray-pic-spin 900ms linear infinite;
+	}
+
+	@keyframes ray-pic-spin {
+		from { transform: rotate(0deg); }
+		to { transform: rotate(360deg); }
 	}
 
 	.ray-pic-error { color: #b00000; }
@@ -535,4 +549,15 @@ body {
 	  max-height: 80vh;
 	  display: block;
 	  margin: 0 auto;
+	}
+
+	/* fade-in for preview images */
+	.ray-pic-img {
+		opacity: 0;
+		transform: translateY(6px);
+		transition: opacity 320ms ease, transform 320ms ease;
+	}
+	.ray-pic-img.show {
+		opacity: 1;
+		transform: translateY(0);
 	}

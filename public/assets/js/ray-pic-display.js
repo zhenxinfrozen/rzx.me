@@ -20,21 +20,29 @@
     if (!finalBox) return;
     // clear existing
     finalBox.innerHTML = '';
-    // show a simple loader box
+    // show spinner (loader)
     var loader = document.createElement('div');
     loader.className = 'ray-pic-loader';
-    loader.textContent = 'Loading...';
     finalBox.appendChild(loader);
 
-    var img = createImage(href, alt || '');
-    // when image loads, replace loader
-    img.onload = function () {
+    // preload using Image object then insert with a fade-in class
+    var tmp = new Image();
+    tmp.onload = function () {
+      // create the image element for DOM and add animation class
+      var dom = createImage(href, alt || '');
+      dom.className = 'ray-pic-img';
+      // replace loader with image
       finalBox.innerHTML = '';
-      finalBox.appendChild(img);
+      finalBox.appendChild(dom);
+      // force reflow then add show class to trigger transition
+      // eslint-disable-next-line no-unused-expressions
+      dom.offsetWidth;
+      dom.classList.add('show');
     };
-    img.onerror = function () {
+    tmp.onerror = function () {
       finalBox.innerHTML = '<p class="ray-pic-error">无法加载图片。</p>';
     };
+    tmp.src = href;
   }
 
   function init() {
