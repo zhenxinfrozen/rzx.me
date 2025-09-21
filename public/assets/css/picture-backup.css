@@ -1,0 +1,12 @@
+/* Backup of pictures.css */
+
+/* Content copied from public/assets/css/pictures.css at backup time */
+
+<?php
+$orig = file_get_contents(__DIR__ . '/pictures.css');
+if ($orig === false) {
+    echo "/* backup read failed */";
+} else {
+    file_put_contents(__DIR__ . '/picture-backup.css', $orig);
+}
+?>
