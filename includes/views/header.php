@@ -35,11 +35,12 @@
                 'Blogs' => '/ray-sites.php',
                 'Sketch' => '/ray-sketch.php',
                 'Pictures' => '/ray-pictures.php',
-                'About' => '/ray-contact.php',
+                'About' => '/ray-about.php',
             ];
 
             // 优先通过 render_template 渲染导航组件；若不可用则回退到内联列表渲染
-            $navComponent = __DIR__ . '/components/nav.php';
+            // 现在使用更明确命名的组件 ray-top-nav.php（顶部导航）
+            $navComponent = __DIR__ . '/components/ray-top-nav.php';
             if (function_exists('render_template')) {
                 echo render_template($navComponent, ['navItems' => $navItems, 'path' => $path]);
             } else {
@@ -62,7 +63,6 @@
 
 <?php
 // 与 footer.php 一样尝试使用公共样式文件以保持单一样式来源
-// 优先使用 public 下的资源以获得缓存；若不存在则回退到 includes 目录下的内联样式。
     $publicCss = __DIR__ . '/../../public/assets/css/header.css';
     if (file_exists($publicCss)) {
         echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/header.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
