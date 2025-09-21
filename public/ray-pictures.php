@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="我不太喜欢也不太擅长的色彩作品" />
 <meta name="author" content="ray,ruizhenxin,rzx.me">
-<link rel="stylesheet" href="/assets/css/pictures.css" type="text/css" media="screen" title="prettyPhoto main stylesheet" charset="utf-8" />
+<link rel="stylesheet" href="/assets/css/pictures.css" type="text/css" media="screen" title="prettyPhoto main stylesheet" />
 <link href="/assets/css/footer.css" rel="stylesheet" type="text/css" />
 <!-- Load a compatible jQuery core for prettyPhoto (local copy 1.9.1 available in Scripts/) -->
-<script src="/Scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/assets/js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>	
 	<style type="text/css" media="screen">
 			* { margin: 0; padding: 0;border:none; }
 			
@@ -24,7 +24,7 @@
 				border-bottom: 1px #000 solid;
 				width: 4000px;
 			}
-	</style>
+		</style>
 </head>
 
 
@@ -89,11 +89,14 @@
 </div>
 
 		
-<script type="text/javascript" charset="utf-8">
-		$(document).ready(function(){
-			$(".gallery a[rel^='prettyPhoto']").prettyPhoto({theme:'dark_square'});
-		});
-		</script>
+<!-- Load scripts at the end of body to avoid render-blocking -->
+<script src="/Scripts/jquery-1.9.1.min.js"></script>
+<script src="/assets/js/jquery.prettyPhoto.js"></script>
+<script>
+    jQuery(function($){
+        $(".gallery a[rel^='prettyPhoto']").prettyPhoto({theme:'dark_square'});
+    });
+</script>
 <?php require_once $INCLUDE_FOOTER; ?>
 </body>
 </html>

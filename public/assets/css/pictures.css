@@ -382,17 +382,10 @@ body {
 	Miscellaneous
 ------------------------------------------------------------------------- */
 
-	.clearfix:after {
-	    content: "."; 
-	    display: block; 
-	    height: 0; 
-	    clear: both; 
-	    visibility: hidden;
+	/* Modern clearfix */
+	.clearfix::after {
+	    content: "";
+	    display: table;
+	    clear: both;
 	}
-
-	.clearfix {display: inline-block;}
-
-	/* Hides from IE-mac \*/
-	* html .clearfix {height: 1%;}
-	.clearfix {display: block;}
-	/* End hide from IE-mac */
+	.clearfix { display: block; }
