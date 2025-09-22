@@ -65,12 +65,26 @@
     </div>
 </div>
 <div class="menu">
-    <a href="ray-animation.php" target="_self"><div class="ray-home-menu-icon"><div class="f1"></div><div class="menu-text">Animation</div></div></a>
-    <a href="ray-latest.php" target="_self"><div class="ray-home-menu-icon"><div class="f2"></div><div class="menu-text">Latest</div></div></a>
+    <a href="ray-animation.php" target="_self">
+        <div class="ray-home-menu-icon">
+            <div class="f1">
+                <!-- <img src="assets/images/ray-home-menu-wordpress-logo.png" alt="Blog" id="wordpress-logo" width="100" height="100"> -->
+            </div><div class="menu-text">Animation</div>
+        </div>
+    </a>
+    <a href="ray-latest.php" target="_self">
+        <div id="ray-home-menu-latest" class="ray-home-menu-icon">
+            <div class="menu_icon_wrapper">
+                <img src="assets/images/ray-home-menu-latest.png" alt="Blog" id="menu_icon" width="100" height="100">
+            </div>
+            <div class="menu-text">Latest</div>
+        </div>
+    </a>
     
     <a href="ray-comic.php" target="_self">
         <div class="ray-home-menu-icon">
-            <div class="f3">
+            <div id="ray-home-menu-comic" class="menu_icon_wrapper">
+                <img src="assets/images/ray-home-menu-comic.png" alt="Blog" class="menu_icon" width="100" height="100">
             </div>
             <div class="menu-text">Comic</div>
         </div>
@@ -94,8 +108,10 @@
         </div>
     </a>
     <a href="ray-about.php" target="_self">
-        <div class="ray-home-menu-icon">
-            <div class="f7"></div>
+        <div id="ray-home-menu-about" class="ray-home-menu-icon">
+            <div class="menu_icon_wrapper">
+                <img src="assets/images/ray-home-menu-avatar100.png" alt="about" class="menu_icon" width="100" height="100">
+            </div>
             <div class="menu-text">About Me</div>
         </div>
     </a>
@@ -105,6 +121,37 @@
     (function(){
         document.addEventListener('click', function(ev){
             var el = ev.target;
+        // setupBounce: lightweight hover/touch/focus bounce for a specific container id
+        function setupBounce(containerId){
+            var cont = document.getElementById(containerId);
+            if (!cont) { console.log('[menu-bounce] no container', containerId); return; }
+            var img = cont.querySelector('img');
+            if (!img) { console.log('[menu-bounce] no img inside', containerId); return; }
+
+            // inject bounce keyframes once
+            if (!document.getElementById('menu-bounce-style')){
+                var style = document.createElement('style');
+                style.id = 'menu-bounce-style';
+                style.textContent = "@keyframes menu-bounce{0%{transform:translateY(0)}30%{transform:translateY(-12px)}50%{transform:translateY(0)}65%{transform:translateY(-6px)}100%{transform:translateY(0)}}.menu-bounce{animation:menu-bounce 420ms cubic-bezier(.22,.9,.39,1) 1 both;}";
+                document.head.appendChild(style);
+            }
+
+            function doBounce(){
+                // ensure we don't stack animations
+                img.classList.remove('menu-bounce');
+                // force reflow to restart animation
+                void img.offsetWidth;
+                img.classList.add('menu-bounce');
+            }
+
+            cont.addEventListener('mouseenter', doBounce);
+            cont.addEventListener('focusin', doBounce);
+            cont.addEventListener('touchstart', function(e){ e.preventDefault(); doBounce(); }, {passive:false});
+        }
+
+        // initialize bounce for comic
+        setupBounce('ray-home-menu-comic');
+
             // find closest .ray-home-menu-blog
             while(el && el !== document.body){
                 if (el.classList && el.classList.contains('ray-home-menu-blog')){
@@ -118,6 +165,63 @@
         }, false);
     })();
     </script>
+
+    <!-- Menu icon scale: center-based transform scaling, only affect specific IDs (no classes) -->
+    <script>
+    (function(){
+        function setupScale(containerId){
+            var cont = document.getElementById(containerId);
+            if (!cont) { console.log('[menu-scale] no container', containerId); return; }
+            var img = cont.querySelector('img');
+            if (!img) { console.log('[menu-scale] no img inside', containerId); return; }
+
+            // Use transform: scale so image scales from its center rather than changing layout
+            img.style.transition = 'transform 180ms ease';
+            img.style.transformOrigin = img.style.transformOrigin || '50% 50%';
+            img.style.willChange = 'transform';
+            // initial scale 0.8 (visually 80px if intrinsic width is 100px)
+            img.style.transform = 'scale(0.8)';
+            img.style.display = img.style.display || 'block';
+            // rounded corners
+            img.style.borderRadius = '10px';
+
+            // create a red overlay only for the 'ray-home-menu-latest' container
+            var wrapper = img.parentElement || cont;
+            try { if (getComputedStyle(wrapper).position === 'static') wrapper.style.position = 'relative'; } catch(e) { wrapper.style.position = 'relative'; }
+            var overlay = null;
+            if (containerId === 'ray-home-menu-latest') {
+                overlay = document.createElement('div');
+                overlay.setAttribute('aria-hidden','true');
+                overlay.style.position = 'absolute';
+                overlay.style.left = '0'; overlay.style.top = '0'; overlay.style.right = '0'; overlay.style.bottom = '0';
+                overlay.style.background = 'rgba(255,0,0,1)';
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 180ms ease';
+                overlay.style.pointerEvents = 'none';
+                // match parent's border radius if present
+                overlay.style.borderRadius = (wrapper.style.borderRadius || '10px');
+                wrapper.appendChild(overlay);
+            }
+
+            function expand(){ img.style.transform = 'scale(1.3)'; if (overlay) overlay.style.opacity = '0.38'; }
+            function shrink(){ img.style.transform = 'scale(0.9)'; if (overlay) overlay.style.opacity = '0'; }
+
+            // Bind events on the container so keyboard focus on links still triggers
+            cont.addEventListener('mouseenter', expand);
+            cont.addEventListener('mouseleave', shrink);
+            cont.addEventListener('focusin', expand);
+            cont.addEventListener('focusout', shrink);
+            cont.addEventListener('touchstart', function(e){ e.preventDefault(); expand(); }, {passive:false});
+            cont.addEventListener('touchend', shrink);
+        }
+
+        setupScale('ray-home-menu-latest');
+        setupScale('ray-home-menu-about');
+        // add bounce behavior for comic menu icon
+        setupBounce('ray-home-menu-comic');
+    })();
+    </script>
+
 
     <!-- Inject SVG filter and bind blur animation to menu images -->
     <script>
