@@ -58,12 +58,13 @@ a{
 	height:100px;
 	margin: 30px auto;
 }
-.menu_box{
+.ray-home-menu-icon{
 	width:100px;
 	height:135px;
 	margin:0 21px;
 	float:left;
 }
+
 .f1, .f2, .f3, .f4, .f5, .f6, .f7{
 	height:100px;
 	width:100px;
@@ -133,7 +134,7 @@ a{
 }
 
 
-.t1, .t2, .t3, .t4, .t5, .t6, .t7{
+.menu-text{
 	height:20px;
 	width:100px;
 	text-align:center;
@@ -147,33 +148,33 @@ a{
 .menu_icon_wrapper{
 	width:100px;
 	height:100px;
-	margin:0 auto;
-	overflow:hidden;
-	line-height:0; /* remove descender gap caused by inline images */
-	display:block;
+	overflow:hidden;  /* clip any overflow when animating */
+	margin:0;
 }
 .menu_icon{
 	display:block;      /* remove inline baseline gap */
-	width:100%;
-	height:100%;
+	width:100px;
+	height:100px;
 	object-fit:cover;   /* preserve aspect and fill box */
 }
 
 /* Default rotated state and smooth hover transition */
-.menu_icon{
+#wordpress-logo{
+	display: block;
 	transform: rotate(20deg); /* default clockwise 20deg */
 	transform-origin: 50% 50%;
 	transition: transform 150ms ease-in-out;
+	overflow: hidden;
 }
-.menu_box:hover .menu_icon{
+#ray-home-menu-blog:hover #wordpress-logo{
 	transform: rotate(0deg); /* on hover, return to upright */
 }
 
 /* Reflection and click animation styles */
-.menu_box{ position:relative; }
+#ray-home-menu-blog{ position:relative; }
 
 /* Click shock animation: quick scale up then settle */
-.menu_box.clicked .menu_icon{
+#ray-home-menu-blog.clicked #wordpress-logo{
 	/* Hint browser to optimize these properties for animation */
 	will-change: transform, filter;
 	animation: icon-shock 100ms cubic-bezier(.2,.8,.2,1) both;
@@ -207,7 +208,7 @@ a{
 	}
 }
 
-/* 当 menu_box 被点击时，允许 wrapper 溢出以免放大时被裁剪 */
-.menu_box.clicked .menu_icon_wrapper{
-	overflow: visible;
+/* 当 ray-home-menu-icon 被点击时，允许 wrapper 溢出以免放大时被裁剪 */
+.ray-home-menu-icon.clicked .menu_icon_wrapper{
+	overflow: hidden;
 }
