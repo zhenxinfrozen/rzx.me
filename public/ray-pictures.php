@@ -52,14 +52,16 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 					</section>
 
 					<section class="ray-pic-section">
-						<h2 class="ray-pic-section-title">Games</h2>
+						<h2 class="ray-pic-section-title">Game+color</h2>
 						<ul class="ray-pic-list clearfix">
 							<li><a href="/assets/images/fullscreen/1.jpg" rel="gallery1" title="都是些老图了,彩图数量有限(一半都是鼠绘)充数."><img loading="lazy" src="/assets/images/thumbnails/t_1.jpg" width="60" height="60" alt="World of Warcraft" /></a></li>
 							<li><a href="/assets/images/fullscreen/2.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/t_2.jpg" width="60" height="60" alt="Nice Night" /></a></li>
 							<li><a href="/assets/images/fullscreen/3.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/t_3.gif" width="60" height="60" alt="Darksiders" /></a></li>
 							<li><a href="/assets/images/fullscreen/4.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/t_4.jpg" width="60" height="60" alt="Sylvanas Windrunner" /></a></li>
+							<li><a href="/assets/images/fullscreen/ray-pic-color-test.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/ray-pic-color-test-thumbnails.jpg" width="60" height="60" alt="Sylvanas Windrunner" /></a></li>
 							<li><a href="/assets/images/fullscreen/5.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/t_5.jpg" width="60" height="60" alt="Dante horses" /></a></li>
 							<li><a href="/assets/images/fullscreen/6.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/t_6.jpg" width="60" height="60" alt="Footman Human" /></a></li>
+							<li><a href="/assets/images/fullscreen/ray-pic-color-2010.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/ray-pic-color-2010-thumbnails.jpg" width="60" height="60" alt="Footman Human" /></a></li>
 							<li><a href="/assets/images/fullscreen/7.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/t_7.jpg" width="60" height="60" alt="" /></a></li>
 							<li><a href="/assets/images/fullscreen/p01.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/p_1.jpg" width="60" height="60" alt="" /></a></li>
 							<li><a href="/assets/images/fullscreen/8.jpg" rel="gallery1"><img loading="lazy" src="/assets/images/thumbnails/t_8.jpg" width="60" height="60" alt="" /></a></li>
@@ -86,6 +88,7 @@ require_once __DIR__ . '/../includes/bootstrap.php';
 						<h2 class="ray-pic-section-title">Special zone</h2>
 						<ul class="ray-pic-list clearfix">
 							<li><a href="/assets/images/fullscreen/s02.jpg" rel="gallery-special" title="&lt;a href=&#x27;http://www.ruizhenxin.com/blog&#x27; target=&#x27;_blank&#x27; &gt;This will open [My Blog] in a new window&lt;/a&gt;"><img loading="lazy" src="/assets/images/thumbnails/s_2.gif" width="60" height="60" alt="" /></a></li>
+							<li><a href="/assets/images/fullscreen/ray-pic-64-1989.png" rel="gallery-special" title="&lt;a href=&#x27;http://www.ruizhenxin.com/blog&#x27; target=&#x27;_blank&#x27; &gt;This will open [My Blog] in a new window&lt;/a&gt;"><img loading="lazy" src="/assets/images/thumbnails/ray-pic-64-1989-thumbnails.png" width="60" height="60" alt="" /></a></li>
 						</ul>
 					</section>
 				</nav>

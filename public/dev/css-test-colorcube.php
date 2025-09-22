@@ -11,10 +11,18 @@
   #header{ font-size:40px; color:#fff; font-family:"Courier New", Courier, monospace; text-align:center; }
 
   #wutai{
-    height:40vh; /* 限制为视口 40vh */
+    position: absolute;
+    height:70vh; /* 限制为视口 60vh */
     width:100vw; /* 视口宽度 */
     margin:0 auto;
-    padding:20px;
+    
+    z-index: 20000;
+    display:flex; 
+    /* flex-direction:column;  */
+    align-items:center; 
+    justify-content:center; 
+    gap: 30px;
+    overflow: hidden;
     perspective:900px;
     perspective-origin:50% 50%;
     -webkit-perspective:900px;
@@ -24,10 +32,12 @@
   }
 
   .box{
+    color: #fff;
+    text-align: center;
+    margin: 20px;
     width:100px;
     height:100px;
-    margin:0;
-    float:left;
+    float: left;
     border:1px #CCC solid;
     background: red;
     padding:0;
@@ -115,11 +125,11 @@
   }
   @-webkit-keyframes myfirst5 { /* Safari/Chrome */
     0%   { left:-100px; top:-100px; }
-    25%  { -webkit-transform: rotateY(23deg) rotateZ(34deg) translateY(552px) translateZ(-2352px); }
+    25%  { -webkit-transform: rotateY(23deg) rotateZ(34deg) translateY(552px) translateZ(-34px); }
     35%  { -webkit-border-radius:25px; }
     50%  { left:600px; top:200px; }
     75%  { -webkit-transform: rotateX(132deg); }
-    80%  { left:0px; top:200px; }
+    80%  { left:0px; top:200px; -webkit-transform: translateY(1552px) translateZ(-222px); }
     90%  { height:200px; }
     100% { left:500px; top:0px; }
   }
@@ -131,7 +141,6 @@
   #box4{ z-index:100; opacity:0.92; transform: rotateY(0deg) rotateZ(0deg) translateY(0px) translateZ(0px); -webkit-transform: rotateY(0eg) rotateZ(0deg) translateY(0px) translateZ(00px); animation-name: myfirst5; animation-duration:5s; animation-timing-function:linear; animation-delay:2s; animation-iteration-count: infinite; animation-direction: alternate; animation-play-state: paused; -webkit-animation-name: myfirst5; -webkit-animation-duration:5s; -webkit-animation-timing-function:linear; -webkit-animation-delay:2s; -webkit-animation-iteration-count: infinite; -webkit-animation-direction: alternate; -webkit-animation-play-state: paused; }
   #box5{ z-index:100; opacity:0.92; transform: rotateY(0deg); -webkit-transform: rotateY(0deg); }
 
-  #box1, #box2 li{ list-style-type:none; }
 
   </style>
 </head>
@@ -142,7 +151,7 @@
       <div id="box2" class="box"></div>
       <div id="box3" class="box"></div>
       <div id="box4" class="box"></div>
-      <div id="box5" class="box"></div>
+      <div id="box5" class="box"><h4>css test</h4>2011-06-15</div>
     </section>
   </main>
 

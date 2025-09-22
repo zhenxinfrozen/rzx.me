@@ -67,7 +67,7 @@
 <div class="menu">
     <a href="ray-animation.php" target="_self">
         <div class="ray-home-menu-icon">
-            <div class="f1">
+            <div class="menu_icon_wrapper" id="ray-home-menu-animation-hover">
                 <!-- <img src="assets/images/ray-home-menu-wordpress-logo.png" alt="Blog" id="wordpress-logo" width="100" height="100"> -->
             </div><div class="menu-text">Animation</div>
         </div>
@@ -98,7 +98,14 @@
             <div class="menu-text">Blog</div>
         </div>
     </a>
-    <a href="ray-sketch.php" target="_self"><div class="ray-home-menu-icon"><div class="f5"></div><div class="menu-text">SketchBooks</div></div></a>
+    <a href="ray-sketch.php" target="_self">
+        <div class="ray-home-menu-icon">
+            <div class="menu_icon_wrapper" id="ray-home-menu-sketch-hover">
+
+            </div><div class="menu-text">SketchBooks</div>
+        </div>
+    </a>
+
     <a href="ray-pictures.php" target="_self">
         <div id="ray-home-menu-pictures" class="ray-home-menu-icon">
             <div class="menu_icon_wrapper">

@@ -11,7 +11,7 @@ a{
 }
 
 .wrap{
-	overflow:hidden;
+	/* overflow:hidden; */
 	margin:0 auto;
 }
 .main{
@@ -65,72 +65,24 @@ a{
 	float:left;
 }
 
-.f1, .f2, .f3, .f4, .f5, .f6, .f7{
-	height:100px;
-	width:100px;
-}
-.f1{
+#ray-home-menu-animation-hover{
 	background:url(../images/back.jpg) no-repeat -600px 0;
 }
-.f1:hover{
+#ray-home-menu-animation-hover:hover{
 	background:url(../images/back.jpg) no-repeat -600px -100px;;
 }
-.f1:active{
+#ray-home-menu-animation-hover:active{
 	background:url(../images/back.jpg) no-repeat -600px -200px;
 }
-.f2{
-	background:url(../images/back.jpg) no-repeat -100px 0;
-}
-.f2:hover{
-	background:url(../images/back.jpg) no-repeat -100px -100px;;
-}
-.f2:active{
-	background:url(../images/back.jpg) no-repeat -100px -200px;
-}
-.f3{
-	background:url(../images/back.jpg) no-repeat -200px 0;
-}
-.f3:hover{
-	background:url(../images/back.jpg) no-repeat -200px -100px;;
-}
-.f3:active{
-	background:url(../images/back.jpg) no-repeat -200px -200px;
-}
-.f4{
-	background:url(../images/back.jpg) no-repeat -300px 0;
-}
-.f4:hover{
-	background:url(../images/back.jpg) no-repeat -300px -100px;;
-}
-.f4:active{
-	background:url(../images/back.jpg) no-repeat -300px -200px;
-}
-.f5{
+
+#ray-home-menu-sketch-hover{
 	background:url(../images/back.jpg) no-repeat -400px 0;
 }
-.f5:hover{
+#ray-home-menu-sketch-hover:hover{
 	background:url(../images/back.jpg) no-repeat -400px -100px;;
 }
-.f5:active{
+#ray-home-menu-sketch-hover:active{
 	background:url(../images/back.jpg) no-repeat -400px -200px;
-}
-.f6{
-	background:url(../images/back.jpg) no-repeat -500px 0;
-}
-.f6:hover{
-	background:url(../images/back.jpg) no-repeat -500px -100px;;
-}
-.f6:active{
-	background:url(../images/back.jpg) no-repeat -500px -200px;
-}
-.f7{
-	background:url(../images/back.jpg) no-repeat 0 0;
-}
-.f7:hover{
-	background:url(../images/back.jpg) no-repeat 0 -100px;;
-}
-.f7:active{
-	background:url(../images/back.jpg) no-repeat 0 -200px;
 }
 
 
@@ -180,6 +132,8 @@ a{
 	animation: icon-shock 100ms cubic-bezier(.2,.8,.2,1) both;
 }
 
+
+
 @keyframes icon-shock{
 	/*
 	主要帧说明：
@@ -211,4 +165,23 @@ a{
 /* 当 ray-home-menu-icon 被点击时，允许 wrapper 溢出以免放大时被裁剪 */
 .ray-home-menu-icon.clicked .menu_icon_wrapper{
 	overflow: hidden;
+}
+
+/* Ensure specific menu items preserve rounded corners and clip blurred/ scaled image edges
+   Only targets by ID to avoid affecting other icons. */
+#ray-home-menu-latest .menu_icon_wrapper,
+#ray-home-menu-about .menu_icon_wrapper,
+#ray-home-menu-pictures .menu_icon_wrapper {
+	overflow: hidden;      /* clip any blur or transform that bleeds outside */
+	border-radius: 10px;   /* rounded corners applied to the container */
+	display: inline-block; /* keep layout stable */
+}
+
+/* Make sure images inside those wrappers don't introduce inline baseline gaps */
+#ray-home-menu-latest .menu_icon_wrapper img,
+#ray-home-menu-about .menu_icon_wrapper img,
+#ray-home-menu-pictures .menu_icon_wrapper img {
+	display: block;
+	width: 100%;
+	height: auto;
 }

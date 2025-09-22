@@ -1,64 +1,85 @@
 @charset "utf-8";
 /* CSS Document */
 
-body {
-	background-image:url(/assets/images/try.jpg);
+
+#ray-about-bg-wallpaper{
+	/* background-image:url(/assets/images/about-left-try.jpg); */
+	
+    width: 620px;
+    height: 489px;
 	background-repeat: no-repeat;
-	background-position-y: 40%;
+	position: fixed;
+	z-index: -1;
 }
-.center{
+#ray-about-wrapper{
+	/* background: #900; */
 	width:500px;
+	height: auto;
 	margin:0 auto;
+	padding: 500px 0 50px 0;
+	overflow: hidden;
 }
-.c-table{
-	margin:430px 0 0 0;
-	text-align:center;
+#ray-about-connectbox{
+	display:flex; 
+	flex-direction:column; 
+	align-items:center; 
+	justify-content:center; 
+	gap:12px; 
+	min-height:240px;
 }
-.center-pic{
-	color: #fff;
-}
-.email{
+#email{
 	background:url(/assets/images/email.jpg);
-	height:36px;
-	margin:0 auto;
+        width: 500px;
+		height: 36px;
+        /* background-color: rgb(62, 243, 7); 让子容器可见 */
 }
 
-.email:hover{
+#email:hover{
 	background:url(/assets/images/email.jpg) no-repeat 0 -36px;
-	height:36px;
-	margin:0 auto;
 }
-.follow1,.follow2,.follow3,.follow4{
+#ray-about-center-follow-icons{
+	width: fit-content;
+	/* background: #009900; */
+}
+
+.follow-icon{
 	width:50px;
 	height:50px;
 	margin:10px 10px;
 	float:left;
 	overflow:hidden;
 }
-.follow1{
+#follow-google{
 	background:url(/assets/images/follow.jpg) no-repeat 0 0;
 }
-.follow1:hover{
+#follow-google:hover{
 	background:url(/assets/images/follow.jpg) no-repeat 0 -50px;
 }
-.follow2{
+#follow-twitter{
 	background:url(/assets/images/follow.jpg) no-repeat -50px 0;
 }
-.follow2:hover{
+#follow-twitter:hover{
 	background:url(/assets/images/follow.jpg) no-repeat -50px -50px;
 }
-.follow3{
+#follow-weibo{
 	background:url(/assets/images/follow.jpg) no-repeat -100px 0;
 }
-.follow3:hover{
+#follow-weibo:hover{
 	background:url(/assets/images/follow.jpg) no-repeat -100px -50px;
 }
-.follow4{
+#follow-qq{
 	background:url(/assets/images/follow.jpg) no-repeat -150px 0;
 }
-.follow4:hover{
+#follow-qq:hover{
 	background:url(/assets/images/follow.jpg) no-repeat -150px -50px;
 }
-.note{
-	color: #fff;
+
+#ray-about-note{
+	color: #aaa;
+	width: 100%;
+	height: 100px;
+	text-align: center;
+	font-size: 14px;
+	font-family: Arial, Helvetica, sans-serif;
+	/* background-color: rgba(9, 166, 218, 0); 让子容器可见 */
 }
