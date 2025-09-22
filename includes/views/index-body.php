@@ -121,37 +121,6 @@
     (function(){
         document.addEventListener('click', function(ev){
             var el = ev.target;
-        // setupBounce: lightweight hover/touch/focus bounce for a specific container id
-        function setupBounce(containerId){
-            var cont = document.getElementById(containerId);
-            if (!cont) { console.log('[menu-bounce] no container', containerId); return; }
-            var img = cont.querySelector('img');
-            if (!img) { console.log('[menu-bounce] no img inside', containerId); return; }
-
-            // inject bounce keyframes once
-            if (!document.getElementById('menu-bounce-style')){
-                var style = document.createElement('style');
-                style.id = 'menu-bounce-style';
-                style.textContent = "@keyframes menu-bounce{0%{transform:translateY(0)}30%{transform:translateY(-12px)}50%{transform:translateY(0)}65%{transform:translateY(-6px)}100%{transform:translateY(0)}}.menu-bounce{animation:menu-bounce 420ms cubic-bezier(.22,.9,.39,1) 1 both;}";
-                document.head.appendChild(style);
-            }
-
-            function doBounce(){
-                // ensure we don't stack animations
-                img.classList.remove('menu-bounce');
-                // force reflow to restart animation
-                void img.offsetWidth;
-                img.classList.add('menu-bounce');
-            }
-
-            cont.addEventListener('mouseenter', doBounce);
-            cont.addEventListener('focusin', doBounce);
-            cont.addEventListener('touchstart', function(e){ e.preventDefault(); doBounce(); }, {passive:false});
-        }
-
-        // initialize bounce for comic
-        setupBounce('ray-home-menu-comic');
-
             // find closest .ray-home-menu-blog
             while(el && el !== document.body){
                 if (el.classList && el.classList.contains('ray-home-menu-blog')){
@@ -169,6 +138,34 @@
     <!-- Menu icon scale: center-based transform scaling, only affect specific IDs (no classes) -->
     <script>
     (function(){
+        // setupBounce: lightweight hover/touch/focus bounce for a specific container id
+        function setupBounce(containerId){
+            var cont = document.getElementById(containerId);
+            if (!cont) { console.log('[menu-bounce] no container', containerId); return; }
+            var img = cont.querySelector('img');
+            if (!img) { console.log('[menu-bounce] no img inside', containerId); return; }
+
+            // inject bounce keyframes once
+            if (!document.getElementById('menu-bounce-style')){
+                var style = document.createElement('style');
+                style.id = 'menu-bounce-style';
+                style.textContent = "@keyframes menu-bounce{0%{transform:translateY(0)}30%{transform:translateY(-15px)}50%{transform:translateY(0)}65%{transform:translateY(-5px)}100%{transform:translateY(0)}}.menu-bounce{animation:menu-bounce 420ms cubic-bezier(.22,.9,.39,1) 1 both;}";
+                document.head.appendChild(style);
+            }
+
+            function doBounce(){
+                // ensure we don't stack animations
+                img.classList.remove('menu-bounce');
+                // force reflow to restart animation
+                void img.offsetWidth;
+                img.classList.add('menu-bounce');
+            }
+
+            cont.addEventListener('mouseenter', doBounce);
+            cont.addEventListener('focusin', doBounce);
+            cont.addEventListener('touchstart', function(e){ e.preventDefault(); doBounce(); }, {passive:false});
+        }
+
         function setupScale(containerId){
             var cont = document.getElementById(containerId);
             if (!cont) { console.log('[menu-scale] no container', containerId); return; }
