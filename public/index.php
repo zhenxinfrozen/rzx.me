@@ -41,16 +41,16 @@ if (!$route) {
     
     // 旧路由表
     $legacyRoutes = [
-        '' => 'pages/index-body.php',
-        'index' => 'pages/index-body.php',
-        'ray-comic' => 'pages/ray-comic-body.php',
-        'ray-pictures' => 'pages/ray-pictures-body.php',
-        'ray-animation' => 'pages/ray-animation-body.php',
-        'ray-latest' => 'pages/ray-latest-body.php',
-        'ray-sites' => 'pages/ray-sites-body.php',
-        'ray-sketch' => 'pages/ray-sketch-body.php',
-        'ray-about' => 'pages/ray-about-body.php',
-        'sketch-dream' => 'pages/ray-comic-reader-body.php',
+        '' => 'pages/home.php',
+        'index' => 'pages/home.php',
+        'ray-comic' => 'pages/comic.php',
+        'ray-pictures' => 'pages/pictures.php',
+        'ray-animation' => 'pages/animation.php',
+        'ray-latest' => 'pages/latest.php',
+        'ray-sites' => 'pages/sites.php',
+        'ray-sketch' => 'pages/sketch.php',
+        'ray-about' => 'pages/about.php',
+        'sketch-dream' => 'pages/comic-gallery.php',
     ];
     
     $viewFile = $legacyRoutes[$path] ?? null;

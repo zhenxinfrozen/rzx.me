@@ -1,5 +1,5 @@
 <?php
-// app/Views/pages/index-body.php
+// app/Views/pages/home.php
 // Main body content for public/index.php — kept as a view for easier edits.
 ?>
 <div class="wrap">

@@ -5,52 +5,52 @@ return [
     // 页面路由
     'pages' => [
         '/' => [
-            'view' => 'pages/index-body.php',
+            'view' => 'pages/home.php',
             'title' => 'Ray的个人主页',
             'handler' => 'get_page_data'
         ],
         '/ray-about' => [
-            'view' => 'pages/ray-about-body.php',
+            'view' => 'pages/about.php',
             'title' => '关于 Ray - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-animation' => [
-            'view' => 'pages/ray-animation-body.php',
+            'view' => 'pages/animation.php',
             'title' => '动画 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-comic' => [
-            'view' => 'pages/ray-comic-body.php',
+            'view' => 'pages/comic.php',
             'title' => '漫画 - RZX.ME',
             'handler' => 'get_comic_data'
         ],
         '/ray-comic-reader' => [
-            'view' => 'pages/ray-comic-reader-body.php',
+            'view' => 'pages/comic-gallery.php',
             'title' => '漫画阅读器 - RZX.ME',
             'handler' => 'get_comic_data'
         ],
         '/ray-latest' => [
-            'view' => 'pages/ray-latest-body.php',
+            'view' => 'pages/latest.php',
             'title' => '最新 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-pictures' => [
-            'view' => 'pages/ray-pictures-body.php',
+            'view' => 'pages/pictures.php',
             'title' => '图片 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-sites' => [
-            'view' => 'pages/ray-sites-body.php',
+            'view' => 'pages/sites.php',
             'title' => '网站 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-sketch' => [
-            'view' => 'pages/ray-sketch-body.php',
+            'view' => 'pages/sketch.php',
             'title' => '素描 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/sketch-dream' => [
-            'view' => 'pages/ray-comic-reader-body.php',
+            'view' => 'pages/comic-gallery.php',
             'title' => 'Dream Gallery - RZX.ME',
             'handler' => 'get_page_data'
         ],
