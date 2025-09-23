@@ -8,7 +8,7 @@
  *
  * 注意：页面引用的 JS 文件为 /assets/js/ray-pic.js（轻量预览脚本），如需更改请同时更新此处。
  */
-require_once __DIR__ . '/../includes/bootstrap.php';
+require_once __DIR__ . '/../app/bootstrap.php';
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">

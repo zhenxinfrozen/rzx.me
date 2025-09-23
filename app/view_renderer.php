@@ -5,9 +5,7 @@ function render_template(string $file, array $vars = []) {
     if (!file_exists($file)) {
         throw new RuntimeException("Template not found: $file");
     }
-    // extract variables into local scope but don't overwrite existing variables
     extract($vars, EXTR_SKIP);
-    // capture output to allow post-processing or caching
     ob_start();
     include $file;
     return ob_get_clean();

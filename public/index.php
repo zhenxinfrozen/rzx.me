@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../includes/bootstrap.php';
-require_once __DIR__ . '/../includes/view_renderer.php';
+require_once __DIR__ . '/../app/bootstrap.php';
+require_once __DIR__ . '/../app/view_renderer.php';
 
 $title = 'Art of Ray | Home';
 ?><!DOCTYPE html>
@@ -21,13 +21,13 @@ $title = 'Art of Ray | Home';
 <body>
     <?php
     // render header
-    echo render_template(__DIR__ . '/../includes/views/header.php', ['title' => $title]);
+    echo render_template(__DIR__ . '/../app/views/header.php', ['title' => $title]);
 
     // render main index body
-    echo render_template(__DIR__ . '/../includes/views/index-body.php');
+    echo render_template(__DIR__ . '/../app/views/index-body.php');
 
     // render footer
-    echo render_template(__DIR__ . '/../includes/views/footer.php');
+    echo render_template(__DIR__ . '/../app/views/footer.php');
     ?>
 </body>
 </html>

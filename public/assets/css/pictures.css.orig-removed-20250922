@@ -1,4 +1,0 @@
-Backup of pictures.css before removing disabled legacy rules
-Created: 2025-09-22
-
-This is a copy of the original `pictures.css` after we previously renamed legacy selectors to "-disabled". If you need to restore, copy this file back to pictures.css

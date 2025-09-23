@@ -1,4 +1,4 @@
-﻿<?php require_once __DIR__ . '/../includes/bootstrap.php'; ?>
+﻿<?php require_once __DIR__ . '/../app/bootstrap.php'; ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>

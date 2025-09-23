@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../includes/bootstrap.php';
-require_once __DIR__ . '/../includes/view_renderer.php';
+require_once __DIR__ . '/../app/bootstrap.php';
+require_once __DIR__ . '/../app/view_renderer.php';
 
 $title = 'Comic';
 
@@ -21,13 +21,13 @@ $title = 'Comic';
 <body>
     <?php
     // render header at top of body (header template may inject its own CSS)
-    echo render_template(__DIR__ . '/../includes/views/header.php', ['title' => $title]);
+    echo render_template(__DIR__ . '/../app/views/header.php', ['title' => $title]);
 
     // main body
-    echo render_template(__DIR__ . '/../includes/views/ray-comic-body.php');
+    echo render_template(__DIR__ . '/../app/views/ray-comic-body.php');
 
     // render footer include (also injects footer CSS)
-    echo render_template(__DIR__ . '/../includes/views/footer.php');
+    echo render_template(__DIR__ . '/../app/views/footer.php');
     ?>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-// includes/views/index-body.php
+// app/views/index-body.php
 // Main body content for public/index.php — kept as a view for easier edits.
 ?>
 <div class="wrap">
@@ -68,7 +68,6 @@
     <a href="ray-animation.php" target="_self">
         <div class="ray-home-menu-icon">
             <div class="menu_icon_wrapper" id="ray-home-menu-animation-hover">
-                <!-- <img src="assets/images/ray-home-menu-wordpress-logo.png" alt="Blog" id="wordpress-logo" width="100" height="100"> -->
             </div><div class="menu-text">Animation</div>
         </div>
     </a>
@@ -128,11 +127,9 @@
     (function(){
         document.addEventListener('click', function(ev){
             var el = ev.target;
-            // find closest .ray-home-menu-blog
             while(el && el !== document.body){
                 if (el.classList && el.classList.contains('ray-home-menu-blog')){
                     el.classList.add('clicked');
-                    // remove after 600ms
                     setTimeout(function(){ el.classList.remove('clicked'); }, 600);
                     return;
                 }
@@ -145,14 +142,12 @@
     <!-- Menu icon scale: center-based transform scaling, only affect specific IDs (no classes) -->
     <script>
     (function(){
-        // setupBounce: lightweight hover/touch/focus bounce for a specific container id
         function setupBounce(containerId){
             var cont = document.getElementById(containerId);
             if (!cont) { console.log('[menu-bounce] no container', containerId); return; }
             var img = cont.querySelector('img');
             if (!img) { console.log('[menu-bounce] no img inside', containerId); return; }
 
-            // inject bounce keyframes once
             if (!document.getElementById('menu-bounce-style')){
                 var style = document.createElement('style');
                 style.id = 'menu-bounce-style';
@@ -161,9 +156,7 @@
             }
 
             function doBounce(){
-                // ensure we don't stack animations
                 img.classList.remove('menu-bounce');
-                // force reflow to restart animation
                 void img.offsetWidth;
                 img.classList.add('menu-bounce');
             }
@@ -179,17 +172,13 @@
             var img = cont.querySelector('img');
             if (!img) { console.log('[menu-scale] no img inside', containerId); return; }
 
-            // Use transform: scale so image scales from its center rather than changing layout
             img.style.transition = 'transform 180ms ease';
             img.style.transformOrigin = img.style.transformOrigin || '50% 50%';
             img.style.willChange = 'transform';
-            // initial scale 0.8 (visually 80px if intrinsic width is 100px)
             img.style.transform = 'scale(0.8)';
             img.style.display = img.style.display || 'block';
-            // rounded corners
             img.style.borderRadius = '10px';
 
-            // create a red overlay only for the 'ray-home-menu-latest' container
             var wrapper = img.parentElement || cont;
             try { if (getComputedStyle(wrapper).position === 'static') wrapper.style.position = 'relative'; } catch(e) { wrapper.style.position = 'relative'; }
             var overlay = null;
@@ -202,7 +191,6 @@
                 overlay.style.opacity = '0';
                 overlay.style.transition = 'opacity 180ms ease';
                 overlay.style.pointerEvents = 'none';
-                // match parent's border radius if present
                 overlay.style.borderRadius = (wrapper.style.borderRadius || '10px');
                 wrapper.appendChild(overlay);
             }
@@ -210,7 +198,6 @@
             function expand(){ img.style.transform = 'scale(1.3)'; if (overlay) overlay.style.opacity = '0.38'; }
             function shrink(){ img.style.transform = 'scale(0.9)'; if (overlay) overlay.style.opacity = '0'; }
 
-            // Bind events on the container so keyboard focus on links still triggers
             cont.addEventListener('mouseenter', expand);
             cont.addEventListener('mouseleave', shrink);
             cont.addEventListener('focusin', expand);
@@ -221,7 +208,6 @@
 
         setupScale('ray-home-menu-latest');
         setupScale('ray-home-menu-about');
-        // add bounce behavior for comic menu icon
         setupBounce('ray-home-menu-comic');
     })();
     </script>
@@ -246,13 +232,10 @@
 
         function bindAnim(img){
             if (!img) return;
-            // Ensure this image uses our SVG filter so changing stdDeviation is visible
             try {
                 img.style.filter = 'url(#motion-blur-horizontal)';
                 img.style.willChange = 'filter';
-            } catch (e) {
-                // ignore if style assignment fails in some contexts
-            }
+            } catch (e) {}
             var raf=null, startTs=null, fromVal=START_X, toVal=0;
             function step(ts){ if (!startTs) startTs=ts; var elapsed = ts - startTs; var p = Math.min(1, elapsed / DURATION); p = ease(p); var cur = fromVal + (toVal - fromVal) * p; gblur.setAttribute('stdDeviation', cur + ' ' + START_Y); if (elapsed < DURATION) raf = requestAnimationFrame(step); else { startTs=null; raf=null; } }
             function startAnim(f,t){ if (raf) cancelAnimationFrame(raf); fromVal = f; toVal = t; startTs=null; raf = requestAnimationFrame(step); }
@@ -265,7 +248,6 @@
             img.addEventListener('touchend', function(){ startAnim(readCur(), START_X); });
         }
 
-        // Strict: only bind to images that are descendants of #ray-home-menu-pictures.
         var targets = [];
         var container = document.getElementById('ray-home-menu-pictures');
         if (container) {

@@ -1,4 +1,4 @@
-<!-- includes/views/footer.php - 简洁现代的页脚片段 -->
+<!-- app/views/footer.php - copied from includes/views/footer.php -->
 <footer class="site-footer">
     <div class="site-footer__inner">
         <div class="site-footer__left">
@@ -14,10 +14,6 @@
 </footer>
 
 <?php
-// Inline centralized footer CSS as a fallback if public asset isn't loaded.
-// This inlines the single source of truth from includes/css/footer.css so there's
-// no duplication between include and public asset.
-// Prefer public asset for caching; fallback to includes inline if missing.
     $publicCss = __DIR__ . '/../../public/assets/css/footer.css';
     if (file_exists($publicCss)) {
         echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/footer.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
@@ -29,37 +25,22 @@
     }
 ?>
 
-
-<!-- Footer is purely CSS-driven fixed footer now. -->
 <script>
-// Load jQuery from CDN with local fallback to /assets/js/jquery-3.7.1.min.js.
-// This avoids document.write and only injects the local script if the CDN is blocked.
+// jQuery CDN with local fallback
 (function(){
-    // Insert CDN script tag
     var cdn = document.createElement('script');
     cdn.src = 'https://code.jquery.com/jquery-3.7.1.min.js';
     cdn.integrity = 'sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=';
     cdn.crossOrigin = 'anonymous';
-    cdn.onload = function(){ /* CDN loaded successfully */ };
+    cdn.onload = function(){};
     cdn.onerror = function(){ loadLocal(); };
     document.head.appendChild(cdn);
-
-    // If CDN is blocked or slow, fall back to local copy.
     function loadLocal(){
         if (window.jQuery) return;
         var s = document.createElement('script');
-        // Use filemtime query string for cache busting when available
         s.src = '/assets/js/jquery-3.7.1.min.js';
         document.head.appendChild(s);
     }
-
-    // In case the CDN script doesn't fire error (e.g. blocked silently), check after short timeout
     setTimeout(function(){ if (!window.jQuery) loadLocal(); }, 3000);
 })();
-</script>
-
-<script>
-// Small vanilla JS to trigger click feedback for menu boxes (no jQuery)
-// Menu click feedback script moved to homepage (index.php) because menu exists only there.
-</script>
 </script>

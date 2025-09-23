@@ -15,7 +15,7 @@
  */
 
 // 加载并执行真正的API处理器逻辑
-require_once __DIR__ . '/../includes/Handlers/api_comic_handler.php';
+require_once __DIR__ . '/../app/Handlers/api_comic_handler.php';
 
 // (可选) 如果您的处理器没有封装成函数，直接加载即可。
 // 如果封装了，则在这里调用函数：

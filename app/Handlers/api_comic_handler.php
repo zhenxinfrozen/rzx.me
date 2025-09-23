@@ -1,6 +1,5 @@
 <?php
-// includes/Handlers/api_comic_handler.php
-
+// app/Handlers/api_comic_handler.php
 // 路径需要相对于调用它的 index.php
 require_once __DIR__ . '/../Data/comic_data.php';
 

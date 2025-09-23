@@ -1,5 +1,0 @@
-pictures.css
-这是Pictures的
-
-sketch.css
-这是sketch的
