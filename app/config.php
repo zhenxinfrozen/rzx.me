@@ -14,14 +14,14 @@ if (APP_ENV === 'production') {
     error_reporting(E_ALL);
 }
 
-$INCLUDE_HEADER = __DIR__ . '/views/header.php';
-$INCLUDE_FOOTER = __DIR__ . '/views/footer.php';
+$INCLUDE_HEADER = __DIR__ . '/Views/header.php';
+$INCLUDE_FOOTER = __DIR__ . '/Views/footer.php';
 
 if (!defined('INCLUDE_HEADER')) {
-    define('INCLUDE_HEADER', __DIR__ . '/views/header.php');
+    define('INCLUDE_HEADER', __DIR__ . '/Views/header.php');
 }
 if (!defined('INCLUDE_FOOTER')) {
-    define('INCLUDE_FOOTER', __DIR__ . '/views/footer.php');
+    define('INCLUDE_FOOTER', __DIR__ . '/Views/footer.php');
 }
 
 if (!defined('BASE_URL')) {

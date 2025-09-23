@@ -1,4 +1,4 @@
-<!-- app/views/header.php - copied from includes/views/header.php -->
+<!-- app/Views/header.php - copied from includes/views/header.php -->
 <header class="site-header" role="banner">
     <div class="site-header__inner">
         <a class="site-brand" href="/">

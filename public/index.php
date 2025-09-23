@@ -2,7 +2,7 @@
 // 前端控制器 - 站点唯一入口
 require_once __DIR__ . '/../app/bootstrap.php';
 require_once __DIR__ . '/../app/view_renderer.php';
-require_once __DIR__ . '/../app/Handlers/page_data_handler.php'; // 引入页面数据处理器
+require_once __DIR__ . '/../app/Controllers/page_data_handler.php'; // 引入页面数据处理器
 
 // 基本路由：将请求路径映射到 app/views 下的视图模板
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
@@ -36,7 +36,7 @@ if ($path === 'api' || strpos($path, 'api/') === 0) {
         // 传统格式: /api.php?id=123 (向后兼容)
     }
     
-    require_once __DIR__ . '/../app/Handlers/api_comic_handler.php';
+    require_once __DIR__ . '/../app/Controllers/api_comic_handler.php';
     handle_api_request();
     exit;
 }
@@ -47,7 +47,7 @@ $viewFile = $routes[$path] ?? null;
 if ($viewFile === null && $path !== '') {
     // 将 'path-name' 转换为 'path-name-body.php'
     $candidateView = $path . '-body.php';
-    if (file_exists(__DIR__ . '/../app/views/' . $candidateView)) {
+    if (file_exists(__DIR__ . '/../app/Views/' . $candidateView)) {
         $viewFile = $candidateView;
     }
 }
@@ -85,15 +85,15 @@ $meta_author = $pageData['meta_author'];
 <?php
 // 渲染页眉
 try {
-    echo render_template(__DIR__ . '/../app/views/header.php', ['title' => $title]);
+    echo render_template(__DIR__ . '/../app/Views/header.php', ['title' => $title]);
 } catch (Exception $e) {
     // 出现异常时静默处理并继续
 }
 
 // 渲染主内容
-if ($viewFile && file_exists(__DIR__ . '/../app/views/' . $viewFile)) {
+if ($viewFile && file_exists(__DIR__ . '/../app/Views/' . $viewFile)) {
     try {
-        echo render_template(__DIR__ . '/../app/views/' . $viewFile);
+        echo render_template(__DIR__ . '/../app/Views/' . $viewFile);
     } catch (Exception $e) {
         http_response_code(500);
         echo '<h1>服务器错误</h1><p>无法加载视图。</p>';
@@ -107,7 +107,7 @@ if ($viewFile && file_exists(__DIR__ . '/../app/views/' . $viewFile)) {
 if (!isset($page_id) || !in_array($page_id, ['sketch', 'comic-reader'])):
 // 渲染页脚
 try {
-    echo render_template(__DIR__ . '/../app/views/footer.php');
+    echo render_template(__DIR__ . '/../app/Views/footer.php');
 } catch (Exception $e) {}
 
 endif;

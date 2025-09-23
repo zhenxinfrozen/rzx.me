@@ -1,6 +1,6 @@
 <?php
 // Lightweight view renderer
-// Usage: echo render_template(__DIR__ . '/views/header.php', ['title' => '...']);
+// Usage: echo render_template(__DIR__ . '/Views/header.php', ['title' => '...']);
 function render_template(string $file, array $vars = []) {
     if (!file_exists($file)) {
         throw new RuntimeException("Template not found: $file");

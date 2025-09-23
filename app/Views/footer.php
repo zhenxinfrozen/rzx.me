@@ -1,4 +1,4 @@
-<!-- app/views/footer.php - copied from includes/views/footer.php -->
+<!-- app/Views/footer.php - copied from includes/views/footer.php -->
 <footer class="site-footer">
     <div class="site-footer__inner">
         <div class="site-footer__left">

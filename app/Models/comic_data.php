@@ -1,5 +1,5 @@
 <?php
-// app/Data/comic_data.php
+// app/Models/comic_data.php
 
 function get_all_comics_data() {
     return [

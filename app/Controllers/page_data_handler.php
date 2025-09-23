@@ -1,5 +1,5 @@
 <?php
-// app/Handlers/page_data_handler.php
+// app/Controllers/page_data_handler.php
 
 function get_page_specific_data($viewFile) {
     // 默认 meta 信息
