@@ -1,8 +1,8 @@
-<!-- app/Views/header.php - copied from includes/views/header.php -->
+<!-- app/Views/layouts/header.php - copied from includes/views/header.php -->
 <header class="site-header" role="banner">
     <div class="site-header__inner">
         <a class="site-brand" href="/">
-            <?php if (file_exists(__DIR__ . '/../../public/assets/images/Avatar100X100.jpg')): ?>
+            <?php if (file_exists(__DIR__ . '/../../../public/assets/images/Avatar100X100.jpg')): ?>
                 <img src="/assets/images/Avatar100X100.jpg" alt="Ray avatar">
             <?php endif; ?>
             rzx.me
@@ -45,7 +45,7 @@
 </header>
 
 <?php
-    $publicCss = __DIR__ . '/../../public/assets/css/header.css';
+    $publicCss = __DIR__ . '/../../../public/assets/css/header.css';
     if (file_exists($publicCss)) {
         echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/header.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
     } else {

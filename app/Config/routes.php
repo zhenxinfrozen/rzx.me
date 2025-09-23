@@ -5,47 +5,47 @@ return [
     // 页面路由
     'pages' => [
         '/' => [
-            'view' => 'index-body.php',
+            'view' => 'pages/index-body.php',
             'title' => 'Ray的个人主页',
             'handler' => 'get_page_data'
         ],
         '/ray-about' => [
-            'view' => 'ray-about-body.php',
+            'view' => 'pages/ray-about-body.php',
             'title' => '关于 Ray - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-animation' => [
-            'view' => 'ray-animation-body.php',
+            'view' => 'pages/ray-animation-body.php',
             'title' => '动画 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-comic' => [
-            'view' => 'ray-comic-body.php',
+            'view' => 'pages/ray-comic-body.php',
             'title' => '漫画 - RZX.ME',
             'handler' => 'get_comic_data'
         ],
         '/ray-comic-reader' => [
-            'view' => 'ray-comic-reader-body.php',
+            'view' => 'pages/ray-comic-reader-body.php',
             'title' => '漫画阅读器 - RZX.ME',
             'handler' => 'get_comic_data'
         ],
         '/ray-latest' => [
-            'view' => 'ray-latest-body.php',
+            'view' => 'pages/ray-latest-body.php',
             'title' => '最新 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-pictures' => [
-            'view' => 'ray-pictures-body.php',
+            'view' => 'pages/ray-pictures-body.php',
             'title' => '图片 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-sites' => [
-            'view' => 'ray-sites-body.php',
+            'view' => 'pages/ray-sites-body.php',
             'title' => '网站 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/ray-sketch' => [
-            'view' => 'ray-sketch-body.php',
+            'view' => 'pages/ray-sketch-body.php',
             'title' => '素描 - RZX.ME',
             'handler' => 'get_page_data'
         ],

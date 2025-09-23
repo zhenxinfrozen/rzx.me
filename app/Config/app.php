@@ -25,8 +25,8 @@ return [
 
     // 视图配置
     'views' => [
-        'header' => 'header.php',
-        'footer' => 'footer.php',
+        'header' => 'layouts/header.php',
+        'footer' => 'layouts/footer.php',
         'default_title' => 'RZX.ME - Ray的个人网站',
         'cache_enabled' => false,
     ],

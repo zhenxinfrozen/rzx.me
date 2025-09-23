@@ -1,4 +1,4 @@
-<!-- app/Views/footer.php - copied from includes/views/footer.php -->
+<!-- app/Views/layouts/footer.php - copied from includes/views/footer.php -->
 <footer class="site-footer">
     <div class="site-footer__inner">
         <div class="site-footer__left">
@@ -15,7 +15,7 @@
 <?php  ?>
 <?php
 
-    $publicCss = __DIR__ . '/../../public/assets/css/footer.css';
+    $publicCss = __DIR__ . '/../../../public/assets/css/footer.css';
     if (file_exists($publicCss)) {
         echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/footer.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
     } else {

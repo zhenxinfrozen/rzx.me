@@ -41,23 +41,23 @@ if (!$route) {
     
     // 旧路由表
     $legacyRoutes = [
-        '' => 'index-body.php',
-        'index' => 'index-body.php',
-        'ray-comic' => 'ray-comic-body.php',
-        'ray-pictures' => 'ray-pictures-body.php',
-        'ray-animation' => 'ray-animation-body.php',
-        'ray-latest' => 'ray-latest-body.php',
-        'ray-sites' => 'ray-sites-body.php',
-        'ray-sketch' => 'ray-sketch-body.php',
-        'ray-about' => 'ray-about-body.php',
-        'sketch-dream' => 'ray-comic-reader-body.php',
+        '' => 'pages/index-body.php',
+        'index' => 'pages/index-body.php',
+        'ray-comic' => 'pages/ray-comic-body.php',
+        'ray-pictures' => 'pages/ray-pictures-body.php',
+        'ray-animation' => 'pages/ray-animation-body.php',
+        'ray-latest' => 'pages/ray-latest-body.php',
+        'ray-sites' => 'pages/ray-sites-body.php',
+        'ray-sketch' => 'pages/ray-sketch-body.php',
+        'ray-about' => 'pages/ray-about-body.php',
+        'sketch-dream' => 'pages/ray-comic-reader-body.php',
     ];
     
     $viewFile = $legacyRoutes[$path] ?? null;
     
     // 动态匹配
     if ($viewFile === null && $path !== '') {
-        $candidateView = $path . '-body.php';
+        $candidateView = 'pages/' . $path . '-body.php';
         if (file_exists(__DIR__ . '/../app/Views/' . $candidateView)) {
             $viewFile = $candidateView;
         }
@@ -114,7 +114,7 @@ $meta_author = $pageData['meta_author'] ?? 'Ray';
 <?php
 // 渲染页眉
 try {
-    $headerPath = __DIR__ . '/../app/Views/' . config('views.header', 'header.php');
+    $headerPath = __DIR__ . '/../app/Views/' . config('views.header', 'layouts/header.php');
     echo render_template($headerPath, ['title' => $title]);
 } catch (Exception $e) {
     if (config('app.debug')) {
@@ -147,7 +147,7 @@ if ($viewFile && file_exists($viewsPath . $viewFile)) {
 // 渲染页脚（某些页面不显示）
 if (!isset($page_id) || !in_array($page_id, ['sketch', 'comic-reader'])):
 try {
-    $footerPath = __DIR__ . '/../app/Views/' . config('views.footer', 'footer.php');
+    $footerPath = __DIR__ . '/../app/Views/' . config('views.footer', 'layouts/footer.php');
     echo render_template($footerPath);
 } catch (Exception $e) {
     if (config('app.debug')) {
