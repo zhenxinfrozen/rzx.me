@@ -131,16 +131,22 @@ rzx-me/
 
 ### **阶段一：基础结构调整**
 
-#### 步骤1：目录重命名 (执行中)
+#### 步骤1：目录重命名 ✅ **已完成**
 - [x] 分析当前结构
-- [ ] app/Handlers/ → app/Controllers/
-- [ ] app/Data/ → app/Models/
-- [ ] app/views/ → app/Views/
+- [x] app/Handlers/ → app/Controllers/
+- [x] app/Data/ → app/Models/
+- [x] app/views/ → app/Views/
+- [x] 更新所有文件路径引用
+- [x] 测试功能完整性
 
-#### 步骤2：配置文件集中化 (计划中)
-- [ ] 创建 app/Config/ 目录
-- [ ] 提取配置到独立文件
-- [ ] 重构 bootstrap.php
+#### 步骤2：配置文件集中化 ✅ **已完成**
+- [x] 创建 app/Config/ 目录
+- [x] 创建 ConfigManager.php 配置管理器
+- [x] 添加 app.php, database.php, routes.php
+- [x] 创建 app/storage/ 目录结构
+- [x] 重构 bootstrap.php 使用新配置
+- [x] 创建现代化 Router 类
+- [x] 更新 index.php 使用新路由系统
 
 #### 步骤3：清理冗余文件 (计划中)
 - [ ] 删除 app/legacy/
