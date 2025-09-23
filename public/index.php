@@ -1,11 +1,11 @@
 <?php
-// Front controller - single entry point to the site
+// 前端控制器 - 站点唯一入口
 require_once __DIR__ . '/../app/bootstrap.php';
 require_once __DIR__ . '/../app/view_renderer.php';
 
-// Basic router: map request path to a view template under app/views
+// 基本路由：将请求路径映射到 app/views 下的视图模板
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-// Normalize: remove leading/trailing slashes
+// 规范化路径：移除首尾斜杠
 $path = trim($path, '/');
 
 // Simple routing table (extend as needed)
@@ -19,10 +19,10 @@ $routes = [
     'ray-sites.php' => 'ray-sites-body.php',
     'ray-sketch.php' => 'ray-sketch-body.php',
     'ray-about.php' => 'ray-about-body.php',
-    'api.php' => null, // handled separately
+    'api.php' => null, // 单独处理（API 直接由 api.php 处理）
 ];
 
-// If request is to api.php, include the API handler directly
+// 如果请求为 api.php，直接包含 API 处理程序
 if ($path === 'api.php' || strpos($_SERVER['SCRIPT_NAME'] ?? '', '/api.php') !== false) {
     require_once __DIR__ . '/api.php';
     exit;
@@ -30,7 +30,7 @@ if ($path === 'api.php' || strpos($_SERVER['SCRIPT_NAME'] ?? '', '/api.php') !==
 
 $viewFile = $routes[$path] ?? null;
 
-// If not found in table but looks like a file under app/views, try to map directly
+// 如果路由表中未找到，但看起来像 app/views 下的文件，则尝试直接映射
 if ($viewFile === null && $path !== '') {
     $candidate = __DIR__ . '/../app/views/' . basename($path);
     if (file_exists($candidate)) {
@@ -38,10 +38,10 @@ if ($viewFile === null && $path !== '') {
     }
 }
 
-// Prepare page title (simple default)
+// 准备页面标题（简单默认）
 $title = 'rzx.me';
 
-// Render standard page layout
+// 渲染标准页面布局
 ?><!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -53,14 +53,14 @@ $title = 'rzx.me';
 </head>
 <body>
 <?php
-// header
+// 页眉
 try {
     echo render_template(__DIR__ . '/../app/views/header.php', ['title' => $title]);
 } catch (Exception $e) {
-    // fail silently and continue
+    // 出现异常时静默处理并继续
 }
 
-// main content
+// 主体内容
 if ($viewFile) {
     try {
         echo render_template(__DIR__ . '/../app/views/' . $viewFile);
@@ -69,12 +69,12 @@ if ($viewFile) {
         echo '<h1>服务器错误</h1><p>无法加载视图。</p>';
     }
 } else {
-    // fallback: 404
+    // 回退：404
     http_response_code(404);
     echo '<h1>404 Not Found</h1><p>请求的页面不存在。</p>';
 }
 
-// footer
+// 页脚
 try {
     echo render_template(__DIR__ . '/../app/views/footer.php');
 } catch (Exception $e) {}
