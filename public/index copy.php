@@ -48,7 +48,7 @@ $title = 'rzx.me';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title><?php echo htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></title>
-    <link rel="icon" href="favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico" />
     <link rel="stylesheet" href="<?php echo htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>/css/home_style.css" />
 </head>
 <body>

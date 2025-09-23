@@ -23,13 +23,13 @@
 
             $navItems = [
                 'Home' => '/',
-                'Animation' => '/ray-animation.php',
-                'Latest' => '/ray-latest.php',
-                'Comic' => '/ray-comic.php',
-                'Blogs' => '/ray-sites.php',
-                'Sketch' => '/ray-sketch.php',
-                'Pictures' => '/ray-pictures.php',
-                'About' => '/ray-about.php',
+                'Animation' => '/ray-animation',
+                'Latest' => '/ray-latest',
+                'Comic' => '/ray-comic',
+                'Blogs' => '/ray-sites',
+                'Sketch' => '/ray-sketch',
+                'Pictures' => '/ray-pictures',
+                'About' => '/ray-about',
             ];
             ?>
             <ul class="site-nav__list">

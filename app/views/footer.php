@@ -12,8 +12,9 @@
         </div>
     </div>
 </footer>
-
+<?php  ?>
 <?php
+
     $publicCss = __DIR__ . '/../../public/assets/css/footer.css';
     if (file_exists($publicCss)) {
         echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/footer.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
@@ -25,22 +26,25 @@
     }
 ?>
 
+<?php if (!isset($page_id) || ($page_id !== 'sketch' && $page_id !== 'test-sketch-test')): ?>
 <script>
-// jQuery CDN with local fallback
+// jQuery CDN with local fallback; skip if already present
 (function(){
-    var cdn = document.createElement('script');
-    cdn.src = 'https://code.jquery.com/jquery-3.7.1.min.js';
-    cdn.integrity = 'sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=';
-    cdn.crossOrigin = 'anonymous';
-    cdn.onload = function(){};
-    cdn.onerror = function(){ loadLocal(); };
-    document.head.appendChild(cdn);
     function loadLocal(){
         if (window.jQuery) return;
         var s = document.createElement('script');
         s.src = '/assets/js/jquery-3.7.1.min.js';
         document.head.appendChild(s);
     }
-    setTimeout(function(){ if (!window.jQuery) loadLocal(); }, 3000);
+    if (!window.jQuery) {
+        var cdn = document.createElement('script');
+        cdn.src = 'https://code.jquery.com/jquery-3.7.1.min.js';
+        cdn.integrity = 'sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=';
+        cdn.crossOrigin = 'anonymous';
+        cdn.onerror = function(){ loadLocal(); };
+        document.head.appendChild(cdn);
+        setTimeout(function(){ if (!window.jQuery) loadLocal(); }, 3000);
+    }
 })();
 </script>
+<?php endif; ?>
