@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             // 【FIX】 Removed the leading slash "/" to make the URL page-relative
-            fetch(`api.php?id=${comicId}`)
+            fetch(`api?id=${comicId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);

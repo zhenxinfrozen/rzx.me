@@ -23,12 +23,21 @@ $routes = [
     'ray-sites' => 'ray-sites-body.php',
     'ray-sketch' => 'ray-sketch-body.php',
     'ray-about' => 'ray-about-body.php',
-    'api' => null, // 单独处理
+    'sketch-dream' => 'ray-comic-reader-body.php', // 使用新的模板文件
 ];
 
-// 如果请求为 api.php，直接包含 API 处理程序
-if ($path === 'api' || strpos($_SERVER['SCRIPT_NAME'] ?? '', '/api.php') !== false) {
-    require_once __DIR__ . '/api.php';
+// API路由处理 - 支持现代RESTful和传统格式
+if ($path === 'api' || strpos($path, 'api/') === 0) {
+    // 解析API路径: api/comic/123 或 api?id=123
+    if (preg_match('/^api\/comic\/(\w+)$/', $path, $matches)) {
+        // RESTful格式: /api/comic/{id}
+        $_GET['id'] = $matches[1];
+    } elseif ($path === 'api' || strpos($_SERVER['SCRIPT_NAME'] ?? '', '/api.php') !== false) {
+        // 传统格式: /api.php?id=123 (向后兼容)
+    }
+    
+    require_once __DIR__ . '/../app/Handlers/api_comic_handler.php';
+    handle_api_request();
     exit;
 }
 
@@ -46,10 +55,14 @@ if ($viewFile === null && $path !== '') {
 // 获取页面特定数据
 $pageData = get_page_specific_data($viewFile);
 
-// 准备页面变量，提供默认值
-$title = $pageData['page_title'] ?? 'rzx.me';
-$page_id = $pageData['page_id'] ?? '';
-$css_file = $pageData['css_file'] ?? null;
+// 从页面数据处理器获取所有页面变量（已包含默认值）
+$title = $pageData['page_title'];
+$page_id = $pageData['page_id'];
+$css_file = $pageData['css_file'];
+$meta_keywords = $pageData['meta_keywords'];
+$meta_description = $pageData['meta_description'];
+$meta_copyright = $pageData['meta_copyright'];
+$meta_author = $pageData['meta_author'];
 
 // 渲染标准页面布局
 ?><!DOCTYPE html>
@@ -57,10 +70,10 @@ $css_file = $pageData['css_file'] ?? null;
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <meta name="copyright" content="站点所有原创图片版权归作者所有，转载注明出处......" />
-    <meta name="keywords" content="动画，漫画，图片，电影，动漫，真实心，分镜头合木，颓废的动画人" />
-    <meta name="description" content="作为动画专业的身份，还是有动画的练习和认真作品的。虽然不是真心感兴趣" />
-    <meta name="author" content="ray,ruizhenxin,rzx.me" />
+    <meta name="copyright" content="<?php echo htmlspecialchars($meta_copyright, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>" />
+    <meta name="keywords" content="<?php echo htmlspecialchars($meta_keywords, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>" />
+    <meta name="description" content="<?php echo htmlspecialchars($meta_description, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>" />
+    <meta name="author" content="<?php echo htmlspecialchars($meta_author, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>" />
     <title><?php echo htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></title>
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico" />
     <?php if ($css_file): ?>
@@ -91,7 +104,7 @@ if ($viewFile && file_exists(__DIR__ . '/../app/views/' . $viewFile)) {
     echo "<h1>404 Not Found</h1><p>请求的页面不存在。</p>";
 }
 
-if (!isset($page_id) || ($page_id !== 'sketch' )):
+if (!isset($page_id) || !in_array($page_id, ['sketch', 'comic-reader'])):
 // 渲染页脚
 try {
     echo render_template(__DIR__ . '/../app/views/footer.php');

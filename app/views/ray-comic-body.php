@@ -6,7 +6,7 @@
 <p align="center"><span style="font-family: 'Comic Sans MS', cursive; color:#999999; font-size:1rem;"> Test page<span style="font-size:0.8rem">（<b>测试</b>）</span> </span></p>
 
 <div id="ray-comic-menu">
-    <a href="sketch-dream.html" ><div id="c1" class="ray-comic-menu-icon"></div></a>
+    <a href="/sketch-dream" ><div id="c1" class="ray-comic-menu-icon"></div></a>
     <a href="#" data-comic-id="gzjy"><div id="c2" class="ray-comic-menu-icon"></div></a>
     <a href="#" data-comic-id="wine"><div id="c3" class="ray-comic-menu-icon"></div></a>
     <a href="#" data-comic-id="MagicUbuntu"><div id="c4" class="ray-comic-menu-icon"></div></a>
@@ -29,16 +29,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     comicLinks.forEach(link => {
         link.addEventListener('click', function(event) {
-            event.preventDefault(); 
-            
             const comicId = this.dataset.comicId;
             if (!comicId) {
-                console.error('Link is missing data-comic-id attribute.');
+                // 如果没有 comic-id，说明是外部链接（如 sketch-dream），允许正常跳转
                 return;
             }
+            
+            // 只有有 comic-id 的链接才阻止默认行为并进行AJAX处理
+            event.preventDefault();
 
-            // 【FIX】 Removed the leading slash "/" to make the URL page-relative
-            fetch(`api.php?id=${comicId}`)
+            // 使用新的统一API路径
+            fetch(`api?id=${comicId}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
