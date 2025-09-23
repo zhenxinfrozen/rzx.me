@@ -49,10 +49,19 @@ return [
             'title' => '素描 - RZX.ME',
             'handler' => 'get_page_data'
         ],
+        '/sketch-dream' => [
+            'view' => 'pages/ray-comic-reader-body.php',
+            'title' => 'Dream Gallery - RZX.ME',
+            'handler' => 'get_page_data'
+        ],
     ],
 
     // API路由
     'api' => [
+        '/api' => [
+            'handler' => 'handle_api_request',
+            'method' => ['GET', 'POST']
+        ],
         '/api/comic/list' => [
             'handler' => 'get_comic_list',
             'method' => 'GET'
