@@ -2,73 +2,102 @@
 // 前端控制器 - 站点唯一入口
 require_once __DIR__ . '/../app/bootstrap.php';
 require_once __DIR__ . '/../app/view_renderer.php';
-require_once __DIR__ . '/../app/Controllers/page_data_handler.php'; // 引入页面数据处理器
+require_once __DIR__ . '/../app/Router.php';
+require_once __DIR__ . '/../app/Controllers/page_data_handler.php';
 
-// 基本路由：将请求路径映射到 app/views 下的视图模板
-$path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-// 规范化路径：移除首尾斜杠，并移除 .php 后缀（如果存在）
-$path = trim($path, '/');
-if (substr($path, -4) === '.php') {
-    $path = substr($path, 0, -4);
-}
+// 初始化路由器
+$router = new Router();
 
-// 路由表现在使用不带 .php 的键
-$routes = [
-    '' => 'index-body.php',
-    'index' => 'index-body.php',
-    'ray-comic' => 'ray-comic-body.php',
-    'ray-pictures' => 'ray-pictures-body.php',
-    'ray-animation' => 'ray-animation-body.php',
-    'ray-latest' => 'ray-latest-body.php',
-    'ray-sites' => 'ray-sites-body.php',
-    'ray-sketch' => 'ray-sketch-body.php',
-    'ray-about' => 'ray-about-body.php',
-    'sketch-dream' => 'ray-comic-reader-body.php', // 使用新的模板文件
-];
+// 匹配当前路由
+$route = $router->match();
 
-// API路由处理 - 支持现代RESTful和传统格式
-if ($path === 'api' || strpos($path, 'api/') === 0) {
-    // 解析API路径: api/comic/123 或 api?id=123
-    if (preg_match('/^api\/comic\/(\w+)$/', $path, $matches)) {
-        // RESTful格式: /api/comic/{id}
-        $_GET['id'] = $matches[1];
-    } elseif ($path === 'api' || strpos($_SERVER['SCRIPT_NAME'] ?? '', '/api.php') !== false) {
-        // 传统格式: /api.php?id=123 (向后兼容)
-    }
-    
+// 处理API请求
+if ($route && $router->isApiRoute($route)) {
     require_once __DIR__ . '/../app/Controllers/api_comic_handler.php';
-    handle_api_request();
+    
+    // 调用对应的处理器函数
+    if (isset($route['handler']) && function_exists($route['handler'])) {
+        call_user_func($route['handler']);
+    } else {
+        handle_api_request(); // 默认处理器
+    }
     exit;
 }
 
-$viewFile = $routes[$path] ?? null;
+// 处理页面请求
+if (!$route || !$router->isPageRoute($route)) {
+    // 未找到路由，使用404
+    $route = $router->get404Route();
+    http_response_code(404);
+}
 
-// 如果路由表中未找到，则进行动态匹配
-if ($viewFile === null && $path !== '') {
-    // 将 'path-name' 转换为 'path-name-body.php'
-    $candidateView = $path . '-body.php';
-    if (file_exists(__DIR__ . '/../app/Views/' . $candidateView)) {
-        $viewFile = $candidateView;
+// 向后兼容：支持旧路由格式
+if (!$route) {
+    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    $path = trim($path, '/');
+    if (substr($path, -4) === '.php') {
+        $path = substr($path, 0, -4);
+    }
+    
+    // 旧路由表
+    $legacyRoutes = [
+        '' => 'index-body.php',
+        'index' => 'index-body.php',
+        'ray-comic' => 'ray-comic-body.php',
+        'ray-pictures' => 'ray-pictures-body.php',
+        'ray-animation' => 'ray-animation-body.php',
+        'ray-latest' => 'ray-latest-body.php',
+        'ray-sites' => 'ray-sites-body.php',
+        'ray-sketch' => 'ray-sketch-body.php',
+        'ray-about' => 'ray-about-body.php',
+        'sketch-dream' => 'ray-comic-reader-body.php',
+    ];
+    
+    $viewFile = $legacyRoutes[$path] ?? null;
+    
+    // 动态匹配
+    if ($viewFile === null && $path !== '') {
+        $candidateView = $path . '-body.php';
+        if (file_exists(__DIR__ . '/../app/Views/' . $candidateView)) {
+            $viewFile = $candidateView;
+        }
+    }
+    
+    if ($viewFile) {
+        $route = [
+            'view' => $viewFile,
+            'title' => config('views.default_title'),
+            'handler' => 'get_page_data'
+        ];
     }
 }
 
-// 获取页面特定数据
-$pageData = get_page_specific_data($viewFile);
+// 获取页面数据
+$pageData = [];
+if (isset($route['handler']) && function_exists($route['handler'])) {
+    if ($route['handler'] === 'get_page_specific_data') {
+        $pageData = get_page_specific_data($route['view'] ?? null);
+    } else {
+        $pageData = call_user_func($route['handler'], $route['view'] ?? null);
+    }
+} else {
+    $pageData = get_page_specific_data($route['view'] ?? null);
+}
 
-// 从页面数据处理器获取所有页面变量（已包含默认值）
-$title = $pageData['page_title'];
-$page_id = $pageData['page_id'];
-$css_file = $pageData['css_file'];
-$meta_keywords = $pageData['meta_keywords'];
-$meta_description = $pageData['meta_description'];
-$meta_copyright = $pageData['meta_copyright'];
-$meta_author = $pageData['meta_author'];
+// 设置页面变量
+$title = $pageData['page_title'] ?? $router->getPageTitle($route);
+$page_id = $pageData['page_id'] ?? 'default';
+$css_file = $pageData['css_file'] ?? '';
+$meta_keywords = $pageData['meta_keywords'] ?? config('app.name', 'RZX.ME');
+$meta_description = $pageData['meta_description'] ?? '';
+$meta_copyright = $pageData['meta_copyright'] ?? '';
+$meta_author = $pageData['meta_author'] ?? 'Ray';
 
-// 渲染标准页面布局
+// 渲染页面
 ?><!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="<?php echo config('app.charset', 'UTF-8'); ?>" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="copyright" content="<?php echo htmlspecialchars($meta_copyright, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>" />
     <meta name="keywords" content="<?php echo htmlspecialchars($meta_keywords, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>" />
@@ -85,31 +114,46 @@ $meta_author = $pageData['meta_author'];
 <?php
 // 渲染页眉
 try {
-    echo render_template(__DIR__ . '/../app/Views/header.php', ['title' => $title]);
+    $headerPath = __DIR__ . '/../app/Views/' . config('views.header', 'header.php');
+    echo render_template($headerPath, ['title' => $title]);
 } catch (Exception $e) {
-    // 出现异常时静默处理并继续
+    if (config('app.debug')) {
+        echo "<!-- Header Error: " . htmlspecialchars($e->getMessage()) . " -->";
+    }
 }
 
 // 渲染主内容
-if ($viewFile && file_exists(__DIR__ . '/../app/Views/' . $viewFile)) {
+$viewFile = $route['view'] ?? null;
+$viewsPath = __DIR__ . '/../app/Views/';
+if ($viewFile && file_exists($viewsPath . $viewFile)) {
     try {
-        echo render_template(__DIR__ . '/../app/Views/' . $viewFile);
+        echo render_template($viewsPath . $viewFile, $pageData);
     } catch (Exception $e) {
         http_response_code(500);
-        echo '<h1>服务器错误</h1><p>无法加载视图。</p>';
+        if (config('app.debug')) {
+            echo '<h1>服务器错误</h1><p>无法加载视图: ' . htmlspecialchars($e->getMessage()) . '</p>';
+        } else {
+            echo '<h1>服务器错误</h1><p>无法加载视图。</p>';
+        }
     }
 } else {
-    // 如果找不到视图，显示 404 页面或消息
-    http_response_code(404);
+    // 404页面
+    if (!isset($route['type']) || $route['type'] !== 'error') {
+        http_response_code(404);
+    }
     echo "<h1>404 Not Found</h1><p>请求的页面不存在。</p>";
 }
 
+// 渲染页脚（某些页面不显示）
 if (!isset($page_id) || !in_array($page_id, ['sketch', 'comic-reader'])):
-// 渲染页脚
 try {
-    echo render_template(__DIR__ . '/../app/Views/footer.php');
-} catch (Exception $e) {}
-
+    $footerPath = __DIR__ . '/../app/Views/' . config('views.footer', 'footer.php');
+    echo render_template($footerPath);
+} catch (Exception $e) {
+    if (config('app.debug')) {
+        echo "<!-- Footer Error: " . htmlspecialchars($e->getMessage()) . " -->";
+    }
+}
 endif;
 ?>
 
