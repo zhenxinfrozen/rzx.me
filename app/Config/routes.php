@@ -9,17 +9,17 @@ return [
             'title' => 'Ray的个人主页',
             'handler' => 'get_page_data'
         ],
-        '/ray-about' => [
+        '/about' => [
             'view' => 'pages/about.php',
             'title' => '关于 Ray - RZX.ME',
             'handler' => 'get_page_data'
         ],
-        '/ray-animation' => [
+        '/animation' => [
             'view' => 'pages/animation.php',
             'title' => '动画 - RZX.ME',
             'handler' => 'get_page_data'
         ],
-        '/ray-comic' => [
+        '/comic' => [
             'view' => 'pages/comic.php',
             'title' => '漫画 - RZX.ME',
             'handler' => 'get_comic_data'
@@ -29,22 +29,22 @@ return [
             'title' => '漫画阅读器 - RZX.ME',
             'handler' => 'get_comic_data'
         ],
-        '/ray-latest' => [
+        '/latest' => [
             'view' => 'pages/latest.php',
             'title' => '最新 - RZX.ME',
             'handler' => 'get_page_data'
         ],
-        '/ray-pictures' => [
+        '/pictures' => [
             'view' => 'pages/pictures.php',
             'title' => '图片 - RZX.ME',
             'handler' => 'get_page_data'
         ],
-        '/ray-sites' => [
+        '/sites' => [
             'view' => 'pages/sites.php',
             'title' => '网站 - RZX.ME',
             'handler' => 'get_page_data'
         ],
-        '/ray-sketch' => [
+        '/sketch' => [
             'view' => 'pages/sketch.php',
             'title' => '素描 - RZX.ME',
             'handler' => 'get_page_data'
@@ -52,6 +52,17 @@ return [
         '/sketch-dream' => [
             'view' => 'pages/comic-gallery.php',
             'title' => 'Dream Gallery - RZX.ME',
+            'handler' => 'get_page_data'
+        ],
+        '/galleries' => [
+            'view' => 'pages/galleries.php',
+            'title' => '画廊 - RZX.ME',
+            'handler' => 'get_page_data'
+        ],
+        // 动态画廊路由模式: /gallery-{name}
+        '~^\/gallery-([^\/]+)$~' => [
+            'view' => 'pages/gallery.php',
+            'title' => '画廊 - RZX.ME',
             'handler' => 'get_page_data'
         ],
     ],

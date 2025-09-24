@@ -31,47 +31,6 @@ if (!$route || !$router->isPageRoute($route)) {
     http_response_code(404);
 }
 
-// 向后兼容：支持旧路由格式
-if (!$route) {
-    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-    $path = trim($path, '/');
-    if (substr($path, -4) === '.php') {
-        $path = substr($path, 0, -4);
-    }
-    
-    // 旧路由表
-    $legacyRoutes = [
-        '' => 'pages/home.php',
-        'index' => 'pages/home.php',
-        'ray-comic' => 'pages/comic.php',
-        'ray-pictures' => 'pages/pictures.php',
-        'ray-animation' => 'pages/animation.php',
-        'ray-latest' => 'pages/latest.php',
-        'ray-sites' => 'pages/sites.php',
-        'ray-sketch' => 'pages/sketch.php',
-        'ray-about' => 'pages/about.php',
-        'sketch-dream' => 'pages/comic-gallery.php',
-    ];
-    
-    $viewFile = $legacyRoutes[$path] ?? null;
-    
-    // 动态匹配
-    if ($viewFile === null && $path !== '') {
-        $candidateView = 'pages/' . $path . '-body.php';
-        if (file_exists(__DIR__ . '/../app/Views/' . $candidateView)) {
-            $viewFile = $candidateView;
-        }
-    }
-    
-    if ($viewFile) {
-        $route = [
-            'view' => $viewFile,
-            'title' => config('views.default_title'),
-            'handler' => 'get_page_data'
-        ];
-    }
-}
-
 // 获取页面数据
 $pageData = [];
 if (isset($route['handler']) && function_exists($route['handler'])) {
@@ -121,7 +80,6 @@ try {
         echo "<!-- Header Error: " . htmlspecialchars($e->getMessage()) . " -->";
     }
 }
-
 // 渲染主内容
 $viewFile = $route['view'] ?? null;
 $viewsPath = __DIR__ . '/../app/Views/';
@@ -145,7 +103,22 @@ if ($viewFile && file_exists($viewsPath . $viewFile)) {
 }
 
 // 渲染页脚（某些页面不显示）
-if (!isset($page_id) || !in_array($page_id, ['sketch', 'comic-reader'])):
+// 检测当前URL路径来决定是否显示页脚
+$currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+$hideFooterPages = ['sketch', 'comic-reader'];
+$hideFooter = false;
+
+// 检查固定页面ID
+if (isset($page_id) && in_array($page_id, $hideFooterPages)) {
+    $hideFooter = true;
+}
+
+// 检查动态gallery页面 (匹配 /gallery-* 模式)
+if (preg_match('/^\/gallery-[^\/]+$/', $currentPath)) {
+    $hideFooter = true;
+}
+
+if (!$hideFooter):
 try {
     $footerPath = __DIR__ . '/../app/Views/' . config('views.footer', 'layouts/footer.php');
     echo render_template($footerPath);

@@ -74,8 +74,13 @@ class Router
             return $this->currentRoute;
         }
         
-        // 动态路由匹配（预留）
+        // 动态路由匹配（正则表达式路由）
         foreach ($this->routes['pages'] ?? [] as $pattern => $route) {
+            // 跳过已经检查过的精确路径
+            if ($pattern === $path) {
+                continue;
+            }
+            
             if ($this->matchPattern($pattern, $path)) {
                 $this->currentRoute = $route;
                 $this->currentRoute['type'] = 'page';
@@ -89,14 +94,22 @@ class Router
     }
     
     /**
-     * 简单的模式匹配（支持:param格式）
+     * 模式匹配（支持正则表达式和:param格式）
      * @param string $pattern
      * @param string $path
      * @return bool
      */
     private function matchPattern($pattern, $path) 
     {
-        // 暂时只支持精确匹配，后续可扩展
+        // 正则表达式路由 (以~开头和结尾)
+        if (preg_match('/^~(.+)~$/', $pattern, $matches)) {
+            $regex = $matches[1];
+            // 为正则表达式添加分隔符
+            $regex = '/' . $regex . '/';
+            return preg_match($regex, $path);
+        }
+        
+        // 精确匹配
         return $pattern === $path;
     }
     
