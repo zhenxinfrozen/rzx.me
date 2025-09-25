@@ -58,6 +58,15 @@ return [
         'meta_keywords' => '图片，插画，概念设计，数字绘画，Digital Art',
     ],
     
+    // 图片作品集（升级版）
+    'pages/single-works.php' => [
+        'page_id' => 'single-works',
+        'page_title' => '图片作品集 - rzx.me',
+        'css_file' => '/assets/css/pictures.css',
+        'meta_description' => '个人图片作品集展示，包括动物、游戏、插画等分类作品',
+        'meta_keywords' => '作品集，插画，动物，游戏，Single Works，Digital Art',
+    ],
+    
     // 速写
     'pages/sketch.php' => [
         'page_id' => 'sketch',

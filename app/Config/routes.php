@@ -39,6 +39,11 @@ return [
             'title' => '图片 - RZX.ME',
             'handler' => 'get_page_data'
         ],
+        '/single-works' => [
+            'view' => 'pages/single-works.php',
+            'title' => '图片作品集 - RZX.ME',
+            'handler' => 'get_page_data'
+        ],
         '/sites' => [
             'view' => 'pages/sites.php',
             'title' => '网站 - RZX.ME',
