@@ -1,7 +1,7 @@
 <?php
 /**
  * Single-Works 分组排序配置
- * 自动生成于: 2025-09-25 14:22:51
+ * 自动生成于: 2025-09-25 14:37:45
  */
 
 return array (
@@ -13,8 +13,7 @@ return array (
     2 => 'Gallery comic',
     3 => 'Special-Zone',
     4 => 'Ae-test',
-    5 => 'test-fgdsfg',
-    6 => '00-Archive',
+    5 => '00-Archive',
   ),
   'prefix_settings' => 
   array (
@@ -27,7 +26,7 @@ return array (
     'Game+color' => 'Game+color',
     'Gallery comic' => 'Gallery comic',
     'Special-Zone' => 'Special-Zone',
-    'test-fgdsfg' => '测试新分组',
+    'Ae-test' => 'Ae-test',
     '00-Archive' => '00-Archive',
   ),
   'descriptions' => 
@@ -36,7 +35,7 @@ return array (
     'Game+color' => '',
     'Gallery comic' => '原创漫画和角色设计',
     'Special-Zone' => '',
-    'test-fgdsfg' => '描述测试',
+    'Ae-test' => '',
     '00-Archive' => '',
   ),
 );
