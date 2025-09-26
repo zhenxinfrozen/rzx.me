@@ -11,8 +11,7 @@
     <script>
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化图标
-            feather.replace();
+            // AdminDashboard类会处理图标初始化，避免重复调用
             
             // 添加页面特定的JavaScript逻辑
             if (typeof pageInit === 'function') {

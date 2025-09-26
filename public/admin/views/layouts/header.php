@@ -11,7 +11,11 @@ if (!headers_sent()) {
 // 简单的认证检查
 session_start();
 if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
-    header('Location: ../login.php');
+    // 根据当前位置决定登录页面路径
+    $request_uri = $_SERVER['REQUEST_URI'];
+    $is_in_controllers = strpos($request_uri, '/admin/controllers/') !== false;
+    $login_path = $is_in_controllers ? '../login.php' : 'login.php';
+    header('Location: ' . $login_path);
     exit;
 }
 
@@ -74,8 +78,7 @@ $current_user = [
     <title><?= htmlspecialchars($page_title) ?> - RZX.ME 后台管理</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Feather Icons -->
-    <link href="https://unpkg.com/feather-icons@4.29.0/dist/feather.css" rel="stylesheet">
+    <!-- Feather Icons (纯 JavaScript 渲染，无需 CSS 文件) -->
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap Icons (用于页面中的 bi- 图标) -->
@@ -302,4 +305,3 @@ $current_user = [
         </header>
         
         <!-- 页面内容区域开始 -->
-        <div class="page-content"></div>

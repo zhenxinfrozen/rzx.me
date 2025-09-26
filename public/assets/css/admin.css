@@ -220,6 +220,14 @@ body {
     min-height: 100vh;
 }
 
+/* 管理页面内容区域 */
+.admin-page-content {
+    padding: var(--spacing-xl);
+    flex: 1;
+    background-color: var(--bg-primary);
+    min-height: calc(100vh - 80px);
+}
+
 /* 顶部导航栏 */
 .admin-header {
     background-color: var(--bg-secondary);
@@ -556,6 +564,10 @@ body {
     
     .admin-content {
         padding: var(--spacing-md);
+    }
+    
+    .admin-page-content {
+        padding: var(--spacing-md) !important;
     }
     
     .stats-grid {
