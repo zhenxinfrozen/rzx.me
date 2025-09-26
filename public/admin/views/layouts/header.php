@@ -18,8 +18,16 @@ if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
 // 动态确定资源路径
 $request_uri = $_SERVER['REQUEST_URI'];
 $is_in_controllers = strpos($request_uri, '/admin/controllers/') !== false;
-// 对后台页面统一使用 ../assets 作为静态资源根，避免相对路径导致样式/图标加载失败
-$assets_base = '../assets';
+
+// 统一资源路径：所有admin页面都使用主assets目录
+if ($is_in_controllers) {
+    // 从 /admin/controllers/ 访问，需要返回两级到public/assets/
+    $assets_base = '../../assets';
+} else {
+    // 从 /admin/ 访问，只需要返回一级到public/assets/
+    $assets_base = '../assets';
+}
+
 $GLOBALS['assets_base'] = $assets_base;
 
 // 动态确定导航链接基础路径

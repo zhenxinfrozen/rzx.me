@@ -13,7 +13,7 @@ if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
 
 // 设置页面信息
 $page_title = '🎛️ 缩略图配置管理';
-$page_subtitle = '统一的缩略图配置管理，支持预设管理、自定义配置、实时测试和预览功能';
+$page_subtitle = '统一的缩略图配置管理，支持预设管理、自定义配置和测试功能';
 $_GET['page'] = 'thumbnail-config-manager';
 
 // 获取配置信息（来自合并后的服务）
@@ -189,9 +189,10 @@ require_once '../views/layouts/header.php';
     </div>
     <?php endif; ?>
 
+    <!-- 所有配置列表 -->
     <div class="row">
-        <!-- 配置列表栏 -->
-        <div class="card mt-3">
+        <div class="col-12">
+            <div class="card">
             <div class="card">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0">
@@ -208,6 +209,7 @@ require_once '../views/layouts/header.php';
                                     <th>尺寸</th>
                                     <th>质量</th>
                                     <th>格式</th>
+                                    <th>剪裁</th>
                                     <th>存放目录</th>
                                     <th>文件后缀</th>
                                     <th class="text-end">操作</th>
@@ -228,13 +230,35 @@ require_once '../views/layouts/header.php';
                                     <td><strong><?= $config['width'] ?>×<?= $config['height'] ?></strong>px</td>
                                     <td><?= $config['quality'] ?>%</td>
                                     <td><span class="badge bg-secondary"><?= strtoupper($config['format']) ?></span></td>
+                                    <td>
+                                        <?php if (!empty($config['crop'])): ?>
+                                            <span class="badge bg-success"><i class="bi bi-check"></i> 启用</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-light text-dark"><i class="bi bi-x"></i> 禁用</span>
+                                        <?php endif; ?>
+                                    </td>
                                     <td><code><?= $config['directory'] ?>/</code></td>
                                     <td><code><?= $config['suffix'] ?></code></td>
                                     <td class="text-end">
-                                        <button class="btn btn-sm btn-outline-primary" disabled>
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-success test-config" data-id="<?= $id ?>">
+                                        <?php if (empty($config['builtin'])): ?>
+                                        <form method="post" class="d-inline">
+                                            <input type="hidden" name="action" value="load_edit">
+                                            <input type="hidden" name="config_id" value="<?= $id ?>">
+                                            <button type="submit" class="btn btn-sm btn-outline-warning" title="编辑配置">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </button>
+                                        </form>
+                                        <form method="post" class="d-inline" onsubmit="return confirm('确定删除该配置吗？');">
+                                            <input type="hidden" name="action" value="delete_config">
+                                            <input type="hidden" name="config_id" value="<?= $id ?>">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="删除配置">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                        <?php else: ?>
+                                        <span class="badge bg-info text-white small">内置配置</span>
+                                        <?php endif; ?>
+                                        <button class="btn btn-sm btn-outline-success test-config" data-id="<?= $id ?>" title="测试配置">
                                             <i class="bi bi-play"></i>
                                         </button>
                                     </td>
@@ -247,68 +271,18 @@ require_once '../views/layouts/header.php';
             </div>
         </div>
 
-            <!-- 已保存的自定义预设 -->
-            <div class="card mt-3">
-                <div class="card-header" style="background:#ffc107;">
-                    <h6 class="mb-0"><i class="bi bi-star-fill"></i> 已保存的自定义预设 (<?= count($custom) ?>)</h6>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>预设ID</th>
-                                    <th>名称</th>
-                                    <th>尺寸</th>
-                                    <th>质量</th>
-                                    <th>格式</th>
-                                    <th>目录</th>
-                                    <th>后缀</th>
-                                    <th class="text-end">操作</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if ($custom): foreach ($custom as $cid => $c): ?>
-                                <tr>
-                                    <td><code><?= htmlspecialchars($cid) ?></code></td>
-                                    <td><?= htmlspecialchars($c['name'] ?? '') ?></td>
-                                    <td><strong><?= (int)($c['width'] ?? 0) ?>×<?= (int)($c['height'] ?? 0) ?></strong></td>
-                                    <td><?= (int)($c['quality'] ?? 0) ?>%</td>
-                                    <td><span class="badge bg-secondary"><?= strtoupper($c['format'] ?? 'jpg') ?></span></td>
-                                    <td><code><?= htmlspecialchars($c['directory'] ?? '') ?></code></td>
-                                    <td><code><?= htmlspecialchars($c['suffix'] ?? '') ?></code></td>
-                                    <td class="text-end">
-                                        <button class="btn btn-sm btn-outline-success test-config" data-id="<?= htmlspecialchars($cid) ?>">
-                                            <i class="bi bi-play"></i>
-                                        </button>
-                                        <form method="post" class="d-inline">
-                                            <input type="hidden" name="action" value="load_edit">
-                                            <input type="hidden" name="config_id" value="<?= htmlspecialchars($cid) ?>">
-                                            <button type="submit" class="btn btn-sm btn-outline-warning">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </button>
-                                        </form>
-                                        <form method="post" class="d-inline" onsubmit="return confirm('确定删除该配置吗？');">
-                                            <input type="hidden" name="action" value="delete_config">
-                                            <input type="hidden" name="config_id" value="<?= htmlspecialchars($cid) ?>">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                <?php endforeach; else: ?>
-                                <tr><td colspan="8" class="text-center text-muted py-3">暂无自定义预设</td></tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
-        <!-- 右侧：测试区域 -->
-        <div class="col-lg-4 mb-4">
-            <div class="card">
+
+                        </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 测试和管理区域 -->
+    <div class="row mt-4">
+        <!-- 左侧：测试区域 -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
                 <div class="card-header bg-success text-white">
                     <h5 class="mb-0">
                         <i class="bi bi-play-circle"></i> 配置测试
@@ -345,7 +319,7 @@ require_once '../views/layouts/header.php';
                     <div class="alert alert-<?= $testResult['success'] ? 'success' : 'danger' ?>">
                         <div class="d-flex align-items-start gap-2">
                             <i class="bi <?= $testResult['success'] ? 'bi-check-circle' : 'bi-x-circle' ?> fs-5"></i>
-                            <div>
+                            <div class="flex-grow-1">
                                 <div class="fw-bold mb-1">测试结果</div>
                                 <?php if ($testResult['success']): ?>
                                     <div class="small text-muted">原图片：<?= str_replace(realpath(__DIR__ . '/..'), '', $testResult['original_path']) ?></div>
@@ -353,6 +327,16 @@ require_once '../views/layouts/header.php';
                                     <?php if (!empty($testResult['file_size'])): ?>
                                         <div class="small text-muted">文件大小：<?= number_format($testResult['file_size']/1024, 2) ?> KB</div>
                                     <?php endif; ?>
+                                    
+                                    <!-- 显示生成的缩略图 -->
+                                    <?php 
+                                    $webPath = str_replace(realpath(__DIR__ . '/../..'), '', $testResult['output_path']);
+                                    $webPath = str_replace('\\', '/', $webPath);
+                                    ?>
+                                    <div class="text-center mt-3 p-3 bg-light rounded">
+                                        <div class="small text-muted mb-2">生成的缩略图：</div>
+                                        <img src="<?= $webPath ?>" alt="Generated Thumbnail" class="img-fluid border rounded" style="max-width: 200px; max-height: 200px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                    </div>
                                 <?php else: ?>
                                     <div class="small text-muted">错误：<?= htmlspecialchars($testResult['error'] ?? '未知错误') ?></div>
                                 <?php endif; ?>
@@ -375,30 +359,14 @@ require_once '../views/layouts/header.php';
                 </div>
             </div>
             
-            <!-- 快速操作 -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h6 class="mb-0"><i class="bi bi-lightning"></i> 快速操作</h6>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <a href="tools.php<?= isset($_GET['dev']) ? '?dev' : '' ?>" class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-tools"></i> 返回工具页面
-                        </a>
-                        <a href="../thumbnail-config-demo.php<?= isset($_GET['dev']) ? '?dev' : '' ?>" class="btn btn-outline-info btn-sm">
-                            <i class="bi bi-eye"></i> 查看演示
-                        </a>
-                        <a href="thumbnail-manager.php<?= isset($_GET['dev']) ? '?dev' : '' ?>" class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-image"></i> 缩略图管理
-                        </a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- 自定义预设管理 -->
-            <div class="card mt-3">
+        </div>
+        
+        <!-- 右侧：自定义预设管理 -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
                 <div class="card-header bg-info text-white">
-                    <h6 class="mb-0"><i class="bi bi-sliders"></i> 自定义预设管理</h6>
+                    <h5 class="mb-0"><i class="bi bi-sliders"></i> 添加自定义预设</h5>
                 </div>
                 <div class="card-body">
                     <form method="post">
@@ -462,69 +430,49 @@ require_once '../views/layouts/header.php';
             </div>
         </div>
     </div>
-                    <!-- 测试结果 -->
-                    <?php if ($testResult): ?>
-                    <hr>
-                    <div class="alert alert-<?= $testResult['success'] ? 'success' : 'danger' ?>">
-                        <div class="d-flex align-items-start gap-2">
-                            <i class="bi <?= $testResult['success'] ? 'bi-check-circle' : 'bi-x-circle' ?> fs-5"></i>
-                            <div>
-                                <div class="fw-bold mb-1">测试结果</div>
-                                <?php if ($testResult['success']): ?>
-                                    <div class="small text-muted">原图片：<?= str_replace(realpath(__DIR__ . '/..'), '', $testResult['original_path']) ?></div>
-                                    <div class="small text-muted">输出路径：<?= str_replace(realpath(__DIR__ . '/..'), '', $testResult['output_path']) ?></div>
-                                    <?php if (!empty($testResult['file_size'])): ?>
-                                        <div class="small text-muted">文件大小：<?= number_format($testResult['file_size']/1024, 2) ?> KB</div>
-                                    <?php endif; ?>
-                                <?php else: ?>
-                                    <div class="small text-muted">错误：<?= htmlspecialchars($testResult['error'] ?? '未知错误') ?></div>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <?php endif; ?>
 
-                    <!-- 使用示例代码 -->
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <div class="card card-info">
-                                <div class="card-header">
-                                    <h4 class="card-title"><i class="fas fa-code"></i> 代码使用示例</h4>
-                                </div>
-                                <div class="card-body">
-                                    <pre><code class="php">
-                                        <?php 
-                                        echo htmlspecialchars('// 1. 基本使用 - 页面预设配置
-        ThumbnailService::generateForPage($imagePath, \'gallery\');
-        ThumbnailService::generateForPage($imagePath, \'single-works\');
-        ThumbnailService::generateForPage($imagePath, \'sketch\');
+</div>
 
-        // 2. 自定义配置
-        $customConfig = [
-        \'width\' => 250,
-        \'height\' => 250,
-        \'quality\' => 90,
-        \'directory\' => \'custom-thumbs\',
-        \'suffix\' => \'_my_thumb\'
-        ];
-        ThumbnailService::generateForPage($imagePath, \'gallery\', $customConfig);
+<!-- 使用示例代码和配置说明 -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-code-slash"></i> 代码使用示例</h5>
+            </div>
+            <div class="card-body">
+                <pre class="bg-dark text-light p-3 rounded"><code><?php 
+echo htmlspecialchars('// 1. 基本使用 - 页面预设配置
+ThumbnailService::generateForPage($imagePath, \'gallery\');
+ThumbnailService::generateForPage($imagePath, \'single-works\');
+ThumbnailService::generateForPage($imagePath, \'sketch\');
 
-        // 3. 批量生成
-        ThumbnailService::generateBatchForPage($directoryPath, \'single-works\');
+// 2. 自定义配置
+$customConfig = [
+    \'width\' => 250,
+    \'height\' => 250,
+    \'quality\' => 90,
+    \'directory\' => \'custom-thumbs\',
+    \'suffix\' => \'_my_thumb\'
+];
+ThumbnailService::generateForPage($imagePath, \'gallery\', $customConfig);
 
-        // 4. 获取缩略图路径
-        $thumbPath = ThumbnailService::getThumbnailPath($imagePath, \'gallery\');
+// 3. 批量生成
+ThumbnailService::generateBatchForPage($directoryPath, \'single-works\');
 
-        // 5. 响应式配置
-        $mobileConfig = ThumbnailConfig::getResponsiveConfig(\'mobile\');
-        ThumbnailService::generateForPage($imagePath, \'gallery\', $mobileConfig);'); ?></code></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+// 4. 获取缩略图路径
+$thumbPath = ThumbnailService::getThumbnailPath($imagePath, \'gallery\');
 
+// 5. 响应式配置
+$mobileConfig = ThumbnailConfig::getResponsiveConfig(\'mobile\');
+ThumbnailService::generateForPage($imagePath, \'gallery\', $mobileConfig);');
+?></code></pre>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- 配置说明 -->
+<!-- 配置说明 -->
     <div class="row">
         <div class="col-12">
             <div class="card">
