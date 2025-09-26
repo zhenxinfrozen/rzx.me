@@ -129,7 +129,7 @@ $stats = getStats();
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="thumbnail-config-manager.php">
+                    <a class="nav-link" href="controllers/thumbnail-config-manager.php">
                         <i class="bi bi-sliders me-2"></i>缩略图配置
                     </a>
                 </li>
@@ -256,7 +256,7 @@ $stats = getStats();
                                     </a>
                                 </div>
                                 <div class="col-md-4">
-                                    <a href="thumbnail-config-manager.php" class="btn btn-outline-warning w-100 d-flex align-items-center">
+                                    <a href="controllers/thumbnail-config-manager.php" class="btn btn-outline-warning w-100 d-flex align-items-center">
                                         <i class="bi bi-sliders me-2"></i>
                                         <span>缩略图配置</span>
                                     </a>

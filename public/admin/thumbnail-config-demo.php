@@ -354,7 +354,7 @@ if ($_POST) {
                             <i class="fas fa-cogs"></i> 缩略图配置演示
                         </a>
                         <div class="navbar-nav ms-auto">
-                            <a class="nav-link" href="thumbnail-config-manager.php">
+                            <a class="nav-link" href="controllers/thumbnail-config-manager.php">
                                 <i class="fas fa-cog"></i> 配置管理
                             </a>
                         </div>

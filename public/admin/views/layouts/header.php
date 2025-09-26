@@ -18,7 +18,8 @@ if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
 // 动态确定资源路径
 $request_uri = $_SERVER['REQUEST_URI'];
 $is_in_controllers = strpos($request_uri, '/admin/controllers/') !== false;
-$assets_base = $is_in_controllers ? '../assets' : 'assets';
+// 对后台页面统一使用 ../assets 作为静态资源根，避免相对路径导致样式/图标加载失败
+$assets_base = '../assets';
 $GLOBALS['assets_base'] = $assets_base;
 
 // 动态确定导航链接基础路径
@@ -69,6 +70,8 @@ $current_user = [
     <link href="https://unpkg.com/feather-icons@4.29.0/dist/feather.css" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons (用于页面中的 bi- 图标) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <!-- 自定义样式 -->
     <link rel="stylesheet" href="<?= $assets_base ?>/css/admin.css">
     <style>
@@ -241,7 +244,7 @@ $current_user = [
             </li>
             
             <li class="menu-item <?= $current_page === 'thumbnail-config-manager' ? 'active' : '' ?>">
-                <a href="<?= $is_in_controllers ? '../' : '' ?>thumbnail-config-manager.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
+                <a href="<?= $nav_base ?>thumbnail-config-manager.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
                     <i data-feather="sliders"></i>
                     <span>缩略图配置</span>
                 </a>
@@ -291,4 +294,4 @@ $current_user = [
         </header>
         
         <!-- 页面内容区域开始 -->
-        <div class="page-content">
+        <div class="page-content"></div>

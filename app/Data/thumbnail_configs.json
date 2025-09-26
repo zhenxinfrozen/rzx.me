@@ -34,5 +34,17 @@
         "directory": "thumbs",
         "builtin": false,
         "created_at": "2025-09-25 20:54:09"
+    },
+    "test-334234234": {
+        "name": "Synology",
+        "width": 49,
+        "height": 49,
+        "quality": 80,
+        "format": "jpg",
+        "directory": "rzx333",
+        "suffix": "_xxxxxxxxx",
+        "crop": true,
+        "builtin": false,
+        "created_at": "2025-09-26 18:10:57"
     }
 }

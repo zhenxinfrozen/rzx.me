@@ -20,7 +20,7 @@ return [
         'css_file' => '/assets/css/comic.css',
         'meta_description' => '漫画作品展示，包括原创漫画和分镜头设计',
         'meta_keywords' => '漫画，Comic，分镜头，Story board，原创漫画，漫画设计',
-    ],,
+    ],
     
     // 动画
     'pages/animation.php' => [
