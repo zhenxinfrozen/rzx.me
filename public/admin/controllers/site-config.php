@@ -4,7 +4,11 @@
  * 管理网站的基本设置和配置选项
  */
 
-$current_page = 'site-config';
+// 设置页面信息
+$page_title = '🛠️ 网站配置';
+$page_subtitle = '管理网站的基本设置和系统配置';
+$_GET['page'] = 'site-config';
+
 require_once '../views/layouts/header.php';
 
 // 处理配置更新

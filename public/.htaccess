@@ -1,0 +1,17 @@
+# Apache配置文件 - 静态文件直接访问规则
+
+RewriteEngine On
+
+# 开发目录直接访问 (不经过路由)
+RewriteRule ^dev/(.*)$ dev/$1 [L]
+
+# 管理后台静态资源直接访问
+RewriteRule ^admin/(assets|css|js|images)/(.*)$ admin/$1/$2 [L]
+
+# 网站静态资源直接访问  
+RewriteRule ^assets/(.*)$ assets/$1 [L]
+
+# 其他请求走路由器
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]

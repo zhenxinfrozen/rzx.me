@@ -7,7 +7,7 @@
     <!-- Feather Icons -->
     <script src="https://unpkg.com/feather-icons@4.29.0/dist/feather.min.js"></script>
     <!-- 自定义JS -->
-    <script src="../assets/js/admin.js"></script>
+    <script src="<?= $GLOBALS['assets_base'] ?>/js/admin.js"></script>
     <script>
         // 初始化页面
         document.addEventListener('DOMContentLoaded', function() {

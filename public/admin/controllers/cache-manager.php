@@ -4,7 +4,11 @@
  * 管理网站的各种缓存，包括缩略图、页面缓存等
  */
 
-$current_page = 'cache-manager';
+// 设置页面信息
+$page_title = '🛠️ 缓存管理';
+$page_subtitle = '管理和优化网站缓存，提升加载性能';
+$_GET['page'] = 'cache-manager';
+
 require_once '../views/layouts/header.php';
 
 // 处理缓存操作
@@ -130,8 +134,7 @@ function formatBytes($bytes, $precision = 2) {
 ?>
 
 <div class="page-header">
-    <h1>缓存管理</h1>
-    <p>管理和优化网站缓存，提升加载性能</p>
+    <p>临时占位页头</p>
 </div>
 
 <?php if ($message): ?>

@@ -65,13 +65,13 @@
     </div>
 </div>
 <div class="menu">
-    <a href="ray-animation" target="_self">
+    <a href="animation" target="_self">
         <div class="ray-home-menu-icon">
             <div class="menu_icon_wrapper" id="ray-home-menu-animation-hover">
             </div><div class="menu-text">Animation</div>
         </div>
     </a>
-    <a href="ray-latest" target="_self">
+    <a href="latest" target="_self">
         <div id="ray-home-menu-latest" class="ray-home-menu-icon">
             <div class="menu_icon_wrapper">
                 <img src="assets/images/ray-home-menu-latest.png" alt="Blog" id="menu_icon" width="100" height="100">
@@ -80,7 +80,7 @@
         </div>
     </a>
     
-    <a href="ray-comic" target="_self">
+    <a href="comic" target="_self">
         <div class="ray-home-menu-icon">
             <div id="ray-home-menu-comic" class="menu_icon_wrapper">
                 <img src="assets/images/ray-home-menu-comic.png" alt="Blog" class="menu_icon" width="100" height="100">
@@ -89,7 +89,7 @@
         </div>
     </a>
 
-    <a href="ray-sites" target="_self">
+    <a href="sites" target="_self">
         <div id="ray-home-menu-blog" class="ray-home-menu-icon">
             <div id="menu_icon_wrapper">
                 <img src="assets/images/ray-home-menu-wordpress-logo.png" alt="Blog" id="wordpress-logo" width="100" height="100">
@@ -97,7 +97,7 @@
             <div class="menu-text">Blog</div>
         </div>
     </a>
-    <a href="ray-sketch" target="_self">
+    <a href="sketch" target="_self">
         <div class="ray-home-menu-icon">
             <div class="menu_icon_wrapper" id="ray-home-menu-sketch-hover">
 
@@ -105,7 +105,7 @@
         </div>
     </a>
 
-    <a href="ray-pictures" target="_self">
+    <a href="pictures" target="_self">
         <div id="ray-home-menu-pictures" class="ray-home-menu-icon">
             <div class="menu_icon_wrapper">
                 <img src="assets/images/ray-home-menu-pictures.png" alt="Blog" class="menu_icon" width="100" height="100">
@@ -113,7 +113,7 @@
             <div class="menu-text">Pictures</div>
         </div>
     </a>
-    <a href="ray-about" target="_self">
+    <a href="about" target="_self">
         <div id="ray-home-menu-about" class="ray-home-menu-icon">
             <div class="menu_icon_wrapper">
                 <img src="assets/images/ray-home-menu-avatar100.png" alt="about" class="menu_icon" width="100" height="100">

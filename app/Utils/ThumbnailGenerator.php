@@ -74,20 +74,30 @@ class ThumbnailGenerator {
                 $config['crop']
             );
             
-            // 创建缩略图画布
-            $thumbnailImage = imagecreatetruecolor($thumbWidth, $thumbHeight);
+            // 裁剪模式需要使用目标尺寸创建画布
+            if ($config['crop']) {
+                $thumbnailImage = imagecreatetruecolor($config['width'], $config['height']);
+            } else {
+                $thumbnailImage = imagecreatetruecolor($thumbWidth, $thumbHeight);
+            }
             
-            // 处理透明度（PNG/GIF）
+            // 处理背景色和透明度
             if ($imageInfo['type'] == IMAGETYPE_PNG || $imageInfo['type'] == IMAGETYPE_GIF) {
+                // PNG/GIF 保持透明度
                 imagealphablending($thumbnailImage, false);
                 imagesavealpha($thumbnailImage, true);
                 $transparent = imagecolorallocatealpha($thumbnailImage, 255, 255, 255, 127);
                 imagefill($thumbnailImage, 0, 0, $transparent);
+            } else {
+                // JPG 使用白色背景
+                imagealphablending($thumbnailImage, true);
+                $white = imagecolorallocate($thumbnailImage, 255, 255, 255);
+                imagefill($thumbnailImage, 0, 0, $white);
             }
             
             // 生成缩略图
             if ($config['crop']) {
-                // 裁剪模式
+                // 裁剪模式 - 直接使用目标尺寸
                 $sourceRatio = $imageInfo['width'] / $imageInfo['height'];
                 $thumbRatio = $config['width'] / $config['height'];
                 

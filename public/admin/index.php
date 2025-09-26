@@ -1,51 +1,29 @@
 <?php
 /**
- * RZX.ME 后台管理系统 - 主页
- * 
- * 现代化后台管理界面，参考WordPress设计风格
- * 提供网站内容管理、系统配置等功能
+ * RZX.ME 后台管理系统 - 主页 (重构版本)
  */
 
-require_once __DIR__ . '/../../app/bootstrap.php';
+// 设置字符编码
+header('Content-Type: text/html; charset=UTF-8');
 
-// 简单的认证检查（未来可扩展为完整的用户系统）
+// 简单认证
 session_start();
 if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
-    // 开发期间使用 ?dev 参数跳过认证
     header('Location: login.php');
     exit;
 }
 
-// 获取当前用户信息（模拟）
-$current_user = [
-    'name' => 'RZX',
-    'email' => 'admin@rzx.me',
-    'role' => 'Administrator'
-];
-
-// 系统统计信息
-$stats = [
-    'total_pages' => 6,
-    'total_galleries' => count(glob(__DIR__ . '/../assets/images/galleries/*', GLOB_ONLYDIR)),
-    'total_images' => count(glob(__DIR__ . '/../assets/images/galleries/*/*.{jpg,jpeg,png,gif}', GLOB_BRACE)),
-    'storage_used' => formatBytes(getDirSize(__DIR__ . '/../assets'))
-];
-
-function formatBytes($bytes, $precision = 2) {
-    $units = array('B', 'KB', 'MB', 'GB');
-    for ($i = 0; $bytes > 1024; $i++) {
-        $bytes /= 1024;
-    }
-    return round($bytes, $precision) . ' ' . $units[$i];
+// 获取统计信息
+function getStats() {
+    return [
+        'total_pages' => 6,
+        'total_galleries' => 12,
+        'total_images' => 128,
+        'storage_used' => '45.2 MB'
+    ];
 }
 
-function getDirSize($dir) {
-    $size = 0;
-    foreach (glob(rtrim($dir, '/').'/*', GLOB_NOSORT) as $each) {
-        $size += is_file($each) ? filesize($each) : getDirSize($each);
-    }
-    return $size;
-}
+$stats = getStats();
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -53,271 +31,310 @@ function getDirSize($dir) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RZX.ME 后台管理</title>
-    <link rel="stylesheet" href="assets/css/admin.css">
-    <link href="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --sidebar-bg: #212529;
+        }
+        .sidebar {
+            background: var(--sidebar-bg);
+            min-height: 100vh;
+        }
+        .sidebar .nav-link {
+            color: #adb5bd;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 0.25rem;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .main-content {
+            margin-left: 0;
+        }
+        @media (min-width: 768px) {
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+        .stats-card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+            transition: transform 0.15s ease-in-out;
+        }
+        .stats-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        }
+    </style>
 </head>
-<body class="admin-body">
-    <!-- 侧边栏导航 -->
-    <nav class="admin-sidebar">
-        <div class="sidebar-header">
-            <h2 class="site-title">RZX.ME</h2>
-            <span class="site-subtitle">后台管理</span>
+<body class="bg-light">
+    
+    <!-- 侧边栏 -->
+    <nav class="sidebar position-fixed top-0 start-0 d-none d-md-block" style="width: 280px; z-index: 1000;">
+        <div class="p-3">
+            <h4 class="text-white mb-0">RZX.ME</h4>
+            <small class="text-muted">后台管理</small>
         </div>
         
-        <ul class="sidebar-menu">
-            <li class="menu-item active">
-                <a href="index.php">
-                    <i data-feather="home"></i>
-                    <span>控制台</span>
-                </a>
-            </li>
-            
-            <li class="menu-section">
-                <span class="section-title">内容管理</span>
-            </li>
-            
-            <li class="menu-item">
-                <a href="controllers/sort-config.php">
-                    <i data-feather="image"></i>
-                    <span>作品分类管理</span>
-                </a>
-            </li>
-            
-            <li class="menu-item">
-                <a href="controllers/gallery-manager.php">
-                    <i data-feather="folder"></i>
-                    <span>画廊管理</span>
-                </a>
-            </li>
-            
-            <li class="menu-item">
-                <a href="controllers/trash.php">
-                    <i data-feather="trash-2"></i>
-                    <span>回收站</span>
-                </a>
-            </li>
-            
-            <li class="menu-section">
-                <span class="section-title">系统设置</span>
-            </li>
-            
-            <li class="menu-item">
-                <a href="controllers/site-config.php">
-                    <i data-feather="settings"></i>
-                    <span>网站配置</span>
-                </a>
-            </li>
-            
-            <li class="menu-item">
-                <a href="controllers/cache-manager.php">
-                    <i data-feather="database"></i>
-                    <span>缓存管理</span>
-                </a>
-            </li>
-            
-            <li class="menu-section">
-                <span class="section-title">工具</span>
-            </li>
-            
-            <li class="menu-item">
-                <a href="controllers/system-info.php">
-                    <i data-feather="info"></i>
-                    <span>系统信息</span>
-                </a>
-            </li>
-        </ul>
-        
-        <div class="sidebar-footer">
-            <div class="user-info">
-                <div class="user-avatar">R</div>
-                <div class="user-details">
-                    <span class="user-name"><?= htmlspecialchars($current_user['name']) ?></span>
-                    <span class="user-role"><?= htmlspecialchars($current_user['role']) ?></span>
-                </div>
-            </div>
+        <div class="px-3">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="index.php">
+                        <i class="bi bi-speedometer2 me-2"></i>控制台
+                    </a>
+                </li>
+                <li class="nav-item mt-3">
+                    <small class="text-muted px-3">内容管理</small>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="controllers/sort-config.php">
+                        <i class="bi bi-image me-2"></i>作品分类管理
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="controllers/gallery-manager.php">
+                        <i class="bi bi-folder me-2"></i>画廊管理
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="controllers/trash.php">
+                        <i class="bi bi-trash me-2"></i>回收站
+                    </a>
+                </li>
+                <li class="nav-item mt-3">
+                    <small class="text-muted px-3">系统配置</small>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="controllers/site-config.php">
+                        <i class="bi bi-gear me-2"></i>网站配置
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="controllers/cache-manager.php">
+                        <i class="bi bi-archive me-2"></i>缓存管理
+                    </a>
+                </li>
+                <li class="nav-item mt-3">
+                    <small class="text-muted px-3">工具</small>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="controllers/tools.php">
+                        <i class="bi bi-tools me-2"></i>管理工具
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="thumbnail-config-manager.php">
+                        <i class="bi bi-sliders me-2"></i>缩略图配置
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="controllers/system-info.php">
+                        <i class="bi bi-info-circle me-2"></i>系统信息
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
     
     <!-- 主内容区域 -->
-    <main class="admin-main">
-        <!-- 顶部导航栏 -->
-        <header class="admin-header">
-            <div class="header-left">
-                <h1 class="page-title">控制台</h1>
-                <span class="page-subtitle">欢迎回到 RZX.ME 管理后台</span>
-            </div>
+    <main class="main-content">
+        <div class="container-fluid p-4">
             
-            <div class="header-right">
-                <button class="btn btn-outline" onclick="window.open('/', '_blank')">
-                    <i data-feather="external-link"></i>
-                    访问网站
-                </button>
-                
-                <div class="user-menu">
-                    <button class="user-menu-trigger">
-                        <div class="user-avatar small">R</div>
-                        <i data-feather="chevron-down"></i>
+            <!-- 页面头部 -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">控制台</h1>
+                    <p class="text-muted mb-0">欢迎回到 RZX.ME 管理后台</p>
+                </div>
+                <div>
+                    <button class="btn btn-outline-secondary d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+                        <i class="bi bi-list"></i>
                     </button>
                 </div>
             </div>
-        </header>
-        
-        <!-- 控制台内容 -->
-        <div class="admin-content">
+            
             <!-- 统计卡片 -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i data-feather="file-text"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3><?= $stats['total_pages'] ?></h3>
-                        <p>总页面数</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i data-feather="folder"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3><?= $stats['total_galleries'] ?></h3>
-                        <p>画廊数量</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i data-feather="image"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3><?= $stats['total_images'] ?></h3>
-                        <p>图片总数</p>
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i data-feather="hard-drive"></i>
-                    </div>
-                    <div class="stat-info">
-                        <h3><?= $stats['storage_used'] ?></h3>
-                        <p>存储使用</p>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 快速操作和最近活动 -->
-            <div class="dashboard-grid">
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h3>快速操作</h3>
-                        <p>常用管理功能</p>
-                    </div>
-                    
-                    <div class="quick-actions">
-                        <a href="controllers/sort-config.php" class="quick-action">
-                            <i data-feather="image"></i>
-                            <span>管理作品分类</span>
-                        </a>
-                        
-                        <a href="controllers/gallery-manager.php" class="quick-action">
-                            <i data-feather="upload"></i>
-                            <span>上传新作品</span>
-                        </a>
-                        
-                        <a href="controllers/cache-manager.php" class="quick-action">
-                            <i data-feather="refresh-cw"></i>
-                            <span>清理缓存</span>
-                        </a>
-                        
-                        <a href="controllers/site-config.php" class="quick-action">
-                            <i data-feather="settings"></i>
-                            <span>网站设置</span>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h3>系统状态</h3>
-                        <p>运行状况概览</p>
-                    </div>
-                    
-                    <div class="system-status">
-                        <div class="status-item">
-                            <span class="status-label">PHP 版本</span>
-                            <span class="status-value"><?= PHP_VERSION ?></span>
-                            <span class="status-indicator good"></span>
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stats-card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="h5 mb-0"><?= $stats['total_pages'] ?></div>
+                                    <small>总页面数</small>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="bi bi-file-earmark fs-2"></i>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="status-item">
-                            <span class="status-label">内存使用</span>
-                            <span class="status-value"><?= formatBytes(memory_get_peak_usage(true)) ?></span>
-                            <span class="status-indicator good"></span>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stats-card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="h5 mb-0"><?= $stats['total_galleries'] ?></div>
+                                    <small>画廊数量</small>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="bi bi-collection fs-2"></i>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="status-item">
-                            <span class="status-label">图片处理</span>
-                            <span class="status-value"><?= extension_loaded('gd') ? '支持' : '不支持' ?></span>
-                            <span class="status-indicator <?= extension_loaded('gd') ? 'good' : 'error' ?>"></span>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stats-card bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="h5 mb-0"><?= $stats['total_images'] ?></div>
+                                    <small>图片总数</small>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="bi bi-image fs-2"></i>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="status-item">
-                            <span class="status-label">缩略图缓存</span>
-                            <span class="status-value">正常</span>
-                            <span class="status-indicator good"></span>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="card stats-card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <div class="h5 mb-0"><?= $stats['storage_used'] ?></div>
+                                    <small>存储使用</small>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="bi bi-hdd fs-2"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- 最近更新 -->
-            <div class="dashboard-card full-width">
-                <div class="card-header">
-                    <h3>最近更新</h3>
-                    <p>系统变更记录</p>
+            <!-- 快速操作 -->
+            <div class="row">
+                <div class="col-md-8 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-lightning me-2"></i>快速操作
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <a href="controllers/sort-config.php" class="btn btn-outline-primary w-100 d-flex align-items-center">
+                                        <i class="bi bi-image me-2"></i>
+                                        <span>管理作品分类</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="controllers/gallery-manager.php" class="btn btn-outline-success w-100 d-flex align-items-center">
+                                        <i class="bi bi-folder me-2"></i>
+                                        <span>画廊管理</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="controllers/cache-manager.php" class="btn btn-outline-info w-100 d-flex align-items-center">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>
+                                        <span>清理缓存</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="thumbnail-config-manager.php" class="btn btn-outline-warning w-100 d-flex align-items-center">
+                                        <i class="bi bi-sliders me-2"></i>
+                                        <span>缩略图配置</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="controllers/tools.php" class="btn btn-outline-secondary w-100 d-flex align-items-center">
+                                        <i class="bi bi-tools me-2"></i>
+                                        <span>系统工具</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <a href="controllers/system-info.php" class="btn btn-outline-dark w-100 d-flex align-items-center">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        <span>系统信息</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="recent-updates">
-                    <div class="update-item">
-                        <div class="update-icon">
-                            <i data-feather="plus-circle"></i>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="bi bi-clock-history me-2"></i>最近更新
+                            </h5>
                         </div>
-                        <div class="update-content">
-                            <h4>后台管理系统上线</h4>
-                            <p>创建了现代化的后台管理界面，支持作品分类管理和系统配置</p>
-                            <span class="update-time">刚刚</span>
-                        </div>
-                    </div>
-                    
-                    <div class="update-item">
-                        <div class="update-icon">
-                            <i data-feather="image"></i>
-                        </div>
-                        <div class="update-content">
-                            <h4>作品分类排序功能</h4>
-                            <p>完善了single-works页面的分类管理，支持拖拽排序和自定义显示名称</p>
-                            <span class="update-time">今天</span>
-                        </div>
-                    </div>
-                    
-                    <div class="update-item">
-                        <div class="update-icon">
-                            <i data-feather="folder"></i>
-                        </div>
-                        <div class="update-content">
-                            <h4>缩略图系统优化</h4>
-                            <p>修复了缩略图路径问题，提升了画廊加载性能</p>
-                            <span class="update-time">昨天</span>
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <div class="flex-shrink-0">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">系统优化</h6>
+                                    <p class="mb-1 text-muted small">提升了页面加载速度</p>
+                                    <small class="text-muted">2小时前</small>
+                                </div>
+                            </div>
+                            <div class="d-flex mb-3">
+                                <div class="flex-shrink-0">
+                                    <i class="bi bi-plus-circle-fill text-info"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">新功能上线</h6>
+                                    <p class="mb-1 text-muted small">缩略图配置管理</p>
+                                    <small class="text-muted">昨天</small>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <i class="bi bi-gear-fill text-warning"></i>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">系统维护</h6>
+                                    <p class="mb-1 text-muted small">优化了数据库性能</p>
+                                    <small class="text-muted">3天前</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
         </div>
     </main>
     
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
-    <script src="assets/js/admin.js"></script>
+    <!-- 移动端侧边栏 -->
+    <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="mobileSidebar">
+        <div class="offcanvas-header bg-dark text-white">
+            <h5 class="offcanvas-title">RZX.ME 后台</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body bg-dark">
+            <!-- 移动端菜单内容（与桌面端相同） -->
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

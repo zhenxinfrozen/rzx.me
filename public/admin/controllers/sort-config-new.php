@@ -4,7 +4,12 @@
  * 提供拖拽排序、显示名称编辑、描述信息管理和删除功能
  */
 
-$current_page = 'sort-config';
+// 设置页面信息
+$page_title = '🗑️ 回收站';
+$page_subtitle = '管理已删除的分类，提供恢复和永久删除功能';
+$_GET['page'] = 'trash';
+
+require_once '../views/layouts/header.php';
 require_once '../views/layouts/header.php';
 
 // 处理表单提交

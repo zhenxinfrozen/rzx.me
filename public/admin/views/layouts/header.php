@@ -3,6 +3,11 @@
  * 后台管理系统 - 公共布局头部
  */
 
+// 设置正确的字符编码
+if (!headers_sent()) {
+    header('Content-Type: text/html; charset=UTF-8');
+}
+
 // 简单的认证检查
 session_start();
 if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
@@ -10,19 +15,40 @@ if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
     exit;
 }
 
-// 获取当前页面信息
-$current_page = $_GET['page'] ?? 'dashboard';
-$page_titles = [
-    'dashboard' => '控制台',
-    'sort-config' => '作品分类管理',
-    'gallery-manager' => '画廊管理',
-    'trash' => '回收站',
-    'site-config' => '网站配置',
-    'cache-manager' => '缓存管理',
-    'system-info' => '系统信息'
-];
+// 动态确定资源路径
+$request_uri = $_SERVER['REQUEST_URI'];
+$is_in_controllers = strpos($request_uri, '/admin/controllers/') !== false;
+$assets_base = $is_in_controllers ? '../assets' : 'assets';
+$GLOBALS['assets_base'] = $assets_base;
 
-$page_title = $page_titles[$current_page] ?? '未知页面';
+// 动态确定导航链接基础路径
+$nav_base = $is_in_controllers ? '' : 'controllers/';
+
+// 获取当前页面信息（从页面文件中继承）
+$current_page = $_GET['page'] ?? 'dashboard';
+
+// 如果页面没有设置标题，使用默认值
+if (!isset($page_title)) {
+    $page_titles = [
+        'dashboard' => '控制台',
+        'sort-config' => '作品分类管理',
+        'gallery-manager' => '画廊管理',
+        'trash' => '回收站',
+        'site-config' => '网站配置',
+        'cache-manager' => '缓存管理',
+        'tools' => '管理工具',
+        'thumbnail-manager' => '缩略图管理器',
+        'thumbnail-config-manager' => '缩略图配置管理',
+        'thumbnail-config-demo' => '缩略图配置演示',
+        'system-info' => '系统信息'
+    ];
+    $page_title = $page_titles[$current_page] ?? '未知页面';
+}
+
+// 如果页面没有设置副标题，使用默认值
+if (!isset($page_subtitle)) {
+    $page_subtitle = '管理和配置您的网站内容';
+}
 
 // 获取当前用户信息
 $current_user = [
@@ -41,8 +67,10 @@ $current_user = [
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Feather Icons -->
     <link href="https://unpkg.com/feather-icons@4.29.0/dist/feather.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- 自定义样式 -->
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="<?= $assets_base ?>/css/admin.css">
     <style>
         /* 页面特定样式 */
         .page-content {
@@ -152,7 +180,7 @@ $current_user = [
         
         <ul class="sidebar-menu">
             <li class="menu-item <?= $current_page === 'dashboard' ? 'active' : '' ?>">
-                <a href="../index.php">
+                <a href="<?= $is_in_controllers ? '../index.php' : 'index.php' ?>">
                     <i data-feather="home"></i>
                     <span>控制台</span>
                 </a>
@@ -163,21 +191,21 @@ $current_user = [
             </li>
             
             <li class="menu-item <?= $current_page === 'sort-config' ? 'active' : '' ?>">
-                <a href="sort-config.php">
+                <a href="<?= $nav_base ?>sort-config.php">
                     <i data-feather="image"></i>
                     <span>作品分类管理</span>
                 </a>
             </li>
             
             <li class="menu-item <?= $current_page === 'gallery-manager' ? 'active' : '' ?>">
-                <a href="gallery-manager.php">
+                <a href="<?= $nav_base ?>gallery-manager.php">
                     <i data-feather="folder"></i>
                     <span>画廊管理</span>
                 </a>
             </li>
             
             <li class="menu-item <?= $current_page === 'trash' ? 'active' : '' ?>">
-                <a href="trash.php">
+                <a href="<?= $nav_base ?>trash.php">
                     <i data-feather="trash-2"></i>
                     <span>回收站</span>
                 </a>
@@ -188,14 +216,14 @@ $current_user = [
             </li>
             
             <li class="menu-item <?= $current_page === 'site-config' ? 'active' : '' ?>">
-                <a href="site-config.php">
+                <a href="<?= $nav_base ?>site-config.php">
                     <i data-feather="settings"></i>
                     <span>网站配置</span>
                 </a>
             </li>
             
             <li class="menu-item <?= $current_page === 'cache-manager' ? 'active' : '' ?>">
-                <a href="cache-manager.php">
+                <a href="<?= $nav_base ?>cache-manager.php">
                     <i data-feather="database"></i>
                     <span>缓存管理</span>
                 </a>
@@ -205,8 +233,22 @@ $current_user = [
                 <span class="section-title">工具</span>
             </li>
             
+            <li class="menu-item <?= $current_page === 'tools' ? 'active' : '' ?>">
+                <a href="<?= $nav_base ?>tools.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
+                    <i data-feather="tool"></i>
+                    <span>管理工具</span>
+                </a>
+            </li>
+            
+            <li class="menu-item <?= $current_page === 'thumbnail-config-manager' ? 'active' : '' ?>">
+                <a href="<?= $is_in_controllers ? '../' : '' ?>thumbnail-config-manager.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
+                    <i data-feather="sliders"></i>
+                    <span>缩略图配置</span>
+                </a>
+            </li>
+            
             <li class="menu-item <?= $current_page === 'system-info' ? 'active' : '' ?>">
-                <a href="system-info.php">
+                <a href="<?= $nav_base ?>system-info.php">
                     <i data-feather="info"></i>
                     <span>系统信息</span>
                 </a>
@@ -230,7 +272,7 @@ $current_user = [
         <header class="admin-header">
             <div class="header-left">
                 <h1 class="page-title"><?= htmlspecialchars($page_title) ?></h1>
-                <span class="page-subtitle">管理和配置您的网站内容</span>
+                <span class="page-subtitle"><?= htmlspecialchars($page_subtitle) ?></span>
             </div>
             
             <div class="header-right">

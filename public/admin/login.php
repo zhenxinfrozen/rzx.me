@@ -4,6 +4,9 @@
  * 简单的认证界面，支持开发模式
  */
 
+// 设置正确的字符编码
+header('Content-Type: text/html; charset=UTF-8');
+
 session_start();
 
 // 处理登录

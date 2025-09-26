@@ -1,0 +1,11 @@
+{
+    "ray-small": {
+        "width": 50,
+        "height": 50,
+        "quality": 85,
+        "format": "png",
+        "directory": "custom",
+        "suffix": "_custom",
+        "crop": true
+    }
+}

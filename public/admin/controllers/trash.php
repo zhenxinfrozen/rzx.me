@@ -4,7 +4,11 @@
  * 管理已删除的分类，提供恢复和永久删除功能
  */
 
-$current_page = 'trash';
+// 设置页面信息
+$page_title = '🗑️ 回收站';
+$page_subtitle = '管理已删除的分类，提供恢复和永久删除功能';
+$_GET['page'] = 'trash';
+
 require_once '../views/layouts/header.php';
 
 // 处理操作

@@ -7,6 +7,7 @@ require_once __DIR__ . '/../../Utils/FileScanner.php';
 require_once __DIR__ . '/../../Utils/ImageProcessor.php';
 require_once __DIR__ . '/../../Utils/ThumbnailGenerator.php';
 require_once __DIR__ . '/../../Utils/GalleryManager.php';
+require_once __DIR__ . '/../../Services/ThumbnailService.php';
 
 // 配置Single Works目录（小写）
 $singleWorksDir = 'single-works';
@@ -15,9 +16,10 @@ $galleryManager = new GalleryManager();
 // 获取排序后的分组数据
 $categoriesData = $galleryManager->getSortedCategories($singleWorksDir);
 
-// 为每个分组生成缩略图
+// 为每个分组生成缩略图（single-works页面专用配置：200x200px）
 foreach ($categoriesData as $categoryData) {
-    $galleryManager->generateThumbnails($singleWorksDir . '/' . $categoryData['name']);
+    $categoryPath = __DIR__ . '/../../../public/assets/images/' . $singleWorksDir . '/' . $categoryData['name'];
+    ThumbnailService::generateBatchForPage($categoryPath, 'single-works');
 }
 ?>
 

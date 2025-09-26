@@ -7,6 +7,7 @@ require_once __DIR__ . '/../../Utils/FileScanner.php';
 require_once __DIR__ . '/../../Utils/ImageProcessor.php';
 require_once __DIR__ . '/../../Utils/ThumbnailGenerator.php';
 require_once __DIR__ . '/../../Utils/GalleryManager.php';
+require_once __DIR__ . '/../../Services/ThumbnailService.php';
 
 // 从URL获取gallery名称 (例如: /gallery-AAA -> AAA)
 $currentPath = $_SERVER['REQUEST_URI'] ?? '';
@@ -25,8 +26,9 @@ if (empty($galleryName)) {
 $galleryManager = new GalleryManager();
 $images = $galleryManager->getGalleryImages($galleryName);
 
-// 生成缩略图（如果不存在）
-$galleryManager->generateThumbnails($galleryName);
+// 使用统一服务生成缩略图（gallery页面专用配置：300x300px）
+$galleryPath = __DIR__ . '/../../../public/assets/images/galleries/' . $galleryName;
+ThumbnailService::generateBatchForPage($galleryPath, 'gallery');
 
 // 检查被跳过的大文件
 $skippedFiles = $galleryManager->getSkippedFiles($galleryName);

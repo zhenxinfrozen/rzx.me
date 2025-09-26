@@ -4,7 +4,11 @@
  * 显示服务器环境、PHP配置、系统状态等详细信息
  */
 
-$current_page = 'system-info';
+// 设置页面信息
+$page_title = 'ℹ️ 系统信息';
+$page_subtitle = '显示服务器环境、PHP配置、系统状态等详细信息';
+$_GET['page'] = 'system-info';
+
 require_once '../views/layouts/header.php';
 
 // 获取详细系统信息

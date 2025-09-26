@@ -79,7 +79,11 @@ $currentConfig = file_exists($configPath) ? include($configPath) : [
     'descriptions' => []
 ];
 
-$page_title = 'Single-Works 排序配置';
+// 设置页面信息
+$page_title = '🛠️ Single-Works 排序配置';
+$page_subtitle = 'single-works 页面 分组排序，和图片添加';
+$_GET['page'] = 'sort-config';
+
 require_once '../views/layouts/header.php';
 ?>
 
@@ -233,16 +237,7 @@ require_once '../views/layouts/header.php';
 <!-- 主要内容区域 -->
 <div class="main-content">
     <div class="content-header d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0">
-            <i data-feather="layers" class="me-2"></i>
-            Single-Works 排序配置
-        </h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../">仪表板</a></li>
-                <li class="breadcrumb-item active">排序配置</li>
-            </ol>
-        </nav>
+        <p>管理 Single-Works 页面的分类排序和显示设置</p>
     </div>
 
     <div class="container-fluid">

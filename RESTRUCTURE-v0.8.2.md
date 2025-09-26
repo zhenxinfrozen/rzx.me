@@ -353,3 +353,123 @@ $gallery->createGalleryData();
 ---
 
 *v0.8.2 轻量级优化开始执行 - 2025年9月24日*
+
+# RZX.ME v0.8.2 版本更新日志
+
+**发布时间**: 2025年9月24日
+**分支**: v0.8.2
+**主要更新**: 画廊系统优化与路由架构重构
+
+## 🎯 核心功能优化
+
+### 1. 画廊系统 (Gallery System) 完全重构
+- ✅ **缩略图居中显示**: 修复了缩略图栏左偏问题，实现完美居中对齐
+- ✅ **点击精确度优化**: 使用 `slideToLoop()` 方法，确保在循环模式下缩略图点击准确定位
+- ✅ **动态页脚控制**: 所有 `gallery-###` 页面自动隐藏页脚显示，提升用户体验
+- ✅ **文件大小管理**: 实现10MB文件大小限制，自动跳过大文件并记录日志
+- ✅ **新增画廊页面**: 
+  - `app/Views/pages/galleries.php` - 画廊列表展示页面
+  - `app/Views/pages/gallery.php` - 单个画廊浏览器（支持Swiper.js）
+
+### 2. 路由系统架构重构 🗺️
+- ✅ **URL简化**: 移除所有 `ray-` 前缀，使用更简洁的URL结构
+  - `/ray-comic` → `/comic`
+  - `/ray-latest` → `/latest`  
+  - `/ray-about` → `/about`
+  - `/ray-pictures` → `/pictures`
+  - `/ray-sites` → `/sites`
+  - `/ray-sketch` → `/sketch`
+- ✅ **配置文件清理**: 
+  - 简化 `app/Config/page_config.php`，移除重复配置项
+  - 清理 `public/index.php` 中的旧路由表和冗余代码
+- ✅ **路由逻辑统一**: 所有路由规则集中在 `app/Config/routes.php` 管理
+
+### 3. 代码清理与优化 🧹
+- ✅ **移除音频播放器**: 清理画廊页面中的遗留音频组件代码
+- ✅ **删除调试文件**: 移除11个测试/调试文件，包括：
+  - `test-simple-regex.php`, `test-regex.php`, `test-routes.php`
+  - `debug-router.php`, `debug-test.php`, `test_api.php`
+  - `test_gallery_tools.php`, `test-generate-icons.php`
+  - `public/gallery-test.php`, `debug_index.php`, `debug_routes.php`
+- ✅ **文件结构优化**: 清理无用的sketch-dreams图片文件(14个文件)
+
+### 4. 工具类新增 🔧
+- ✅ **GalleryManager类**: 新增画廊管理工具类 `app/Utils/GalleryManager.php`
+  - 自动扫描画廊目录
+  - 图片文件管理与缩略图生成
+  - 文件大小检测与过滤
+  - 图标自动生成功能
+
+## 📁 文件变更详情
+
+### 新增文件
+```
+app/Utils/GalleryManager.php          - 画廊管理工具类
+app/Views/pages/galleries.php        - 画廊列表页面  
+app/Views/pages/gallery.php          - 单个画廊浏览器
+app/Config/page_config.php           - 简化的页面配置
+public/gallery-debug.php             - 画廊调试工具
+```
+
+### 修改文件
+```
+app/Config/routes.php                 - 路由配置简化
+app/Controllers/page_data_handler.php - 页面数据处理优化
+app/Router.php                        - 路由匹配逻辑改进
+app/Views/layouts/header.php         - 导航链接URL更新
+public/index.php                     - 旧路由表清理
+RESTRUCTURE-v0.8.2.md                - 重构文档更新
+```
+
+### 删除文件
+```
+调试文件 (11个):
+- test-simple-regex.php, test-regex.php, test-routes.php
+- debug-router.php, debug-test.php, test_api.php
+- test_gallery_tools.php, test-generate-icons.php  
+- public/gallery-test.php, debug_index.php, debug_routes.php
+
+图片文件 (16个):
+- sketch-dreams-01.jpg ~ sketch-dreams-14.jpg
+- tu.jpg
+- 1_thumb.jpg
+```
+
+## 🚀 性能提升
+
+1. **路由性能**: 统一路由管理，减少复杂的向后兼容逻辑
+2. **文件管理**: 自动大文件检测，避免内存溢出
+3. **代码简洁**: 移除冗余代码15%+，提升可维护性
+4. **用户体验**: 缩略图精确点击，页脚智能隐藏
+
+## 🔧 技术改进
+
+- **MVC架构**: 完善的Model-View-Controller分离
+- **配置集中**: 页面配置统一管理，消除重复
+- **路由简化**: 单一职责原则，清晰的URL结构
+- **工具类**: 可重用的画廊管理组件
+
+## 🐛 问题修复
+
+1. **画廊缩略图居中问题** - 通过CSS flex布局修复
+2. **点击定位不准确** - 使用slideToLoop()方法解决
+3. **页脚显示冗余** - 实现动态检测gallery-### URL模式
+4. **路由配置混乱** - 清理重复配置，统一管理入口
+
+## ⚠️ 兼容性说明
+
+- ✅ 保持向后兼容：旧URL仍可访问（如/ray-comic）
+- ✅ 新URL优先：导航使用简洁的新URL结构
+- ✅ API接口不变：所有API端点保持稳定
+- ✅ 文件路径兼容：资源文件路径未改变
+
+## 📈 下一版本计划 (v0.8.3)
+
+1. 完善画廊管理后台功能
+2. 添加批量图片处理工具
+3. 优化移动端画廊浏览体验
+4. 实现画廊标签分类系统
+
+---
+
+**总结**: v0.8.2是一个重要的架构优化版本，重点解决了画廊系统的用户体验问题，并大幅简化了路由配置。这为后续功能开发奠定了坚实的技术基础。

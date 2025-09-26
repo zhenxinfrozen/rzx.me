@@ -4,7 +4,11 @@
  * 管理网站的图片画廊，包括上传、编辑、删除等功能
  */
 
-$current_page = 'gallery-manager';
+// 设置页面信息
+$page_title = '📁 画廊管理';
+$page_subtitle = '管理网站的图片画廊，包括上传、编辑、删除等功能';
+$_GET['page'] = 'gallery-manager';
+
 require_once '../views/layouts/header.php';
 
 // 处理操作

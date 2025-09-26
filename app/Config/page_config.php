@@ -20,16 +20,7 @@ return [
         'css_file' => '/assets/css/comic.css',
         'meta_description' => '漫画作品展示，包括原创漫画和分镜头设计',
         'meta_keywords' => '漫画，Comic，分镜头，Story board，原创漫画，漫画设计',
-    ],
-    
-    // 漫画画廊（Dream Gallery）
-    'pages/comic-gallery.php' => [
-        'page_id' => 'comic-reader',
-        'page_title' => 'Dream Gallery - rzx.me',
-        'css_file' => null,
-        'meta_description' => 'Dream速写画廊，沉浸式浏览体验，配有背景音乐的图片幻灯片',
-        'meta_keywords' => '速写画廊，Dream，幻灯片，艺术欣赏，沉浸式体验，sketch gallery',
-    ],
+    ],,
     
     // 动画
     'pages/animation.php' => [

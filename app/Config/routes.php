@@ -93,6 +93,25 @@ return [
         ],
     ],
 
+    // 静态文件路由 (开发用)
+    'static' => [
+        // 开发目录直接访问规则
+        '~^\/dev\/(.+)$~' => [
+            'type' => 'static',
+            'allow_direct' => true
+        ],
+        // 管理后台静态资源
+        '~^\/admin\/(assets|css|js|images)\/(.+)$~' => [
+            'type' => 'static', 
+            'allow_direct' => true
+        ],
+        // 网站静态资源
+        '~^\/assets\/(.+)$~' => [
+            'type' => 'static',
+            'allow_direct' => true
+        ],
+    ],
+
     // 错误页面
     'errors' => [
         '404' => [

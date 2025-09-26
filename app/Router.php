@@ -55,6 +55,19 @@ class Router
             return $this->currentRoute;
         }
         
+        // 检查静态文件路由 (优先检查，避免拦截静态资源)
+        foreach ($this->routes['static'] ?? [] as $pattern => $route) {
+            if ($this->matchPattern($pattern, $path)) {
+                // 静态文件直接返回，不处理
+                if ($route['allow_direct'] ?? false) {
+                    $this->currentRoute = $route;
+                    $this->currentRoute['type'] = 'static';
+                    $this->currentRoute['path'] = $path;
+                    return $this->currentRoute;
+                }
+            }
+        }
+
         // 检查API路由
         if (isset($this->routes['api'][$path])) {
             $route = $this->routes['api'][$path];
@@ -175,5 +188,19 @@ class Router
         }
         
         return ($route['type'] ?? '') === 'page';
+    }
+
+    /**
+     * 检查是否为静态文件请求
+     * @param array $route
+     * @return bool
+     */
+    public function isStaticRoute($route = null) 
+    {
+        if ($route === null) {
+            $route = $this->currentRoute;
+        }
+        
+        return ($route['type'] ?? '') === 'static';
     }
 }

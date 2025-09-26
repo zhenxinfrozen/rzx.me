@@ -11,6 +11,25 @@ $router = new Router();
 // 匹配当前路由
 $route = $router->match();
 
+// 处理静态文件请求 (dev目录等)
+if ($route && $router->isStaticRoute($route)) {
+    // 静态文件请求，让Web服务器处理
+    // 不做任何处理，直接退出让服务器查找物理文件
+    $requestUri = $_SERVER['REQUEST_URI'];
+    $filePath = __DIR__ . parse_url($requestUri, PHP_URL_PATH);
+    
+    // 检查文件是否存在
+    if (file_exists($filePath)) {
+        // 文件存在，让Web服务器处理
+        return false; // 这会让PHP内置服务器继续处理
+    } else {
+        // 文件不存在，返回404
+        http_response_code(404);
+        echo "File not found: " . htmlspecialchars($requestUri);
+        exit;
+    }
+}
+
 // 处理API请求
 if ($route && $router->isApiRoute($route)) {
     require_once __DIR__ . '/../app/Controllers/api_comic_handler.php';
