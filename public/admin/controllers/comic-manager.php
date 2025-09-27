@@ -482,7 +482,7 @@ function deleteComic(id) {
 </script>
 
 <script>
-// 填充侧边栏
+// 填充侧边栏（使用 Sortable.js）
 document.addEventListener('DOMContentLoaded', function() {
     const sideItems = document.getElementById('sideItems');
     const comicKeys = Object.keys(comics);
@@ -490,58 +490,37 @@ document.addEventListener('DOMContentLoaded', function() {
         const c = comics[key];
         const div = document.createElement('div');
         div.className = 'side-item';
-        div.draggable = true;
         div.dataset.id = key;
         div.innerHTML = `
+            <span class="drag-handle" title="拖动排序">⋮</span>
             <img class="side-thumb" src="${c.images && c.images[0] ? c.images[0] : '/assets/images/comic/thumbs/placeholder.png'}" alt="">
             <div style="flex:1; min-width:0">
                 <div style="font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${c.title || key}</div>
                 <div style="font-size:12px; color:#666">${(c.images||[]).length} 张图片</div>
             </div>
         `;
-        div.addEventListener('click', function(){ openEditFromSidebar(this.dataset.id); });
-        // 简单拖事件（仅外观）
-        div.addEventListener('dragstart', function(e){ this.classList.add('dragging'); e.dataTransfer.setData('text/plain', this.dataset.id); });
-        div.addEventListener('dragend', function(){ this.classList.remove('dragging'); });
+        div.addEventListener('click', function(e){ if (e.target.closest('.drag-handle')) return; openEditFromSidebar(this.dataset.id); });
         sideItems.appendChild(div);
     });
-});
 
-    // 侧边栏拖拽排序并保存
-    function initSidebarReorder() {
-        const container = document.getElementById('sideItems');
-        let dragged = null;
-        container.addEventListener('dragstart', function(e){
-            const target = e.target.closest('.side-item');
-            if (!target) return;
-            dragged = target;
-        });
-        container.addEventListener('dragover', function(e){
-            e.preventDefault();
-            const after = getDragAfterElement(container, e.clientY);
-            if (after == null) return;
-            const dragging = container.querySelector('.dragging');
-            if (!dragging) return;
-            if (after === 'end') container.appendChild(dragging);
-            else container.insertBefore(dragging, after);
-        });
-        container.addEventListener('drop', function(e){
-            e.preventDefault();
-            saveSidebarOrder();
-        });
+    // 初始化 Sortable for side list
+    function initSideSortable() {
+        if (typeof Sortable !== 'undefined') {
+            Sortable.create(sideItems, {
+                handle: '.drag-handle',
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: function() { saveSidebarOrder(); }
+            });
+        } else {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js';
+            s.onload = initSideSortable;
+            document.head.appendChild(s);
+        }
     }
 
-    function getDragAfterElement(container, y) {
-        const items = [...container.querySelectorAll('.side-item:not(.dragging)')];
-        if (items.length === 0) return 'end';
-        return items.reduce((closest, child) => {
-            const box = child.getBoundingClientRect();
-            const offset = y - box.top - box.height / 2;
-            if (offset < 0 && offset > closest.offset) {
-                return { offset: offset, element: child };
-            } else return closest;
-        }, { offset: Number.NEGATIVE_INFINITY }).element || 'end';
-    }
+    initSideSortable();
 
     function saveSidebarOrder() {
         const ids = [...document.querySelectorAll('#sideItems .side-item')].map(el=>el.dataset.id);
@@ -552,8 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!res.ok) alert(res.error || '排序保存失败');
         });
     }
-
-    document.addEventListener('DOMContentLoaded', function(){ initSidebarReorder(); });
+});
 
 function openEditFromSidebar(id) {
     // 找到并打开编辑模态
@@ -576,12 +554,8 @@ function renderThumbnails(id) {
     (comic.images || []).forEach(url=>{
         const el = document.createElement('div');
         el.className = 'thumbnail-item';
-        el.draggable = true;
         el.dataset.url = url;
         el.innerHTML = `<img src="${url}" /><div style="text-align:center; margin-top:4px;"><button class='btn btn-sm btn-outline-danger' onclick="ajaxDeleteImage('${id}','${url.replace(/'/g,"\\'")}')">删除</button></div>`;
-        // drag handlers
-        el.addEventListener('dragstart', function(e){ this.classList.add('dragging'); e.dataTransfer.setData('text/plain', this.dataset.url); });
-        el.addEventListener('dragend', function(){ this.classList.remove('dragging'); saveThumbnailOrder(id); });
         grid.appendChild(el);
     });
     // 添加上传按钮
@@ -590,21 +564,6 @@ function renderThumbnails(id) {
     add.innerHTML = '+';
     add.onclick = function(){ showUploadDialog(id); };
     grid.insertBefore(add, grid.firstChild);
-
-    // thumbnail drop target logic
-    grid.addEventListener('dragover', function(e){ e.preventDefault(); const dragging = grid.querySelector('.dragging'); if (!dragging) return; const after = getDragAfterThumbnail(grid, e.clientX, e.clientY); if (after === 'end') grid.appendChild(dragging); else grid.insertBefore(dragging, after); });
-
-    function getDragAfterThumbnail(container, x, y) {
-        const items = [...container.querySelectorAll('.thumbnail-item:not(.dragging)')];
-        if (items.length === 0) return 'end';
-        return items.reduce((closest, child) => {
-            const box = child.getBoundingClientRect();
-            const offset = y - box.top - box.height / 2;
-            if (offset < 0 && offset > closest.offset) {
-                return { offset: offset, element: child };
-            } else return closest;
-        }, { offset: Number.NEGATIVE_INFINITY }).element || 'end';
-    }
 
     // save order after uploads/deletes as well
     function saveThumbnailOrder(comicId) {
@@ -624,6 +583,27 @@ function renderThumbnails(id) {
             }
         });
     }
+
+    // 初始化 Sortable for thumbnail grid（销毁旧实例后重建）
+    function initThumbnailSortable() {
+        try {
+            if (grid._sortable) { grid._sortable.destroy(); grid._sortable = null; }
+        } catch (e) { /* ignore */ }
+        if (typeof Sortable !== 'undefined') {
+            grid._sortable = Sortable.create(grid, {
+                animation: 150,
+                ghostClass: 'sortable-ghost',
+                onEnd: function(){ saveThumbnailOrder(id); }
+            });
+        } else {
+            const s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js';
+            s.onload = initThumbnailSortable;
+            document.head.appendChild(s);
+        }
+    }
+
+    initThumbnailSortable();
 }
 
 function showUploadDialog(id) {
