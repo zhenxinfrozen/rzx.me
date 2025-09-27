@@ -255,6 +255,12 @@ require_once __DIR__ . '/../views/layouts/header.php';
     #comic-side-list .side-thumb{ width:56px; height:56px; border-radius:6px; object-fit:cover; border:1px solid #dee2e6 }
     #main-content { margin-left: 300px; }
     @media (max-width: 991px) { #comic-side-list{ display:none } #main-content{ margin-left:0 } }
+    /* 缩略图网格样式 */
+    #thumbnail-grid { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-start; }
+    #thumbnail-grid .thumbnail-item { width:84px; padding:6px; border:1px solid #e9ecef; border-radius:6px; text-align:center; background:#fff; cursor:grab; }
+    #thumbnail-grid .thumbnail-item.dragging { opacity:0.6; transform:scale(1.02); box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+    #thumbnail-grid .thumbnail-item img { width:72px; height:72px; object-fit:cover; border-radius:4px; display:block; margin:0 auto; }
+    #thumbnail-grid .add-image-btn { width:84px; height:84px; display:flex; align-items:center; justify-content:center; border:1px dashed #ced4da; border-radius:6px; font-size:28px; color:#6c757d; background:#fafafa; cursor:pointer; }
     </style>
 
     <div id="comic-side-list" aria-label="漫画列表">
@@ -425,6 +431,12 @@ require_once __DIR__ . '/../views/layouts/header.php';
                             <option value="inactive">禁用</option>
                         </select>
                     </div>
+                    <!-- 缩略图编辑网格（由 JS 渲染） -->
+                    <div class="mb-3">
+                        <label class="form-label">图片管理</label>
+                        <div id="thumbnail-grid" style="min-height:100px; padding:6px; background:#f8f9fa; border-radius:6px;"></div>
+                        <div class="form-text">可上传/删除，并拖拽排序（会保存顺序）</div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
@@ -564,7 +576,12 @@ function renderThumbnails(id) {
     (comic.images || []).forEach(url=>{
         const el = document.createElement('div');
         el.className = 'thumbnail-item';
+        el.draggable = true;
+        el.dataset.url = url;
         el.innerHTML = `<img src="${url}" /><div style="text-align:center; margin-top:4px;"><button class='btn btn-sm btn-outline-danger' onclick="ajaxDeleteImage('${id}','${url.replace(/'/g,"\\'")}')">删除</button></div>`;
+        // drag handlers
+        el.addEventListener('dragstart', function(e){ this.classList.add('dragging'); e.dataTransfer.setData('text/plain', this.dataset.url); });
+        el.addEventListener('dragend', function(){ this.classList.remove('dragging'); saveThumbnailOrder(id); });
         grid.appendChild(el);
     });
     // 添加上传按钮
@@ -573,6 +590,40 @@ function renderThumbnails(id) {
     add.innerHTML = '+';
     add.onclick = function(){ showUploadDialog(id); };
     grid.insertBefore(add, grid.firstChild);
+
+    // thumbnail drop target logic
+    grid.addEventListener('dragover', function(e){ e.preventDefault(); const dragging = grid.querySelector('.dragging'); if (!dragging) return; const after = getDragAfterThumbnail(grid, e.clientX, e.clientY); if (after === 'end') grid.appendChild(dragging); else grid.insertBefore(dragging, after); });
+
+    function getDragAfterThumbnail(container, x, y) {
+        const items = [...container.querySelectorAll('.thumbnail-item:not(.dragging)')];
+        if (items.length === 0) return 'end';
+        return items.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else return closest;
+        }, { offset: Number.NEGATIVE_INFINITY }).element || 'end';
+    }
+
+    // save order after uploads/deletes as well
+    function saveThumbnailOrder(comicId) {
+        const urls = [...grid.querySelectorAll('.thumbnail-item')].map(el=>el.dataset.url);
+        const fd = new FormData();
+        fd.append('ajax_action','reorder_images');
+        fd.append('comic_id', comicId);
+        fd.append('order', JSON.stringify(urls));
+        fetch(location.href, { method:'POST', body: fd }).then(r=>r.json()).then(res=>{
+            if (!res.ok) alert(res.error || '缩略图排序保存失败');
+            else {
+                // update local comics variable to reflect saved order
+                comics[comicId].images = urls;
+                // update side thumbnail if first image changed
+                const thumb = document.querySelector('#sideItems .side-item[data-id="'+comicId+'"] .side-thumb');
+                if (thumb) thumb.src = urls[0] || '/assets/images/comic/thumbs/placeholder.png';
+            }
+        });
+    }
 }
 
 function showUploadDialog(id) {
