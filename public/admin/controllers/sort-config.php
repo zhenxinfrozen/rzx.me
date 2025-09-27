@@ -235,7 +235,7 @@ require_once '../views/layouts/header.php';
 <?php unset($_SESSION['save_message']); endif; ?>
 
 <!-- 主要内容区域 -->
-<div class="main-content">
+<div class="admin-page-content">
     <div class="content-header d-flex justify-content-between align-items-center mb-4">
         <p>管理 Single-Works 页面的分类排序和显示设置</p>
     </div>

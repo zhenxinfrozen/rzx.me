@@ -379,7 +379,7 @@ require_once '../views/layouts/header.php';
         padding-left: 0;
     }
     
-    .page-content {
+    .admin-page-content {
         padding: 1rem;
     }
     

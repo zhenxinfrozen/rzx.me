@@ -10,7 +10,6 @@ $page_subtitle = '管理已删除的分类，提供恢复和永久删除功能';
 $_GET['page'] = 'trash';
 
 require_once '../views/layouts/header.php';
-require_once '../views/layouts/header.php';
 
 // 处理表单提交
 $message = '';
