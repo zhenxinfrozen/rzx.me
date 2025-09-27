@@ -60,12 +60,20 @@
         "icon_default": "\/assets\/images\/comic\/thumbs\/menu-cion-blog-pictures-icon-default.png",
         "icon_hover": "\/assets\/images\/comic\/thumbs\/ray-home-menu-comic-icon-hover.png",
         "images": [
-            "\/assets\/images\/comic\/Gemini_Generated_Image_9bx4yy9bx4yy9bx4.jpg",
-            "\/assets\/images\/comic\/Gemini_Generated_Image_cq1nxpcq1nxpcq1n.jpg",
-            "\/assets\/images\/comic\/Gemini_Generated_Image_k34xbok34xbok34x.jpg",
             "\/assets\/images\/comic\/Gemini_Generated_Image_qldrpuqldrpuqldr.jpg",
+            "\/assets\/images\/comic\/Gemini_Generated_Image_cq1nxpcq1nxpcq1n.jpg",
+            "\/assets\/images\/comic\/Gemini_Generated_Image_9bx4yy9bx4yy9bx4.jpg",
+            "\/assets\/images\/comic\/Gemini_Generated_Image_k34xbok34xbok34x.jpg",
             "\/assets\/images\/comic\/Gemini_Generated_Image_rd9bvwrd9bvwrd9b.jpg"
         ],
         "created_at": "2025-09-27 12:50:08"
+    },
+    "g1758987058": {
+        "title": "New Group",
+        "subtitle": "",
+        "lines": "",
+        "alt": "",
+        "status": "inactive",
+        "images": []
     }
 }

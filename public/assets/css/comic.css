@@ -41,9 +41,8 @@
 	transition: all 0.3s ease;
 }
 .ray-comic-menu-icon:hover{
+	/* 取消放大与阴影，保留图像切换的视觉（overlay handled by .default-img/.hover-img opacity） */
 	border: 0px;
-	box-shadow: #929292 0 0 8px, 0 4px 12px rgba(146,146,146,0.3);
-	transform: translateY(-2px) scale(1.05);
 }
 .ray-comic-menu-icon > img,
 .ray-comic-menu-icon img{

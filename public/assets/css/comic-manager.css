@@ -1,0 +1,124 @@
+/* Styles for comic manager admin page - extracted from sort-config for visual parity */
+.category-list { max-height: 72vh; overflow-y: auto; padding: 10px; }
+.category-item { 
+    margin-bottom: 10px; 
+    transition: all 0.3s ease;
+}
+.category-row { 
+    transition: all 0.2s ease; 
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    position: relative;
+}
+.category-row:hover { 
+    background: #f8f9fa !important; 
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0,123,255,0.06);
+    transform: translateY(-1px);
+}
+.category-row.active { 
+    background: #e3f2fd !important; 
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.08);
+}
+.category-item.dragging {
+    opacity: 0.9;
+    transform: scale(1.02) rotate(0.5deg);
+    z-index: 1000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12) !important;
+}
+.category-item.drag-over {
+    border-top: 3px solid #007bff;
+    margin-top: 15px;
+}
+.drag-handle { 
+    color: #6c757d; 
+    cursor: grab; 
+    -webkit-user-select: none; /* Safari */
+    user-select: none; 
+    font-size: 18px;
+    padding: 5px;
+    margin-right: 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+.drag-handle:hover {
+    background: rgba(0,123,255,0.06);
+    color: #007bff;
+}
+.drag-handle:active, .drag-handle.grabbing { 
+    cursor: grabbing; 
+    background: rgba(0,123,255,0.12);
+}
+.category-content {
+    cursor: pointer;
+    flex: 1;
+    min-width: 0;
+}
+.thumbnail-container { min-height: 200px; border: 1px solid #e9ecef; border-radius: 8px; padding: 10px; background: #f8f9fa; }
+.thumbnail-area, .thumbnail-container { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.thumbnail-item { width: 80px; height: 80px; margin: 5px; border-radius: 6px; overflow: hidden; display: inline-flex; align-items:center; justify-content:center; border: 2px solid #dee2e6; position:relative }
+.thumbnail-item img { width: 100%; height: 100%; object-fit: cover; }
+.thumbnail-item:hover { border-color: #007bff; }
+.add-image-btn {
+    width: 80px; 
+    height: 80px; 
+    margin: 5px; 
+    border-radius: 6px; 
+    border: 2px dashed #007bff; 
+    background: #f8f9fa;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #007bff;
+    font-size: 24px;
+}
+.add-image-btn:hover { background: #e3f2fd; border-color: #0056b3; }
+.add-category-btn {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: #108e1dff;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(9, 115, 133, 1);
+}
+.add-category-btn:hover { background: #47a854ff; transform: translateY(-50%) scale(1.05); }
+.action-buttons { position: relative; margin-top: 15px; text-align: right; padding-top: 10px; border-top: 1px solid #e9ecef; }
+
+/* 编辑面板小部件 */
+#edit-panel { background:#fff; border:1px solid #e9ecef; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.03); padding:0; }
+#edit-panel .panel-header { background: #0d6efd; color:#fff; padding:12px 16px; border-top-left-radius:8px; border-top-right-radius:8px; font-weight:600 }
+#edit-panel .panel-body { padding:16px }
+#edit-panel.hidden { display:none }
+#edit-panel .thumbnail-area { min-height:100px; padding:6px; background:#f8f9fa; border-radius:6px; }
+#edit-panel .form-actions { padding:12px 16px; border-top:1px solid #eef0f2; background:#fafbfd; }
+
+/* 侧栏小图 */
+.side-thumb { width:56px; height:56px; border-radius:6px; object-fit:cover; border:1px solid #dee2e6 }
+@media (min-width:1200px) { .side-thumb { width:64px; height:64px } }
+
+/* 缩略图删除按钮 */
+.thumbnail-item .del-btn { position:absolute; top:6px; right:6px; display:none; padding:0 6px; height:22px; line-height:18px; font-size:14px; border-radius:4px }
+.thumbnail-item:hover .del-btn { display:block }
+
+.sortable-ghost-placeholder { border:2px dashed #0d6efd; background:#f1f7ff }
+#edit-panel-placeholder { border:1px dashed #e6eefc; background:#fbfdff; border-radius:6px; padding:28px; }
+
+/* Toast placeholder */
+.alert-toast { position: fixed; top: 20px; right: 20px; z-index: 1055; min-width: 300px; }
