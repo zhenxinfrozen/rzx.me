@@ -237,9 +237,8 @@ require_once __DIR__ . '/../views/layouts/header.php';
     <style>
     /* 轻量化侧边栏样式，最小侵入性 */
     #comic-side-list {
-        /* 改为右侧固定定位，避免与主题左侧导航发生重叠 */
-        position: fixed;
-        right: 20px;
+        position: absolute;
+        left: 20px;
         top: 100px;
         width: 260px;
         max-height: calc(100vh - 140px);
@@ -249,14 +248,13 @@ require_once __DIR__ . '/../views/layouts/header.php';
         border: 1px solid #e9ecef;
         border-radius: 8px;
         box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-        z-index: 1200; /* 提升，覆盖侧边栏但不遮挡模态 */
+        z-index: 20;
     }
     #comic-side-list .side-item { display:flex; align-items:center; gap:10px; padding:8px; border-radius:6px; margin-bottom:8px; cursor:grab; }
     #comic-side-list .side-item.dragging { opacity:0.7; transform:scale(1.01); box-shadow:0 8px 20px rgba(0,0,0,0.08); }
     #comic-side-list .side-thumb{ width:56px; height:56px; border-radius:6px; object-fit:cover; border:1px solid #dee2e6 }
-    /* 主内容右侧留出侧栏宽度，避免空白；移动到右侧后移除左边距 */
-    #main-content { margin-left: 0; margin-right: 320px; }
-    @media (max-width: 991px) { #comic-side-list{ display:none } #main-content{ margin-right:0 } }
+    #main-content { margin-left: 300px; }
+    @media (max-width: 991px) { #comic-side-list{ display:none } #main-content{ margin-left:0 } }
     /* 缩略图网格样式 */
     #thumbnail-grid { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-start; }
     #thumbnail-grid .thumbnail-item { width:84px; padding:6px; border:1px solid #e9ecef; border-radius:6px; text-align:center; background:#fff; cursor:grab; }
