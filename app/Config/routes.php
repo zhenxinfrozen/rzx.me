@@ -34,11 +34,7 @@ return [
             'title' => '最新 - RZX.ME',
             'handler' => 'get_page_data'
         ],
-        '/pictures' => [
-            'view' => 'pages/pictures.php',
-            'title' => '图片 - RZX.ME',
-            'handler' => 'get_page_data'
-        ],
+
         '/single-works' => [
             'view' => 'pages/single-works.php',
             'title' => '图片作品集 - RZX.ME',
@@ -65,7 +61,7 @@ return [
             'handler' => 'get_page_data'
         ],
         // 动态画廊路由模式: /gallery-{name}
-        '~^\/gallery-([^\/]+)$~' => [
+        '~/^\/gallery-([^\/]+)$/~' => [
             'view' => 'pages/gallery.php',
             'title' => '画廊 - RZX.ME',
             'handler' => 'get_page_data'

@@ -105,12 +105,12 @@
         </div>
     </a>
 
-    <a href="pictures" target="_self">
+    <a href="single-works" target="_self">
         <div id="ray-home-menu-pictures" class="ray-home-menu-icon">
             <div class="menu_icon_wrapper">
                 <img src="assets/images/ray-home-menu-pictures.png" alt="Blog" class="menu_icon" width="100" height="100">
             </div>
-            <div class="menu-text">Pictures</div>
+            <div class="menu-text">Works</div>
         </div>
     </a>
     <a href="about" target="_self">

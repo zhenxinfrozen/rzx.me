@@ -29,7 +29,6 @@
                 'Gallery' => '/galleries',
                 'Blogs' => '/sites',
                 'Sketch' => '/sketch',
-                'Pictures' => '/pictures',
                 'Single-Works' => '/single-works',
                 'About' => '/about',
             ];

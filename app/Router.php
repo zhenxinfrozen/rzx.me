@@ -117,9 +117,14 @@ class Router
         // 正则表达式路由 (以~开头和结尾)
         if (preg_match('/^~(.+)~$/', $pattern, $matches)) {
             $regex = $matches[1];
-            // 为正则表达式添加分隔符
-            $regex = '/' . $regex . '/';
-            return preg_match($regex, $path);
+            // 调试输出
+            error_log("Matching pattern: $pattern against path: $path");
+            error_log("Extracted regex: $regex");
+            
+            $result = preg_match($regex, $path);
+            error_log("Match result: " . ($result ? 'true' : 'false'));
+            
+            return $result;
         }
         
         // 精确匹配

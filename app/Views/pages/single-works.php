@@ -5,7 +5,6 @@
 // 自动加载必要的类
 require_once __DIR__ . '/../../Utils/FileScanner.php';
 require_once __DIR__ . '/../../Utils/ImageProcessor.php';
-require_once __DIR__ . '/../../Utils/ThumbnailGenerator.php';
 require_once __DIR__ . '/../../Utils/GalleryManager.php';
 require_once __DIR__ . '/../../Services/ThumbnailService.php';
 

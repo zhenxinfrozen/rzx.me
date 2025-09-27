@@ -1,7 +1,7 @@
 <?php
 // app/Utils/GalleryManager.php
 
-require_once __DIR__ . '/ThumbnailGenerator.php';
+
 
 class GalleryManager
 {
@@ -199,11 +199,14 @@ class GalleryManager
                 
                 // 检查文件类型和大小
                 if (in_array($extension, $supportedTypes) && $fileSize <= $maxFileSize) {
+                    // 自动检测使用哪种缩略图文件名
+                    $thumbName = $this->detectThumbnailName($galleryPath, $file);
+                    
                     $images[] = [
                         'name' => $file,
                         'path' => $filePath,
                         'url' => $this->galleriesUrl . '/' . $galleryName . '/' . $file,
-                        'thumb_url' => $this->galleriesUrl . '/' . $galleryName . '/thumbs/' . $file,
+                        'thumb_url' => $this->galleriesUrl . '/' . $galleryName . '/thumbs/' . $thumbName,
                         'size' => $fileSize
                     ];
                 } elseif (in_array($extension, $supportedTypes) && $fileSize > $maxFileSize) {
@@ -223,6 +226,7 @@ class GalleryManager
     
     /**
      * 为gallery生成所有缩略图
+     * 统一使用ThumbnailService处理
      */
     public function generateThumbnails($galleryName)
     {
@@ -231,32 +235,10 @@ class GalleryManager
             return $this->generateThumbnailsForPath($galleryName);
         }
         
-        $images = $this->getGalleryImages($galleryName);
-        $thumbsPath = $this->galleriesPath . '/' . $galleryName . '/thumbs';
-        
-        // 创建thumbs目录
-        if (!is_dir($thumbsPath)) {
-            mkdir($thumbsPath, 0755, true);
-        }
-        
-        $thumbnailGenerator = new ThumbnailGenerator();
-        $results = [];
-        
-        foreach ($images as $image) {
-            $thumbPath = $thumbsPath . '/' . $image['name'];
-            
-            // 如果缩略图不存在，则生成
-            if (!file_exists($thumbPath)) {
-                $success = $thumbnailGenerator->generate($image['path'], $thumbPath, ['width' => 300, 'height' => 300]);
-                $results[] = [
-                    'image' => $image['name'],
-                    'success' => $success,
-                    'thumb_path' => $thumbPath
-                ];
-            }
-        }
-        
-        return $results;
+        // 使用ThumbnailService统一处理
+        $galleryPath = $this->galleriesPath . '/' . $galleryName;
+        require_once __DIR__ . '/../Services/ThumbnailService.php';
+        return ThumbnailService::generateBatchForPage($galleryPath, 'gallery-standard');
     }
     
     /**
@@ -266,53 +248,27 @@ class GalleryManager
     public function generateThumbnailsForPath($relativePath)
     {
         $fullPath = __DIR__ . '/../../public/assets/images/' . $relativePath;
-        $thumbsPath = $fullPath . '/thumbs';
         
         if (!is_dir($fullPath)) {
             return [];
         }
         
-        // 创建thumbs目录
-        if (!is_dir($thumbsPath)) {
-            mkdir($thumbsPath, 0755, true);
+        // 根据路径确定使用哪种配置
+        $configId = 'gallery-standard'; // 默认使用标准配置
+        if (strpos($relativePath, 'single-works') !== false) {
+            $configId = 'single-works';
+        } elseif (strpos($relativePath, 'sketch') !== false) {
+            $configId = 'sketch';
         }
         
-        $thumbnailGenerator = new ThumbnailGenerator();
-        $results = [];
-        $supportedTypes = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        
-        $files = scandir($fullPath);
-        foreach ($files as $file) {
-            if ($file === '.' || $file === '..' || $file === 'thumbs') {
-                continue;
-            }
-            
-            $filePath = $fullPath . '/' . $file;
-            if (is_file($filePath)) {
-                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                $fileSize = filesize($filePath);
-                
-                if (in_array($extension, $supportedTypes) && $fileSize <= $this->maxFileSize) {
-                    $thumbPath = $thumbsPath . '/' . $file;
-                    
-                    // 如果缩略图不存在，则生成 (200px max)
-                    if (!file_exists($thumbPath)) {
-                        $success = $thumbnailGenerator->generate($filePath, $thumbPath, ['width' => 200, 'height' => 200]);
-                        $results[] = [
-                            'image' => $file,
-                            'success' => $success,
-                            'thumb_path' => $thumbPath
-                        ];
-                    }
-                }
-            }
-        }
-        
-        return $results;
+        // 使用ThumbnailService统一处理
+        require_once __DIR__ . '/../Services/ThumbnailService.php';
+        return ThumbnailService::generateBatchForPage($fullPath, $configId);
     }
     
     /**
      * 为gallery生成图标缩略图（100x100px, 两张：默认和悬停）
+     * 统一使用ThumbnailService处理
      */
     public function generateGalleryIcon($galleryName)
     {
@@ -329,7 +285,7 @@ class GalleryManager
             mkdir($thumbsPath, 0755, true);
         }
         
-        $thumbnailGenerator = new ThumbnailGenerator();
+        require_once __DIR__ . '/../Services/ThumbnailService.php';
         $results = [];
         
         // 生成两个图标：默认和悬停
@@ -342,7 +298,8 @@ class GalleryManager
             
             // 如果图标不存在，则生成
             if (!file_exists($iconPath)) {
-                $success = $thumbnailGenerator->generate($sourceImage['path'], $iconPath, ['width' => 100, 'height' => 100]);
+                // 使用ThumbnailService生成图标
+                $success = ThumbnailService::generateSingle($sourceImage['path'], $iconPath, 'gallery-icon');
                 $results[$i == 0 ? 'default' : 'hover'] = [
                     'success' => $success,
                     'icon_name' => $iconName,
@@ -538,5 +495,28 @@ class GalleryManager
         }
         
         return $formatted;
+    }
+    
+    /**
+     * 自动检测缩略图文件名
+     * 优先检查带_gallery后缀的文件，如果不存在则使用标准文件名
+     */
+    private function detectThumbnailName($galleryPath, $originalFile)
+    {
+        $thumbsPath = $galleryPath . '/thumbs';
+        
+        // 首先检查是否有_gallery后缀的缩略图
+        $galleryThumbName = pathinfo($originalFile, PATHINFO_FILENAME) . '_gallery.' . pathinfo($originalFile, PATHINFO_EXTENSION);
+        if (file_exists($thumbsPath . '/' . $galleryThumbName)) {
+            return $galleryThumbName;
+        }
+        
+        // 如果没有_gallery后缀的，使用标准文件名
+        if (file_exists($thumbsPath . '/' . $originalFile)) {
+            return $originalFile;
+        }
+        
+        // 默认返回_gallery后缀的名称（用于新生成）
+        return $galleryThumbName;
     }
 }

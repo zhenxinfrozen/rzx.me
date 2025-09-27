@@ -1,9 +1,18 @@
 <?php
 // 前端控制器 - 站点唯一入口
-require_once __DIR__ . '/../app/bootstrap.php';
-require_once __DIR__ . '/../app/view_renderer.php';
-require_once __DIR__ . '/../app/Router.php';
-require_once __DIR__ . '/../app/Controllers/page_data_handler.php';
+
+// 开启错误报告以便调试
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+try {
+    require_once __DIR__ . '/../app/bootstrap.php';
+    require_once __DIR__ . '/../app/view_renderer.php';
+    require_once __DIR__ . '/../app/Router.php';
+    require_once __DIR__ . '/../app/Controllers/page_data_handler.php';
+} catch (Exception $e) {
+    die('Error loading dependencies: ' . $e->getMessage());
+}
 
 // 初始化路由器
 $router = new Router();

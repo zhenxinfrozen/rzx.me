@@ -207,14 +207,21 @@ $current_user = [
             <li class="menu-item <?= $current_page === 'sort-config' ? 'active' : '' ?>">
                 <a href="<?= $nav_base ?>sort-config.php">
                     <i data-feather="image"></i>
-                    <span>作品分类管理</span>
+                    <span>Single-Works分类管理</span>
                 </a>
             </li>
+            
+            <li class="menu-item <?= $current_page === 'comic-manager' ? 'active' : '' ?>">
+                <a href="<?= $nav_base ?>comic-manager.php">
+                    <i data-feather="folder"></i>
+                    <span>漫画管理</span>
+                </a>
+            </li>            
             
             <li class="menu-item <?= $current_page === 'gallery-manager' ? 'active' : '' ?>">
                 <a href="<?= $nav_base ?>gallery-manager.php">
                     <i data-feather="folder"></i>
-                    <span>画廊管理</span>
+                    <span>gallery管理</span>
                 </a>
             </li>
             

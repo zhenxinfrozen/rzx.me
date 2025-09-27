@@ -21,7 +21,7 @@
 // 引入服务
 require_once __DIR__ . '/../../Services/ThumbnailService.php';
 
-// Gallery页面 - 300x300px，存放在 gallery-thumbs/
+// Gallery页面 - 300x300px，存放在 thumbs/
 ThumbnailService::generateForPage($imagePath, 'gallery');
 
 // Single-Works页面 - 200x200px，存放在 works-thumbs/
@@ -80,7 +80,7 @@ if ($thumbPath) {
 
 | 页面类型 | 尺寸 | 质量 | 格式 | 存放目录 | 文件后缀 | 裁剪模式 |
 |---------|------|------|------|----------|----------|----------|
-| `gallery` | 300×300px | 85% | JPG | `gallery-thumbs/` | `_gallery` | 缩放 |
+| `gallery` | 300×300px | 85% | JPG | `thumbs/` | `_gallery` | 缩放 |
 | `single-works` | 200×200px | 80% | JPG | `works-thumbs/` | `_works` | 缩放 |
 | `sketch` | 150×150px | 75% | JPG | `sketch-thumbs/` | `_sketch` | 裁剪 |
 | `icon` | 100×100px | 80% | PNG | `icons/` | `_icon` | 裁剪 |
@@ -99,7 +99,7 @@ public/assets/images/
 │   └── AAA/
 │       ├── image1.jpg              # 原图
 │       ├── image2.jpg              # 原图
-│       ├── gallery-thumbs/         # Gallery页面缩略图
+│       ├── thumbs/         # Gallery页面缩略图
 │       │   ├── image1_gallery.jpg
 │       │   └── image2_gallery.jpg
 │       ├── sketch-thumbs/          # Sketch页面缩略图

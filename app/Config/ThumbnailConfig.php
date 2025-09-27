@@ -18,7 +18,7 @@ class ThumbnailConfig {
                 'format' => 'jpg',
                 'crop' => false,
                 'suffix' => '_gallery',
-                'directory' => 'gallery-thumbs'  // 专用目录
+                'directory' => 'thumbs'  // 标准目录
             ],
             
             // Single-Works页面 - 中等尺寸
