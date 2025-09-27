@@ -30,19 +30,78 @@
 	margin:0 auto;
 }
 .ray-comic-menu-icon{
-	width:60px;
-	height:60px;
+	width: 60px;
+	height: 60px;
 	border: #efeeee 1px solid;
 	border-radius: 10px;
 	overflow: hidden;
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	transition: all 0.3s ease;
 }
 .ray-comic-menu-icon:hover{
 	border: 0px;
- box-shadow: #929292 0 0 5px;
+	box-shadow: #929292 0 0 8px, 0 4px 12px rgba(146,146,146,0.3);
+	transform: translateY(-2px) scale(1.05);
 }
-.ray-comic-menu-icon> img{
-	width:60px;
-	height:60px;
+.ray-comic-menu-icon > img,
+.ray-comic-menu-icon img{
+	width: 60px;
+	height: 60px;
+	display: block;
+	transition: opacity 0.3s ease;
+	object-fit: cover;
+}
+
+/* 图标悬停效果 */
+.ray-comic-menu-icon .default-img {
+	opacity: 1;
+}
+
+.ray-comic-menu-icon .hover-img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+}
+
+.ray-comic-menu-icon:hover .default-img {
+	opacity: 0;
+}
+
+.ray-comic-menu-icon:hover .hover-img {
+	opacity: 1;
+}
+
+/* 文字图标样式 */
+.ray-comic-menu-icon .icon-text {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 60px;
+	height: 60px;
+	font-weight: bold;
+	font-size: 12px;
+	color: #666;
+	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	transition: all 0.3s ease;
+	border-radius: 10px;
+}
+
+.ray-comic-menu-icon:hover .icon-text {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+}
+
+/* Dreams 特殊图标样式 */
+.sketch-dream-icon .icon-text {
+	background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+	color: #333;
+}
+
+.sketch-dream-icon:hover .icon-text {
+	background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
 }
 
 #c1{
@@ -73,54 +132,7 @@
 	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat -180px 0;
 }
 
-#c5 {
-  position: relative;
-  width: 60px;
-  height: 60px;
-  display: block;
-  
-}
-
-#c5 img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1; /* 让图片都在滤镜层下方 */
-}
-
-#c5 .hover-img {
-  opacity: 0; 
-  transition: opacity 0.3s ease-in-out;
-}
-
-/* --- 新增：滤镜层 --- */
-#c5::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  
-  /* 设置您想要的滤镜颜色和透明度 */
-  background-color: rgba(4, 166, 241, 0.477); /* 例如：半透明的紫色 */
-  
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  z-index: 2; /* 关键：确保层级高于图片 */
-  pointer-events: none; /* (可选)确保滤镜不会影响鼠标点击 */
-}
-
-#c5:hover .hover-img {
-  opacity: 1;
-}
-
-/* --- 新增：Hover 时显示滤镜 --- */
-#c5:hover::before {
-  opacity: 1;
-}
+/* 统一的图标hover效果，移除了特定ID样式 */
 
 .comic_show{
 	margin:0 auto;
@@ -148,6 +160,7 @@
 	margin: 0 auto;
 }
 
+/* 单个漫画图片容器 */
 .comic-item {
 	display: flex;
 	justify-content: center;
@@ -156,7 +169,46 @@
 }
 
 .comic-item img {
-	max-width: 100%;
+	max-width: 90%;
 	height: auto;
 	display: block;
+}
+
+/* 多图片画廊容器 */
+.comic-gallery {
+	width: 100%;
+	margin: 20px auto;
+	padding: 0 20px;
+}
+
+.comic-gallery .comic-item {
+	margin-bottom: 30px;
+	animation: fadeInUp 0.6s ease forwards;
+	opacity: 0;
+	transform: translateY(30px);
+}
+
+.comic-gallery .comic-item:nth-child(1) { animation-delay: 0.1s; }
+.comic-gallery .comic-item:nth-child(2) { animation-delay: 0.2s; }
+.comic-gallery .comic-item:nth-child(3) { animation-delay: 0.3s; }
+.comic-gallery .comic-item:nth-child(4) { animation-delay: 0.4s; }
+.comic-gallery .comic-item:nth-child(n+5) { animation-delay: 0.5s; }
+
+/* 占位符样式 */
+.comic-placeholder {
+	text-align: center;
+	padding: 60px 20px;
+	color: #999;
+	font-style: italic;
+	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	border-radius: 15px;
+	margin: 20px;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }

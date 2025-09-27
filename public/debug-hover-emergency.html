@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紧急Hover调试</title>
+    <style>
+        body {
+            padding: 2rem;
+            background: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+        
+        .debug-container {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* 测试1：最基础的hover */
+        .test1 {
+            width: 120px;
+            height: 120px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            background: white;
+        }
+        
+        .test1 .img1 {
+            width: 100%;
+            height: 100%;
+            display: block;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        
+        .test1 .img2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .test1:hover .img1 {
+            opacity: 0;
+        }
+        
+        .test1:hover .img2 {
+            opacity: 1;
+        }
+        
+        /* 测试2：纯色版本 */
+        .test2 {
+            width: 120px;
+            height: 120px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .color1 {
+            width: 100%;
+            height: 100%;
+            background: blue;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+        
+        .color2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: red;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .test2:hover .color1 {
+            opacity: 0;
+        }
+        
+        .test2:hover .color2 {
+            opacity: 1;
+        }
+        
+        .label {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .status {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚨 紧急Hover调试</h1>
+    
+    <div class="debug-container">
+        <!-- 纯色测试 -->
+        <div>
+            <div class="test2">
+                <div class="color1">默认</div>
+                <div class="color2">悬停</div>
+            </div>
+            <div class="label">纯色测试<br>蓝→红</div>
+        </div>
+        
+        <!-- 真实图片测试 -->
+        <div>
+            <div class="test1">
+                <img class="img1" src="/assets/images/comic/thumbs/icon_default_68d7cf7dc520f.png" alt="默认">
+                <img class="img2" src="/assets/images/comic/thumbs/icon_hover_68d7cf7dc5b47.png" alt="悬停">
+            </div>
+            <div class="label">真实图片</div>
+        </div>
+        
+        <!-- 老图片测试 -->
+        <div>
+            <div class="test1">
+                <img class="img1" src="/assets/images/ray-comic-icefire-01.png" alt="默认">
+                <img class="img2" src="/assets/images/ray-comic-icefire-02.png" alt="悬停">
+            </div>
+            <div class="label">老版本图片</div>
+        </div>
+    </div>
+    
+    <div class="status">
+        <h3>🔍 测试结果：</h3>
+        <ol>
+            <li><strong>纯色测试：</strong>如果这个不工作，说明CSS有问题</li>
+            <li><strong>真实图片：</strong>如果纯色工作但这个不工作，说明图片路径有问题</li>
+            <li><strong>老版本图片：</strong>参考对比</li>
+        </ol>
+        
+        <div id="image-status" style="margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 4px;">
+            检查图片加载中...
+        </div>
+    </div>
+    
+    <script>
+        // 简单的图片加载检查
+        const images = document.querySelectorAll('img');
+        const statusDiv = document.getElementById('image-status');
+        let results = [];
+        
+        images.forEach((img, index) => {
+            img.onload = function() {
+                results.push(`✅ 图片${index + 1}: OK`);
+                updateStatus();
+            };
+            
+            img.onerror = function() {
+                results.push(`❌ 图片${index + 1}: 失败 - ${this.src.split('/').pop()}`);
+                updateStatus();
+            };
+        });
+        
+        function updateStatus() {
+            statusDiv.innerHTML = results.join('<br>') || '检查中...';
+        }
+        
+        // 添加hover事件监听用于调试
+        document.querySelectorAll('.test1, .test2').forEach((element, index) => {
+            element.addEventListener('mouseenter', function() {
+                console.log(`进入测试${index + 1}`);
+            });
+            
+            element.addEventListener('mouseleave', function() {
+                console.log(`离开测试${index + 1}`);
+            });
+        });
+    </script>
+</body>
+</html>

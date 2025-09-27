@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简洁Hover测试</title>
+    <link rel="stylesheet" href="/assets/css/comic.css">
+</head>
+<body style="padding: 20px; background: #f5f5f5;">
+    <div style="max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px;">
+        <h1>简洁Hover测试</h1>
+        <p>基于老版本CSS的简洁hover效果测试</p>
+        
+        <div id="ray-comic-menu" style="display: flex; gap: 20px; justify-content: center;">
+            <!-- 测试图标1 -->
+            <div class="ray-comic-menu-icon">
+                <div class="default-img" style="background: #ff9999; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">默认</div>
+                <div class="hover-img" style="background: #99ff99; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">悬停</div>
+            </div>
+            
+            <!-- 测试图标2 -->
+            <div class="ray-comic-menu-icon">
+                <div class="default-img" style="background: #9999ff; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">默认</div>
+                <div class="hover-img" style="background: #ffff99; display: flex; align-items: center; justify-content: center; color: black; font-weight: bold;">悬停</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px; padding: 15px; background: #e8f4ff; border-radius: 5px;">
+            <h3>测试说明：</h3>
+            <p>✅ 使用原始comic.css样式</p>
+            <p>✅ 简洁的HTML结构</p>
+            <p>✅ 基于老版本的定位逻辑</p>
+            <p><strong>预期效果：</strong>鼠标悬停时，颜色块应该直接切换，不出现位置偏移</p>
+        </div>
+    </div>
+</body>
+</html>
