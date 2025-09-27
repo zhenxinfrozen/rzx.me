@@ -7,6 +7,22 @@ function get_all_comics_data() {
     if (file_exists($dataFile)) {
         $jsonData = file_get_contents($dataFile);
         $data = json_decode($jsonData, true);
+        // 如果存在自定义顺序文件，应用顺序到返回的数据上
+        $orderFile = __DIR__ . '/../../storage/comic_order.json';
+        if (is_array($data) && file_exists($orderFile)) {
+            $orderJson = file_get_contents($orderFile);
+            $orderArr = json_decode($orderJson, true);
+            if (is_array($orderArr) && count($orderArr) > 0) {
+                $ordered = [];
+                foreach ($orderArr as $cid) {
+                    if (isset($data[$cid])) $ordered[$cid] = $data[$cid];
+                }
+                // append any missing comics
+                foreach ($data as $k => $v) if (!isset($ordered[$k])) $ordered[$k] = $v;
+                $data = $ordered;
+            }
+        }
+
         return $data ?: get_default_comics_data();
     }
     
