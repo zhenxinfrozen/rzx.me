@@ -213,7 +213,7 @@ $current_user = [
             
             <li class="menu-item <?= $current_page === 'comic-manager' ? 'active' : '' ?>">
                 <a href="<?= $nav_base ?>comic-manager.php">
-                    <i data-feather="folder"></i>
+                    <i class="fa-regular fa-object-group"></i>
                     <span>漫画管理</span>
                 </a>
             </li>            

@@ -42,7 +42,9 @@
 }
 .ray-comic-menu-icon:hover{
 	/* 取消放大与阴影，保留图像切换的视觉（overlay handled by .default-img/.hover-img opacity） */
-	border: 0px;
+	border: 1px solid #a7a7a7	;
+	box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	transform: scale(1.1);
 }
 .ray-comic-menu-icon > img,
 .ray-comic-menu-icon img{
@@ -93,44 +95,6 @@
 	color: white;
 }
 
-/* Dreams 特殊图标样式 */
-.sketch-dream-icon .icon-text {
-	background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-	color: #333;
-}
-
-.sketch-dream-icon:hover .icon-text {
-	background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-}
-
-#c1{
-	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat 0 0;
-}
-#c1:hover{
-	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat 0 -60px;
-}
-#c2{
-	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat -60px 0;
-}
-#c2:hover{
-	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat -60px -60px;
-}
-#c3{
-	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat -120px 0;
-}
-#c3:hover{
-	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat -120px -60px;
-}
-#c4{
-	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat -180px 0;
-}
-#c4:hover{
-	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat -180px -60px;
-}
-#c4{
-	background:url(/assets/images/ray-comic-oldlist-pic.jpg) no-repeat -180px 0;
-}
-
 /* 统一的图标hover效果，移除了特定ID样式 */
 
 .comic_show{
@@ -144,7 +108,8 @@
 }
 
 #comic-titlebox {
-	color: #565656;
+	color: #696969;
+	font-size: small;
 	width: 500px;
 	margin: 0 auto;
 	float: none;

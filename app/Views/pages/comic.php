@@ -13,7 +13,7 @@ $comicStats = get_comic_stats();
 <a href="#"><div class="comic_dog">
 </div></a>
 <p align="center"><span style="font-family: 'Comic Sans MS', cursive; color:#999999; font-size:1rem;"> 
-    Interactive Comics Gallery <span style="font-size:0.8rem">（<b>交互式漫画</b> - 共<?= $comicStats['active'] ?>个作品）</span>
+    Interesting short comics <span style="font-size:0.8rem">（<b>兴致小短篇</b> - 数量：<b><?= $comicStats['active'] ?></b>头）</span>
 </span></p>
 
 <div id="ray-comic-menu">

@@ -12,6 +12,8 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.06);
     position: relative;
 }
+/* Ensure flex alignment for thumbnail + content rows */
+.category-row { display: flex; align-items: center; }
 .category-row:hover { 
     background: #f8f9fa !important; 
     border-color: #007bff;
@@ -87,7 +89,7 @@
     height: 36px;
     border: none;
     border-radius: 8px;
-    background: #108e1dff;
+    background: rgb(36, 108, 216);
     color: white;
     font-size: 20px;
     font-weight: bold;
@@ -96,9 +98,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(9, 115, 133, 1);
+    box-shadow: 0 2px 8px rgb(239, 0, 0);
 }
-.add-category-btn:hover { background: #47a854ff; transform: translateY(-50%) scale(1.05); }
+.add-category-btn:hover { background: rgb(4, 25, 81); transform: translateY(-50%) scale(1.05); }
 .action-buttons { position: relative; margin-top: 15px; text-align: right; padding-top: 10px; border-top: 1px solid #e9ecef; }
 
 /* 编辑面板小部件 */
@@ -110,7 +112,7 @@
 #edit-panel .form-actions { padding:12px 16px; border-top:1px solid #eef0f2; background:#fafbfd; }
 
 /* 侧栏小图 */
-.side-thumb { width:56px; height:56px; border-radius:6px; object-fit:cover; border:1px solid #dee2e6 }
+.side-thumb { width:56px; height:56px; border-radius:6px; object-fit:cover; border:1px solid #dee2e6; align-self: center; margin-top: 0 !important; margin-bottom: 0 !important; display: block; }
 @media (min-width:1200px) { .side-thumb { width:64px; height:64px } }
 
 /* 缩略图删除按钮 */
@@ -122,3 +124,38 @@
 
 /* Toast placeholder */
 .alert-toast { position: fixed; top: 20px; right: 20px; z-index: 1055; min-width: 300px; }
+
+/* Icon preview (default / hover) */
+.icon-row { display:flex; gap:12px; align-items:center; }
+.icon-box { width:50px; height:50px; border:1px solid #dee2e6; border-radius:6px; background:#fff; display:flex; align-items:center; justify-content:center; position:relative; }
+.icon-box img.icon-img { width:48px; height:48px; object-fit:cover; border-radius:4px }
+.icon-actions { display:flex; gap:6px; margin-left:8px; }
+.icon-actions .btn { padding:4px 8px; font-size:12px }
+
+/* 禁用图标删除按钮 - 确保不显示 */
+.icon-box .btn-outline-danger { display: none !important; }
+
+
+#addGroupBtn {
+    /* 自定义样式 */
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: #108e1dff;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(9, 115, 133, 1);
+}
+#addGroupBtn:hover {
+    /* 自定义样式 */
+    background: #47a854ff;
+    transform: translateY(0) scale(1.1);
+    box-shadow: 0 4px 12px rgba(39, 39, 39, 0.72);
+}

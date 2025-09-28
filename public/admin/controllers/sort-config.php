@@ -242,7 +242,7 @@ require_once '../views/layouts/header.php';
 
     <div class="container-fluid">
         <!-- 排序方式选择 -->
-        <div class="card shadow-sm mb-4">
+        <!-- <div class="card shadow-sm mb-4">
             <div class="card-header bg-primary text-white">
                 <h5 class="card-title mb-0">
                     <i data-feather="settings" class="me-2"></i>
@@ -264,7 +264,7 @@ require_once '../views/layouts/header.php';
                         </div>
                     </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- 三栏布局 -->
         <div class="row g-3">

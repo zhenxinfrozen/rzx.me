@@ -60,15 +60,6 @@ return [
         'meta_keywords' => '速写，Sketch，人物速写，场景练习，创意草图',
     ],
     
-    // 速写测试版
-    'pages/sketch-test.php' => [
-        'page_id' => 'test-sketch-test',
-        'page_title' => 'SketchBooks (jQuery Test) - rzx.me',
-        'css_file' => '/assets/css/sketch.css',
-        'meta_description' => '速写本和练习作品，记录日常的绘画练习和创意草图（jQuery测试版本）',
-        'meta_keywords' => '速写，草图，练习作品，sketchbook，drawing，concept sketches',
-    ],
-    
     // 网站链接
     'pages/sites.php' => [
         'page_id' => 'sites',
