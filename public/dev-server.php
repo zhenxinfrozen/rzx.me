@@ -1,7 +1,8 @@
 <?php
 /**
- * PHP内置服务器路由器
- * 用法: php -S localhost:8000 -t public router.php
+ * 开发环境服务器路由器 (仅用于开发)
+ * 用法: php -S localhost:8000 -t public dev-server.php
+ * 注意: 生产环境请使用 Apache/Nginx + .htaccess
  */
 
 $requestUri = $_SERVER['REQUEST_URI'];

@@ -1,4 +1,6 @@
-# Apache配置文件 - 静态文件直接访问规则
+# Apache URL重写规则 - 生产环境路由配置
+# 功能: 静态文件直接访问 + 动态请求重定向到 index.php
+# 注意: 仅用于 Apache 服务器，开发环境使用 dev-server.php
 
 RewriteEngine On
 

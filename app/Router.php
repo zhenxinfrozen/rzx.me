@@ -1,5 +1,16 @@
 <?php
-// app/Router.php - 现代路由处理器
+/**
+ * 路由处理引擎 - 现代化路由处理类
+ * 
+ * 功能:
+ * - 解析HTTP请求路径
+ * - 匹配路由规则(精确匹配 + 正则匹配)
+ * - 区分页面/API/静态文件请求类型
+ * - 提供路由查询和验证方法
+ * 
+ * 配置: 读取 app/Config/routes.php 配置文件
+ * 使用: 由 public/index.php 实例化和调用
+ */
 
 class Router 
 {
