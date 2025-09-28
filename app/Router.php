@@ -107,7 +107,7 @@ class Router
             
             if ($this->matchPattern($pattern, $path)) {
                 $this->currentRoute = $route;
-                $this->currentRoute['type'] = 'page';
+                $this->currentRoute['type'] = $route['type'] ?? 'page';
                 $this->currentRoute['path'] = $path;
                 $this->currentRoute['pattern'] = $pattern;
                 return $this->currentRoute;
@@ -218,5 +218,19 @@ class Router
         }
         
         return ($route['type'] ?? '') === 'static';
+    }
+
+    /**
+     * 检查是否为admin后台请求
+     * @param array $route
+     * @return bool
+     */
+    public function isAdminRoute($route = null) 
+    {
+        if ($route === null) {
+            $route = $this->currentRoute;
+        }
+        
+        return ($route['type'] ?? '') === 'admin';
     }
 }

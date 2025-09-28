@@ -50,6 +50,22 @@ if ($route && $router->isStaticRoute($route)) {
     }
 }
 
+// 处理admin后台请求 (交给admin目录的.htaccess处理)
+if ($route && $router->isAdminRoute($route)) {
+    // admin路由请求，重定向到admin目录
+    $requestUri = $_SERVER['REQUEST_URI'];
+    $adminPath = __DIR__ . '/admin' . str_replace('/admin', '', parse_url($requestUri, PHP_URL_PATH));
+    
+    // 如果是admin根目录，重定向到admin/index.php
+    if ($requestUri === '/admin' || $requestUri === '/admin/') {
+        header('Location: /admin/index.php');
+        exit;
+    }
+    
+    // 其他admin请求让admin目录的.htaccess处理
+    return false;
+}
+
 // 处理API请求
 if ($route && $router->isApiRoute($route)) {
     require_once __DIR__ . '/../app/Controllers/api_comic_handler.php';

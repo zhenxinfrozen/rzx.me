@@ -1,0 +1,15 @@
+# 后台管理系统 - URL重写规则
+# 功能: admin目录独立路由处理
+
+RewriteEngine On
+
+# 静态资源直接访问
+RewriteRule ^(assets|css|js|images)/(.*)$ $1/$2 [L]
+
+# 控制器路由: /admin/controller-name → controllers/controller-name.php
+RewriteRule ^([a-zA-Z0-9\-_]+)/?$ controllers/$1.php [L]
+
+# 其他请求重定向到首页
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ index.php [L]

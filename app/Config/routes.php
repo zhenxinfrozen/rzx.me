@@ -77,6 +77,11 @@ return [
             'title' => '画廊 - RZX.ME',
             'handler' => 'get_page_data'
         ],
+        // 后台管理系统路由 (交给admin目录自己的.htaccess处理)
+        '~/^\/admin(\/.*)?$/~' => [
+            'type' => 'admin',
+            'allow_passthrough' => true
+        ],
     ],
 
     // API路由
