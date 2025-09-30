@@ -44,7 +44,8 @@ $current_page = $_GET['page'] ?? 'dashboard';
 if (!isset($page_title)) {
     $page_titles = [
         'dashboard' => '控制台',
-        'sort-config' => '作品分类管理',
+    'sort-config' => '作品分类管理',
+    'comics' => '漫画管理',
         'gallery-manager' => '画廊管理',
         'trash' => '回收站',
         'site-config' => '网站配置',
@@ -211,8 +212,8 @@ $current_user = [
                 </a>
             </li>
             
-            <li class="menu-item <?= $current_page === 'comic-manager' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>comic-manager.php">
+            <li class="menu-item <?= $current_page === 'comics' ? 'active' : '' ?>">
+                <a href="<?= $nav_base ?>comics.php">
                     <i class="fa-regular fa-object-group"></i>
                     <span>漫画管理</span>
                 </a>
