@@ -271,11 +271,38 @@ $totalCategories = count($categoryData);
     transform: scale(1.05);
     z-index: 1000;
 }
+.thumbnail-sortable.is-thumbnail {
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40,167,69,.25);
+}
 .thumbnail-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     padding: 10px;
+}
+
+/* 方块上传按钮样式 - 与comics页面统一 */
+.add-image-btn {
+    width: 80px;
+    height: 80px;
+    border: 2px dashed #007bff;
+    border-radius: 6px;
+    background: #f8f9fa;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #007bff;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 5px;
+}
+.add-image-btn:hover {
+    background: #e3f2fd;
+    border-color: #0056b3;
+    transform: scale(1.05);
 }
 
 /* 上传区域样式 */
@@ -424,18 +451,16 @@ $totalCategories = count($categoryData);
                                     </div>
                                 </div>
 
-                                <!-- 新增：图片管理 -->
-                                <div class="mb-3">
-                                    <label class="form-label">图片管理</label>
-                                    <div class="upload-area" id="new-images-upload" onclick="selectImagesFile('new')">
-                                        <i data-feather="image" class="mb-2" style="width: 32px; height: 32px;"></i>
-                                        <p class="mb-0">点击上传图片</p>
-                                        <small class="text-muted">可选择多张图片</small>
+                            <!-- 图片管理 -->
+                            <div class="mb-3">
+                                <label class="form-label">图片管理</label>
+                                <div id="new-images-preview" class="thumbnail-container" style="min-height: 100px;">
+                                    <div class="add-image-btn" onclick="selectImagesFile('new')" title="选择图片">
+                                        +
                                     </div>
-                                    <div id="new-images-preview" class="thumbnail-grid mt-3" style="display: none;"></div>
                                 </div>
-
-                                <div class="d-flex gap-2">
+                                <small class="text-muted">可选择多张图片</small>
+                            </div>                                <div class="d-flex gap-2">
                                     <button type="button" class="btn btn-success btn-sm" onclick="createNewCategory()">
                                         <i data-feather="plus" class="me-1"></i>创建分组
                                     </button>
@@ -729,34 +754,52 @@ function loadCategoryThumbnails(categoryName) {
     fetch(`${controllerUrl}?ajax=thumbnails&category=${encodeURIComponent(categoryName)}`)
         .then(res => res.json())
         .then(data => {
-            let html = '<div class="thumbnail-grid">';
+            container.innerHTML = '';
+            
+            // 添加方块上传按钮
+            const addBtn = document.createElement('div');
+            addBtn.className = 'add-image-btn';
+            addBtn.innerHTML = '+';
+            addBtn.title = '上传图片';
+            addBtn.onclick = () => selectImagesFile('edit');
+            container.appendChild(addBtn);
 
             if (data.success && data.images.length > 0) {
                 data.images.forEach((image, index) => {
-                    html += `
-                        <div class="thumbnail-item thumbnail-sortable" data-image="${image.name}" data-index="${index}" draggable="true">
-                            <img src="${image.thumb_path}" alt="${image.name}" loading="lazy">
-                            <div class="thumbnail-actions">
-                                <button class="thumbnail-action-btn set-thumb" title="设为缩略图" onclick="setAsThumbnail('${categoryName}', '${image.name}')" onmousedown="event.stopPropagation();">
-                                    <i data-feather="star" style="width: 10px; height: 10px;"></i>
-                                </button>
-                                <button class="thumbnail-action-btn move" title="移动" onmousedown="event.stopPropagation();">
-                                    <i data-feather="move" style="width: 10px; height: 10px;"></i>
-                                </button>
-                                <button class="thumbnail-action-btn delete" title="删除" onclick="deleteImage('${categoryName}', '${image.name}')" onmousedown="event.stopPropagation();">
-                                    <i data-feather="trash-2" style="width: 10px; height: 10px;"></i>
-                                </button>
-                            </div>
-                        </div>`;
+                    const isThumb = data.current_thumbnail && image.name === data.current_thumbnail;
+                    const div = document.createElement('div');
+                    div.className = `thumbnail-item thumbnail-sortable ${isThumb ? 'is-thumbnail' : ''}`;
+                    div.dataset.image = image.name;
+                    div.dataset.index = index;
+                    div.draggable = true;
+                    div.innerHTML = `
+                        <img src="${image.thumb_path}" alt="${image.name}" loading="lazy">
+                        <div class="thumbnail-actions">
+                            <button class="thumbnail-action-btn set-thumb" title="设为缩略图" onclick="setAsThumbnail('${categoryName}', '${image.name}')" onmousedown="event.stopPropagation();">
+                                <i data-feather="star" style="width: 10px; height: 10px;"></i>
+                            </button>
+                            <button class="thumbnail-action-btn move" title="移动" onmousedown="event.stopPropagation();">
+                                <i data-feather="move" style="width: 10px; height: 10px;"></i>
+                            </button>
+                            <button class="thumbnail-action-btn delete" title="删除" onclick="deleteImage('${categoryName}', '${image.name}')" onmousedown="event.stopPropagation();">
+                                <i data-feather="trash-2" style="width: 10px; height: 10px;"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(div);
                 });
-                html += '</div>';
-                html += `<div class="mt-2 small text-muted">共 ${data.images.length} 张图片，可拖拽排序</div>`;
+                
+                const statusDiv = document.createElement('div');
+                statusDiv.className = 'mt-2 small text-muted';
+                statusDiv.innerHTML = `共 ${data.images.length} 张图片，可拖拽排序。${data.current_thumbnail ? '绿色边框为当前缩略图' : ''}`;
+                container.appendChild(statusDiv);
             } else {
-                html += '</div>';
-                html += '<div class="mt-2 small text-muted">暂无图片</div>';
+                const emptyDiv = document.createElement('div');
+                emptyDiv.className = 'mt-2 small text-muted';
+                emptyDiv.textContent = '暂无图片';
+                container.appendChild(emptyDiv);
             }
 
-            container.innerHTML = html;
             feather.replace();
             initializeImageSorting();
         })
@@ -957,18 +1000,25 @@ function setAsThumbnail(categoryName, imageName) {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            document.getElementById('edit-thumbnail-img').src = data.thumbnail_url;
-            document.getElementById('edit-thumbnail-preview').style.display = 'block';
-            document.getElementById('edit-thumbnail-upload').style.display = 'none';
+            // 更新编辑区域的缩略图显示
+            const editImg = document.getElementById('edit-thumbnail-img');
+            if (editImg && data.thumbnail_url) {
+                editImg.src = data.thumbnail_url;
+                document.getElementById('edit-thumbnail-preview').style.display = 'block';
+                document.getElementById('edit-thumbnail-upload').style.display = 'none';
+            }
             
             // 更新左侧分组列表的缩略图
             const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
             const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
-            if (categoryThumb) {
+            if (categoryThumb && data.thumbnail_url) {
                 categoryThumb.src = data.thumbnail_url;
-            } else if (categoryPlaceholder) {
+            } else if (categoryPlaceholder && data.thumbnail_url) {
                 categoryPlaceholder.outerHTML = `<img src="${data.thumbnail_url}" alt="缩略图" class="category-thumbnail">`;
             }
+            
+            // 重新加载图片网格以更新视觉标识
+            loadCategoryThumbnails(categoryName);
             
             showToast('success', '缩略图已设置');
         } else {
@@ -976,7 +1026,7 @@ function setAsThumbnail(categoryName, imageName) {
         }
     })
     .catch(err => {
-        console.error(err);
+        console.error('设置缩略图失败:', err);
         showToast('danger', '设置缩略图失败');
     });
 }
@@ -1075,11 +1125,22 @@ function handleImagesUpload(event) {
     } else if (currentFileInputContext === 'new') {
         // 新建模式预览
         const previewContainer = document.getElementById('new-images-preview');
-        previewContainer.style.display = 'block';
         
         files.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = function(e) {
+                // 检查是否已存在上传按钮，如果没有则添加
+                let addBtn = previewContainer.querySelector('.add-image-btn');
+                if (!addBtn) {
+                    addBtn = document.createElement('div');
+                    addBtn.className = 'add-image-btn';
+                    addBtn.innerHTML = '+';
+                    addBtn.title = '选择更多图片';
+                    addBtn.onclick = () => selectImagesFile('new');
+                    previewContainer.appendChild(addBtn);
+                }
+                
+                // 创建图片预览项
                 const div = document.createElement('div');
                 div.className = 'thumbnail-item';
                 div.innerHTML = `
@@ -1090,7 +1151,8 @@ function handleImagesUpload(event) {
                         </button>
                     </div>
                 `;
-                previewContainer.appendChild(div);
+                // 在上传按钮之前插入
+                previewContainer.insertBefore(div, addBtn);
                 feather.replace();
             };
             reader.readAsDataURL(file);
@@ -1173,8 +1235,19 @@ function removeThumbnail(context) {
 function removePreviewImage(button) {
     button.closest('.thumbnail-item').remove();
     const container = document.getElementById('new-images-preview');
-    if (container.children.length === 0) {
-        container.style.display = 'none';
+    // 检查是否还有图片项（除了上传按钮）
+    const imageItems = container.querySelectorAll('.thumbnail-item');
+    if (imageItems.length === 0) {
+        // 确保上传按钮仍然存在
+        let addBtn = container.querySelector('.add-image-btn');
+        if (!addBtn) {
+            addBtn = document.createElement('div');
+            addBtn.className = 'add-image-btn';
+            addBtn.innerHTML = '+';
+            addBtn.title = '选择图片';
+            addBtn.onclick = () => selectImagesFile('new');
+            container.appendChild(addBtn);
+        }
     }
 }
 
@@ -1200,6 +1273,18 @@ function uploadImages(categoryName, files) {
             const countEl = document.querySelector(`[data-category="${categoryName}"] .category-item small`);
             if (countEl && data.total_count) {
                 countEl.textContent = `${data.total_count} 张图片`;
+            }
+            
+            // 如果是第一张图片且没有缩略图，自动设置为缩略图
+            if (data.auto_set_thumbnail || data.thumbnail_set) {
+                showToast('info', '已自动设置第一张图片为缩略图');
+                loadCategoryThumbnailImage(categoryName);
+                
+                // 更新左侧分组列表的缩略图
+                const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
+                if (categoryPlaceholder && data.thumbnail_url) {
+                    categoryPlaceholder.outerHTML = `<img src="${data.thumbnail_url}" alt="缩略图" class="category-thumbnail">`;
+                }
             }
         } else {
             showToast('danger', data.message || '上传失败');
