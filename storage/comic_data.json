@@ -75,5 +75,14 @@
         "icon_default": "\/assets\/images\/comic\/thumbs\/comic-huashan-iconA.png",
         "icon_hover": "\/assets\/images\/comic\/thumbs\/comic-huashan-iconB.png",
         "updated_at": "2025-09-28 12:33:28"
+    },
+    "g1759411984": {
+        "title": "New Group",
+        "subtitle": "",
+        "lines": "",
+        "alt": "",
+        "status": "inactive",
+        "order_id": 6,
+        "images": []
     }
 }

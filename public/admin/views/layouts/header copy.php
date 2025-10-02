@@ -32,7 +32,7 @@ $current_page = $_GET['page'] ?? 'dashboard';
 if (!isset($page_title)) {
     $page_titles = [
         'dashboard' => '控制台',
-        'sort-config' => '作品分类管理',
+    'single-works' => 'Single-Works 分类管理',
         'gallery-manager' => '画廊管理',
         'trash' => '回收站',
         'site-config' => '网站配置',
@@ -193,8 +193,8 @@ $current_user = [
                 <span class="section-title">内容管理</span>
             </li>
             
-            <li class="menu-item <?= $current_page === 'sort-config' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>sort-config.php">
+            <li class="menu-item <?= $current_page === 'single-works' ? 'active' : '' ?>">
+                <a href="<?= $nav_base ?>single-works.php">
                     <i data-feather="image"></i>
                     <span>作品分类管理</span>
                 </a>

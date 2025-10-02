@@ -118,7 +118,7 @@ $stats = getStats();
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-lg-4 col-md-6">
-                        <a href="controllers/sort-config.php" class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+                        <a href="controllers/single-works.php" class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
                             <i class="bi bi-image fs-4 mb-2"></i>
                             <span class="fw-medium">作品分类管理</span>
                             <small class="text-muted mt-1">管理作品分类配置</small>
