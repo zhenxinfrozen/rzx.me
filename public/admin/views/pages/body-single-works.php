@@ -100,6 +100,48 @@ $totalCategories = count($categoryData);
 }
 
 .thumbnail-container { min-height: 200px; border: 1px solid #e9ecef; border-radius: 8px; padding: 10px; background: #f8f9fa; }
+
+/* 新的图片网格容器 - 居中对齐 */
+.thumbnail-grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 200px;
+    padding: 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+/* 缩略图编辑区域样式 */
+.thumbnail-edit-section {
+    padding: 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+    margin-bottom: 10px;
+}
+
+.thumbnail-upload-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-direction: column;
+}
+
+.thumbnail-upload-btn:hover {
+    background: #e3f2fd;
+    border-color: #0056b3;
+}
 .thumbnail-item { 
     width: 80px; 
     height: 80px; 
@@ -530,32 +572,27 @@ $totalCategories = count($categoryData);
 
                                 <!-- 缩略图编辑 -->
                                 <div class="mb-3">
-                                    <label class="form-label d-flex justify-content-between align-items-center">
-                                        缩略图
-                                        <button type="button" class="auto-thumbnail-btn" onclick="autoSetThumbnail()" title="自动设置为第一张图片">
-                                            自动设置
-                                        </button>
-                                    </label>
-                                    <div class="d-flex align-items-center gap-3">
+                                    <label class="form-label">缩略图</label>
+                                    <div class="thumbnail-edit-section text-center">
                                         <!-- 当前缩略图显示 -->
-                                        <div id="edit-thumbnail-preview">
-                                            <img id="edit-thumbnail-img" style="width: 120px; height: 120px; border-radius: 8px; object-fit: cover; border: 2px solid #dee2e6; display: none;">
+                                        <div class="thumbnail-preview mb-2" id="edit-thumbnail-preview">
+                                            <img id="edit-thumbnail-img" style="width: 120px; height: 120px; border-radius: 8px; object-fit: cover; border: 2px solid #28a745; display: none;">
                                         </div>
                                         <!-- 上传/更换缩略图按钮 -->
-                                        <div class="thumbnail-upload-btn" id="edit-thumbnail-upload" onclick="selectThumbnailFile('edit')" title="上传/更换缩略图">
+                                        <div class="thumbnail-upload-btn mx-auto" id="edit-thumbnail-upload" onclick="selectThumbnailFile('edit')" title="上传/更换缩略图">
                                             <i data-feather="upload"></i>
-                                            <span>上传/更换</span>
+                                            <span>上传缩略图</span>
                                         </div>
-                                    </div>
-                                    <div class="mt-2">
-                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeThumbnail('edit')" id="remove-thumbnail-btn" style="display: none;">
-                                            <i data-feather="trash-2" class="me-1"></i>删除缩略图
-                                        </button>
+                                        <div class="mt-2">
+                                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeThumbnail('edit')" id="remove-thumbnail-btn" style="display: none;">
+                                                <i data-feather="trash-2" class="me-1"></i>删除缩略图
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <h6><i data-feather="image" class="me-1"></i>图片管理</h6>
-                                <div id="thumbnail-grid" class="thumbnail-container"></div>
+                                <div id="thumbnail-grid" class="thumbnail-grid-container"></div>
                                 <div class="action-buttons d-flex gap-2">
                                     <button type="button" class="btn btn-primary btn-sm" onclick="saveCategory()">
                                         <i data-feather="save" class="me-1"></i>更新
@@ -819,13 +856,13 @@ function loadCategoryThumbnails(categoryName) {
                     div.innerHTML = `
                         <img src="${image.thumb_path}" alt="${image.name}" loading="lazy">
                         <div class="thumbnail-actions">
-                            <button class="thumbnail-action-btn set-thumb" title="设为缩略图" onclick="setAsThumbnail('${categoryName}', '${image.name}')" onmousedown="event.stopPropagation();">
+                            <button class="thumbnail-action-btn set-thumb" title="设为缩略图" onclick="event.stopPropagation(); setAsThumbnail('${categoryName}', '${image.name}');">
                                 <i data-feather="star" style="width: 10px; height: 10px;"></i>
                             </button>
                             <button class="thumbnail-action-btn move" title="移动" onmousedown="event.stopPropagation();">
                                 <i data-feather="move" style="width: 10px; height: 10px;"></i>
                             </button>
-                            <button class="thumbnail-action-btn delete" title="删除" onclick="deleteImage('${categoryName}', '${image.name}')" onmousedown="event.stopPropagation();">
+                            <button class="thumbnail-action-btn delete" title="删除" onclick="event.stopPropagation(); deleteImage('${categoryName}', '${image.name}');">
                                 <i data-feather="trash-2" style="width: 10px; height: 10px;"></i>
                             </button>
                         </div>
@@ -1001,48 +1038,6 @@ function getCurrentCategoryOrder() {
         order.push(item.dataset.category);
     });
     return order.join(',');
-}
-
-function autoSetThumbnail() {
-    if (!currentEditingCategory) return;
-
-    fetch(`${controllerUrl}?ajax=auto_set_thumbnail`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category: currentEditingCategory })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
-            const editImg = document.getElementById('edit-thumbnail-img');
-            const previewDiv = document.getElementById('edit-thumbnail-preview');
-            const uploadDiv = document.getElementById('edit-thumbnail-upload');
-            
-            if (editImg && data.thumbnail_url) {
-                editImg.src = data.thumbnail_url;
-                editImg.style.display = 'block';
-                previewDiv.style.display = 'flex';
-                uploadDiv.style.display = 'none';
-            }
-            
-            // 更新左侧分组列表的缩略图
-            const categoryThumb = document.querySelector(`[data-category="${currentEditingCategory}"] .category-thumbnail`);
-            const categoryPlaceholder = document.querySelector(`[data-category="${currentEditingCategory}"] .category-thumbnail-placeholder`);
-            if (categoryThumb && data.thumbnail_url) {
-                categoryThumb.src = data.thumbnail_url;
-            } else if (categoryPlaceholder && data.thumbnail_url) {
-                categoryPlaceholder.outerHTML = `<img src="${data.thumbnail_url}" alt="缩略图" class="category-thumbnail">`;
-            }
-            
-            showToast('success', '已自动设置为第一张图片作为缩略图');
-        } else {
-            showToast('danger', data.message || '自动设置失败');
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        showToast('danger', '自动设置缩略图失败');
-    });
 }
 
 function setAsThumbnail(categoryName, imageName) {
