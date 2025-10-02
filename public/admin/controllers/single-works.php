@@ -621,10 +621,27 @@ function getCategoryThumbnailInfo($category, $dirPath)
     if (is_dir($dirPath)) {
         $images = glob($dirPath . '/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
         if (!empty($images)) {
+            // 按文件名排序，确保一致性
+            sort($images);
             $firstImage = basename($images[0]);
             $thumbPath = $dirPath . '/thumbs/' . $firstImage;
+            
+            // 如果缩略图不存在，尝试生成
+            if (!file_exists($thumbPath)) {
+                // 调用ThumbnailService生成缩略图
+                try {
+                    require_once __DIR__ . '/../../app/Services/ThumbnailService.php';
+                    ThumbnailService::generate($images[0], 'single-works');
+                } catch (Exception $e) {
+                    error_log('缩略图生成失败: ' . $e->getMessage());
+                }
+            }
+            
             if (file_exists($thumbPath)) {
                 $result['first_image_thumb'] = '/assets/images/single-works/' . $category . '/thumbs/' . $firstImage;
+            } else {
+                // 如果缩略图依然不存在，使用原图
+                $result['first_image_thumb'] = '/assets/images/single-works/' . $category . '/' . $firstImage;
             }
         }
     }

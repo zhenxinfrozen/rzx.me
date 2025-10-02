@@ -759,13 +759,10 @@ function saveCategory() {
     const displayName = document.getElementById('edit-display-name').value;
     const description = document.getElementById('edit-description').value;
 
-    // 发送保存请求到后端
-    const formData = new FormData();
-    formData.append('action', 'save_category');
-    formData.append('category', currentEditingCategory);
-    formData.append('displayName', displayName);
-    formData.append('description', description);
-    formData.append('category_order', getCurrentCategoryOrder());
+    // 添加确认对话框
+    if (!confirm('确定要保存对分组 "' + currentEditingCategory + '" 的修改吗？')) {
+        return;
+    }
 
     showToast('info', '正在保存...');
 
@@ -782,16 +779,9 @@ function saveCategory() {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            // 更新前端显示
-            const displayInput = document.querySelector(`input[name="display_names[${currentEditingCategory}]"]`);
-            const descriptionInput = document.querySelector(`input[name="descriptions[${currentEditingCategory}]"]`);
-
-            if (displayInput) displayInput.value = displayName;
-            if (descriptionInput) descriptionInput.value = description;
-
-            const nameEl = document.querySelector(`[data-category="${currentEditingCategory}"] .category-name`);
-            if (nameEl) nameEl.textContent = displayName || currentEditingCategory;
-
+            // 局部更新界面，不重新加载整个页面
+            updateCategoryDisplayInList(currentEditingCategory, displayName, description);
+            
             // 更新缩略图信息
             if (data.thumbnail_info) {
                 updateCategoryThumbnailInList(currentEditingCategory, 
@@ -799,9 +789,6 @@ function saveCategory() {
             }
 
             showToast('success', '分组信息已保存');
-            
-            // 刷新页面以显示最新的数据
-            setTimeout(() => window.location.reload(), 1000);
         } else {
             showToast('danger', data.message || '保存失败');
         }
@@ -1104,6 +1091,72 @@ function updateCategoryThumbnailInList(categoryName, thumbnailUrl) {
     } else if (categoryPlaceholder && thumbnailUrl) {
         categoryPlaceholder.outerHTML = `<img src="${thumbnailUrl}" alt="缩略图" class="category-thumbnail">`;
     }
+}
+
+/**
+ * 更新分组在列表中的显示信息
+ */
+function updateCategoryDisplayInList(categoryName, displayName, description) {
+    // 更新隐藏的input值
+    const displayInput = document.querySelector(`input[name="display_names[${categoryName}]"]`);
+    const descriptionInput = document.querySelector(`input[name="descriptions[${categoryName}]"]`);
+    
+    if (displayInput) displayInput.value = displayName;
+    if (descriptionInput) descriptionInput.value = description;
+    
+    // 更新显示的名称
+    const nameEl = document.querySelector(`[data-category="${categoryName}"] .category-name`);
+    if (nameEl) nameEl.textContent = displayName || categoryName;
+}
+
+/**
+ * 动态添加新分组到列表中
+ */
+function addNewCategoryToList(categoryName, displayName, description, thumbnailInfo) {
+    const categoryList = document.getElementById('categoryOrder');
+    const position = document.getElementById('new-category-position').value;
+    
+    // 创建新的分组元素
+    const newCategoryItem = document.createElement('li');
+    newCategoryItem.className = 'category-item';
+    newCategoryItem.setAttribute('data-category', categoryName);
+    newCategoryItem.setAttribute('draggable', 'true');
+    
+    // 确定缩略图显示
+    const thumbnailUrl = thumbnailInfo?.custom_thumbnail || thumbnailInfo?.first_image_thumb;
+    const thumbnailHtml = thumbnailUrl 
+        ? `<img src="${thumbnailUrl}" alt="缩略图" class="category-thumbnail">`
+        : `<div class="category-thumbnail-placeholder"><i data-feather="image"></i></div>`;
+    
+    newCategoryItem.innerHTML = `
+        <div class="category-row d-flex align-items-center p-3">
+            <span class="drag-handle" title="拖拽排序">⋮⋮</span>
+            ${thumbnailHtml}
+            <div class="category-content d-flex align-items-center flex-grow-1" onclick="editCategory('${categoryName}')">
+                <div class="flex-grow-1">
+                    <div class="fw-semibold category-name">${displayName || categoryName}</div>
+                    <small class="text-muted">0 张图片</small>
+                </div>
+                <span class="badge bg-secondary">${categoryList.children.length + 1}</span>
+            </div>
+        </div>
+        <input type="hidden" name="display_names[${categoryName}]" value="${displayName}" class="display-name-input">
+        <input type="hidden" name="descriptions[${categoryName}]" value="${description}" class="description-input">
+    `;
+    
+    // 根据位置插入
+    if (position === 'first') {
+        categoryList.insertBefore(newCategoryItem, categoryList.firstChild);
+    } else {
+        categoryList.appendChild(newCategoryItem);
+    }
+    
+    // 重新初始化拖拽和feather图标
+    initializeDragAndDrop();
+    feather.replace();
+    
+    // 更新分组顺序
+    updateCategoryOrder();
 }
 
 function updateImageOrder() {
@@ -1484,12 +1537,18 @@ function createNewCategory() {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            showToast('success', '分组创建成功，正在加载最新数据...');
+            showToast('success', '分组创建成功，正在更新列表...');
             
-            // 立即重新加载页面以显示新分组和缩略图
-            setTimeout(() => {
-                window.location.reload();
-            }, 800);
+            // 动态添加新分组到列表中，而不是刷新整个页面
+            addNewCategoryToList(data.category, displayName, description, data.thumbnail_info);
+            
+            // 清空表单
+            document.getElementById('new-category-name').value = '';
+            document.getElementById('new-display-name').value = '';
+            document.getElementById('new-description').value = '';
+            
+            // 关闭添加面板
+            cancelAddCategory();
         } else {
             showToast('danger', data.message || '创建失败');
         }
