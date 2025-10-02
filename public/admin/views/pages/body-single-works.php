@@ -539,30 +539,22 @@ $totalCategories = count($categoryData);
                                     <div class="d-flex align-items-center gap-3">
                                         <!-- 当前缩略图显示 -->
                                         <div id="edit-thumbnail-preview">
-                                            <img id="edit-thumbnail-img" style="width: 120px; height: 120px; border-radius: 8px; object-fit: cover; border: 2px solid #dee2e6;">
+                                            <img id="edit-thumbnail-img" style="width: 120px; height: 120px; border-radius: 8px; object-fit: cover; border: 2px solid #dee2e6; display: none;">
                                         </div>
-                                        <!-- 上传缩略图按钮 -->
-                                        <div class="thumbnail-upload-btn" onclick="selectThumbnailFile('edit')" title="上传/更换缩略图">
+                                        <!-- 上传/更换缩略图按钮 -->
+                                        <div class="thumbnail-upload-btn" id="edit-thumbnail-upload" onclick="selectThumbnailFile('edit')" title="上传/更换缩略图">
                                             <i data-feather="upload"></i>
                                             <span>上传/更换</span>
                                         </div>
-                                        <!-- 无缩略图时的上传区域 -->
-                                        <div class="thumbnail-upload-btn" id="edit-thumbnail-upload" onclick="selectThumbnailFile('edit')" style="display: none;">
-                                            <i data-feather="upload"></i>
-                                            <span>上传缩略图</span>
-                                        </div>
                                     </div>
                                     <div class="mt-2">
-                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeThumbnail('edit')">
+                                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeThumbnail('edit')" id="remove-thumbnail-btn" style="display: none;">
                                             <i data-feather="trash-2" class="me-1"></i>删除缩略图
                                         </button>
                                     </div>
                                 </div>
 
                                 <h6><i data-feather="image" class="me-1"></i>图片管理</h6>
-                                <div class="upload-area mb-3" id="edit-images-upload" onclick="selectImagesFile('edit')">
-                                    <i data-feather="plus" class="me-2"></i>添加更多图片
-                                </div>
                                 <div id="thumbnail-grid" class="thumbnail-container"></div>
                                 <div class="action-buttons d-flex gap-2">
                                     <button type="button" class="btn btn-primary btn-sm" onclick="saveCategory()">
@@ -870,28 +862,29 @@ function loadCategoryThumbnailImage(categoryName) {
     fetch(`${controllerUrl}?ajax=category_thumbnail&category=${encodeURIComponent(categoryName)}`)
         .then(res => res.json())
         .then(data => {
-            const previewDiv = document.getElementById('edit-thumbnail-preview');
-            const uploadDiv = document.getElementById('edit-thumbnail-upload');
             const img = document.getElementById('edit-thumbnail-img');
+            const uploadBtn = document.getElementById('edit-thumbnail-upload');
+            const removeBtn = document.getElementById('remove-thumbnail-btn');
             
             if (data.success && (data.thumbnail || data.first_image_thumb)) {
-                // 优先使用自定义缩略图，其次使用第一张图片的缩略图
+                // 有缩略图时显示图片，隐藏上传按钮
                 const thumbnailUrl = data.thumbnail || data.first_image_thumb;
                 img.src = thumbnailUrl;
                 img.style.display = 'block';
-                previewDiv.style.display = 'flex';
-                uploadDiv.style.display = 'none';
+                uploadBtn.querySelector('span').textContent = '更换缩略图';
+                removeBtn.style.display = data.thumbnail ? 'inline-block' : 'none'; // 只有自定义缩略图才显示删除按钮
             } else {
-                // 没有缩略图时隐藏预览，显示上传按钮
+                // 没有缩略图时隐藏图片，显示上传按钮
                 img.style.display = 'none';
-                previewDiv.style.display = 'none';
-                uploadDiv.style.display = 'flex';
+                uploadBtn.querySelector('span').textContent = '上传缩略图';
+                removeBtn.style.display = 'none';
             }
         })
         .catch(err => {
             console.error(err);
-            document.getElementById('edit-thumbnail-upload').style.display = 'flex';
-            document.getElementById('edit-thumbnail-preview').style.display = 'none';
+            document.getElementById('edit-thumbnail-img').style.display = 'none';
+            document.getElementById('edit-thumbnail-upload').querySelector('span').textContent = '上传缩略图';
+            document.getElementById('remove-thumbnail-btn').style.display = 'none';
         });
 }
 
@@ -1066,24 +1059,18 @@ function setAsThumbnail(categoryName, imageName) {
         if (data.success) {
             // 更新编辑区域的缩略图显示
             const editImg = document.getElementById('edit-thumbnail-img');
-            const previewDiv = document.getElementById('edit-thumbnail-preview');
-            const uploadDiv = document.getElementById('edit-thumbnail-upload');
+            const uploadBtn = document.getElementById('edit-thumbnail-upload');
+            const removeBtn = document.getElementById('remove-thumbnail-btn');
             
             if (editImg && data.thumbnail_url) {
                 editImg.src = data.thumbnail_url;
                 editImg.style.display = 'block';
-                previewDiv.style.display = 'flex';
-                uploadDiv.style.display = 'none';
+                uploadBtn.querySelector('span').textContent = '更换缩略图';
+                removeBtn.style.display = 'inline-block';
             }
             
             // 更新左侧分组列表的缩略图
-            const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
-            const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
-            if (categoryThumb && data.thumbnail_url) {
-                categoryThumb.src = data.thumbnail_url;
-            } else if (categoryPlaceholder && data.thumbnail_url) {
-                categoryPlaceholder.outerHTML = `<img src="${data.thumbnail_url}" alt="缩略图" class="category-thumbnail">`;
-            }
+            updateCategoryThumbnailInList(categoryName, data.thumbnail_url);
             
             // 重新加载图片网格以更新视觉标识
             loadCategoryThumbnails(categoryName);
@@ -1097,6 +1084,17 @@ function setAsThumbnail(categoryName, imageName) {
         console.error('设置缩略图失败:', err);
         showToast('danger', '设置缩略图失败');
     });
+}
+
+function updateCategoryThumbnailInList(categoryName, thumbnailUrl) {
+    const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
+    const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
+    
+    if (categoryThumb && thumbnailUrl) {
+        categoryThumb.src = thumbnailUrl;
+    } else if (categoryPlaceholder && thumbnailUrl) {
+        categoryPlaceholder.outerHTML = `<img src="${thumbnailUrl}" alt="缩略图" class="category-thumbnail">`;
+    }
 }
 
 function updateImageOrder() {
@@ -1288,20 +1286,20 @@ function removeThumbnail(context) {
             if (data.success) {
                 // 更新编辑区域显示
                 const editImg = document.getElementById('edit-thumbnail-img');
-                const previewDiv = document.getElementById('edit-thumbnail-preview');
-                const uploadDiv = document.getElementById('edit-thumbnail-upload');
+                const uploadBtn = document.getElementById('edit-thumbnail-upload');
+                const removeBtn = document.getElementById('remove-thumbnail-btn');
                 
                 if (data.new_thumbnail_url) {
                     // 有新的缩略图（第一张图片）
                     editImg.src = data.new_thumbnail_url;
                     editImg.style.display = 'block';
-                    previewDiv.style.display = 'flex';
-                    uploadDiv.style.display = 'none';
+                    uploadBtn.querySelector('span').textContent = '更换缩略图';
+                    removeBtn.style.display = 'inline-block';
                 } else {
                     // 完全没有图片
                     editImg.style.display = 'none';
-                    previewDiv.style.display = 'none';
-                    uploadDiv.style.display = 'flex';
+                    uploadBtn.querySelector('span').textContent = '上传缩略图';
+                    removeBtn.style.display = 'none';
                 }
                 
                 showToast('success', '缩略图已删除，已自动使用第一张图片');
