@@ -630,9 +630,14 @@ function getCategoryThumbnailInfo($category, $dirPath)
             if (!file_exists($thumbPath)) {
                 // 调用ThumbnailService生成缩略图
                 try {
-                    require_once __DIR__ . '/../../app/Services/ThumbnailService.php';
-                    ThumbnailService::generate($images[0], 'single-works');
-                } catch (Exception $e) {
+                    $thumbnailServicePath = __DIR__ . '/../../app/Services/ThumbnailService.php';
+                    if (file_exists($thumbnailServicePath)) {
+                        require_once $thumbnailServicePath;
+                        if (class_exists('ThumbnailService')) {
+                            ThumbnailService::generate($images[0], 'single-works');
+                        }
+                    }
+                } catch (Throwable $e) {
                     error_log('缩略图生成失败: ' . $e->getMessage());
                 }
             }

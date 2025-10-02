@@ -3,6 +3,12 @@ $page_title = $page_title ?? '🛠️ Single-Works 管理';
 $page_subtitle = $page_subtitle ?? '管理 Single-Works 页面分组与图片';
 $_GET['page'] = $_GET['page'] ?? 'single-works';
 
+// 如果控制器没有传入数据，则手动加载数据
+if (!isset($categoryData)) {
+    // 手动加载必要的依赖和数据
+    require_once __DIR__ . '/../../controllers/single-works-data.php';
+}
+
 $categoryData = $categoryData ?? [];
 $currentConfig = $currentConfig ?? [
     'sort_method' => 'custom_order',
