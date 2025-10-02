@@ -1100,7 +1100,7 @@ function updateImageOrder() {
         imageOrder.push(item.dataset.image);
     });
 
-    fetch(`${controllerUrl}?ajax=update_image_order`, {
+    fetch(`${controllerUrl}?ajax=reorder_images`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

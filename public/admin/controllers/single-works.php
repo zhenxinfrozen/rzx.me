@@ -42,12 +42,17 @@ foreach ($orderedCategories as $index => $category) {
         ? count(glob($dirPath . '/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE))
         : 0;
 
+    // 获取缩略图信息
+    $thumbnailInfo = getCategoryThumbnailInfo($category, $dirPath);
+
     $categoryData[] = [
         'id' => $category,
         'display_name' => $currentConfig['display_names'][$category] ?? $category,
         'description' => $currentConfig['descriptions'][$category] ?? '',
         'image_count' => $imageCount,
-        'position' => $index + 1
+        'position' => $index + 1,
+        'thumbnail' => $thumbnailInfo['custom_thumbnail'],
+        'first_image_thumb' => $thumbnailInfo['first_image_thumb']
     ];
 }
 
@@ -116,6 +121,26 @@ function handleSingleWorksAjax(string $action, string $configPath, string $image
 
         case 'php_config':
             outputPhpUploadConfig();
+            return;
+
+        case 'category_thumbnail':
+            outputCategoryThumbnail($imagesRoot);
+            return;
+
+        case 'set_thumbnail':
+            setAsThumbnail($imagesRoot, $configPath);
+            return;
+
+        case 'delete_thumbnail':
+            deleteThumbnail($imagesRoot, $configPath);
+            return;
+
+        case 'reorder_images':
+            reorderCategoryImages($imagesRoot);
+            return;
+
+        case 'delete_image':
+            deleteCategoryImage($imagesRoot, $trashRoot);
             return;
 
         default:
@@ -562,4 +587,258 @@ function respondJson(array $payload, int $status = 200): void
     http_response_code($status);
     header('Content-Type: application/json');
     echo json_encode($payload, JSON_UNESCAPED_UNICODE);
+}
+
+/**
+ * 获取分组的缩略图信息
+ */
+function getCategoryThumbnailInfo($category, $dirPath)
+{
+    $result = [
+        'custom_thumbnail' => null,
+        'first_image_thumb' => null
+    ];
+    
+    // 检查是否有自定义缩略图（在config中保存的）
+    $configPath = __DIR__ . '/../../app/Config/single_works_config.php';
+    if (file_exists($configPath)) {
+        $config = require $configPath;
+        if (isset($config['category_thumbnails'][$category])) {
+            $result['custom_thumbnail'] = $config['category_thumbnails'][$category];
+        }
+    }
+    
+    // 获取第一张图片的缩略图路径
+    if (is_dir($dirPath)) {
+        $images = glob($dirPath . '/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
+        if (!empty($images)) {
+            $firstImage = basename($images[0]);
+            $thumbPath = $dirPath . '/thumbs/' . $firstImage;
+            if (file_exists($thumbPath)) {
+                $result['first_image_thumb'] = '/assets/images/single-works/' . $category . '/thumbs/' . $firstImage;
+            }
+        }
+    }
+    
+    return $result;
+}
+
+/**
+ * 输出分组缩略图信息
+ */
+function outputCategoryThumbnail($imagesRoot)
+{
+    $category = $_GET['category'] ?? '';
+    if (!$category) {
+        respondJson(['success' => false, 'error' => '分组名称不能为空'], 400);
+        return;
+    }
+    
+    $dirPath = $imagesRoot . '/' . $category;
+    $thumbnailInfo = getCategoryThumbnailInfo($category, $dirPath);
+    
+    respondJson([
+        'success' => true,
+        'thumbnail' => $thumbnailInfo['custom_thumbnail'],
+        'first_image_thumb' => $thumbnailInfo['first_image_thumb']
+    ]);
+}
+
+/**
+ * 设置分组缩略图
+ */
+function setAsThumbnail($imagesRoot, $configPath)
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+    $category = $input['category'] ?? '';
+    $image = $input['image'] ?? '';
+    
+    if (!$category || !$image) {
+        respondJson(['success' => false, 'error' => '参数不完整'], 400);
+        return;
+    }
+    
+    // 保存到配置文件
+    $config = [];
+    $configFile = __DIR__ . '/../../app/Config/single_works_config.php';
+    if (file_exists($configFile)) {
+        $config = require $configFile;
+    }
+    
+    if (!isset($config['category_thumbnails'])) {
+        $config['category_thumbnails'] = [];
+    }
+    
+    $thumbnailUrl = '/assets/images/single-works/' . $category . '/thumbs/' . $image;
+    $config['category_thumbnails'][$category] = $thumbnailUrl;
+    
+    // 保存配置
+    $configContent = "<?php\nreturn " . var_export($config, true) . ";\n";
+    if (file_put_contents($configFile, $configContent)) {
+        respondJson([
+            'success' => true,
+            'thumbnail_url' => $thumbnailUrl
+        ]);
+    } else {
+        respondJson(['success' => false, 'error' => '保存配置失败'], 500);
+    }
+}
+
+/**
+ * 删除分组缩略图
+ */
+function deleteThumbnail($imagesRoot, $configPath)
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+    $category = $input['category'] ?? '';
+    
+    if (!$category) {
+        respondJson(['success' => false, 'error' => '分组名称不能为空'], 400);
+        return;
+    }
+    
+    // 从配置文件中删除
+    $configFile = __DIR__ . '/../../app/Config/single_works_config.php';
+    $config = [];
+    if (file_exists($configFile)) {
+        $config = require $configFile;
+    }
+    
+    if (isset($config['category_thumbnails'][$category])) {
+        unset($config['category_thumbnails'][$category]);
+    }
+    
+    // 保存配置
+    $configContent = "<?php\nreturn " . var_export($config, true) . ";\n";
+    file_put_contents($configFile, $configContent);
+    
+    // 获取第一张图片作为新的缩略图
+    $dirPath = $imagesRoot . '/' . $category;
+    $newThumbnailUrl = null;
+    if (is_dir($dirPath)) {
+        $images = glob($dirPath . '/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
+        if (!empty($images)) {
+            $firstImage = basename($images[0]);
+            $thumbPath = $dirPath . '/thumbs/' . $firstImage;
+            if (file_exists($thumbPath)) {
+                $newThumbnailUrl = '/assets/images/single-works/' . $category . '/thumbs/' . $firstImage;
+            }
+        }
+    }
+    
+    respondJson([
+        'success' => true,
+        'new_thumbnail_url' => $newThumbnailUrl
+    ]);
+}
+
+/**
+ * 重新排序分组图片
+ */
+function reorderCategoryImages($imagesRoot)
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+    $category = $input['category'] ?? '';
+    $order = $input['order'] ?? [];
+    
+    if (!$category || empty($order)) {
+        respondJson(['success' => false, 'error' => '参数不完整'], 400);
+        return;
+    }
+    
+    $dirPath = $imagesRoot . '/' . $category;
+    if (!is_dir($dirPath)) {
+        respondJson(['success' => false, 'error' => '分组不存在'], 404);
+        return;
+    }
+    
+    // 创建临时目录
+    $tempDir = $dirPath . '_temp_' . time();
+    if (!mkdir($tempDir)) {
+        respondJson(['success' => false, 'error' => '创建临时目录失败'], 500);
+        return;
+    }
+    
+    try {
+        // 按新顺序移动文件到临时目录
+        foreach ($order as $index => $filename) {
+            $oldPath = $dirPath . '/' . $filename;
+            $newFilename = sprintf('%03d_%s', $index + 1, $filename);
+            $newPath = $tempDir . '/' . $newFilename;
+            
+            if (file_exists($oldPath)) {
+                rename($oldPath, $newPath);
+                
+                // 同时移动缩略图
+                $oldThumbPath = $dirPath . '/thumbs/' . $filename;
+                $newThumbPath = $tempDir . '/thumbs/' . $newFilename;
+                if (file_exists($oldThumbPath)) {
+                    if (!is_dir($tempDir . '/thumbs')) {
+                        mkdir($tempDir . '/thumbs', 0755, true);
+                    }
+                    rename($oldThumbPath, $newThumbPath);
+                }
+            }
+        }
+        
+        // 删除原目录并重命名临时目录
+        if (is_dir($dirPath . '/thumbs')) {
+            rmdir($dirPath . '/thumbs');
+        }
+        rmdir($dirPath);
+        rename($tempDir, $dirPath);
+        
+        respondJson(['success' => true]);
+        
+    } catch (Exception $e) {
+        // 清理临时目录
+        if (is_dir($tempDir)) {
+            array_map('unlink', glob($tempDir . '/*'));
+            rmdir($tempDir);
+        }
+        respondJson(['success' => false, 'error' => '排序失败: ' . $e->getMessage()], 500);
+    }
+}
+
+/**
+ * 删除分组图片
+ */
+function deleteCategoryImage($imagesRoot, $trashRoot)
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+    $category = $input['category'] ?? '';
+    $image = $input['image'] ?? '';
+    
+    if (!$category || !$image) {
+        respondJson(['success' => false, 'error' => '参数不完整'], 400);
+        return;
+    }
+    
+    $imagePath = $imagesRoot . '/' . $category . '/' . $image;
+    $thumbPath = $imagesRoot . '/' . $category . '/thumbs/' . $image;
+    
+    if (!file_exists($imagePath)) {
+        respondJson(['success' => false, 'error' => '图片不存在'], 404);
+        return;
+    }
+    
+    // 移动到回收站
+    $trashCategoryDir = $trashRoot . '/' . $category;
+    if (!is_dir($trashCategoryDir)) {
+        mkdir($trashCategoryDir, 0755, true);
+    }
+    if (!is_dir($trashCategoryDir . '/thumbs')) {
+        mkdir($trashCategoryDir . '/thumbs', 0755, true);
+    }
+    
+    $success = rename($imagePath, $trashCategoryDir . '/' . $image);
+    if (file_exists($thumbPath)) {
+        rename($thumbPath, $trashCategoryDir . '/thumbs/' . $image);
+    }
+    
+    if ($success) {
+        respondJson(['success' => true]);
+    } else {
+        respondJson(['success' => false, 'error' => '删除失败'], 500);
+    }
 }
