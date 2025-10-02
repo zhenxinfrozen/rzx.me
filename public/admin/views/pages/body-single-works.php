@@ -573,15 +573,17 @@ $totalCategories = count($categoryData);
                                 <!-- 缩略图编辑 -->
                                 <div class="mb-3">
                                     <label class="form-label">缩略图</label>
-                                    <div class="thumbnail-edit-section text-center">
-                                        <!-- 当前缩略图显示 -->
-                                        <div class="thumbnail-preview mb-2" id="edit-thumbnail-preview">
-                                            <img id="edit-thumbnail-img" style="width: 120px; height: 120px; border-radius: 8px; object-fit: cover; border: 2px solid #28a745; display: none;">
-                                        </div>
-                                        <!-- 上传/更换缩略图按钮 -->
-                                        <div class="thumbnail-upload-btn mx-auto" id="edit-thumbnail-upload" onclick="selectThumbnailFile('edit')" title="上传/更换缩略图">
-                                            <i data-feather="upload"></i>
-                                            <span>上传缩略图</span>
+                                    <div class="thumbnail-edit-section">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <!-- 当前缩略图显示 -->
+                                            <div class="thumbnail-preview" id="edit-thumbnail-preview">
+                                                <img id="edit-thumbnail-img" style="width: 120px; height: 120px; border-radius: 8px; object-fit: cover; border: 2px solid #28a745; display: none;">
+                                            </div>
+                                            <!-- 上传/更换缩略图按钮 -->
+                                            <div class="thumbnail-upload-btn" id="edit-thumbnail-upload" onclick="selectThumbnailFile('edit')" title="上传/更换缩略图">
+                                                <i data-feather="upload"></i>
+                                                <span>上传缩略图</span>
+                                            </div>
                                         </div>
                                         <div class="mt-2">
                                             <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeThumbnail('edit')" id="remove-thumbnail-btn" style="display: none;">
@@ -856,9 +858,6 @@ function loadCategoryThumbnails(categoryName) {
                     div.innerHTML = `
                         <img src="${image.thumb_path}" alt="${image.name}" loading="lazy">
                         <div class="thumbnail-actions">
-                            <button class="thumbnail-action-btn set-thumb" title="设为缩略图" onclick="event.stopPropagation(); setAsThumbnail('${categoryName}', '${image.name}');">
-                                <i data-feather="star" style="width: 10px; height: 10px;"></i>
-                            </button>
                             <button class="thumbnail-action-btn move" title="移动" onmousedown="event.stopPropagation();">
                                 <i data-feather="move" style="width: 10px; height: 10px;"></i>
                             </button>

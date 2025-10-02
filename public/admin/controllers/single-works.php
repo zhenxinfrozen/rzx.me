@@ -752,50 +752,53 @@ function reorderCategoryImages($imagesRoot)
         return;
     }
     
-    // 创建临时目录
-    $tempDir = $dirPath . '_temp_' . time();
-    if (!mkdir($tempDir)) {
-        respondJson(['success' => false, 'error' => '创建临时目录失败'], 500);
-        return;
-    }
-    
     try {
-        // 按新顺序移动文件到临时目录
+        // 创建一个映射来存储新的文件顺序
+        $orderMap = [];
         foreach ($order as $index => $filename) {
-            $oldPath = $dirPath . '/' . $filename;
-            $newFilename = sprintf('%03d_%s', $index + 1, $filename);
-            $newPath = $tempDir . '/' . $newFilename;
+            $orderMap[$filename] = sprintf('%03d_%s', $index + 1, $filename);
+        }
+        
+        // 先重命名为临时名称（避免冲突）
+        $tempFiles = [];
+        foreach ($orderMap as $oldName => $newName) {
+            $oldPath = $dirPath . '/' . $oldName;
+            $tempName = 'temp_' . uniqid() . '_' . $oldName;
+            $tempPath = $dirPath . '/' . $tempName;
             
             if (file_exists($oldPath)) {
-                rename($oldPath, $newPath);
+                rename($oldPath, $tempPath);
+                $tempFiles[$tempName] = $newName;
                 
-                // 同时移动缩略图
-                $oldThumbPath = $dirPath . '/thumbs/' . $filename;
-                $newThumbPath = $tempDir . '/thumbs/' . $newFilename;
+                // 同时重命名缩略图
+                $oldThumbPath = $dirPath . '/thumbs/' . $oldName;
+                $tempThumbPath = $dirPath . '/thumbs/' . $tempName;
                 if (file_exists($oldThumbPath)) {
-                    if (!is_dir($tempDir . '/thumbs')) {
-                        mkdir($tempDir . '/thumbs', 0755, true);
-                    }
-                    rename($oldThumbPath, $newThumbPath);
+                    rename($oldThumbPath, $tempThumbPath);
                 }
             }
         }
         
-        // 删除原目录并重命名临时目录
-        if (is_dir($dirPath . '/thumbs')) {
-            rmdir($dirPath . '/thumbs');
+        // 再重命名为最终名称
+        foreach ($tempFiles as $tempName => $finalName) {
+            $tempPath = $dirPath . '/' . $tempName;
+            $finalPath = $dirPath . '/' . $finalName;
+            
+            if (file_exists($tempPath)) {
+                rename($tempPath, $finalPath);
+                
+                // 同时重命名缩略图
+                $tempThumbPath = $dirPath . '/thumbs/' . $tempName;
+                $finalThumbPath = $dirPath . '/thumbs/' . $finalName;
+                if (file_exists($tempThumbPath)) {
+                    rename($tempThumbPath, $finalThumbPath);
+                }
+            }
         }
-        rmdir($dirPath);
-        rename($tempDir, $dirPath);
         
         respondJson(['success' => true]);
         
     } catch (Exception $e) {
-        // 清理临时目录
-        if (is_dir($tempDir)) {
-            array_map('unlink', glob($tempDir . '/*'));
-            rmdir($tempDir);
-        }
         respondJson(['success' => false, 'error' => '排序失败: ' . $e->getMessage()], 500);
     }
 }
