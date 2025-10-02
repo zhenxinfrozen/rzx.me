@@ -143,6 +143,14 @@ function handleSingleWorksAjax(string $action, string $configPath, string $image
             deleteCategoryImage($imagesRoot, $trashRoot);
             return;
 
+        case 'save_category':
+            saveCategoryUpdate($configPath, $imagesRoot);
+            return;
+
+        case 'delete_category':
+            deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot);
+            return;
+
         default:
             respondJson(['success' => false, 'error' => '未知的操作'], 400);
             return;
@@ -428,6 +436,7 @@ function createCategory(string $configPath, string $imagesRoot): void
             'success' => true,
             'message' => '分组创建成功',
             'category' => $category,
+            'thumbnail_info' => getCategoryThumbnailInfo($category, $categoryDir)
         ]);
     } catch (Throwable $e) {
         respondJson([
@@ -843,5 +852,133 @@ function deleteCategoryImage($imagesRoot, $trashRoot)
         respondJson(['success' => true]);
     } else {
         respondJson(['success' => false, 'error' => '删除失败'], 500);
+    }
+}
+
+/**
+ * 保存分组更新
+ */
+function saveCategoryUpdate($configPath, $imagesRoot)
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (!$input) {
+        parse_str(file_get_contents('php://input'), $input);
+    }
+    
+    $category = $input['category'] ?? '';
+    $displayName = $input['displayName'] ?? '';
+    $description = $input['description'] ?? '';
+    $categoryOrder = $input['category_order'] ?? '';
+    
+    if (!$category) {
+        respondJson(['success' => false, 'error' => '分组名称不能为空'], 400);
+        return;
+    }
+    
+    try {
+        $config = loadSingleWorksConfig($configPath);
+        
+        // 更新显示名称和描述
+        if ($displayName) {
+            $config['display_names'][$category] = $displayName;
+        }
+        if ($description) {
+            $config['descriptions'][$category] = $description;
+        }
+        
+        // 更新分组顺序
+        if ($categoryOrder) {
+            $config['custom_order'] = explode(',', $categoryOrder);
+        }
+        
+        if (saveSingleWorksConfig($configPath, $config)) {
+            // 获取更新后的缩略图信息
+            $dirPath = $imagesRoot . '/' . $category;
+            $thumbnailInfo = getCategoryThumbnailInfo($category, $dirPath);
+            
+            respondJson([
+                'success' => true,
+                'message' => '分组信息已更新',
+                'thumbnail_info' => $thumbnailInfo
+            ]);
+        } else {
+            respondJson(['success' => false, 'error' => '保存配置失败'], 500);
+        }
+    } catch (Exception $e) {
+        respondJson(['success' => false, 'error' => '更新失败: ' . $e->getMessage()], 500);
+    }
+}
+
+/**
+ * 删除分组和文件
+ */
+function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+    $category = $input['category'] ?? '';
+    
+    if (!$category) {
+        respondJson(['success' => false, 'error' => '分组名称不能为空'], 400);
+        return;
+    }
+    
+    try {
+        $categoryDir = $imagesRoot . '/' . $category;
+        
+        if (!is_dir($categoryDir)) {
+            respondJson(['success' => false, 'error' => '分组不存在'], 404);
+            return;
+        }
+        
+        // 移动到回收站
+        if (!is_dir($trashRoot)) {
+            mkdir($trashRoot, 0755, true);
+        }
+        
+        $trashTarget = $trashRoot . '/' . $category . '_deleted_' . date('Y-m-d_H-i-s');
+        if (rename($categoryDir, $trashTarget)) {
+            // 从配置中删除
+            $config = loadSingleWorksConfig($configPath);
+            
+            // 从custom_order中删除
+            if (isset($config['custom_order'])) {
+                $config['custom_order'] = array_values(array_filter($config['custom_order'], function($item) use ($category) {
+                    return $item !== $category;
+                }));
+            }
+            
+            // 删除显示名称和描述
+            if (isset($config['display_names'][$category])) {
+                unset($config['display_names'][$category]);
+            }
+            if (isset($config['descriptions'][$category])) {
+                unset($config['descriptions'][$category]);
+            }
+            
+            // 删除缩略图配置
+            $thumbnailConfigFile = __DIR__ . '/../../app/Config/single_works_config.php';
+            if (file_exists($thumbnailConfigFile)) {
+                $thumbnailConfig = require $thumbnailConfigFile;
+                if (isset($thumbnailConfig['category_thumbnails'][$category])) {
+                    unset($thumbnailConfig['category_thumbnails'][$category]);
+                    $configContent = "<?php\nreturn " . var_export($thumbnailConfig, true) . ";\n";
+                    file_put_contents($thumbnailConfigFile, $configContent);
+                }
+            }
+            
+            if (saveSingleWorksConfig($configPath, $config)) {
+                respondJson([
+                    'success' => true,
+                    'message' => '分组已删除并移至回收站'
+                ]);
+            } else {
+                respondJson(['success' => false, 'error' => '删除成功但配置更新失败'], 500);
+            }
+        } else {
+            respondJson(['success' => false, 'error' => '无法移动分组到回收站'], 500);
+        }
+        
+    } catch (Exception $e) {
+        respondJson(['success' => false, 'error' => '删除失败: ' . $e->getMessage()], 500);
     }
 }

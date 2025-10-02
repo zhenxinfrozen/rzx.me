@@ -771,7 +771,13 @@ function saveCategory() {
 
     fetch(`${controllerUrl}?ajax=save_category`, {
         method: 'POST',
-        body: formData
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            category: currentEditingCategory,
+            displayName: displayName,
+            description: description,
+            category_order: getCurrentCategoryOrder()
+        })
     })
     .then(res => res.json())
     .then(data => {
@@ -786,7 +792,16 @@ function saveCategory() {
             const nameEl = document.querySelector(`[data-category="${currentEditingCategory}"] .category-name`);
             if (nameEl) nameEl.textContent = displayName || currentEditingCategory;
 
+            // 更新缩略图信息
+            if (data.thumbnail_info) {
+                updateCategoryThumbnailInList(currentEditingCategory, 
+                    data.thumbnail_info.custom_thumbnail || data.thumbnail_info.first_image_thumb);
+            }
+
             showToast('success', '分组信息已保存');
+            
+            // 刷新页面以显示最新的数据
+            setTimeout(() => window.location.reload(), 1000);
         } else {
             showToast('danger', data.message || '保存失败');
         }
@@ -1469,8 +1484,12 @@ function createNewCategory() {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            showToast('success', '分组创建成功，页面将刷新');
-            setTimeout(() => window.location.reload(), 1500);
+            showToast('success', '分组创建成功，正在加载最新数据...');
+            
+            // 立即重新加载页面以显示新分组和缩略图
+            setTimeout(() => {
+                window.location.reload();
+            }, 800);
         } else {
             showToast('danger', data.message || '创建失败');
         }
