@@ -1,7 +1,7 @@
 <?php
 /**
  * Single-Works 分组排序配置
- * 自动生成于: 2025-10-02 14:36:05
+ * 自动生成于: 2025-10-02 22:34:40
  */
 
 return array (
@@ -14,6 +14,9 @@ return array (
     3 => 'Special-Zone',
     4 => 'Ae-test',
     5 => '00-Archive',
+    6 => 'test-2025-10-3',
+    7 => 'test-fgdsfg333333',
+    8 => 'rrrrrr',
   ),
   'prefix_settings' => 
   array (
@@ -28,6 +31,9 @@ return array (
     'Special-Zone' => 'Special-Zone',
     'Ae-test' => 'Ae-test',
     '00-Archive' => '00-Archive',
+    'test-2025-10-3' => 'test-2025-10-3',
+    'test-fgdsfg333333' => '测试新分组3333',
+    'rrrrrr' => 'rrrrr',
   ),
   'descriptions' => 
   array (
@@ -37,5 +43,7 @@ return array (
     'Special-Zone' => '',
     'Ae-test' => '',
     '00-Archive' => '',
+    'test-fgdsfg333333' => 'asdfasd sadfsadf',
+    'rrrrrr' => 'rrrrr',
   ),
 );

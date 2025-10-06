@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Font Awesome 免费图标库预览 - RZX.ME</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body { font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background: #f8f9fa; }
+        .header { background: #fff; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .header h1 { color: #333; font-size: 28px; margin-bottom: 10px; }
+        .header p { color: #666; font-size: 16px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .usage-section { background: #fff; padding: 20px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .usage-section h2 { color: #333; margin-bottom: 15px; font-size: 20px; }
+        .code-block { background: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; padding: 15px; margin: 10px 0; font-family: 'Courier New', monospace; font-size: 14px; overflow-x: auto; }
+        .icons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .icon-item { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; text-align: center; transition: all 0.3s ease; cursor: pointer; }
+        .icon-item:hover { border-color: #007bff; box-shadow: 0 4px 12px rgba(0,123,255,0.15); transform: translateY(-2px); }
+        .icon-item.copied { border-color: #28a745; background-color: #f8fff9; }
+        .icon-display { font-size: 32px; color: #333; margin-bottom: 10px; height: 40px; display: flex; align-items: center; justify-content: center; }
+        .icon-name { font-weight: 600; color: #333; margin-bottom: 5px; font-size: 14px; }
+        .icon-code { font-family: 'Courier New', monospace; font-size: 12px; color: #666; background: #f8f9fa; padding: 4px 8px; border-radius: 4px; word-break: break-all; }
+        .search-box { width: 100%; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; margin-bottom: 20px; transition: border-color 0.3s ease; }
+        .search-box:focus { outline: none; border-color: #007bff; }
+        .stats { text-align: center; margin-bottom: 20px; color: #666; }
+        .toast { position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 12px 20px; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; transform: translateX(300px); transition: transform 0.3s ease; }
+        .toast.show { transform: translateX(0); }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🎨 Font Awesome 免费图标库预览</h1>
+            <p>Font Awesome 6 免费版（Solid/Regular/Brands）图标一览，点击可复制 HTML 代码</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="usage-section">
+            <h2>📖 使用说明</h2>
+            <p>在 HTML 中引入 Font Awesome CDN，然后用 <code>&lt;i class="fa-solid fa-xxx"&gt;&lt;/i&gt;</code> 或 <code>fa-regular</code>、<code>fa-brands</code> 使用：</p>
+            <div class="code-block">
+&lt;!-- 引入 Font Awesome CDN --&gt;
+&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"&gt;
+
+&lt;!-- 使用图标 --&gt;
+&lt;i class="fa-solid fa-user"&gt;&lt;/i&gt;
+&lt;i class="fa-regular fa-image"&gt;&lt;/i&gt;
+&lt;i class="fa-brands fa-github"&gt;&lt;/i&gt;
+            </div>
+        </div>
+        <input type="text" class="search-box" placeholder="🔍 搜索图标名称..." id="searchInput">
+        <div class="stats">
+            <span id="iconCount">加载中...</span> 个图标可用
+        </div>
+        <div class="icons-grid" id="iconsGrid">
+            <!-- 图标将在这里动态生成 -->
+        </div>
+    </div>
+    <div class="toast" id="toast">代码已复制到剪贴板！</div>
+    <script>
+    // Font Awesome 6 免费版常用图标（solid/regular/brands）部分示例
+    // 可根据需要扩展更多
+    const faIcons = [
+        // Solid
+        {name: 'fa-solid fa-user', label: 'user'},
+        {name: 'fa-solid fa-users', label: 'users'},
+        {name: 'fa-solid fa-home', label: 'home'},
+        {name: 'fa-solid fa-cog', label: 'cog'},
+        {name: 'fa-solid fa-gear', label: 'gear'},
+        {name: 'fa-solid fa-image', label: 'image'},
+        {name: 'fa-solid fa-images', label: 'images'},
+        {name: 'fa-solid fa-layer-group', label: 'layer-group'},
+        {name: 'fa-solid fa-book', label: 'book'},
+        {name: 'fa-solid fa-book-open', label: 'book-open'},
+        {name: 'fa-solid fa-folder', label: 'folder'},
+        {name: 'fa-solid fa-folder-open', label: 'folder-open'},
+        {name: 'fa-solid fa-database', label: 'database'},
+        {name: 'fa-solid fa-trash', label: 'trash'},
+        {name: 'fa-solid fa-info-circle', label: 'info-circle'},
+        {name: 'fa-solid fa-circle-info', label: 'circle-info'},
+        {name: 'fa-solid fa-plus', label: 'plus'},
+        {name: 'fa-solid fa-minus', label: 'minus'},
+        {name: 'fa-solid fa-edit', label: 'edit'},
+        {name: 'fa-solid fa-pen', label: 'pen'},
+        {name: 'fa-solid fa-pen-to-square', label: 'pen-to-square'},
+        {name: 'fa-solid fa-save', label: 'save'},
+        {name: 'fa-solid fa-download', label: 'download'},
+        {name: 'fa-solid fa-upload', label: 'upload'},
+        {name: 'fa-solid fa-search', label: 'search'},
+        {name: 'fa-solid fa-eye', label: 'eye'},
+        {name: 'fa-solid fa-eye-slash', label: 'eye-slash'},
+        {name: 'fa-solid fa-lock', label: 'lock'},
+        {name: 'fa-solid fa-unlock', label: 'unlock'},
+        {name: 'fa-solid fa-link', label: 'link'},
+        {name: 'fa-solid fa-external-link-alt', label: 'external-link-alt'},
+        {name: 'fa-solid fa-list', label: 'list'},
+        {name: 'fa-solid fa-bars', label: 'bars'},
+        {name: 'fa-solid fa-th', label: 'th'},
+        {name: 'fa-solid fa-th-large', label: 'th-large'},
+        {name: 'fa-solid fa-table', label: 'table'},
+        {name: 'fa-solid fa-calendar', label: 'calendar'},
+        {name: 'fa-solid fa-clock', label: 'clock'},
+        {name: 'fa-solid fa-bell', label: 'bell'},
+        {name: 'fa-solid fa-bell-slash', label: 'bell-slash'},
+        {name: 'fa-solid fa-star', label: 'star'},
+        {name: 'fa-solid fa-heart', label: 'heart'},
+        {name: 'fa-solid fa-comment', label: 'comment'},
+        {name: 'fa-solid fa-comments', label: 'comments'},
+        {name: 'fa-solid fa-envelope', label: 'envelope'},
+        {name: 'fa-solid fa-paper-plane', label: 'paper-plane'},
+        {name: 'fa-solid fa-phone', label: 'phone'},
+        {name: 'fa-solid fa-globe', label: 'globe'},
+        {name: 'fa-solid fa-map', label: 'map'},
+        {name: 'fa-solid fa-map-marker', label: 'map-marker'},
+        {name: 'fa-solid fa-map-marker-alt', label: 'map-marker-alt'},
+        {name: 'fa-solid fa-wrench', label: 'wrench'},
+        {name: 'fa-solid fa-toolbox', label: 'toolbox'},
+        {name: 'fa-solid fa-sliders-h', label: 'sliders-h'},
+        {name: 'fa-solid fa-bug', label: 'bug'},
+        {name: 'fa-solid fa-code', label: 'code'},
+        {name: 'fa-solid fa-terminal', label: 'terminal'},
+        {name: 'fa-solid fa-sync', label: 'sync'},
+        {name: 'fa-solid fa-redo', label: 'redo'},
+        {name: 'fa-solid fa-undo', label: 'undo'},
+        {name: 'fa-solid fa-arrow-up', label: 'arrow-up'},
+        {name: 'fa-solid fa-arrow-down', label: 'arrow-down'},
+        {name: 'fa-solid fa-arrow-left', label: 'arrow-left'},
+        {name: 'fa-solid fa-arrow-right', label: 'arrow-right'},
+        {name: 'fa-solid fa-chevron-up', label: 'chevron-up'},
+        {name: 'fa-solid fa-chevron-down', label: 'chevron-down'},
+        {name: 'fa-solid fa-chevron-left', label: 'chevron-left'},
+        {name: 'fa-solid fa-chevron-right', label: 'chevron-right'},
+        {name: 'fa-solid fa-question', label: 'question'},
+        {name: 'fa-solid fa-question-circle', label: 'question-circle'},
+        {name: 'fa-solid fa-exclamation', label: 'exclamation'},
+        {name: 'fa-solid fa-exclamation-circle', label: 'exclamation-circle'},
+        {name: 'fa-solid fa-info', label: 'info'},
+        {name: 'fa-solid fa-info-circle', label: 'info-circle'},
+        // Regular
+        {name: 'fa-regular fa-user', label: 'user (regular)'},
+        {name: 'fa-regular fa-image', label: 'image (regular)'},
+        {name: 'fa-regular fa-folder', label: 'folder (regular)'},
+        {name: 'fa-regular fa-file', label: 'file (regular)'},
+        {name: 'fa-regular fa-file-alt', label: 'file-alt (regular)'},
+        {name: 'fa-regular fa-file-image', label: 'file-image (regular)'},
+        {name: 'fa-regular fa-envelope', label: 'envelope (regular)'},
+        {name: 'fa-regular fa-calendar', label: 'calendar (regular)'},
+        {name: 'fa-regular fa-clock', label: 'clock (regular)'},
+        {name: 'fa-regular fa-comment', label: 'comment (regular)'},
+        {name: 'fa-regular fa-star', label: 'star (regular)'},
+        {name: 'fa-regular fa-heart', label: 'heart (regular)'},
+        // Brands
+        {name: 'fa-brands fa-github', label: 'github'},
+        {name: 'fa-brands fa-gitlab', label: 'gitlab'},
+        {name: 'fa-brands fa-bitbucket', label: 'bitbucket'},
+        {name: 'fa-brands fa-qq', label: 'qq'},
+        {name: 'fa-brands fa-weixin', label: 'weixin'},
+        {name: 'fa-brands fa-weibo', label: 'weibo'},
+        {name: 'fa-brands fa-zhihu', label: 'zhihu'},
+        {name: 'fa-brands fa-weebly', label: 'weebly'},
+        {name: 'fa-brands fa-telegram', label: 'telegram'},
+        {name: 'fa-brands fa-twitter', label: 'twitter'},
+        {name: 'fa-brands fa-facebook', label: 'facebook'},
+        {name: 'fa-brands fa-google', label: 'google'},
+        {name: 'fa-brands fa-android', label: 'android'},
+        {name: 'fa-brands fa-apple', label: 'apple'},
+        {name: 'fa-brands fa-windows', label: 'windows'},
+        {name: 'fa-brands fa-linux', label: 'linux'},
+        {name: 'fa-brands fa-chrome', label: 'chrome'},
+        {name: 'fa-brands fa-edge', label: 'edge'},
+        {name: 'fa-brands fa-firefox', label: 'firefox'},
+        {name: 'fa-brands fa-internet-explorer', label: 'internet-explorer'},
+        {name: 'fa-brands fa-php', label: 'php'},
+        {name: 'fa-brands fa-python', label: 'python'},
+        {name: 'fa-brands fa-js', label: 'js'},
+        {name: 'fa-brands fa-node', label: 'node'},
+        {name: 'fa-brands fa-vuejs', label: 'vuejs'},
+        {name: 'fa-brands fa-react', label: 'react'},
+        {name: 'fa-brands fa-angular', label: 'angular'},
+        {name: 'fa-brands fa-git', label: 'git'},
+        {name: 'fa-brands fa-docker', label: 'docker'}
+    ];
+    function generateIconsGrid(icons = faIcons) {
+        const grid = document.getElementById('iconsGrid');
+        grid.innerHTML = '';
+        icons.forEach(icon => {
+            const iconItem = document.createElement('div');
+            iconItem.className = 'icon-item';
+            iconItem.innerHTML = `
+                <div class="icon-display"><i class="${icon.name}"></i></div>
+                <div class="icon-name">${icon.label}</div>
+                <div class="icon-code">&lt;i class=\"${icon.name}\"&gt;&lt;/i&gt;</div>
+            `;
+            iconItem.addEventListener('click', () => copyIconCode(icon.name, iconItem));
+            grid.appendChild(iconItem);
+        });
+        document.getElementById('iconCount').textContent = icons.length;
+    }
+    function copyIconCode(className, element) {
+        const code = `<i class=\"${className}\"></i>`;
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(code).then(() => {
+                showToast();
+                highlightIcon(element);
+            });
+        } else {
+            const textArea = document.createElement('textarea');
+            textArea.value = code;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            showToast();
+            highlightIcon(element);
+        }
+    }
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => { toast.classList.remove('show'); }, 2000);
+    }
+    function highlightIcon(element) {
+        element.classList.add('copied');
+        setTimeout(() => { element.classList.remove('copied'); }, 2000);
+    }
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredIcons = faIcons.filter(icon =>
+            icon.name.toLowerCase().includes(searchTerm) ||
+            icon.label.toLowerCase().includes(searchTerm)
+        );
+        generateIconsGrid(filteredIcons);
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+        generateIconsGrid();
+    });
+    </script>
+</body>
+</html>

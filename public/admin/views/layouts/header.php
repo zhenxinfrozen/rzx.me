@@ -51,9 +51,7 @@ if (!isset($page_title)) {
         'site-config' => '网站配置',
         'cache-manager' => '缓存管理',
         'tools' => '管理工具',
-        'thumbnail-manager' => '缩略图管理器',
-        'thumbnail-config-manager' => '缩略图配置管理',
-        'thumbnail-config-demo' => '缩略图配置演示',
+    'thumbnail-center' => '缩略图中心',
         'system-info' => '系统信息'
     ];
     $page_title = $page_titles[$current_page] ?? '未知页面';
@@ -183,6 +181,10 @@ $current_user = [
             color: #0073aa;
             border: 1px solid #dbeafe;
         }
+        .fa-solid {
+            font-size: 24px;
+            color: #0073aa;
+        }
     </style>
 </head>
 <body class="admin-body">
@@ -214,7 +216,7 @@ $current_user = [
             
             <li class="menu-item <?= $current_page === 'comics' ? 'active' : '' ?>">
                 <a href="<?= $nav_base ?>comics.php">
-                    <i class="fa-regular fa-object-group"></i>
+                    <i data-feather="layers"></i>
                     <span>漫画管理</span>
                 </a>
             </li>            
@@ -262,10 +264,10 @@ $current_user = [
                 </a>
             </li>
             
-            <li class="menu-item <?= $current_page === 'thumbnail-config-manager' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>thumbnail-config-manager.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
-                    <i data-feather="sliders"></i>
-                    <span>缩略图配置</span>
+            <li class="menu-item <?= $current_page === 'thumbnail-center' ? 'active' : '' ?>">
+                <a href="<?= $nav_base ?>thumbnail-center.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
+                    <i data-feather="image"></i>
+                    <span>缩略图中心</span>
                 </a>
             </li>
             
@@ -273,6 +275,18 @@ $current_user = [
                 <a href="<?= $nav_base ?>system-info.php">
                     <i data-feather="info"></i>
                     <span>系统信息</span>
+                </a>
+            </li>
+            <li class="menu-item <?= $current_page === 'system-info' ? 'active' : '' ?>">
+                <a href="/dev/fontawesome-icons-preview.html">
+                    <i class="fa-solid fa-book"></i>
+                    <span>fontawesome</span>
+                </a>
+            </li>
+            <li class="menu-item <?= $current_page === 'system-info' ? 'active' : '' ?>">
+                <a href="/dev/feather-icons-preview.html">
+                    <i data-feather="printer"></i>
+                    <span>feather-icons</span>
                 </a>
             </li>
         </ul>

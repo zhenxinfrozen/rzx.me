@@ -17,11 +17,12 @@ $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
 $configPath = __DIR__ . '/../../../app/Config/single_works_sort.php';
 $imagesRoot = __DIR__ . '/../../assets/images/single-works';
 $trashRoot = __DIR__ . '/../../assets/images/trash';
+$imageOrderPath = __DIR__ . '/../../../app/Data/single_works_image_order.json';
 
 $galleryManager = new GalleryManager();
 
 if ($ajaxAction) {
-    handleSingleWorksAjax($ajaxAction, $configPath, $imagesRoot, $trashRoot);
+    handleSingleWorksAjax($ajaxAction, $configPath, $imagesRoot, $trashRoot, $imageOrderPath);
     exit;
 }
 
@@ -104,11 +105,11 @@ function handleSingleWorksFormSubmission(string $configPath, string $imagesRoot,
 /**
  * 处理 AJAX 请求
  */
-function handleSingleWorksAjax(string $action, string $configPath, string $imagesRoot, string $trashRoot): void
+function handleSingleWorksAjax(string $action, string $configPath, string $imagesRoot, string $trashRoot, string $imageOrderPath): void
 {
     switch ($action) {
         case 'thumbnails':
-            outputThumbnails($imagesRoot);
+            outputThumbnails($imagesRoot, $imageOrderPath);
             return;
 
         case 'upload_images':
@@ -136,11 +137,11 @@ function handleSingleWorksAjax(string $action, string $configPath, string $image
             return;
 
         case 'reorder_images':
-            reorderCategoryImages($imagesRoot);
+            reorderCategoryImages($imagesRoot, $imageOrderPath);
             return;
 
         case 'delete_image':
-            deleteCategoryImage($imagesRoot, $trashRoot);
+            deleteCategoryImage($imagesRoot, $trashRoot, $imageOrderPath);
             return;
 
         case 'save_category':
@@ -225,7 +226,7 @@ function moveCategoryToTrash(string $category, string $imagesRoot, string $trash
     }
 }
 
-function outputThumbnails(string $imagesRoot): void
+function outputThumbnails(string $imagesRoot, string $imageOrderPath): void
 {
     header('Content-Type: application/json');
 
@@ -244,7 +245,7 @@ function outputThumbnails(string $imagesRoot): void
         }
 
         $supported = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        $images = [];
+        $allImageFiles = [];
         $files = scandir($categoryDir);
 
         foreach ($files as $file) {
@@ -257,6 +258,14 @@ function outputThumbnails(string $imagesRoot): void
                 continue;
             }
 
+            $allImageFiles[] = $file;
+        }
+
+        // 使用新的排序逻辑获取有序的图片列表
+        $orderedFiles = getCategoryImageOrder($category, $imageOrderPath, $allImageFiles);
+        
+        $images = [];
+        foreach ($orderedFiles as $file) {
             $filePath = $categoryDir . '/' . $file;
             $thumbPath = $thumbDir . '/' . $file;
             $thumbUrl = file_exists($thumbPath)
@@ -272,13 +281,19 @@ function outputThumbnails(string $imagesRoot): void
             ];
         }
 
-        usort($images, static fn($a, $b) => $b['modified'] <=> $a['modified']);
+        // 获取当前缩略图信息
+        $thumbnailInfo = getCategoryThumbnailInfo($category, $categoryDir);
+        $currentThumbnail = null;
+        if ($thumbnailInfo['custom_thumbnail']) {
+            $currentThumbnail = basename($thumbnailInfo['custom_thumbnail']);
+        }
 
         respondJson([
             'success' => true,
             'category' => $category,
             'images' => $images,
             'count' => count($images),
+            'current_thumbnail' => $currentThumbnail,
         ]);
     } catch (Throwable $e) {
         respondJson([
@@ -390,13 +405,10 @@ function createCategory(string $configPath, string $imagesRoot): void
     header('Content-Type: application/json');
 
     try {
-        $input = file_get_contents('php://input');
-        $payload = json_decode($input, true) ?? $_POST;
-
-        $category = $payload['category'] ?? '';
-        $displayName = $payload['displayName'] ?? $category;
-        $description = $payload['description'] ?? '';
-        $position = $payload['position'] ?? 'last';
+        $category = $_POST['category'] ?? '';
+        $displayName = $_POST['displayName'] ?? $category;
+        $description = $_POST['description'] ?? '';
+        $position = $_POST['position'] ?? 'last';
 
         if (!preg_match('/^[a-zA-Z0-9_-]+$/', $category)) {
             throw new InvalidArgumentException('分组名称只能包含字母、数字、下划线和连字符');
@@ -414,6 +426,47 @@ function createCategory(string $configPath, string $imagesRoot): void
         }
         if (!mkdir($thumbDir, 0755, true)) {
             throw new RuntimeException('创建缩略图目录失败');
+        }
+
+        // 处理图片上传
+        $uploadedFiles = [];
+        if (!empty($_FILES['images']) && is_array($_FILES['images']['name'])) {
+            for ($i = 0; $i < count($_FILES['images']['name']); $i++) {
+                if ($_FILES['images']['error'][$i] === UPLOAD_ERR_OK) {
+                    $tmpName = $_FILES['images']['tmp_name'][$i];
+                    $originalName = $_FILES['images']['name'][$i];
+                    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+                    
+                    // 验证文件类型
+                    if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                        continue; // 跳过不支持的文件类型
+                    }
+                    
+                    // 生成安全的文件名
+                    $safeFileName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
+                    $fileName = $safeFileName . '.' . $extension;
+                    
+                    // 确保文件名唯一
+                    $counter = 1;
+                    $finalFileName = $fileName;
+                    while (file_exists($categoryDir . '/' . $finalFileName)) {
+                        $finalFileName = $safeFileName . '_' . $counter . '.' . $extension;
+                        $counter++;
+                    }
+                    
+                    $targetPath = $categoryDir . '/' . $finalFileName;
+                    if (move_uploaded_file($tmpName, $targetPath)) {
+                        $uploadedFiles[] = $finalFileName;
+                        
+                        // 生成缩略图
+                        $imageInfo = getimagesize($targetPath);
+                        if ($imageInfo && !generateThumbnail($targetPath, $thumbDir . '/' . $finalFileName, 200, 200, $imageInfo[2])) {
+                            // 缩略图生成失败，但不影响主流程
+                            error_log("Failed to generate thumbnail for: " . $finalFileName);
+                        }
+                    }
+                }
+            }
         }
 
         $config = loadSingleWorksConfig($configPath);
@@ -434,8 +487,9 @@ function createCategory(string $configPath, string $imagesRoot): void
 
         respondJson([
             'success' => true,
-            'message' => '分组创建成功',
+            'message' => '分组创建成功' . (!empty($uploadedFiles) ? '，已上传 ' . count($uploadedFiles) . ' 张图片' : ''),
             'category' => $category,
+            'uploaded_files' => $uploadedFiles,
             'thumbnail_info' => getCategoryThumbnailInfo($category, $categoryDir)
         ]);
     } catch (Throwable $e) {
@@ -764,9 +818,9 @@ function deleteThumbnail($imagesRoot, $configPath)
 }
 
 /**
- * 重新排序分组图片
+ * 重新排序分组图片 - 基于数据记录的优雅排序
  */
-function reorderCategoryImages($imagesRoot)
+function reorderCategoryImages($imagesRoot, $imageOrderPath)
 {
     $input = json_decode(file_get_contents('php://input'), true);
     $category = $input['category'] ?? '';
@@ -784,50 +838,22 @@ function reorderCategoryImages($imagesRoot)
     }
     
     try {
-        // 创建一个映射来存储新的文件顺序
-        $orderMap = [];
-        foreach ($order as $index => $filename) {
-            $orderMap[$filename] = sprintf('%03d_%s', $index + 1, $filename);
-        }
+        // 读取或创建图片排序配置
+        $orderConfig = loadImageOrderConfig($imageOrderPath);
         
-        // 先重命名为临时名称（避免冲突）
-        $tempFiles = [];
-        foreach ($orderMap as $oldName => $newName) {
-            $oldPath = $dirPath . '/' . $oldName;
-            $tempName = 'temp_' . uniqid() . '_' . $oldName;
-            $tempPath = $dirPath . '/' . $tempName;
-            
-            if (file_exists($oldPath)) {
-                rename($oldPath, $tempPath);
-                $tempFiles[$tempName] = $newName;
-                
-                // 同时重命名缩略图
-                $oldThumbPath = $dirPath . '/thumbs/' . $oldName;
-                $tempThumbPath = $dirPath . '/thumbs/' . $tempName;
-                if (file_exists($oldThumbPath)) {
-                    rename($oldThumbPath, $tempThumbPath);
-                }
+        // 验证所有文件都存在
+        foreach ($order as $filename) {
+            if (!file_exists($dirPath . '/' . $filename)) {
+                respondJson(['success' => false, 'error' => "文件不存在: {$filename}"], 404);
+                return;
             }
         }
         
-        // 再重命名为最终名称
-        foreach ($tempFiles as $tempName => $finalName) {
-            $tempPath = $dirPath . '/' . $tempName;
-            $finalPath = $dirPath . '/' . $finalName;
-            
-            if (file_exists($tempPath)) {
-                rename($tempPath, $finalPath);
-                
-                // 同时重命名缩略图
-                $tempThumbPath = $dirPath . '/thumbs/' . $tempName;
-                $finalThumbPath = $dirPath . '/thumbs/' . $finalName;
-                if (file_exists($tempThumbPath)) {
-                    rename($tempThumbPath, $finalThumbPath);
-                }
-            }
-        }
+        // 保存新的排序
+        $orderConfig['categories'][$category] = $order;
+        saveImageOrderConfig($imageOrderPath, $orderConfig);
         
-        respondJson(['success' => true]);
+        respondJson(['success' => true, 'message' => '排序保存成功']);
         
     } catch (Exception $e) {
         respondJson(['success' => false, 'error' => '排序失败: ' . $e->getMessage()], 500);
@@ -837,7 +863,7 @@ function reorderCategoryImages($imagesRoot)
 /**
  * 删除分组图片
  */
-function deleteCategoryImage($imagesRoot, $trashRoot)
+function deleteCategoryImage($imagesRoot, $trashRoot, $imageOrderPath)
 {
     $input = json_decode(file_get_contents('php://input'), true);
     $category = $input['category'] ?? '';
@@ -871,6 +897,18 @@ function deleteCategoryImage($imagesRoot, $trashRoot)
     }
     
     if ($success) {
+        // 从排序配置中移除已删除的图片
+        $orderConfig = loadImageOrderConfig($imageOrderPath);
+        if (isset($orderConfig['categories'][$category])) {
+            $orderConfig['categories'][$category] = array_values(
+                array_filter(
+                    $orderConfig['categories'][$category],
+                    fn($filename) => $filename !== $image
+                )
+            );
+            saveImageOrderConfig($imageOrderPath, $orderConfig);
+        }
+        
         respondJson(['success' => true]);
     } else {
         respondJson(['success' => false, 'error' => '删除失败'], 500);
@@ -1003,4 +1041,82 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
     } catch (Exception $e) {
         respondJson(['success' => false, 'error' => '删除失败: ' . $e->getMessage()], 500);
     }
+}
+
+/**
+ * 加载图片排序配置
+ */
+function loadImageOrderConfig(string $imageOrderPath): array
+{
+    if (!file_exists($imageOrderPath)) {
+        return [
+            '_comment' => 'Single-Works 图片排序配置文件',
+            '_generated' => date('c'),
+            'categories' => []
+        ];
+    }
+    
+    $content = file_get_contents($imageOrderPath);
+    $config = json_decode($content, true);
+    
+    if (!is_array($config)) {
+        return [
+            '_comment' => 'Single-Works 图片排序配置文件',
+            '_generated' => date('c'),
+            'categories' => []
+        ];
+    }
+    
+    return $config;
+}
+
+/**
+ * 保存图片排序配置
+ */
+function saveImageOrderConfig(string $imageOrderPath, array $config): bool
+{
+    $config['_generated'] = date('c');
+    
+    $dir = dirname($imageOrderPath);
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
+    }
+    
+    $content = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    return file_put_contents($imageOrderPath, $content) !== false;
+}
+
+/**
+ * 获取分组图片的排序列表
+ */
+function getCategoryImageOrder(string $category, string $imageOrderPath, array $allImages): array
+{
+    $orderConfig = loadImageOrderConfig($imageOrderPath);
+    $savedOrder = $orderConfig['categories'][$category] ?? [];
+    
+    if (empty($savedOrder)) {
+        // 如果没有保存的排序，按文件名自然排序
+        sort($allImages, SORT_NATURAL | SORT_FLAG_CASE);
+        return $allImages;
+    }
+    
+    // 合并保存的排序和新文件
+    $orderedImages = [];
+    $remainingImages = $allImages;
+    
+    // 首先添加已排序的文件（如果它们仍然存在）
+    foreach ($savedOrder as $filename) {
+        if (in_array($filename, $allImages)) {
+            $orderedImages[] = $filename;
+            $remainingImages = array_diff($remainingImages, [$filename]);
+        }
+    }
+    
+    // 然后添加新的文件（按自然排序）
+    if (!empty($remainingImages)) {
+        sort($remainingImages, SORT_NATURAL | SORT_FLAG_CASE);
+        $orderedImages = array_merge($orderedImages, $remainingImages);
+    }
+    
+    return $orderedImages;
 }

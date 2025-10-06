@@ -22,7 +22,7 @@ $totalCategories = count($categoryData);
 ?>
 
 <style>
-.category-list { max-height: 500px; overflow-y: auto; padding: 10px; }
+.category-list { max-height: 70vh; overflow-y: auto; padding: 10px; }
 .category-item { 
     margin-bottom: 10px; 
     transition: all 0.3s ease;
@@ -524,33 +524,19 @@ $totalCategories = count($categoryData);
                                     <label class="form-label">描述信息</label>
                                     <textarea id="new-description" class="form-control" rows="2" placeholder="可选的描述信息"></textarea>
                                 </div>
-                                
-                                <!-- 新增：缩略图上传 -->
+
+                                <!-- 图片管理 -->
                                 <div class="mb-3">
-                                    <label class="form-label">缩略图</label>
-                                    <div class="upload-area" id="new-thumbnail-upload" onclick="selectThumbnailFile('new')">
-                                        <i data-feather="upload" class="mb-2" style="width: 32px; height: 32px;"></i>
-                                        <p class="mb-0">点击选择缩略图</p>
-                                        <small class="text-muted">支持 JPG、PNG、WebP 格式</small>
+                                    <label class="form-label">图片管理</label>
+                                    <div id="new-images-preview" class="thumbnail-grid-container" style="min-height: 150px;">
+                                        <div class="add-image-btn" onclick="selectImagesFile('new')" title="上传图片">
+                                            +
+                                        </div>
                                     </div>
-                                    <div id="new-thumbnail-preview" style="display: none;">
-                                        <img id="new-thumbnail-img" style="max-width: 200px; max-height: 150px; border-radius: 8px;">
-                                        <button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeThumbnail('new')">
-                                            <i data-feather="x"></i>
-                                        </button>
-                                    </div>
+                                    <small class="text-muted">可选择多张图片，支持 JPG、PNG、WebP 格式</small>
                                 </div>
 
-                            <!-- 图片管理 -->
-                            <div class="mb-3">
-                                <label class="form-label">图片管理</label>
-                                <div id="new-images-preview" class="thumbnail-container" style="min-height: 100px;">
-                                    <div class="add-image-btn" onclick="selectImagesFile('new')" title="选择图片">
-                                        +
-                                    </div>
-                                </div>
-                                <small class="text-muted">可选择多张图片</small>
-                            </div>                                <div class="d-flex gap-2">
+                                <div class="d-flex gap-2">
                                     <button type="button" class="btn btn-success btn-sm" onclick="createNewCategory()">
                                         <i data-feather="plus" class="me-1"></i>创建分组
                                     </button>
@@ -728,6 +714,23 @@ function cancelAddCategory() {
     document.getElementById('edit-icon').setAttribute('data-feather', 'edit-3');
     document.getElementById('edit-title').textContent = '编辑分组';
     document.getElementById('edit-status').textContent = '选择左侧分组进行编辑';
+    
+    // 清空表单
+    document.getElementById('new-category-name').value = '';
+    document.getElementById('new-display-name').value = '';
+    document.getElementById('new-description').value = '';
+    
+    // 清空图片预览
+    const previewContainer = document.getElementById('new-images-preview');
+    previewContainer.innerHTML = `
+        <div class="add-image-btn" onclick="selectImagesFile('new')" title="上传图片">
+            +
+        </div>
+    `;
+    
+    // 清空文件输入
+    document.getElementById('imagesFileInput').value = '';
+    
     feather.replace();
 }
 
@@ -1269,7 +1272,7 @@ function handleImagesUpload(event) {
                     addBtn = document.createElement('div');
                     addBtn.className = 'add-image-btn';
                     addBtn.innerHTML = '+';
-                    addBtn.title = '选择更多图片';
+                    addBtn.title = '上传图片';
                     addBtn.onclick = () => selectImagesFile('new');
                     previewContainer.appendChild(addBtn);
                 }
@@ -1517,7 +1520,6 @@ function createNewCategory() {
         return;
     }
 
-    const thumbnailFile = document.getElementById('thumbnailFileInput').files[0];
     const imageFiles = document.getElementById('imagesFileInput').files;
 
     const formData = new FormData();
@@ -1525,10 +1527,6 @@ function createNewCategory() {
     formData.append('displayName', displayName);
     formData.append('description', description);
     formData.append('position', position);
-    
-    if (thumbnailFile) {
-        formData.append('thumbnail', thumbnailFile);
-    }
     
     if (imageFiles.length > 0) {
         Array.from(imageFiles).forEach(file => formData.append('images[]', file));
@@ -1552,6 +1550,17 @@ function createNewCategory() {
             document.getElementById('new-category-name').value = '';
             document.getElementById('new-display-name').value = '';
             document.getElementById('new-description').value = '';
+            
+            // 清空图片预览
+            const previewContainer = document.getElementById('new-images-preview');
+            previewContainer.innerHTML = `
+                <div class="add-image-btn" onclick="selectImagesFile('new')" title="上传图片">
+                    +
+                </div>
+            `;
+            
+            // 清空文件输入
+            document.getElementById('imagesFileInput').value = '';
             
             // 关闭添加面板
             cancelAddCategory();

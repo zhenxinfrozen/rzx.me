@@ -26,6 +26,60 @@ $messageType = $messageType ?? '';
 <!-- 引入独立的 comic manager 样式 -->
 <link rel="stylesheet" href="/assets/css/comic-manager.css">
 
+<!-- Single-Works 风格的拖拽动效样式 -->
+<style>
+.category-item.dragging {
+    opacity: 0.8;
+    transform: scale(1.02) rotate(2deg);
+    z-index: 1000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
+    transition: all 0.3s ease;
+}
+.category-item.drag-over {
+    border-top: 3px solid #007bff;
+    margin-top: 15px;
+}
+.drag-handle { 
+    color: #6c757d; 
+    cursor: grab; 
+    user-select: none; 
+    font-size: 18px;
+    padding: 5px;
+    margin-right: 5px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+.drag-handle:hover {
+    background: rgba(0,123,255,0.1);
+    color: #007bff;
+}
+.drag-handle:active, .drag-handle.grabbing { 
+    cursor: grabbing; 
+    background: rgba(0,123,255,0.2);
+}
+.category-row {
+    transition: all 0.2s ease;
+}
+.category-item:hover .category-row {
+    background: rgba(0,123,255,0.05);
+}
+
+/* 缩略图拖拽样式 */
+.thumbnail-sortable {
+    transition: all 0.3s ease;
+    cursor: move;
+}
+.thumbnail-sortable.dragging {
+    opacity: 0.5;
+    transform: scale(1.05) rotate(3deg);
+    z-index: 1000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4) !important;
+}
+.thumbnail-item {
+    position: relative;
+}
+</style>
+
 <div class="container-fluid mt-4 admin-page-content">
     <!-- 顶部排序卡片已移除，排序 ID 已集成到编辑分组面板 -->
     <div class="row g-3">
@@ -43,7 +97,7 @@ $messageType = $messageType ?? '';
                     <ul class="category-list list-unstyled mb-0" id="sideItems">
                         <?php $i = 0; foreach ($comics as $id => $c): $i++; ?>
                         <?php $imageCount = isset($c['images']) ? count($c['images']) : 0; ?>
-                        <li class="category-item" data-id="<?= htmlspecialchars($id) ?>">
+                        <li class="category-item" data-id="<?= htmlspecialchars($id) ?>" draggable="true">
                             <div class="category-row d-flex align-items-center p-3">
                                 <span class="drag-handle" title="拖拽排序">⋮⋮</span>
                                 <?php $thumb = isset($c['icon_default']) && $c['icon_default'] ? $c['icon_default'] : '/assets/images/comic/thumbs/placeholder.png'; ?>
@@ -311,25 +365,60 @@ function deleteComic(id) {
 </script>
 
 <script>
-// 初始化 Sortable for side list (绑定到服务器渲染的 #sideItems)
+// 初始化拖拽排序 - 使用single-works风格的丰富动效
 document.addEventListener('DOMContentLoaded', function() {
-    const sideItems = document.getElementById('sideItems');
-    function initSideSortable() {
-        if (typeof Sortable !== 'undefined') {
-            Sortable.create(sideItems, {
-                handle: '.drag-handle',
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-                onEnd: function() { saveSidebarOrder(); }
+    initializeDragAndDrop();
+
+    function initializeDragAndDrop() {
+        const sideItems = document.getElementById('sideItems');
+        let draggedItem = null;
+
+        document.querySelectorAll('#sideItems .category-item').forEach(item => {
+            item.addEventListener('dragstart', function(e) {
+                draggedItem = this;
+                this.classList.add('dragging');
+                const handle = this.querySelector('.drag-handle');
+                if (handle) handle.classList.add('grabbing');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', '');
             });
-        } else {
-            const s = document.createElement('script');
-            s.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js';
-            s.onload = initSideSortable;
-            document.head.appendChild(s);
-        }
+
+            item.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                const handle = this.querySelector('.drag-handle');
+                if (handle) handle.classList.remove('grabbing');
+                document.querySelectorAll('#sideItems .category-item').forEach(el => el.classList.remove('drag-over'));
+                draggedItem = null;
+                saveSidebarOrder();
+            });
+
+            item.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                if (!draggedItem || draggedItem === this) return;
+                const rect = this.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                document.querySelectorAll('#sideItems .category-item').forEach(el => el.classList.remove('drag-over'));
+                if (e.clientY < midY) {
+                    sideItems.insertBefore(draggedItem, this);
+                } else {
+                    sideItems.insertBefore(draggedItem, this.nextSibling);
+                }
+                this.classList.add('drag-over');
+            });
+
+            item.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+
+            item.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+            });
+        });
     }
-    initSideSortable();
+
+    // 重新初始化拖拽的函数（在加载新数据后调用）
+    window.reinitializeDragAndDrop = initializeDragAndDrop;
 
     function saveSidebarOrder() {
         const ids = [...document.querySelectorAll('#sideItems .category-item')].map(el=>el.dataset.id);
@@ -471,23 +560,44 @@ function renderThumbnails(id) {
         });
     }
 
-    // 初始化 Sortable for thumbnail grid（销毁旧实例后重建）
+    // 初始化原生拖拽排序 - Single-Works 风格
     function initThumbnailSortable() {
-        try {
-            if (grid._sortable) { grid._sortable.destroy(); grid._sortable = null; }
-        } catch (e) { /* ignore */ }
-        if (typeof Sortable !== 'undefined') {
-            grid._sortable = Sortable.create(grid, {
-                animation: 150,
-                ghostClass: 'sortable-ghost',
-                onEnd: function(){ saveThumbnailOrder(id); }
+        const thumbnails = grid.querySelectorAll('.thumbnail-item');
+        let draggedThumbnail = null;
+
+        thumbnails.forEach(thumbnail => {
+            thumbnail.draggable = true;
+            thumbnail.classList.add('thumbnail-sortable');
+
+            thumbnail.addEventListener('dragstart', function(e) {
+                draggedThumbnail = this;
+                this.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/html', '');
             });
-        } else {
-            const s = document.createElement('script');
-            s.src = 'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js';
-            s.onload = initThumbnailSortable;
-            document.head.appendChild(s);
-        }
+
+            thumbnail.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                draggedThumbnail = null;
+                saveThumbnailOrder(id);
+            });
+
+            thumbnail.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                if (!draggedThumbnail || draggedThumbnail === this) return;
+                const rect = this.getBoundingClientRect();
+                const midX = rect.left + rect.width / 2;
+                if (e.clientX < midX) {
+                    grid.insertBefore(draggedThumbnail, this);
+                } else {
+                    grid.insertBefore(draggedThumbnail, this.nextSibling);
+                }
+            });
+
+            thumbnail.addEventListener('drop', function(e) {
+                e.preventDefault();
+            });
+        });
     }
 
     initThumbnailSortable();
