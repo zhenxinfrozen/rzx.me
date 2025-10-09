@@ -100,8 +100,28 @@ class ImageProcessor {
      * @param bool $crop 是否裁剪
      * @return array 新的尺寸 [width, height]
      */
-    public static function calculateDimensions($originalWidth, $originalHeight, $maxWidth, $maxHeight, $crop = false) {
+    public static function calculateDimensions($originalWidth, $originalHeight, $maxWidth, $maxHeight, $crop = false, array $options = []) {
         $ratio = $originalWidth / $originalHeight;
+        $mode = $options['mode'] ?? 'fit';
+
+        if (!$crop && $mode === 'min_edge') {
+            $targetMin = (int)($options['min_edge'] ?? min($maxWidth, $maxHeight));
+            if ($targetMin <= 0) {
+                $targetMin = min($maxWidth, $maxHeight);
+            }
+
+            $originalMin = min($originalWidth, $originalHeight);
+            // 若原图较小则不放大
+            if ($originalMin <= $targetMin) {
+                return [$originalWidth, $originalHeight];
+            }
+
+            $scale = $targetMin / $originalMin;
+            return [
+                (int) round($originalWidth * $scale),
+                (int) round($originalHeight * $scale)
+            ];
+        }
         
         if ($crop) {
             // 裁剪模式：填满目标尺寸

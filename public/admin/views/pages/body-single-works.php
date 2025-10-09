@@ -699,9 +699,20 @@ function showAddCategoryPanel() {
     document.getElementById('new-description').value = '';
     
     // 重置缩略图和图片预览
-    document.getElementById('new-thumbnail-preview').style.display = 'none';
-    document.getElementById('new-images-preview').style.display = 'none';
-    document.getElementById('new-images-preview').innerHTML = '';
+    const newThumbPreview = document.getElementById('new-thumbnail-preview');
+    if (newThumbPreview) {
+        newThumbPreview.style.display = 'none';
+    }
+
+    const newImagesPreview = document.getElementById('new-images-preview');
+    if (newImagesPreview) {
+        newImagesPreview.style.display = 'flex';
+        newImagesPreview.innerHTML = `
+            <div class="add-image-btn" onclick="selectImagesFile('new')" title="上传图片">
+                +
+            </div>
+        `;
+    }
 
     const icon = document.getElementById('edit-icon');
     icon.setAttribute('data-feather', 'plus');
@@ -722,11 +733,14 @@ function cancelAddCategory() {
     
     // 清空图片预览
     const previewContainer = document.getElementById('new-images-preview');
-    previewContainer.innerHTML = `
-        <div class="add-image-btn" onclick="selectImagesFile('new')" title="上传图片">
-            +
-        </div>
-    `;
+    if (previewContainer) {
+        previewContainer.style.display = 'flex';
+        previewContainer.innerHTML = `
+            <div class="add-image-btn" onclick="selectImagesFile('new')" title="上传图片">
+                +
+            </div>
+        `;
+    }
     
     // 清空文件输入
     document.getElementById('imagesFileInput').value = '';
@@ -1262,7 +1276,12 @@ function handleImagesUpload(event) {
     } else if (currentFileInputContext === 'new') {
         // 新建模式预览
         const previewContainer = document.getElementById('new-images-preview');
-        
+        if (!previewContainer) {
+            return;
+        }
+
+        previewContainer.style.display = 'flex';
+
         files.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = function(e) {
@@ -1398,8 +1417,14 @@ function removeThumbnail(context) {
             showToast('danger', '删除缩略图失败');
         });
     } else if (context === 'new') {
-        document.getElementById('new-thumbnail-preview').style.display = 'none';
-        document.getElementById('new-thumbnail-upload').style.display = 'block';
+        const newThumbPreview = document.getElementById('new-thumbnail-preview');
+        const newThumbUpload = document.getElementById('new-thumbnail-upload');
+        if (newThumbPreview) {
+            newThumbPreview.style.display = 'none';
+        }
+        if (newThumbUpload) {
+            newThumbUpload.style.display = 'block';
+        }
     }
 }
 
@@ -1517,6 +1542,10 @@ function createNewCategory() {
     const existing = Array.from(document.querySelectorAll('.category-item')).map(item => item.dataset.category);
     if (existing.includes(categoryName)) {
         showToast('danger', '分组名称已存在');
+        return;
+    }
+
+    if (!confirm(`确定要创建分组 "${displayName || categoryName}" 吗？`)) {
         return;
     }
 

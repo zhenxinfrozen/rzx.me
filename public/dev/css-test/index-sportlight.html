@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CSS Test - Ray Comic Showbox</title>
+    <style>
+      html,body{height:100%;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f3f3f3}
+      
+
+      /* 外层包装器保持不变，它是正确的 */
+      #ray-anim-wapper{
+        display: flex;
+        justify-content: center; /* 水平居中 */
+      }
+/* 在父容器上定义变量 */
+#ray-anim-showbox {
+  display: inline-flex;
+  margin: 400px 0;
+  position: relative;
+  gap: 10px; /* 使用 gap 属性来控制间距 */
+  
+  /* --- 新增：定义变量 --- */
+  --item-width: 200px; /* 子元素的宽度 */
+  --gap: 10px;        /* 子元素之间的间距 */
+}
+
+/* 统一 anim-item 和 overlay 的尺寸与盒模型 */
+#ray-anim-showbox .anim-item,
+#overlay {
+  box-sizing: border-box; 
+  width: var(--item-width); /* 使用变量 */
+  height: 363px;
+  border: #444 solid 2px;
+}
+
+#ray-anim-showbox .anim-item {
+  background: #fff;
+  overflow: hidden;
+  flex: 0 0 auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  position: relative;
+}
+
+/* ... 您的 .anim-item img 样式 ... */
+
+
+/* --- 蒙版区域 --- */
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-color: transparent; /* 关键：用透明边框来匹配尺寸 */
+  background-color: transparent;
+  opacity: 0;
+  transform: translate3d(0, 0, 0); 
+  transition: opacity 0.4s ease,
+              transform 0.2s cubic-bezier(0.65, 0, 0.35, 1) 0s;
+  pointer-events: none;
+  z-index: 2;
+  --spot-x: 50%;
+  --spot-y: 50%;
+  --spot-size: 160px;
+  --spot-softness: 140px;
+  --overlay-color: rgba(26, 35, 126, 0.5);
+  --overlay-blur: 18px;
+  --spot-center-opacity: 0.4;
+  --spot-middle-opacity: 0.8;
+  --spot-edge-opacity: 0.98;
+}
+
+#overlay::before,
+#overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+#overlay::before {
+  background: var(--overlay-color);
+  mix-blend-mode: multiply;
+  transition: background 0.3s ease;
+}
+
+#overlay::after {
+  background: transparent;
+  -webkit-backdrop-filter: blur(var(--overlay-blur));
+  backdrop-filter: blur(var(--overlay-blur));
+  -webkit-mask-image: radial-gradient(circle at var(--spot-x) var(--spot-y),
+    rgba(0,0,0,var(--spot-center-opacity)) calc(var(--spot-size) * 0.25),
+    rgba(0,0,0,var(--spot-middle-opacity)) calc(var(--spot-size) * 0.6),
+    rgba(0,0,0,var(--spot-edge-opacity)) calc(var(--spot-size) + var(--spot-softness))
+  );
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-image: radial-gradient(circle at var(--spot-x) var(--spot-y),
+    rgba(0,0,0,var(--spot-center-opacity)) calc(var(--spot-size) * 0.25),
+    rgba(0,0,0,var(--spot-middle-opacity)) calc(var(--spot-size) * 0.6),
+    rgba(0,0,0,var(--spot-edge-opacity)) calc(var(--spot-size) + var(--spot-softness))
+  );
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+}
+
+/* 移除旧的 hover 规则，因为它会导致延迟冲突 */
+/* .anim-item:hover ~ #overlay { ... } */
+
+/* 使用新的、精确计算的 hover 规则 */
+#anim-1:hover ~ #overlay,
+#anim-2:hover ~ #overlay,
+#anim-3:hover ~ #overlay,
+#anim-4:hover ~ #overlay {
+    opacity: 0.85;
+}
+
+#anim-1:hover ~ #overlay {
+  --overlay-color: rgba(255, 0, 242, 0.3);
+  transform: translate3d(0, 0, 0);
+}
+#anim-2:hover ~ #overlay {
+  --overlay-color: rgba(0, 166, 255, 0.3);
+  transform: translate3d(calc(1 * (var(--item-width) + var(--gap))), 0, 0);
+}
+#anim-3:hover ~ #overlay {
+  --overlay-color: rgba(0, 255, 0, 0.3);
+  transform: translate3d(calc(2 * (var(--item-width) + var(--gap))), 0, 0);
+}
+#anim-4:hover ~ #overlay {
+  --overlay-color: rgba(255, 153, 0, 0.3);
+  transform: translate3d(calc(3 * (var(--item-width) + var(--gap))), 0, 0);
+}
+      /* --- END: Overlay and Hover Effect CSS --- */
+
+
+      /* Responsive tweaks */
+      @media (max-width:1200px){
+        #ray-anim-showbox{width:calc(100% - 40px);gap:0}
+        #ray-anim-showbox .anim-item, #overlay {
+            width:22%;
+            height:560px
+        }
+      }
+      @media (max-width:700px){
+        #ray-anim-showbox{flex-wrap:wrap;gap:0}
+        #ray-anim-showbox .anim-item, #overlay {
+            width:48%;
+            height:320px
+        }
+
+        #anim-2:hover ~ #overlay {
+          transform: translate3d(100%, 0, 0);
+        }
+        #anim-3:hover ~ #overlay {
+          transform: translate3d(0%, 100%, 0);
+        }
+        #anim-4:hover ~ #overlay {
+          transform: translate3d(100%, 100%, 0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="ray-anim-wapper">
+      <div id="ray-anim-showbox" aria-label="Ray Comic Showbox">
+        <div class="anim-item" id="anim-1">
+          <img src="../../assets/images/anim-001.png" alt="comic 1">
+        </div>
+        <div class="anim-item" id="anim-2">
+          <img src="../../assets/images/anim-002.png" alt="comic 2">
+        </div>
+        <div class="anim-item" id="anim-3">
+          <img src="../../assets/images/anim-003.png" alt="comic 3">
+        </div>
+        <div class="anim-item" id="anim-4">
+          <img src="../../assets/images/anim-004.png" alt="comic 4">
+        </div>
+        
+        <div id="overlay"></div>
+      </div>
+    </div>
+    <script>
+      (() => {
+        const showbox = document.getElementById('ray-anim-showbox');
+        const overlay = document.getElementById('overlay');
+        if (!showbox || !overlay) return;
+
+        const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
+        const updateSpot = (event) => {
+          const rect = overlay.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) {
+            return;
+          }
+          const offsetX = clamp(event.clientX - rect.left, 0, rect.width);
+          const offsetY = clamp(event.clientY - rect.top, 0, rect.height);
+          overlay.style.setProperty('--spot-x', `${offsetX}px`);
+          overlay.style.setProperty('--spot-y', `${offsetY}px`);
+        };
+
+        showbox.addEventListener('mousemove', updateSpot);
+        showbox.addEventListener('mouseenter', updateSpot);
+        showbox.addEventListener('mouseleave', () => {
+          overlay.style.setProperty('--spot-x', '50%');
+          overlay.style.setProperty('--spot-y', '50%');
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -51,15 +51,29 @@ class ThumbnailService {
             'directory' => 'thumbs',
             'builtin' => true
         ],
-        'sketch' => [
-            'name' => 'Sketch页面',
+        'sketchbook-thumb' => [
+            'name' => 'Sketchbook缩略图',
             'width' => 150,
             'height' => 150,
-            'quality' => 75,
-            'format' => 'jpg',
-            'crop' => true,
-            'suffix' => '_sketch',
-            'directory' => 'sketch-thumbs',
+            'quality' => 85,
+            'format' => 'webp',
+            'crop' => false,
+            'mode' => 'fit',
+            'suffix' => '',
+            'directory' => 'thumbs',
+            'builtin' => true
+        ],
+        // 向后兼容旧的ID，行为与新的 sketchbook-thumb 保持一致
+        'sketch' => [
+            'name' => 'Sketch（兼容）',
+            'width' => 150,
+            'height' => 150,
+            'quality' => 85,
+            'format' => 'webp',
+            'crop' => false,
+            'mode' => 'fit',
+            'suffix' => '',
+            'directory' => 'thumbs',
             'builtin' => true
         ]
     ];
@@ -189,6 +203,8 @@ class ThumbnailService {
             'quality' => (int)($config['quality'] ?? 80),
             'format' => strtolower($config['format'] ?? 'jpg'),
             'crop' => (bool)($config['crop'] ?? false),
+            'mode' => $config['mode'] ?? 'fit',
+            'min_edge' => $config['min_edge'] ?? null,
             // ThumbnailGenerator 仍然会在文件名上使用 suffix，我们这里传递，便于其行为一致
             'suffix' => $config['suffix'] ?? '_thumb',
         ];
@@ -309,7 +325,9 @@ class ThumbnailService {
             'height' => 200,
             'quality' => 80,
             'format' => 'jpg',
-            'crop' => false
+            'crop' => false,
+            'mode' => 'fit',
+            'min_edge' => null,
         ];
         
         $config = array_merge($defaultConfig, $config);
@@ -352,7 +370,11 @@ class ThumbnailService {
                 $imageInfo['height'], 
                 $config['width'], 
                 $config['height'], 
-                $config['crop']
+                $config['crop'],
+                [
+                    'mode' => $config['mode'] ?? 'fit',
+                    'min_edge' => $config['min_edge'] ?? null,
+                ]
             );
             
             // 裁剪模式需要使用目标尺寸创建画布

@@ -32,15 +32,16 @@ class ThumbnailConfig {
                 'directory' => 'works-thumbs'
             ],
             
-            // Sketch页面 - 小尺寸裁剪
-            'sketch' => [
+            // Sketch 页面 - 统一使用新的非裁剪缩略图
+            'sketchbook-thumb' => [
                 'width' => 150,
                 'height' => 150,
-                'quality' => 75,
-                'format' => 'jpg',
-                'crop' => true,  // 使用裁剪保持正方形
-                'suffix' => '_sketch',
-                'directory' => 'sketch-thumbs'
+                'quality' => 85,
+                'format' => 'webp',
+                'crop' => false,
+                'mode' => 'fit',
+                'suffix' => '',
+                'directory' => 'thumbs'
             ],
             
             // 图标用途 - 最小尺寸
@@ -109,7 +110,22 @@ class ThumbnailConfig {
         $configs = self::getCustomConfigs();
         
         foreach ($configs as $pageType => $config) {
-            ThumbnailService::setPageConfig($pageType, $config);
+            try {
+                $existing = ThumbnailService::getConfig($pageType);
+
+                // 内置配置不允许直接覆盖
+                if ($existing && ($existing['builtin'] ?? false)) {
+                    continue;
+                }
+
+                if ($existing) {
+                    ThumbnailService::updateCustomConfig($pageType, $config);
+                } else {
+                    ThumbnailService::addCustomConfig($pageType, $config);
+                }
+            } catch (Throwable $e) {
+                error_log('ThumbnailConfig::applyCustomConfigs error: ' . $e->getMessage());
+            }
         }
     }
     
@@ -147,7 +163,7 @@ class ThumbnailConfig {
 
 // 1. 基本使用 - 页面预设配置
 ThumbnailService::generateForPage($imagePath, 'gallery');
-ThumbnailService::generateForPage($imagePath, 'sketch');
+ThumbnailService::generateForPage($imagePath, 'sketchbook-thumb');
 
 // 2. 自定义配置
 $customConfig = [

@@ -1,234 +1,170 @@
+<?php
+require_once __DIR__ . '/../../Utils/GalleryManager.php';
+require_once __DIR__ . '/../../Services/ThumbnailService.php';
+
+/**
+ * 根据后台配置对速写本目录进行排序
+ */
+function reorderSketchbookAlbums(array $albumNames): array {
+    $configPath = __DIR__ . '/../../Config/sketchbook_sort.php';
+    if (!file_exists($configPath)) {
+        natcasesort($albumNames);
+        return array_values($albumNames);
+    }
+
+    $config = include $configPath;
+    $method = $config['sort_method'] ?? 'alphabetical';
+    $customOrder = $config['custom_order'] ?? [];
+
+    switch ($method) {
+        case 'custom_order':
+            $ordered = [];
+            foreach ($customOrder as $name) {
+                if (in_array($name, $albumNames, true)) {
+                    $ordered[] = $name;
+                }
+            }
+            foreach ($albumNames as $name) {
+                if (!in_array($name, $ordered, true)) {
+                    $ordered[] = $name;
+                }
+            }
+            return $ordered;
+
+        case 'date_modified':
+            $basePath = __DIR__ . '/../../../public/assets/images/sketchbook/';
+            usort($albumNames, function ($a, $b) use ($basePath) {
+                $pathA = $basePath . $a;
+                $pathB = $basePath . $b;
+                $timeA = is_dir($pathA) ? filemtime($pathA) : 0;
+                $timeB = is_dir($pathB) ? filemtime($pathB) : 0;
+                return $timeB <=> $timeA;
+            });
+            return $albumNames;
+
+        case 'prefix_sort':
+            $settings = $config['prefix_settings'] ?? ['remove_prefix' => false, 'separator' => '-'];
+            $separator = $settings['separator'] ?? '-';
+            usort($albumNames, function ($a, $b) use ($separator) {
+                $pa = explode($separator, $a, 2);
+                $pb = explode($separator, $b, 2);
+                $prefixA = $pa[0];
+                $prefixB = $pb[0];
+                if ($prefixA === $prefixB) {
+                    return strcmp($a, $b);
+                }
+                return strcmp($prefixA, $prefixB);
+            });
+            return $albumNames;
+
+        case 'alphabetical':
+        default:
+            natcasesort($albumNames);
+            return array_values($albumNames);
+    }
+}
+
+/**
+ * 根据后台记录的排序调整图片顺序
+ */
+function reorderSketchbookImages(string $albumName, array $images): array {
+    $orderFile = __DIR__ . '/../../Data/sketchbook_image_order.json';
+    if (!file_exists($orderFile)) {
+        return $images;
+    }
+
+    $orders = json_decode(file_get_contents($orderFile), true);
+    if (!is_array($orders) || empty($orders[$albumName]) || !is_array($orders[$albumName])) {
+        return $images;
+    }
+
+    $order = array_values(array_filter($orders[$albumName], 'is_string'));
+    if (empty($order)) {
+        return $images;
+    }
+
+    $position = array_flip($order);
+    usort($images, function ($a, $b) use ($position) {
+        $nameA = $a['name'] ?? ($a['filename'] ?? null);
+        $nameB = $b['name'] ?? ($b['filename'] ?? null);
+        $indexA = $nameA !== null && isset($position[$nameA]) ? $position[$nameA] : PHP_INT_MAX;
+        $indexB = $nameB !== null && isset($position[$nameB]) ? $position[$nameB] : PHP_INT_MAX;
+        if ($indexA === $indexB) {
+            return strcmp((string)$nameA, (string)$nameB);
+        }
+        return $indexA <=> $indexB;
+    });
+
+    return $images;
+}
+
+$sketchDir = 'sketchbook';
+$galleryManager = new GalleryManager();
+$albumNames = $galleryManager->getGalleryCategories($sketchDir);
+$albumNames = reorderSketchbookAlbums($albumNames);
+
+$albumsData = [];
+foreach ($albumNames as $albumName) {
+    $albumPath = __DIR__ . '/../../../public/assets/images/' . $sketchDir . '/' . $albumName;
+    if (!is_dir($albumPath)) {
+        continue;
+    }
+
+    // 确保生成标准缩略图（保存在 thumbs 目录）
+    ThumbnailService::generateBatchForPage($albumPath, 'sketchbook-thumb');
+
+    $images = $galleryManager->getCategoryImages($sketchDir, $albumName);
+    $images = reorderSketchbookImages($albumName, $images);
+    if (empty($images)) {
+        continue;
+    }
+
+    $formattedImages = [];
+    foreach ($images as $image) {
+        $thumbUrl = $image['thumb_url'] ?? '';
+        $thumbPath = $thumbUrl ? __DIR__ . '/../../../public' . $thumbUrl : '';
+        if (!$thumbUrl || !file_exists($thumbPath)) {
+            $thumbUrl = $image['url'];
+        }
+
+        $formattedImages[] = [
+            'full_url' => $image['url'],
+            'thumb_url' => $thumbUrl,
+            'filename' => $image['name'],
+            'label' => pathinfo($image['name'], PATHINFO_FILENAME) ?: $image['name']
+        ];
+    }
+
+    $albumsData[] = [
+        'name' => $albumName,
+        'images' => $formattedImages
+    ];
+}
+?>
+
 <div id="pp_gallery" class="pp_gallery">
     <div id="pp_loading" class="pp_loading"></div>
     <div id="pp_next" class="pp_next"></div>
     <div id="pp_prev" class="pp_prev"></div>
     <div id="pp_thumbContainer">
-        <div class="album">
-            <div class="content">
-                <img src="/assets/images/album1/thumbs/1.jpg" alt="/assets/images/album1/1.jpg" />
-                <span>PLANT</span>
+        <?php if (empty($albumsData)): ?>
+            <div class="album empty-album">
+                <div class="descr">暂无素描册内容</div>
             </div>
-            <div class="content">
-                <img src="/assets/images/album1/thumbs/2.jpg" alt="/assets/images/album1/2.jpg" />
-                <span>PLANT</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album1/thumbs/3.jpg" alt="/assets/images/album1/3.jpg" />
-                <span>PLANT</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album1/thumbs/4.jpg" alt="/assets/images/album1/4.jpg" />
-                <span>PLANT</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album1/thumbs/5.jpg" alt="/assets/images/album1/5.jpg" />
-                <span>PLANT</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album1/thumbs/6.jpg" alt="/assets/images/album1/6.jpg" />
-                <span>PLANT</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album1/thumbs/7.jpg" alt="/assets/images/album1/7.jpg" />
-                <span>PLANT</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album1/thumbs/8.jpg" alt="/assets/images/album1/8.jpg" />
-                <span>PLANT</span>
-            </div>
-            <div class="descr">NATURE</div>
-        </div>
-        <div class="album">
-            <div class="content">
-                <img src="/assets/images/album2/thumbs/1.jpg" alt="/assets/images/album2/1.jpg" />
-                <span>JUST A CRAB</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album2/thumbs/2.jpg" alt="/assets/images/album2/2.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album2/thumbs/3.jpg" alt="/assets/images/album2/3.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album2/thumbs/4.jpg" alt="/assets/images/album2/4.jpg" />
-                <span>PARK SCENE</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album2/thumbs/5.jpg" alt="/assets/images/album2/5.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album2/thumbs/6.jpg" alt="/assets/images/album2/6.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album2/thumbs/7.jpg" alt="/assets/images/album2/7.jpg" />
-                <span>SAW SEVEN</span>
-            </div>
-            <div class="descr">FASHION</div>
-        </div>
-        <div class="album">
-            <div class="content">
-                <img src="/assets/images/album3/thumbs/1.jpg" alt="/assets/images/album3/1.jpg" />
-                <span>FIGHT CLUB</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album3/thumbs/2.jpg" alt="/assets/images/album3/2.jpg" />
-                <span>SOLDIER</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album3/thumbs/3.jpg" alt="/assets/images/album3/3.jpg" />
-                <span>OH MY LEFT HAND!</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album3/thumbs/4.jpg" alt="/assets/images/album3/4.jpg" />
-                <span>FLU ?</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album3/thumbs/5.jpg" alt="/assets/images/album3/5.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album3/thumbs/6.jpg" alt="/assets/images/album3/6.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album3/thumbs/7.jpg" alt="/assets/images/album3/7.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album3/thumbs/8.jpg" alt="/assets/images/album3/8.jpg" />
-                <span>CHOPPER</span>
-            </div>
-            <div class="descr">MAYBE A STORY</div>
-        </div>
-        <div class="album">
-            <div class="content">
-                <img src="/assets/images/album4/thumbs/1.jpg" alt="/assets/images/album4/1.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album4/thumbs/2.jpg" alt="/assets/images/album4/2.jpg" />
-                <span>SOLDIER</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album4/thumbs/3.jpg" alt="/assets/images/album4/3.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album4/thumbs/4.jpg" alt="/assets/images/album4/4.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album4/thumbs/5.jpg" alt="/assets/images/album4/5.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album4/thumbs/6.jpg" alt="/assets/images/album4/6.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album4/thumbs/7.jpg" alt="/assets/images/album4/7.jpg" />
-                <span>KING AND PHOENIX</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album4/thumbs/8.jpg" alt="/assets/images/album4/8.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="descr">THIS MY WORLD</div>
-        </div>
-        <div class="album">
-            <div class="content">
-                <img src="/assets/images/album5/thumbs/1.jpg" alt="/assets/images/album5/1.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album5/thumbs/2.jpg" alt="/assets/images/album5/2.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album5/thumbs/3.jpg" alt="/assets/images/album5/3.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album5/thumbs/4.jpg" alt="/assets/images/album5/4.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album5/thumbs/5.jpg" alt="/assets/images/album5/5.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album5/thumbs/6.jpg" alt="/assets/images/album5/6.jpg" />
-                <span>CHOPPER</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album5/thumbs/7.jpg" alt="/assets/images/album5/7.jpg" />
-                <span>CHOPPER</span>
-            </div>
-            <div class="descr">Continuity</div>
-        </div>
-        <div class="album">
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/1.jpg" alt="/assets/images/album6/1.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/2.jpg" alt="/assets/images/album6/2.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/3.jpg" alt="/assets/images/album6/3.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/4.jpg" alt="/assets/images/album6/4.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/5.jpg" alt="/assets/images/album6/5.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/6.jpg" alt="/assets/images/album6/6.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/7.jpg" alt="/assets/images/album6/7.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/8.jpg" alt="/assets/images/album6/8.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/9.jpg" alt="/assets/images/album6/9.jpg" />
-                <span>LIU CHI</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/10.jpg" alt="/assets/images/album6/10.jpg" />
-                <span>LIU CHI</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/11.jpg" alt="/assets/images/album6/11.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/12.jpg" alt="/assets/images/album6/12.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/13.jpg" alt="/assets/images/album6/13.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="content">
-                <img src="/assets/images/album6/thumbs/14.jpg" alt="/assets/images/album6/14.jpg" />
-                <span>SKETCH</span>
-            </div>
-            <div class="descr">PERSONAL</div>
-        </div>
+        <?php else: ?>
+            <?php foreach ($albumsData as $albumData): ?>
+                <div class="album" data-album="<?= htmlspecialchars($albumData['name'], ENT_QUOTES, 'UTF-8') ?>">
+                    <?php foreach ($albumData['images'] as $image): ?>
+                        <div class="content">
+                            <img src="<?= htmlspecialchars($image['thumb_url'], ENT_QUOTES, 'UTF-8') ?>"
+                                 alt="<?= htmlspecialchars($image['full_url'], ENT_QUOTES, 'UTF-8') ?>" />
+                            <span><?= htmlspecialchars($image['label'], ENT_QUOTES, 'UTF-8') ?></span>
+                        </div>
+                    <?php endforeach; ?>
+                    <div class="descr"><?= htmlspecialchars($albumData['name'], ENT_QUOTES, 'UTF-8') ?></div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
         <div id="pp_back" class="pp_back">Albums</div>
     </div>
     <!-- scripts: keep view self-contained (header/footer load CSS/JS separately) -->

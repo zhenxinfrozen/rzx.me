@@ -213,6 +213,13 @@ $current_user = [
                     <span>Single-Works分类管理</span>
                 </a>
             </li>
+
+            <li class="menu-item <?= $current_page === 'sketchbook' ? 'active' : '' ?>">
+                <a href="<?= $nav_base ?>sketchbook.php">
+                    <i data-feather="book-open"></i>
+                    <span>Sketchbook管理</span>
+                </a>
+            </li>
             
             <li class="menu-item <?= $current_page === 'comics' ? 'active' : '' ?>">
                 <a href="<?= $nav_base ?>comics.php">

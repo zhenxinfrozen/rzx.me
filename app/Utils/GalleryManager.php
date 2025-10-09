@@ -151,11 +151,15 @@ class GalleryManager
                 
                 // 跳过过大的文件
                 if (in_array($extension, $supportedTypes) && $fileSize <= $this->maxFileSize) {
+                    // 自动检测正确的缩略图文件名
+                    $thumbName = $this->detectThumbnailName($categoryPath, $file);
+
                     $images[] = [
                         'name' => $file,
                         'path' => $filePath,
                         'url' => '/assets/images/' . $baseDir . '/' . $category . '/' . $file,
-                        'thumb_url' => '/assets/images/' . $baseDir . '/' . $category . '/thumbs/' . $file,
+                        'thumb_url' => '/assets/images/' . $baseDir . '/' . $category . '/thumbs/' . $thumbName,
+                        'thumb_name' => $thumbName,
                         'size' => $fileSize,
                         'category' => $category
                     ];
@@ -207,6 +211,7 @@ class GalleryManager
                         'path' => $filePath,
                         'url' => $this->galleriesUrl . '/' . $galleryName . '/' . $file,
                         'thumb_url' => $this->galleriesUrl . '/' . $galleryName . '/thumbs/' . $thumbName,
+                        'thumb_name' => $thumbName,
                         'size' => $fileSize
                     ];
                 } elseif (in_array($extension, $supportedTypes) && $fileSize > $maxFileSize) {
@@ -258,7 +263,7 @@ class GalleryManager
         if (strpos($relativePath, 'single-works') !== false) {
             $configId = 'single-works';
         } elseif (strpos($relativePath, 'sketch') !== false) {
-            $configId = 'sketch';
+            $configId = 'sketchbook-thumb';
         }
         
         // 使用ThumbnailService统一处理
@@ -505,18 +510,33 @@ class GalleryManager
     {
         $thumbsPath = $galleryPath . '/thumbs';
         
-        // 首先检查是否有_gallery后缀的缩略图
-        $galleryThumbName = pathinfo($originalFile, PATHINFO_FILENAME) . '_gallery.' . pathinfo($originalFile, PATHINFO_EXTENSION);
+        $baseName = pathinfo($originalFile, PATHINFO_FILENAME);
+        $originalExt = strtolower(pathinfo($originalFile, PATHINFO_EXTENSION));
+
+        // 1) 首选与原始扩展匹配的 _gallery 缩略图
+        $galleryThumbName = $baseName . '_gallery.' . $originalExt;
         if (file_exists($thumbsPath . '/' . $galleryThumbName)) {
             return $galleryThumbName;
         }
-        
-        // 如果没有_gallery后缀的，使用标准文件名
+
+        // 2) 其次检查与原始文件同名同扩展的缩略图
         if (file_exists($thumbsPath . '/' . $originalFile)) {
             return $originalFile;
         }
-        
-        // 默认返回_gallery后缀的名称（用于新生成）
+
+        // 3) 再次尝试查找任何扩展的 _gallery 缩略图
+        $galleryCandidates = glob($thumbsPath . '/' . $baseName . '_gallery.*');
+        if (!empty($galleryCandidates)) {
+            return basename($galleryCandidates[0]);
+        }
+
+        // 4) 最后查找与原始文件同名的任意扩展缩略图
+        $directCandidates = glob($thumbsPath . '/' . $baseName . '.*');
+        if (!empty($directCandidates)) {
+            return basename($directCandidates[0]);
+        }
+
+        // 兜底返回默认的 _gallery 名称（用于后续生成）
         return $galleryThumbName;
     }
 }
