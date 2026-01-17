@@ -51,7 +51,10 @@ document.addEventListener('DOMContentLoaded', function() {
             
             event.preventDefault();
 
-            fetch(`api?id=${comicId}`)
+            const apiBase = "<?= url('/api') ?>";
+            const fetchUrl = apiBase + (apiBase.includes('?') ? '&' : '?') + `id=${comicId}`;
+
+            fetch(fetchUrl)
                 .then(response => response.json())
                 .then(data => {
                     if (data.error) {

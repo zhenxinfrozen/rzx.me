@@ -86,7 +86,7 @@ class GalleryManager
                     'name' => $dir,
                     'path' => $fullPath,
                     'url' => $this->galleriesUrl . '/' . $dir,
-                    'route' => '/gallery-' . $dir
+                    'route' => url('/gallery-' . $dir)
                 ];
             }
         }
