@@ -2,7 +2,7 @@
 // app/Models/comic_data.php
 
 function get_all_comics_data() {
-    $dataFile = __DIR__ . '/../../storage/comic_data.json';
+    $dataFile = __DIR__ . '/../storage/data/comics.json';
 
     if (file_exists($dataFile)) {
         $jsonData = file_get_contents($dataFile);
@@ -85,7 +85,7 @@ function get_comic_by_id($id) {
 }
 
 function save_comics_data($data) {
-    $dataFile = __DIR__ . '/../../storage/comic_data.json';
+    $dataFile = __DIR__ . '/../storage/data/comics.json';
     $storageDir = dirname($dataFile);
 
     if (!is_dir($storageDir)) {

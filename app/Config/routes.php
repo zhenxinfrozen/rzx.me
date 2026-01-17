@@ -30,6 +30,11 @@ return [
             'title' => '动画 - RZX.ME',
             'handler' => 'get_page_data'
         ],
+        '/videos' => [
+            'view' => 'pages/videos.php',
+            'title' => '视频 - RZX.ME',
+            'handler' => 'get_page_data'
+        ],
         '/comic' => [
             'view' => 'pages/comic.php',
             'title' => '漫画 - RZX.ME',

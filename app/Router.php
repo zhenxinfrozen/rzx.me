@@ -32,6 +32,17 @@ class Router
      */
     public function getCurrentPath() 
     {
+        // 1. 优先检查 query string 中的 route 参数 (例如 index.php?route=/about)
+        // 即使开启伪静态，也允许通过参数访问，方便调试或兼容
+        if (isset($_GET['route']) && !empty($_GET['route'])) {
+            $path = $_GET['route'];
+            // 确保以/开头
+            if (strpos($path, '/') !== 0) {
+                $path = '/' . $path;
+            }
+            return $path;
+        }
+
         $path = $_SERVER['REQUEST_URI'] ?? '/';
         
         // 移除查询参数
@@ -39,6 +50,12 @@ class Router
             $path = substr($path, 0, $pos);
         }
         
+        // 2. 处理 /index.php 直接访问的情况 (非伪静态模式下的首页)
+        $scriptName = $_SERVER['SCRIPT_NAME'] ?? '/index.php';
+        if ($path === $scriptName) {
+            return '/';
+        }
+
         // 确保以/开头
         if (strpos($path, '/') !== 0) {
             $path = '/' . $path;

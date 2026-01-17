@@ -60,6 +60,54 @@ function safe_path_join(...$paths) {
 }
 
 /**
+ * 生成链接 URL
+ * 根据配置决定是否使用伪静态链接
+ * 
+ * @param string $path 路径，例如 '/about'
+ * @param array $params 查询参数
+ * @return string
+ */
+function url($path = '', array $params = []) {
+    // 处理空路径
+    if (empty($path)) {
+        $path = '/';
+    }
+
+    // 确保 path 以 / 开头
+    if (strpos($path, '/') !== 0) {
+        $path = '/' . $path;
+    }
+
+    // 获取配置，默认开启伪静态
+    $usePrettyUrls = config('app.use_pretty_urls', true);
+
+    // 构建基础 URL
+    if ($usePrettyUrls) {
+        $url = $path;
+    } else {
+        // 使用查询参数模式
+        // 在非伪静态模式下，所有请求都通过入口文件 index.php
+        $base = '/index.php'; 
+        
+        if ($path === '/') {
+            $url = $base;
+        } else {
+            $url = $base . '?route=' . $path;
+        }
+    }
+
+    // 添加额外的查询参数
+    if (!empty($params)) {
+        // 检查是否已经有 ?
+        $separator = (strpos($url, '?') !== false) ? '&' : '?';
+        $queryString = http_build_query($params);
+        $url .= $separator . $queryString;
+    }
+
+    return $url;
+}
+
+/**
  * 检查文件是否为图片
  * @param string $filePath 文件路径
  * @return bool

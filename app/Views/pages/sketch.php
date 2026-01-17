@@ -68,13 +68,19 @@ function reorderSketchbookAlbums(array $albumNames): array {
  * 根据后台记录的排序调整图片顺序
  */
 function reorderSketchbookImages(string $albumName, array $images): array {
-    $orderFile = __DIR__ . '/../../Data/sketchbook_image_order.json';
+    $orderFile = __DIR__ . '/../../storage/config/image-orders.json';
     if (!file_exists($orderFile)) {
         return $images;
     }
 
-    $orders = json_decode(file_get_contents($orderFile), true);
-    if (!is_array($orders) || empty($orders[$albumName]) || !is_array($orders[$albumName])) {
+    $fullConfig = json_decode(file_get_contents($orderFile), true);
+    if (!is_array($fullConfig)) {
+        return $images;
+    }
+
+    // 从合并结构中提取sketchbook模块的数据
+    $orders = $fullConfig['modules']['sketchbook']['categories'] ?? $fullConfig;
+    if (empty($orders[$albumName]) || !is_array($orders[$albumName])) {
         return $images;
     }
 

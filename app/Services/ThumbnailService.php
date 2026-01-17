@@ -5,7 +5,7 @@
 require_once __DIR__ . '/../Utils/ImageProcessor.php';
 
 class ThumbnailService {
-    private static $configFile = __DIR__ . '/../Data/thumbnail_configs.json';
+    private static $configFile = __DIR__ . '/../storage/config/thumbnail-configs.json';
     private static $builtinConfigs = [
         'gallery' => [
             'name' => 'Gallery页面',

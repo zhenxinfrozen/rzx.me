@@ -7,6 +7,12 @@
 // 获取页面参数，默认为dashboard
 $current_page = $_GET['page'] ?? 'dashboard';
 
+// 如果是 AJAX 请求 docs 页面，我们需要在输出任何 HTML（header.php）之前处理它
+if ($current_page === 'docs' && isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    require_once __DIR__ . '/controllers/docs-handler.php';
+    exit;
+}
+
 // 根据页面参数确定要加载的内容文件（使用绝对路径确保任意入口都可用）
 $views_base = __DIR__ . '/views';
 $content_file = $views_base . "/pages/body-{$current_page}.php";

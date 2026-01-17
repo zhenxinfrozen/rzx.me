@@ -11,11 +11,8 @@ if (!headers_sent()) {
 // 简单的认证检查
 session_start();
 if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
-    // 根据当前位置决定登录页面路径
-    $request_uri = $_SERVER['REQUEST_URI'];
-    $is_in_controllers = strpos($request_uri, '/admin/controllers/') !== false;
-    $login_path = $is_in_controllers ? '../login.php' : 'login.php';
-    header('Location: ' . $login_path);
+    // 强制跳转到 admin 目录下的 login.php
+    header('Location: /admin/login.php');
     exit;
 }
 
@@ -45,14 +42,17 @@ if (!isset($page_title)) {
     $page_titles = [
         'dashboard' => '控制台',
     'single-works' => 'Single-Works 分类管理',
+    'sketchbook' => 'Sketchbook 管理',
     'comics' => '漫画管理',
+    'video-gallery' => 'Video Gallery 管理',
         'gallery-manager' => '画廊管理',
         'trash' => '回收站',
         'site-config' => '网站配置',
         'cache-manager' => '缓存管理',
         'tools' => '管理工具',
     'thumbnail-center' => '缩略图中心',
-        'system-info' => '系统信息'
+        'system-info' => '系统信息',
+        'docs' => '项目文档'
     ];
     $page_title = $page_titles[$current_page] ?? '未知页面';
 }
@@ -197,91 +197,105 @@ $current_user = [
         
         <ul class="sidebar-menu">
             <li class="menu-item <?= $current_page === 'dashboard' ? 'active' : '' ?>">
-                <a href="<?= $is_in_controllers ? '../index.php' : 'index.php' ?>">
+                <a href="/admin/index.php">
                     <i data-feather="home"></i>
                     <span>控制台</span>
                 </a>
             </li>
-            
+
             <li class="menu-section">
                 <span class="section-title">内容管理</span>
             </li>
-            
+
             <li class="menu-item <?= $current_page === 'single-works' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>single-works.php">
+                <a href="/admin/controllers/single-works.php">
                     <i data-feather="image"></i>
                     <span>Single-Works分类管理</span>
                 </a>
             </li>
 
             <li class="menu-item <?= $current_page === 'sketchbook' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>sketchbook.php">
+                <a href="/admin/controllers/sketchbook.php">
                     <i data-feather="book-open"></i>
                     <span>Sketchbook管理</span>
                 </a>
             </li>
-            
+
             <li class="menu-item <?= $current_page === 'comics' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>comics.php">
+                <a href="/admin/controllers/comics.php">
                     <i data-feather="layers"></i>
-                    <span>漫画管理</span>
+                    <span>Comics管理</span>
                 </a>
-            </li>            
-            
+            </li>
+
+            <li class="menu-item <?= $current_page === 'video-gallery' ? 'active' : '' ?>">
+                <a href="/admin/controllers/video-gallery.php">
+                    <i data-feather="film"></i>
+                    <span>Video Gallery管理</span>
+                </a>
+            </li>
+
             <li class="menu-item <?= $current_page === 'gallery-manager' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>gallery-manager.php">
+                <a href="/admin/controllers/gallery-manager.php">
                     <i data-feather="folder"></i>
                     <span>gallery管理</span>
                 </a>
             </li>
-            
+
             <li class="menu-item <?= $current_page === 'trash' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>trash.php">
+                <a href="/admin/controllers/trash.php">
                     <i data-feather="trash-2"></i>
                     <span>回收站</span>
                 </a>
             </li>
-            
+
             <li class="menu-section">
                 <span class="section-title">系统设置</span>
             </li>
-            
+
             <li class="menu-item <?= $current_page === 'site-config' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>site-config.php">
+                <a href="/admin/controllers/site-config.php">
                     <i data-feather="settings"></i>
                     <span>网站配置</span>
                 </a>
             </li>
-            
+
             <li class="menu-item <?= $current_page === 'cache-manager' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>cache-manager.php">
+                <a href="/admin/controllers/cache-manager.php">
                     <i data-feather="database"></i>
                     <span>缓存管理</span>
                 </a>
             </li>
-            
+
             <li class="menu-section">
                 <span class="section-title">工具</span>
             </li>
-            
+
             <li class="menu-item <?= $current_page === 'tools' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>tools.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
+                <a href="/admin/controllers/tools.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
                     <i data-feather="tool"></i>
                     <span>管理工具</span>
                 </a>
             </li>
-            
+
             <li class="menu-item <?= $current_page === 'thumbnail-center' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>thumbnail-center.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
+                <a href="/admin/controllers/thumbnail-center.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
                     <i data-feather="image"></i>
                     <span>缩略图中心</span>
                 </a>
             </li>
-            
+
             <li class="menu-item <?= $current_page === 'system-info' ? 'active' : '' ?>">
-                <a href="<?= $nav_base ?>system-info.php">
+                <a href="/admin/controllers/system-info.php">
                     <i data-feather="info"></i>
                     <span>系统信息</span>
+                </a>
+            </li>
+
+            <li class="menu-item <?= $current_page === 'docs' ? 'active' : '' ?>">
+                <a href="/admin/index.php?page=docs">
+                    <i data-feather="book"></i>
+                    <span>项目文档</span>
                 </a>
             </li>
             <li class="menu-item <?= $current_page === 'system-info' ? 'active' : '' ?>">

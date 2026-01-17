@@ -31,6 +31,15 @@ return [
         'meta_keywords' => '动画，Flash动画，原创动画，动画短片，Motion Graphics',
     ],
     
+    // 视频
+    'pages/videos.php' => [
+        'page_id' => 'videos',
+        'page_title' => 'Videos - rzx.me',
+        'css_file' => '/assets/css/videos.css',
+        'meta_description' => '视频作品展示，包括动画分镜、特效和故事片段',
+        'meta_keywords' => '视频，Video，动画视频，特效，分镜头，动画短片',
+    ],
+    
     // 最新作品
     'pages/latest.php' => [
         'page_id' => 'latest',

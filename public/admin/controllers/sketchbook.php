@@ -17,7 +17,7 @@ $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
 $configPath = __DIR__ . '/../../../app/Config/sketchbook_sort.php';
 $imagesRoot = __DIR__ . '/../../assets/images/sketchbook';
 $trashRoot = __DIR__ . '/../../assets/images/trash/sketchbook';
-$imageOrderPath = __DIR__ . '/../../../app/Data/sketchbook_image_order.json';
+$imageOrderPath = __DIR__ . '/../../../app/storage/config/image-orders.json';
 
 $galleryManager = new GalleryManager();
 
@@ -1242,10 +1242,10 @@ function loadImageOrderConfig(string $imageOrderPath): array
             'categories' => []
         ];
     }
-    
+
     $content = file_get_contents($imageOrderPath);
     $config = json_decode($content, true);
-    
+
     if (!is_array($config)) {
         return [
             '_comment' => 'Sketchbook 图片排序配置文件',
@@ -1253,7 +1253,13 @@ function loadImageOrderConfig(string $imageOrderPath): array
             'categories' => []
         ];
     }
-    
+
+    // 从新的合并结构中提取sketchbook模块的数据
+    if (isset($config['modules']['sketchbook'])) {
+        return $config['modules']['sketchbook'];
+    }
+
+    // 向后兼容：如果没有modules结构，直接返回旧格式
     return $config;
 }
 
@@ -1263,13 +1269,29 @@ function loadImageOrderConfig(string $imageOrderPath): array
 function saveImageOrderConfig(string $imageOrderPath, array $config): bool
 {
     $config['_generated'] = date('c');
-    
+
     $dir = dirname($imageOrderPath);
     if (!is_dir($dir)) {
         mkdir($dir, 0755, true);
     }
-    
-    $content = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+    // 读取现有的合并配置文件
+    $fullConfig = [];
+    if (file_exists($imageOrderPath)) {
+        $content = file_get_contents($imageOrderPath);
+        $fullConfig = json_decode($content, true) ?? [];
+    }
+
+    // 确保modules结构存在
+    if (!isset($fullConfig['modules'])) {
+        $fullConfig['modules'] = [];
+    }
+
+    // 更新sketchbook模块的配置
+    $fullConfig['modules']['sketchbook'] = $config;
+    $fullConfig['_generated'] = date('c');
+
+    $content = json_encode($fullConfig, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     return file_put_contents($imageOrderPath, $content) !== false;
 }
 

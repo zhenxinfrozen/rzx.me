@@ -1,19 +1,19 @@
 <?php
 /**
  * Single-Works 分组排序配置
- * 自动生成于: 2025-10-02 22:34:40
+ * 自动生成于: 2025-10-12 17:48:54
  */
 
 return array (
   'sort_method' => 'custom_order',
   'custom_order' => 
   array (
-    0 => 'Animals',
-    1 => 'Game+color',
-    2 => 'Gallery comic',
-    3 => 'Special-Zone',
-    4 => 'Ae-test',
-    5 => '00-Archive',
+    0 => '00-Archive',
+    1 => 'Animals',
+    2 => 'Game+color',
+    3 => 'Gallery comic',
+    4 => 'Special-Zone',
+    5 => 'Ae-test',
     6 => 'test-2025-10-3',
     7 => 'test-fgdsfg333333',
     8 => 'rrrrrr',

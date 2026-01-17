@@ -16,6 +16,8 @@
 		<div class="anim-item" id="anim-4">
 			<img src="/assets/images/anim-004.png" alt="comic 4">
 		</div>
+		
+		<div id="overlay"></div>
 	</div>
 </div>
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * Sketchbook 分组排序配置
- * 自动生成于: 2025-10-07 08:40:43
+ * 自动生成于: 2025-10-12 17:49:53
  */
 
 return array (
@@ -12,9 +12,9 @@ return array (
     1 => 'FASHION',
     2 => 'MAYBE A STORY',
     3 => 'THIS MY WORLD',
-    4 => 'Continuity',
-    5 => 'PEOPLE',
-    6 => 'test-f3333',
+    4 => 'test-f3333',
+    5 => 'Continuity',
+    6 => 'PEOPLE',
     7 => 'boutter-test',
     8 => 'test-sb-222',
   ),

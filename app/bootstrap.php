@@ -9,6 +9,9 @@ if (!defined('APP_RUNNING')) {
 // 加载新的配置管理器
 require_once __DIR__ . '/Config/ConfigManager.php';
 
+// 加载通用助手函数
+require_once __DIR__ . '/Utils/HelperFunctions.php';
+
 // 初始化配置
 $config = ConfigManager::getInstance();
 

@@ -1,11 +1,11 @@
 <!-- app/Views/layouts/header.php - copied from includes/views/header.php -->
 <header class="site-header" role="banner">
     <div class="site-header__inner">
-        <a class="site-brand" href="/">
+        <a class="site-brand" href="<?php echo htmlspecialchars(url('/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>">
             <?php if (file_exists(__DIR__ . '/../../../public/assets/images/Avatar100X100.jpg')): ?>
                 <img src="/assets/images/Avatar100X100.jpg" alt="Ray avatar">
             <?php endif; ?>
-            rzx.me
+            RZX.ME <span class="site-tagline">颓废动画人</span>
         </a>
 
         <input id="nav-toggle" class="nav-toggle" type="checkbox" aria-hidden="true">
@@ -15,15 +15,30 @@
 
         <nav class="site-nav" role="navigation" aria-label="Primary">
             <?php
-            $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-            $path = parse_url($requestUri, PHP_URL_PATH);
-            if ($path !== '/') {
-                $path = rtrim($path, '/');
+            // 获取当前逻辑路径，用于高亮导航
+            $currentPath = $_SERVER['REQUEST_URI'] ?? '/';
+            // 优先检测 route 参数 (兼容非伪静态模式)
+            if (isset($_GET['route'])) {
+                $currentPath = $_GET['route'];
+            } else {
+                // 伪静态模式
+                $parsedPath = parse_url($currentPath, PHP_URL_PATH);
+                if ($parsedPath !== '/' && $parsedPath) {
+                    $currentPath = rtrim($parsedPath, '/');
+                } else {
+                    $currentPath = $parsedPath ?: '/';
+                }
+            }
+            
+            // 确保以 / 开头
+            if (strpos($currentPath, '/') !== 0) {
+                $currentPath = '/' . $currentPath;
             }
 
             $navItems = [
                 'Home' => '/',
                 'Animation' => '/animation',
+                'Videos' => '/videos',
                 'Latest' => '/latest',
                 'Comic' => '/comic',
                 'Gallery' => '/galleries',
@@ -35,10 +50,16 @@
             ?>
             <ul class="site-nav__list">
                 <?php foreach ($navItems as $label => $href):
-                    $isActive = ($href === $path) || ($href === '/' && $path === '/');
+                    // 简单匹配：当前路径等于菜单路径，或者当前路径以菜单路径开头（对于/除外）
+                    if ($href === '/') {
+                        $isActive = ($currentPath === '/');
+                    } else {
+                        $isActive = ($currentPath === $href) || (strpos($currentPath, $href . '/') === 0);
+                    }
+                    
                     $class = 'site-nav__link' . ($isActive ? ' site-nav__link--active' : '');
                 ?>
-                <li class="site-nav__item"><a class="<?php echo $class ?>" href="<?php echo htmlspecialchars($href, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>"><?php echo htmlspecialchars($label, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a></li>
+                <li class="site-nav__item"><a class="<?php echo $class ?>" href="<?php echo htmlspecialchars(url($href), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>"><?php echo htmlspecialchars($label, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a></li>
                 <?php endforeach; ?>
             </ul>
         </nav>

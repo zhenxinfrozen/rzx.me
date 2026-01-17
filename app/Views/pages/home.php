@@ -68,13 +68,14 @@
     <a href="animation" target="_self">
         <div class="ray-home-menu-icon">
             <div class="menu_icon_wrapper" id="ray-home-menu-animation-hover">
+                <div class="wave-layer"></div>
             </div><div class="menu-text">Animation</div>
         </div>
     </a>
     <a href="latest" target="_self">
         <div id="ray-home-menu-latest" class="ray-home-menu-icon">
             <div class="menu_icon_wrapper">
-                <img src="assets/images/ray-home-menu-latest.png" alt="Blog" id="menu_icon" width="100" height="100">
+                <img src="assets/images/ray-home-menu-latest.png" alt="Latest" id="menu_icon" width="100" height="100">
             </div>
             <div class="menu-text">Latest</div>
         </div>
@@ -182,18 +183,6 @@
             var wrapper = img.parentElement || cont;
             try { if (getComputedStyle(wrapper).position === 'static') wrapper.style.position = 'relative'; } catch(e) { wrapper.style.position = 'relative'; }
             var overlay = null;
-            if (containerId === 'ray-home-menu-latest') {
-                overlay = document.createElement('div');
-                overlay.setAttribute('aria-hidden','true');
-                overlay.style.position = 'absolute';
-                overlay.style.left = '0'; overlay.style.top = '0'; overlay.style.right = '0'; overlay.style.bottom = '0';
-                overlay.style.background = 'rgba(255,0,0,1)';
-                overlay.style.opacity = '0';
-                overlay.style.transition = 'opacity 180ms ease';
-                overlay.style.pointerEvents = 'none';
-                overlay.style.borderRadius = (wrapper.style.borderRadius || '10px');
-                wrapper.appendChild(overlay);
-            }
 
             function expand(){ img.style.transform = 'scale(1.3)'; if (overlay) overlay.style.opacity = '0.38'; }
             function shrink(){ img.style.transform = 'scale(0.9)'; if (overlay) overlay.style.opacity = '0'; }
@@ -206,7 +195,6 @@
             cont.addEventListener('touchend', shrink);
         }
 
-        setupScale('ray-home-menu-latest');
         setupScale('ray-home-menu-about');
         setupBounce('ray-home-menu-comic');
     })();

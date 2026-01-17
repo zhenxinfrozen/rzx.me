@@ -28,21 +28,44 @@ $messageType = $messageType ?? '';
 
 <!-- Single-Works 风格的拖拽动效样式 -->
 <style>
+.category-list { max-height: 70vh; overflow-y: auto; padding: 10px; }
+.category-item {
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+.category-row {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+}
+.category-row:hover {
+    background: #f8f9fa !important;
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0,123,255,0.2);
+    transform: translateY(-1px);
+}
+.category-row.active {
+    background: #e3f2fd !important;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
 .category-item.dragging {
     opacity: 0.8;
     transform: scale(1.02) rotate(2deg);
     z-index: 1000;
     box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
-    transition: all 0.3s ease;
 }
 .category-item.drag-over {
     border-top: 3px solid #007bff;
     margin-top: 15px;
 }
-.drag-handle { 
-    color: #6c757d; 
-    cursor: grab; 
-    user-select: none; 
+.drag-handle {
+    color: #6c757d;
+    cursor: grab;
+    user-select: none;
     font-size: 18px;
     padding: 5px;
     margin-right: 5px;
@@ -53,8 +76,8 @@ $messageType = $messageType ?? '';
     background: rgba(0,123,255,0.1);
     color: #007bff;
 }
-.drag-handle:active, .drag-handle.grabbing { 
-    cursor: grabbing; 
+.drag-handle:active, .drag-handle.grabbing {
+    cursor: grabbing;
     background: rgba(0,123,255,0.2);
 }
 .category-row {
@@ -78,6 +101,60 @@ $messageType = $messageType ?? '';
 .thumbnail-item {
     position: relative;
 }
+
+/* 漫画分组缩略图样式 */
+.category-thumbnail {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 2px solid #dee2e6;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+.category-thumbnail-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    border: 2px dashed #ced4da;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+    color: #6c757d;
+}
+
+/* 添加按钮样式 */
+.add-category-btn {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: #108e1dff;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(9, 115, 133, 1);
+}
+.add-category-btn:hover {
+    background: #47a854ff;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(39, 39, 39, 0.72);
+}
+.add-category-btn:active {
+    transform: translateY(-50%) scale(0.95);
+}
 </style>
 
 <div class="container-fluid mt-4 admin-page-content">
@@ -86,23 +163,37 @@ $messageType = $messageType ?? '';
         <!-- 左栏：分组/侧栏 -->
         <div class="col-lg-3">
             <div class="card shadow-sm h-100">
-                <div class="card-header bg-success text-white d-flex align-items-center justify-content-between">
-                    <h6 class="card-title mb-0"><i class="bi bi-list me-2"></i> 现有条目顺序</h6>
-                    <div class="d-flex gap-2">
-                        <button id="addGroupBtn" class="btn btn-sm btn-success" title="添加新条目">+</button>
-                        <button id="reindexBtn" class="btn btn-sm btn-warning" title="重建排序">应用排列顺序</button>
-                    </div>
+                <div class="card-header bg-success text-white position-relative">
+                    <h6 class="card-title mb-0">
+                        <i data-feather="list" class="me-2"></i>
+                        分组顺序
+                    </h6>
+                    <button type="button" class="add-category-btn" onclick="showAddComicModal()" title="添加新漫画">+</button>
                 </div>
                 <div class="card-body p-0">
-                    <ul class="category-list list-unstyled mb-0" id="sideItems">
+                    <ul class="category-list list-unstyled mb-0" id="categoryOrder">
                         <?php $i = 0; foreach ($comics as $id => $c): $i++; ?>
                         <?php $imageCount = isset($c['images']) ? count($c['images']) : 0; ?>
-                        <li class="category-item" data-id="<?= htmlspecialchars($id) ?>" draggable="true">
+                        <li class="category-item" data-category="<?= htmlspecialchars($id) ?>" data-id="<?= htmlspecialchars($id) ?>" draggable="true">
                             <div class="category-row d-flex align-items-center p-3">
                                 <span class="drag-handle" title="拖拽排序">⋮⋮</span>
-                                <?php $thumb = isset($c['icon_default']) && $c['icon_default'] ? $c['icon_default'] : '/assets/images/comic/thumbs/placeholder.png'; ?>
-                                <img class="side-thumb me-2" src="<?= htmlspecialchars($thumb) ?>" alt="">
-                                <div class="category-content d-flex align-items-center flex-grow-1" data-id="<?= htmlspecialchars($id) ?>">
+                                <!-- 漫画缩略图 -->
+                                <?php 
+                                $thumbnailSrc = '';
+                                if (!empty($c['icon_default'])) {
+                                    $thumbnailSrc = $c['icon_default'];
+                                } elseif (!empty($c['images']) && count($c['images']) > 0) {
+                                    $thumbnailSrc = $c['images'][0];
+                                }
+                                ?>
+                                <?php if ($thumbnailSrc): ?>
+                                    <img src="<?= htmlspecialchars($thumbnailSrc) ?>" alt="缩略图" class="category-thumbnail">
+                                <?php else: ?>
+                                    <div class="category-thumbnail-placeholder">
+                                        <i data-feather="image"></i>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="category-content d-flex align-items-center flex-grow-1" onclick="editComic('<?= htmlspecialchars($id) ?>')">
                                     <div class="flex-grow-1">
                                         <div class="fw-semibold category-name"><?= htmlspecialchars($c['title'] ?? $id) ?></div>
                                         <small class="text-muted"><?= $imageCount ?> 张图片</small>
@@ -110,6 +201,8 @@ $messageType = $messageType ?? '';
                                     <span class="badge bg-secondary"><?= isset($c['order_id']) ? (int)$c['order_id'] : $i ?></span>
                                 </div>
                             </div>
+                            <input type="hidden" name="display_names[<?= htmlspecialchars($id) ?>]" value="<?= htmlspecialchars($c['title']) ?>" class="display-name-input">
+                            <input type="hidden" name="descriptions[<?= htmlspecialchars($id) ?>]" value="<?= htmlspecialchars($c['lines']) ?>" class="description-input">
                         </li>
                         <?php endforeach; ?>
                     </ul>
@@ -121,10 +214,11 @@ $messageType = $messageType ?? '';
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-primary text-white">
-                    <div class="d-flex align-items-center w-100">
-                        <h6 class="card-title mb-0"><i class="bi bi-pencil-square me-2"></i> 编辑条目</h6>
-                        <small id="edit-status" class="opacity-75 ms-3">选择左侧条目进行编辑</small>
-                    </div>
+                    <h6 class="card-title mb-0">
+                        <i data-feather="edit-3" class="me-2" id="edit-icon"></i>
+                        <span id="edit-title">编辑漫画</span>
+                    </h6>
+                    <small id="edit-status" class="opacity-75">选择左侧漫画进行编辑</small>
                 </div>
                 <div class="card-body">
                     <!-- 编辑容器：包含占位和表单，表单初始隐藏 -->
@@ -211,21 +305,48 @@ $messageType = $messageType ?? '';
 
         <!-- 右栏：预览与管理 -->
         <div class="col-lg-3">
-            <div class="card shadow-sm mb-3">
-                <div class="card-header bg-info text-white"><i class="bi bi-eye me-2"></i> 预览</div>
-                <div class="card-body">
-                    <a href="/" class="d-block mb-2"><i class="bi bi-box-arrow-up-right"></i> 前台页面</a>
-                    <a href="#" class="d-block"><i class="bi bi-code"></i> API数据</a>
-                    <hr>
-                    <div>总分组: <?= count($comics) ?></div>
+            <div class="d-flex flex-column gap-3 h-100">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="card-title mb-0">
+                            <i data-feather="eye" class="me-2"></i>预览
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="/" target="_blank" class="btn btn-outline-primary btn-sm">
+                                <i data-feather="external-link" class="me-1"></i>前台页面
+                            </a>
+                            <a href="#" class="btn btn-outline-secondary btn-sm">
+                                <i data-feather="code" class="me-1"></i>API数据
+                            </a>
+                        </div>
+                        <hr>
+                        <div class="small text-muted">
+                            <div class="d-flex justify-content-between">
+                                <span>总分组:</span>
+                                <span><?= count($comics) ?></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card shadow-sm">
-                <div class="card-header" style="background:#f4c542; color:#222;"><i class="bi bi-gear me-2"></i> 管理</div>
-                <div class="card-body">
-                    <a href="#" class="d-block"><i class="bi bi-trash"></i> 回收站</a>
-                    <a href="#" class="d-block"><i class="bi bi-gear"></i> PHP配置</a>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="card-title mb-0">
+                            <i data-feather="settings" class="me-2"></i>管理
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="#" class="btn btn-outline-warning btn-sm">
+                                <i data-feather="trash-2" class="me-1"></i>回收站
+                            </a>
+                            <a href="#" class="btn btn-outline-info btn-sm">
+                                <i data-feather="info" class="me-1"></i>PHP配置
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -240,7 +361,7 @@ $messageType = $messageType ?? '';
                 <h5 class="modal-title">添加新漫画</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" id="addComicForm">
                 <div class="modal-body">
                     <input type="hidden" name="action" value="add">
                     
@@ -307,6 +428,14 @@ $messageType = $messageType ?? '';
 <script>
 const comics = <?= json_encode($comics) ?>;
 
+function showAddComicModal() {
+    // 重置表单
+    document.getElementById('addComicForm').reset();
+    // 显示模态框
+    const modal = new bootstrap.Modal(document.getElementById('addComicModal'));
+    modal.show();
+}
+
 function editComic(id) {
     const comic = comics[id];
     if (!comic) return;
@@ -370,10 +499,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeDragAndDrop();
 
     function initializeDragAndDrop() {
-        const sideItems = document.getElementById('sideItems');
+        const sideItems = document.getElementById('categoryOrder');
         let draggedItem = null;
 
-        document.querySelectorAll('#sideItems .category-item').forEach(item => {
+        document.querySelectorAll('#categoryOrder .category-item').forEach(item => {
             item.addEventListener('dragstart', function(e) {
                 draggedItem = this;
                 this.classList.add('dragging');
@@ -387,7 +516,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.remove('dragging');
                 const handle = this.querySelector('.drag-handle');
                 if (handle) handle.classList.remove('grabbing');
-                document.querySelectorAll('#sideItems .category-item').forEach(el => el.classList.remove('drag-over'));
+                document.querySelectorAll('#categoryOrder .category-item').forEach(el => el.classList.remove('drag-over'));
                 draggedItem = null;
                 saveSidebarOrder();
             });
@@ -397,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!draggedItem || draggedItem === this) return;
                 const rect = this.getBoundingClientRect();
                 const midY = rect.top + rect.height / 2;
-                document.querySelectorAll('#sideItems .category-item').forEach(el => el.classList.remove('drag-over'));
+                document.querySelectorAll('#categoryOrder .category-item').forEach(el => el.classList.remove('drag-over'));
                 if (e.clientY < midY) {
                     sideItems.insertBefore(draggedItem, this);
                 } else {
@@ -421,7 +550,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.reinitializeDragAndDrop = initializeDragAndDrop;
 
     function saveSidebarOrder() {
-        const ids = [...document.querySelectorAll('#sideItems .category-item')].map(el=>el.dataset.id);
+        const ids = [...document.querySelectorAll('#categoryOrder .category-item')].map(el=>el.dataset.id);
         const fd = new FormData();
         fd.append('ajax_action','reorder_comics');
         fd.append('order', JSON.stringify(ids));
@@ -460,36 +589,12 @@ function showToast(title, message, type='info'){
     setTimeout(()=>{ t.style.opacity = '0'; setTimeout(()=>t.remove(),300); }, 3000);
 }
 
-// Add group button
-document.addEventListener('click', function(e){
-    if (e.target && e.target.id === 'addGroupBtn'){
-        const fd = new FormData(); fd.append('ajax_action','add_group');
-        fetch(location.href, { method:'POST', body: fd }).then(r=>r.json()).then(res=>{
-                    if (res.ok) {
-                        // Open edit panel for the created group (do not insert into sidebar immediately)
-                        comics[res.id] = comics[res.id] || {
-                            title: res.title || 'New Group',
-                            subtitle: '',
-                            lines: '',
-                            alt: '',
-                            status: 'active',
-                            images: []
-                        };
-                        // set returned order_id so edit form defaults to max+1
-                        if (res.order_id !== undefined) comics[res.id].order_id = res.order_id;
-                        editComic(res.id);
-                        showToast('成功','已创建新分组，已打开编辑面板，请填写信息并保存','success');
-            } else showToast('错误', res.error || '创建失败','danger');
-        });
-    }
-});
-
 function openEditFromSidebar(id) {
     // 找到并打开编辑模态
     editComic(id);
     // 高亮选中项
-    document.querySelectorAll('#sideItems .category-item').forEach(el=>el.classList.remove('active'));
-    const sel = document.querySelector('#sideItems .category-item[data-id="'+id+'"]');
+    document.querySelectorAll('#categoryOrder .category-item').forEach(el=>el.classList.remove('active'));
+    const sel = document.querySelector('#categoryOrder .category-item[data-id="'+id+'"]');
     if (sel) sel.classList.add('active');
     // 在编辑模态内渲染缩略图网格
     // renderThumbnails 已在 editComic 中调用
@@ -553,7 +658,7 @@ function renderThumbnails(id) {
             if (!res.ok) showToast('错误', res.error || '缩略图排序保存失败', 'danger');
             else {
                 comics[comicId].images = urls;
-                const thumb = document.querySelector('#sideItems .category-item[data-id="'+comicId+'"] .side-thumb');
+                const thumb = document.querySelector('#categoryOrder .category-item[data-id="'+comicId+'"] .side-thumb');
                 if (thumb) thumb.src = urls[0] || '/assets/images/comic/thumbs/placeholder.png';
                 showToast('已保存','缩略图顺序已保存','success');
             }
@@ -619,7 +724,7 @@ function showUploadDialog(id) {
                 comics[id].images = comics[id].images || [];
                 comics[id].images.push(res.url);
                 renderThumbnails(id);
-                const thumb = document.querySelector('#sideItems .category-item[data-id="'+id+'"] .side-thumb');
+                const thumb = document.querySelector('#categoryOrder .category-item[data-id="'+id+'"] .side-thumb');
                 if (thumb) thumb.src = res.url;
                 showToast('已上传','图片上传成功','success');
             } else showToast('错误', res.error||'上传失败', 'danger');
@@ -679,7 +784,7 @@ function showIconUploadDialog(field) {
 document.addEventListener('click', function(e){
     const btn = e.target && e.target.closest ? e.target.closest('#reindexBtn') : null;
     if (btn) {
-        const ids = [...document.querySelectorAll('#sideItems .category-item')].map(el=>el.dataset.id);
+        const ids = [...document.querySelectorAll('#categoryOrder .category-item')].map(el=>el.dataset.id);
         console.log('reindex requested, ids=', ids);
         if (!ids || ids.length === 0) { showToast('错误', '未找到侧栏分组，请确认侧栏 DOM 是否存在', 'danger'); return; }
         // disable button during request

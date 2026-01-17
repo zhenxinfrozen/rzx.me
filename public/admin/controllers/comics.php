@@ -1,6 +1,16 @@
 <?php
 // public/admin/controllers/comics.php
 
+// 开发模式下显示错误
+if (isset($_GET['dev'])) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+    // 记录错误到文件
+    ini_set('log_errors', 1);
+    ini_set('error_log', __DIR__ . '/../../../debug.log');
+}
+
 define('ADMIN_ACCESS', true);
 require_once __DIR__ . '/../../../app/Models/comic_data.php';
 
@@ -103,11 +113,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $comicData['order_id'] = $max + 1;
             }
             
-            if (add_comic($comicData)) {
-                $message = '漫画添加成功！';
-                $messageType = 'success';
-            } else {
-                $message = '添加失败，请重试。';
+            try {
+                if (add_comic($comicData)) {
+                    $message = '漫画添加成功！';
+                    $messageType = 'success';
+                } else {
+                    $message = '添加失败，请重试。';
+                    $messageType = 'danger';
+                }
+            } catch (Exception $e) {
+                $message = '添加失败：' . $e->getMessage();
                 $messageType = 'danger';
             }
             break;

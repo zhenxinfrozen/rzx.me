@@ -36,4 +36,4 @@ foreach ($allowDirectAccess as $prefix) {
 }
 
 // 其他请求通过index.php处理
-require_once __DIR__ . '/index.php';
+return require_once __DIR__ . '/index.php';

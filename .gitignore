@@ -4,3 +4,8 @@ includes_css_backup.zip
 .DS_Store
 .vscode/
 node_modules/
+
+# Media assets
+public/assets/images/
+public/assets/movie/
+public/assets/videos/
