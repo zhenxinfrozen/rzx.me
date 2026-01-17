@@ -1,203 +1,92 @@
-# Billfish Web Manager 开发文档
+# Rzx.me (2008-2014 Archive Edition)
 
-本文档面向开发者，介绍项目架构、核心组件和开发指南。
+> 一个关于 2008-2014 年时期个人网站的数字化存档与现代化重构项目。
 
-## 项目概述
+## 📖 项目背景
 
-Billfish Web Manager 是一个基于 PHP 的 Web 应用，用于通过浏览器管理和预览 Billfish 资源库中的文件。
+这是我个人网站（Rzx.me）的早期版本存档，主要涵盖了 2008 年至 2014 年期间的内容与设计风格。
+那个时代的代码大多是“手搓”的原生 PHP 和早期的 jQuery 交互。随着时间的推移，旧版代码在现代 PHP 环境（PHP 8+）下出现了大量兼容性问题，且原有的架构难以维护。
 
-## 技术栈
+**本项目的目标是：**
+在**表面上完整保留**当年的视觉创意、动画效果和交互逻辑（作为怀旧存档），但在**底层逻辑上**进行彻底的现代化重构，使其能够稳定运行在现代服务器环境中。
 
-- **后端**：PHP 8.0+
-- **前端**：原生 JavaScript + CSS
-- **数据库**：SQLite3（Billfish 数据库）
-- **文档**：Markdown + Parsedown
+## 🛠️ 现代化改造 (Modernization)
 
-## 项目结构
+为了适应现代 Web 标准，本项目在保留前端“原汁原味”的同时，对后端进行了全面的重写：
+
+*   **架构升级**：从杂乱的单文件 PHP 脚本重构为基于 **单一入口 (Single Entry Point)** 和 **自定义路由 (Custom Router)** 的 MVC-lite 架构。
+*   **PHP 8 兼容**：修复了所有过时的语法，全面支持 PHP 8.0+。
+*   **路由系统**：
+    *   实现了灵活的路由分发机制。
+    *   支持 **伪静态 (Pretty URL)** 和 **查询参数 (Query Param)** 双模式，方便在不支持 URL Rewrite 的环境（如部分宝塔面板配置）中部署。
+*   **媒体管理**：
+    *   重构了 **Sketchbook** 和 **Single Works** 画廊系统。
+    *   重写了视频画廊 (Video Gallery) 的数据加载逻辑。
+    *   引入了基于 PHP GD 的**智能缩略图生成服务**，自动处理旧资源的预览图。
+*   **工程化**：引入了统一的配置管理 (`ConfigManager`) 和视图渲染器，从混乱的全局变量中解脱出来。
+
+## ✨ 主要特性
+
+*   **怀旧 UI**: 完美的 2010 年代 Web 设计风格，保留了经典的导航动画和页面布局。
+*   **双模路由**: 通过配置文件轻松切换 `example.com/about` 或 `example.com/?route=/about`。
+*   **画廊系统**: 支持按文件夹自动扫描、分页和排序的图片展示系统。
+*   **轻量级**: 不依赖笨重的现代框架（如 Laravel/Symfony），保持了当年网站“打开即看”的轻快感。
+
+## 🚀 快速开始
+
+### 环境要求
+*   PHP 8.0 或更高版本
+*   Web 服务器 (Nginx/Apache)
+*   PHP GD 扩展 (用于缩略图生成)
+
+### 安装步骤
+
+1.  **克隆代码**:
+    ```bash
+    git clone https://github.com/zhenxinfrozen/rzx-me.git
+    cd rzx-me
+    ```
+
+2.  **配置环境**:
+    复制或修改 `app/Config/app.php`。
+    如果你的服务器配置了 URL Rewrite (伪静态)，请开启：
+    ```php
+    'use_pretty_urls' => true,
+    ```
+    如果在宝塔等不支持 Rewrite 的简单环境，请关闭（默认）：
+    ```php
+    'use_pretty_urls' => false,
+    ```
+
+3.  **恢复资源 (重要)**:
+    由于体积原因，原始的媒体资源（图片、视频、Sketchbook原稿）**并未包含**在 Git 仓库中。（它们在 `.gitignore` 中被排除）。
+    请将备份的媒体资源放入以下目录：
+    *   `public/assets/images/`
+    *   `public/assets/videos/`
+    *   `public/assets/movie/`
+
+4.  **运行**:
+    将 Web 服务器根目录指向 `public/` 文件夹。
+
+## 📂 目录结构
 
 ```
-billfish-webui/
-├── public/                    # Web 根目录
-│   ├── index.php             # 首页
-│   ├── browse.php            # 文件浏览
-│   ├── docs-ui.php           # 文档中心
-│   ├── config.php            # 配置文件
-│   ├── libraries.json        # 资源库列表
-│   ├── api/                  # API 接口
-│   ├── assets/               # 静态资源
-│   ├── includes/             # PHP 类库
-│   └── docs/                 # Markdown 文档
-├── tools/                     # 工具脚本
-└── demo-billfish/            # 演示数据
+rzx-me/
+├── app/                  # 核心应用代码
+│   ├── Config/           # 配置文件 (路由, 应用配置, 画廊排序)
+│   ├── Controllers/      # 业务逻辑控制器
+│   ├── Services/         # 核心服务 (如缩略图生成)
+│   ├── Utils/            # 工具类
+│   ├── Views/            # 页面模板 (PHP混编)
+│   └── Router.php        # 路由分发器
+├── public/               # Web 入口
+│   ├── assets/           # 静态资源 (CSS, JS, 媒体文件)
+│   ├── admin/            # 旧版后台入口 (部分保留)
+│   └── index.php         # 统一入口文件
+└── docs/                 # 开发与维护文档
 ```
 
-## 核心组件
+## 📝 许可证
 
-### 1. BillfishManagerV3 类
-
-位置：`public/includes/BillfishManagerV3.php`
-
-主要功能：
-- 读取 Billfish 数据库
-- 查询文件信息
-- 生成预览图路径
-- 搜索和过滤
-
-关键方法：
-```php
-__construct($billfishPath)     // 初始化
-getFiles($options)             // 获取文件列表
-searchFiles($query)            // 搜索文件
-getFileById($id)               // 获取单个文件
-```
-
-### 2. DocumentManager 类
-
-位置：`public/includes/DocumentManager.php`
-
-主要功能：
-- 扫描和解析 Markdown 文档
-- 生成文档目录结构
-- 渲染 Markdown 内容
-- 支持搜索
-
-### 3. 资源库配置系统
-
-位置：
-- `public/api/library-config.php`
-- `public/libraries.json`
-
-功能：
-- 管理多个资源库
-- 切换当前资源库
-- 验证路径有效性
-
-## 开发环境设置
-
-### 1. 安装 PHP
-
-确保 PHP 版本 >= 8.0：
-
-```bash
-php -v
-```
-
-### 2. 启动开发服务器
-
-```bash
-cd billfish-webui
-php -S localhost:8800 -t public
-```
-
-### 3. 访问应用
-
-- 首页：http://localhost:8800
-- 文档：http://localhost:8800/docs-ui.php
-
-## API 接口
-
-### 资源库配置 API
-
-**端点**：`/api/library-config.php`
-
-**切换资源库**：
-```http
-POST /api/library-config.php
-Content-Type: application/json
-
-{
-  "action": "switch",
-  "libraryId": "demo"
-}
-```
-
-**获取资源库列表**：
-```http
-GET /api/library-config.php?action=list
-```
-
-### 文档 API
-
-**端点**：`/api/docs.php`
-
-**获取文档列表**：
-```http
-GET /api/docs.php?action=list
-```
-
-**搜索文档**：
-```http
-GET /api/docs.php?action=search&query=配置
-```
-
-## 数据库结构
-
-Billfish 使用 SQLite3 数据库，主要表：
-
-- `bf_material_v2`：文件主表
-- `bf_folder`：文件夹表
-- `bf_tag`：标签表
-- `bf_collection`：收藏集表
-
-关键字段：
-- `id`：文件ID
-- `name`：文件名
-- `path`：相对路径
-- `previewTid`：预览图ID
-
-## 调试技巧
-
-### 1. PHP 错误日志
-
-启用错误显示（开发环境）：
-
-```php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-```
-
-### 2. 浏览器控制台
-
-检查 JavaScript 错误和网络请求。
-
-### 3. 数据库查询
-
-直接查询 Billfish 数据库：
-
-```bash
-sqlite3 .BillfishDatabase/xxxxxx.bf3
-.tables
-SELECT * FROM bf_material_v2 LIMIT 5;
-```
-
-## 贡献指南
-
-1. Fork 项目
-2. 创建功能分支：`git checkout -b feature/xxx`
-3. 提交更改：`git commit -m "Add xxx"`
-4. 推送分支：`git push origin feature/xxx`
-5. 提交 Pull Request
-
-## 代码规范
-
-- PHP 遵循 PSR-12
-- JavaScript 使用 ES6+
-- CSS 使用 BEM 命名
-- 文档使用 Markdown
-
-## 版本管理
-
-- `master`：主分支，稳定版本
-- `v0.0.x`：功能分支
-- 使用语义化版本号
-
-## 相关资源
-
-- [Billfish 官网](https://www.billfish.cn)
-- [PHP 文档](https://www.php.net)
-- [MDN Web Docs](https://developer.mozilla.org)
-
----
-
-**更新日期**：2025-01-17  
-**维护者**：zhenxinfrozen
+Private / Personal Archive.
+仅供学习与存档使用。
