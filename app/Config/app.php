@@ -3,15 +3,13 @@
 
 return [
     // 应用基本配置
-    'app' => [
-        'name' => 'RZX.ME Personal Website',
-        'version' => '0.8.1',
-        'environment' => 'development', // development, production
-        'debug' => true,
-        'timezone' => 'Asia/Shanghai',
-        'charset' => 'UTF-8',
-        'use_pretty_urls' => false, // Set to true if you have URL rewriting (pseudo-static) enabled
-    ],
+    'name' => 'RZX.ME Personal Website',
+    'version' => '0.8.1',
+    'environment' => 'development', // development, production
+    'debug' => true,
+    'timezone' => 'Asia/Shanghai',
+    'charset' => 'UTF-8',
+    'use_pretty_urls' => false, // Set to true if you have URL rewriting (pseudo-static) enabled
 
     // 路径配置
     'paths' => [
