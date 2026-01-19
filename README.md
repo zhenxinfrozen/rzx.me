@@ -63,7 +63,7 @@
     请将备份的媒体资源放入以下目录：
     *   `public/assets/images/`
     *   `public/assets/videos/`
-    *   `public/assets/movie/`
+    *   `public/assets/videos/`
 
 4.  **运行**:
     将 Web 服务器根目录指向 `public/` 文件夹。

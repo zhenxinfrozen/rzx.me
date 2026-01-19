@@ -28,54 +28,54 @@
 
 	<div class="video-row">
 		<div class="video-x">
-				<video class="movie" poster="/assets/movie/shooting-01.jpg" preload controls width="355" height="200">
-					<source src="/assets/movie/shooting-01.mp4" type="video/mp4" />
-					<source src="/assets/movie/shooting-01.webm" type="video/webm" />
+				<video class="movie" poster="/assets/videos/shooting-01.jpg" preload controls width="355" height="200">
+					<source src="/assets/videos/shooting-01.mp4" type="video/mp4" />
+					<source src="/assets/videos/shooting-01.webm" type="video/webm" />
 				</video>
 				<p>biu biu biu</p>
 		</div>
 
 		<div class="video-x">
-				<video class="movie" poster="/assets/movie/flower.jpg" preload controls width="355" height="200">
-					<source src="/assets/movie/flower.mp4" type="video/mp4" />
-					<source src="/assets/movie/flower.webm" type="video/webm" />
+				<video class="movie" poster="/assets/videos/flower.jpg" preload controls width="355" height="200">
+					<source src="/assets/videos/flower.mp4" type="video/mp4" />
+					<source src="/assets/videos/flower.webm" type="video/webm" />
 				</video>
 				<p>flower</p>
 		</div>
 
 		<div class="video-x">
-				<video class="movie" poster="/assets/movie/dragonfire.jpg" preload controls width="355" height="200">
-					<source src="/assets/movie/dragonfire.mp4" type="video/mp4" />
-					<source src="/assets/movie/dragonfire.webm" type="video/webm" />
+				<video class="movie" poster="/assets/videos/dragonfire.jpg" preload controls width="355" height="200">
+					<source src="/assets/videos/dragonfire.mp4" type="video/mp4" />
+					<source src="/assets/videos/dragonfire.webm" type="video/webm" />
 				</video>
 				<p>dragonfire</p>
 		</div>
 
 		<div class="video-x">
-				<video class="movie" poster="/assets/movie/begin-01.jpg" preload controls width="355" height="200">
-					<source src="/assets/movie/begin-01.mp4" type="video/mp4" />
-					<source src="/assets/movie/begin-01.webm" type="video/webm" />
+				<video class="movie" poster="/assets/videos/begin-01.jpg" preload controls width="355" height="200">
+					<source src="/assets/videos/begin-01.mp4" type="video/mp4" />
+					<source src="/assets/videos/begin-01.webm" type="video/webm" />
 				</video>
 				<p>动画片段 1</p>
 		</div>
 
 		<div class="video-x">
-				<video class="movie" poster="/assets/movie/Gunman.jpg" preload controls width="355" height="200">
-					<source src="/assets/movie/Gunman.mp4" type="video/mp4" />
-					<source src="/assets/movie/Gunman.webm" type="video/webm" />
+				<video class="movie" poster="/assets/videos/Gunman.jpg" preload controls width="355" height="200">
+					<source src="/assets/videos/Gunman.mp4" type="video/mp4" />
+					<source src="/assets/videos/Gunman.webm" type="video/webm" />
 				</video>
 				<p>dragonfire</p>
 		</div>
 
 		<div class="video-x">
-				<video class="movie" poster="/assets/movie/gun-shooting.jpg" preload controls width="355" height="200">
-					<source src="/assets/movie/gun-shooting.mp4" type="video/mp4" />
-					<source src="/assets/movie/gun-shooting.webm" type="video/webm" />
+				<video class="movie" poster="/assets/videos/gun-shooting.jpg" preload controls width="355" height="200">
+					<source src="/assets/videos/gun-shooting.mp4" type="video/mp4" />
+					<source src="/assets/videos/gun-shooting.webm" type="video/webm" />
 				</video>
 				<p>dragonfire</p>
 		</div>
 			<div class="html5-tip">
-		<p><img src="/assets/movie/html5-150.png" alt="HTML5" /></p>
+		<p><img src="/assets/videos/html5-150.png" alt="HTML5" /></p>
 		<p>本页面视频采用HTML5标准</p>
 		<p>请使用<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh">Chrome</a>, Firefox, 或者 Safari 浏览该网页.</p>
 	</div>

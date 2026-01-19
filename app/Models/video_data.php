@@ -72,28 +72,28 @@ function get_default_video_groups() {
                 [
                     'title' => 'biu biu biu',
                     'description' => '',
-                    'poster' => '/assets/movie/shooting-01.jpg',
+                    'poster' => '/assets/videos/shooting-01.jpg',
                     'sources' => [
-                        'mp4' => '/assets/movie/shooting-01.mp4',
-                        'webm' => '/assets/movie/shooting-01.webm'
+                        'mp4' => '/assets/videos/shooting-01.mp4',
+                        'webm' => '/assets/videos/shooting-01.webm'
                     ]
                 ],
                 [
                     'title' => 'Gunman',
                     'description' => '',
-                    'poster' => '/assets/movie/Gunman.jpg',
+                    'poster' => '/assets/videos/Gunman.jpg',
                     'sources' => [
-                        'mp4' => '/assets/movie/Gunman.mp4',
-                        'webm' => '/assets/movie/Gunman.webm'
+                        'mp4' => '/assets/videos/Gunman.mp4',
+                        'webm' => '/assets/videos/Gunman.webm'
                     ]
                 ],
                 [
                     'title' => 'gun shooting',
                     'description' => '',
-                    'poster' => '/assets/movie/gun-shooting.jpg',
+                    'poster' => '/assets/videos/gun-shooting.jpg',
                     'sources' => [
-                        'mp4' => '/assets/movie/gun-shooting.mp4',
-                        'webm' => '/assets/movie/gun-shooting.webm'
+                        'mp4' => '/assets/videos/gun-shooting.mp4',
+                        'webm' => '/assets/videos/gun-shooting.webm'
                     ]
                 ]
             ]
@@ -107,19 +107,19 @@ function get_default_video_groups() {
                 [
                     'title' => 'flower',
                     'description' => '',
-                    'poster' => '/assets/movie/flower.jpg',
+                    'poster' => '/assets/videos/flower.jpg',
                     'sources' => [
-                        'mp4' => '/assets/movie/flower.mp4',
-                        'webm' => '/assets/movie/flower.webm'
+                        'mp4' => '/assets/videos/flower.mp4',
+                        'webm' => '/assets/videos/flower.webm'
                     ]
                 ],
                 [
                     'title' => 'dragonfire',
                     'description' => '',
-                    'poster' => '/assets/movie/dragonfire.jpg',
+                    'poster' => '/assets/videos/dragonfire.jpg',
                     'sources' => [
-                        'mp4' => '/assets/movie/dragonfire.mp4',
-                        'webm' => '/assets/movie/dragonfire.webm'
+                        'mp4' => '/assets/videos/dragonfire.mp4',
+                        'webm' => '/assets/videos/dragonfire.webm'
                     ]
                 ]
             ]
@@ -133,10 +133,10 @@ function get_default_video_groups() {
                 [
                     'title' => '动画片段 1',
                     'description' => '',
-                    'poster' => '/assets/movie/begin-01.jpg',
+                    'poster' => '/assets/videos/begin-01.jpg',
                     'sources' => [
-                        'mp4' => '/assets/movie/begin-01.mp4',
-                        'webm' => '/assets/movie/begin-01.webm'
+                        'mp4' => '/assets/videos/begin-01.mp4',
+                        'webm' => '/assets/videos/begin-01.webm'
                     ]
                 ]
             ]

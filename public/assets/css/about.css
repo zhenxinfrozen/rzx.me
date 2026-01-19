@@ -27,16 +27,67 @@
 	gap:12px; 
 	min-height:240px;
 }
+/* 旧图片样式，保留仅供参考，或可注释掉
 #email{
 	background:url(/assets/images/email.jpg);
         width: 500px;
 		height: 36px;
-        /* background-color: rgb(62, 243, 7); 让子容器可见 */
 }
-
 #email:hover{
 	background:url(/assets/images/email.jpg) no-repeat 0 -36px;
 }
+*/
+
+/* 新的纯代码 Email 样式 */
+#ray-contact-email {
+    font-size: 30px; 
+    font-weight: 600;
+    color: #888; 
+    text-align: center;
+    cursor: pointer;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+    letter-spacing: 0px;
+    margin-bottom: 5px;
+    user-select: text;
+    line-height: 36px;
+    height: 36px;
+    
+    /* 使用 flex 布局来精确控制子元素 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 即使父容器 hover，默认也不要全体变色，而是分别控制 */
+#ray-contact-email:hover {
+    color: #888; 
+}
+
+/* "Email:" 标签部分 */
+.email-label {
+	padding-right: 5px;
+    display: inline-block;
+    transition: transform 0.2s ease, color 0.1s ease;
+}
+
+#ray-contact-email:hover .email-label {
+    /* 只有标签向左移动 */
+    transform: translateX(-10px); 
+    /* 根据描述，似乎只有邮箱变色，这里标签保持原色或只微调 */
+    color: #888; 
+}
+
+/* 邮箱地址部分 */
+#email-safe {
+    display: inline-block;
+    transition: color 0.1s ease;
+}
+
+#ray-contact-email:hover #email-safe {
+    /* 只有邮箱地址变色 */
+    color: #d67b5d; 
+}
+
 #ray-about-center-follow-icons{
 	width: fit-content;
 	/* background: #009900; */
@@ -48,30 +99,37 @@
 	margin:10px 10px;
 	float:left;
 	overflow:hidden;
+    
+    /* Modernized: Shared background image & Transition */
+    background-image: url(/assets/images/follow.png);
+    background-repeat: no-repeat;
+    
+    /* Default: Grayscale (Black & White) */
+    filter: grayscale(100%);
+    opacity: 0.6; /* 默认稍微变淡一点，增加对比 */
+    
+    /* Smooth transition for filter */
+    transition: filter 0.3s ease, opacity 0.3s ease;
 }
+
+/* Hover: Become Colorful */
+.follow-icon:hover {
+    filter: grayscale(0%); /* 恢复彩色 */
+    opacity: 1;
+}
+
+/* Individual Icon Positions (Same X offsets) */
 #follow-google{
-	background:url(/assets/images/follow.jpg) no-repeat 0 0;
-}
-#follow-google:hover{
-	background:url(/assets/images/follow.jpg) no-repeat 0 -50px;
+	background-position: 0 0;
 }
 #follow-twitter{
-	background:url(/assets/images/follow.jpg) no-repeat -50px 0;
-}
-#follow-twitter:hover{
-	background:url(/assets/images/follow.jpg) no-repeat -50px -50px;
+	background-position: -50px 0;
 }
 #follow-weibo{
-	background:url(/assets/images/follow.jpg) no-repeat -100px 0;
-}
-#follow-weibo:hover{
-	background:url(/assets/images/follow.jpg) no-repeat -100px -50px;
+	background-position: -100px 0;
 }
 #follow-qq{
-	background:url(/assets/images/follow.jpg) no-repeat -150px 0;
-}
-#follow-qq:hover{
-	background:url(/assets/images/follow.jpg) no-repeat -150px -50px;
+	background-position: -150px 0;
 }
 
 #ray-about-note{

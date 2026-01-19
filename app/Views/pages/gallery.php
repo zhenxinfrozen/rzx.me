@@ -12,13 +12,13 @@ require_once __DIR__ . '/../../Services/ThumbnailService.php';
 $currentPath = $_SERVER['REQUEST_URI'] ?? '';
 $galleryName = '';
 
-if (preg_match('/\/gallery-([^\/\?]+)/', $currentPath, $matches)) {
+if (preg_match('/\/gallery-([^\/\?&]+)/', $currentPath, $matches)) {
     $galleryName = $matches[1];
 }
 
 if (empty($galleryName)) {
     // 如果没有指定gallery，重定向到galleries页面
-    header('Location: /galleries');
+    header('Location: ' . url('/galleries'));
     exit;
 }
 
@@ -40,7 +40,7 @@ if (empty($images)) {
     echo '<div style="text-align:center; margin:50px;">
             <h2>Gallery "' . htmlspecialchars($galleryName) . '" 不存在或无图片</h2>
             ' . $skippedInfo . '
-            <p><a href="/galleries">返回画廊列表</a></p>
+            <p><a href="' . url('/galleries') . '">返回画廊列表</a></p>
           </div>';
     return;
 }
@@ -130,7 +130,7 @@ align-items: center;
 
 <div class="gallery-wrap">
   <div class="gallery-header">
-    <a href="/galleries" class="back-link">← BACK</a>
+    <a href="<?php echo url('/galleries'); ?>" class="back-link">← BACK</a>
         <div class="gallery-title-container">
       <h1 class="gallery-title"><?php echo htmlspecialchars($galleryName); ?></h1>
       <p class="gallery-subtitle">
