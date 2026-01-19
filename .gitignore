@@ -6,6 +6,7 @@ includes_css_backup.zip
 node_modules/
 
 # Media assets
-public/assets/images/
-public/assets/movie/
-public/assets/videos/
+public/assets/images/*
+!public/assets/images/.gitkeep
+public/assets/videos/*
+!public/assets/videos/.gitkeep
