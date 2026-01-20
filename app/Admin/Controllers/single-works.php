@@ -648,8 +648,9 @@ function generateThumbnail(string $sourcePath, string $destPath, int $maxWidth, 
 function respondJson(array $payload, int $status = 200): void
 {
     http_response_code($status);
-    header('Content-Type: application/json');
-    echo json_encode($payload, JSON_UNESCAPED_UNICODE);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
 }
 
 /**
