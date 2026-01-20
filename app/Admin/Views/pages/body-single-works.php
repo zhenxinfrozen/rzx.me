@@ -672,6 +672,19 @@ let currentFileInputType = null; // 'thumbnail' | 'images'
 let currentFileInputContext = null; // 'new' | 'edit'
 let selectedImages = []; // 当前选中的图片用于排序
 
+// HTML转义函数，防止XSS和HTML注入
+function escapeHtml(text) {
+    if (!text) return '';
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return String(text).replace(/[&<>"']/g, m => map[m]);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeDragAndDrop();
     updateCategoryOrder();
@@ -778,30 +791,51 @@ function editCategory(categoryName) {
 }
 
 function saveCategory() {
-    if (!currentEditingCategory) return;
+    console.log('[saveCategory] 开始保存...');
+    console.log('[saveCategory] currentEditingCategory:', currentEditingCategory);
+    
+    if (!currentEditingCategory) {
+        console.error('[saveCategory] currentEditingCategory 为空!');
+        showToast('danger', '请先选择要编辑的分组');
+        return;
+    }
 
     const displayName = document.getElementById('edit-display-name').value;
     const description = document.getElementById('edit-description').value;
+    
+    console.log('[saveCategory] displayName:', displayName);
+    console.log('[saveCategory] description:', description);
 
     // 添加确认对话框
     if (!confirm('确定要保存对分组 "' + currentEditingCategory + '" 的修改吗？')) {
+        console.log('[saveCategory] 用户取消保存');
         return;
     }
 
     showToast('info', '正在保存...');
+    
+    const requestBody = {
+        category: currentEditingCategory,
+        displayName: displayName,
+        description: description,
+        category_order: getCurrentCategoryOrder()
+    };
+    
+    const url = `${controllerUrl}&ajax=save_category`;
+    console.log('[saveCategory] 请求URL:', url);
+    console.log('[saveCategory] 请求体:', requestBody);
 
-    fetch(`${controllerUrl}&ajax=save_category`, {
+    fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            category: currentEditingCategory,
-            displayName: displayName,
-            description: description,
-            category_order: getCurrentCategoryOrder()
-        })
+        body: JSON.stringify(requestBody)
     })
-    .then(res => res.json())
+    .then(res => {
+        console.log('[saveCategory] 响应状态:', res.status);
+        return res.json();
+    })
     .then(data => {
+        console.log('[saveCategory] 响应数据:', data);
         if (data.success) {
             // 局部更新界面，不重新加载整个页面
             updateCategoryDisplayInList(currentEditingCategory, displayName, description);
@@ -1123,13 +1157,33 @@ function setAsThumbnail(categoryName, imageName) {
 }
 
 function updateCategoryThumbnailInList(categoryName, thumbnailUrl) {
+    if (!thumbnailUrl) {
+        console.warn('[updateCategoryThumbnailInList] thumbnailUrl 为空');
+        return;
+    }
+    
+    // 添加时间戳避免缓存
+    const timestamp = new Date().getTime();
+    const thumbnailUrlWithTimestamp = thumbnailUrl + '?t=' + timestamp;
+    
     const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
     const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
     
-    if (categoryThumb && thumbnailUrl) {
-        categoryThumb.src = thumbnailUrl;
-    } else if (categoryPlaceholder && thumbnailUrl) {
-        categoryPlaceholder.outerHTML = `<img src="${thumbnailUrl}" alt="缩略图" class="category-thumbnail">`;
+    console.log('[updateCategoryThumbnailInList] 更新缩略图:', {
+        categoryName,
+        thumbnailUrl: thumbnailUrlWithTimestamp,
+        foundThumb: !!categoryThumb,
+        foundPlaceholder: !!categoryPlaceholder
+    });
+    
+    if (categoryThumb) {
+        categoryThumb.src = thumbnailUrlWithTimestamp;
+        console.log('[updateCategoryThumbnailInList] 已更新现有缩略图');
+    } else if (categoryPlaceholder) {
+        categoryPlaceholder.outerHTML = `<img src="${thumbnailUrlWithTimestamp}" alt="缩略图" class="category-thumbnail">`;
+        console.log('[updateCategoryThumbnailInList] 已替换占位符');
+    } else {
+        console.error('[updateCategoryThumbnailInList] 未找到缩略图元素或占位符');
     }
 }
 
@@ -1162,26 +1216,33 @@ function addNewCategoryToList(categoryName, displayName, description, thumbnailI
     newCategoryItem.setAttribute('data-category', categoryName);
     newCategoryItem.setAttribute('draggable', 'true');
     
-    // 确定缩略图显示
+    // 确定缩略图显示（添加时间戳避免缓存）
+    const timestamp = new Date().getTime();
     const thumbnailUrl = thumbnailInfo?.custom_thumbnail || thumbnailInfo?.first_image_thumb;
-    const thumbnailHtml = thumbnailUrl 
-        ? `<img src="${thumbnailUrl}" alt="缩略图" class="category-thumbnail">`
+    const thumbnailUrlWithTimestamp = thumbnailUrl ? `${thumbnailUrl}?t=${timestamp}` : null;
+    const thumbnailHtml = thumbnailUrlWithTimestamp 
+        ? `<img src="${escapeHtml(thumbnailUrlWithTimestamp)}" alt="缩略图" class="category-thumbnail">`
         : `<div class="category-thumbnail-placeholder"><i data-feather="image"></i></div>`;
+    
+    // 转义所有文本内容防止HTML注入
+    const safeCategoryName = escapeHtml(categoryName);
+    const safeDisplayName = escapeHtml(displayName || categoryName);
+    const safeDescription = escapeHtml(description);
     
     newCategoryItem.innerHTML = `
         <div class="category-row d-flex align-items-center p-3">
             <span class="drag-handle" title="拖拽排序">⋮⋮</span>
             ${thumbnailHtml}
-            <div class="category-content d-flex align-items-center flex-grow-1" onclick="editCategory('${categoryName}')">
+            <div class="category-content d-flex align-items-center flex-grow-1" onclick="editCategory('${safeCategoryName}')">
                 <div class="flex-grow-1">
-                    <div class="fw-semibold category-name">${displayName || categoryName}</div>
+                    <div class="fw-semibold category-name">${safeDisplayName}</div>
                     <small class="text-muted">0 张图片</small>
                 </div>
                 <span class="badge bg-secondary">${categoryList.children.length + 1}</span>
             </div>
         </div>
-        <input type="hidden" name="display_names[${categoryName}]" value="${displayName}" class="display-name-input">
-        <input type="hidden" name="descriptions[${categoryName}]" value="${description}" class="description-input">
+        <input type="hidden" name="display_names[${safeCategoryName}]" value="${safeDisplayName}" class="display-name-input">
+        <input type="hidden" name="descriptions[${safeCategoryName}]" value="${safeDescription}" class="description-input">
     `;
     
     // 根据位置插入
@@ -1361,13 +1422,22 @@ function uploadThumbnail(categoryName, file) {
                 uploadDiv.style.display = 'none';
             }
             
-            // 更新左侧分组列表的缩略图
+            // 更新左侧分组列表的缩略图（添加时间戳避免缓存）
+            const timestamp = new Date().getTime();
+            const thumbnailUrlWithTimestamp = data.thumbnail_url + '?t=' + timestamp;
             const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
             const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
             if (categoryThumb && data.thumbnail_url) {
-                categoryThumb.src = data.thumbnail_url;
+                categoryThumb.src = thumbnailUrlWithTimestamp;
+                console.log('[uploadThumbnail] 已更新左侧列表缩略图:', thumbnailUrlWithTimestamp);
             } else if (categoryPlaceholder && data.thumbnail_url) {
-                categoryPlaceholder.outerHTML = `<img src="${data.thumbnail_url}" alt="缩略图" class="category-thumbnail">`;
+                categoryPlaceholder.outerHTML = `<img src="${thumbnailUrlWithTimestamp}" alt="缩略图" class="category-thumbnail">`;
+                console.log('[uploadThumbnail] 已替换占位符为缩略图:', thumbnailUrlWithTimestamp);
+            }
+            
+            // 同时更新编辑区域的显示
+            if (editImg && data.thumbnail_url) {
+                editImg.src = thumbnailUrlWithTimestamp;
             }
         } else {
             showToast('danger', data.message || '缩略图上传失败');

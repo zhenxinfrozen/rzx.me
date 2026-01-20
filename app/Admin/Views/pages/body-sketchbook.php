@@ -674,6 +674,19 @@ let currentFileInputType = null; // 'thumbnail' | 'images'
 let currentFileInputContext = null; // 'new' | 'edit'
 let selectedImages = []; // 当前选中的图片用于排序
 
+// HTML转义函数，防止XSS和HTML注入
+function escapeHtml(text) {
+    if (!text) return '';
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return String(text).replace(/[&<>"']/g, m => map[m]);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeDragAndDrop();
     updateCategoryOrder();
@@ -1178,23 +1191,28 @@ function addNewCategoryToList(categoryName, displayName, description, thumbnailI
     // 确定缩略图显示
     const thumbnailUrl = thumbnailInfo?.custom_thumbnail || thumbnailInfo?.first_image_thumb;
     const thumbnailHtml = thumbnailUrl 
-        ? `<img src="${thumbnailUrl}" alt="缩略图" class="category-thumbnail">`
+        ? `<img src="${escapeHtml(thumbnailUrl)}" alt="缩略图" class="category-thumbnail">`
         : `<div class="category-thumbnail-placeholder"><i data-feather="image"></i></div>`;
+    
+    // 转义所有文本内容防止HTML注入
+    const safeCategoryName = escapeHtml(categoryName);
+    const safeDisplayName = escapeHtml(displayName || categoryName);
+    const safeDescription = escapeHtml(description);
     
     newCategoryItem.innerHTML = `
         <div class="category-row d-flex align-items-center p-3">
             <span class="drag-handle" title="拖拽排序">⋮⋮</span>
             ${thumbnailHtml}
-            <div class="category-content d-flex align-items-center flex-grow-1" onclick="editCategory('${categoryName}')">
+            <div class="category-content d-flex align-items-center flex-grow-1" onclick="editCategory('${safeCategoryName}')">
                 <div class="flex-grow-1">
-                    <div class="fw-semibold category-name">${displayName || categoryName}</div>
+                    <div class="fw-semibold category-name">${safeDisplayName}</div>
                     <small class="text-muted">0 张图片</small>
                 </div>
                 <span class="badge bg-secondary">${categoryList.children.length + 1}</span>
             </div>
         </div>
-        <input type="hidden" name="display_names[${categoryName}]" value="${displayName}" class="display-name-input">
-        <input type="hidden" name="descriptions[${categoryName}]" value="${description}" class="description-input">
+        <input type="hidden" name="display_names[${safeCategoryName}]" value="${safeDisplayName}" class="display-name-input">
+        <input type="hidden" name="descriptions[${safeCategoryName}]" value="${safeDescription}" class="description-input">
     `;
     
     // 根据位置插入
@@ -1362,6 +1380,10 @@ function uploadThumbnail(categoryName, file) {
         if (data.success) {
             showToast('success', '缩略图上传成功');
             
+            // 生成时间戳避免浏览器缓存
+            const timestamp = new Date().getTime();
+            const thumbnailUrlWithTimestamp = data.thumbnail_url + '?t=' + timestamp;
+            
             // 更新编辑区域的缩略图显示
             const editImg = document.getElementById('edit-thumbnail-img');
             const previewDiv = document.getElementById('edit-thumbnail-preview');
@@ -1369,7 +1391,7 @@ function uploadThumbnail(categoryName, file) {
             const removeBtn = document.getElementById('remove-thumbnail-btn');
             
             if (editImg && data.thumbnail_url) {
-                editImg.src = data.thumbnail_url;
+                editImg.src = thumbnailUrlWithTimestamp;
                 editImg.style.display = 'block';
                 previewDiv.style.display = 'flex';
                 uploadDiv.style.display = 'none';
@@ -1378,13 +1400,15 @@ function uploadThumbnail(categoryName, file) {
                 }
             }
             
-            // 更新左侧速写本列表的缩略图
+            // 更新左侧速写本列表的缩略图（添加时间戳避免缓存）
             const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
             const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
             if (categoryThumb && data.thumbnail_url) {
-                categoryThumb.src = data.thumbnail_url;
+                categoryThumb.src = thumbnailUrlWithTimestamp;
+                console.log('[uploadThumbnail] 已更新左侧列表缩略图:', thumbnailUrlWithTimestamp);
             } else if (categoryPlaceholder && data.thumbnail_url) {
-                categoryPlaceholder.outerHTML = `<img src="${data.thumbnail_url}" alt="缩略图" class="category-thumbnail">`;
+                categoryPlaceholder.outerHTML = `<img src="${thumbnailUrlWithTimestamp}" alt="缩略图" class="category-thumbnail">`;
+                console.log('[uploadThumbnail] 已替换占位符为缩略图:', thumbnailUrlWithTimestamp);
             }
 
             // 重新加载图片列表与缩略图信息
@@ -1563,31 +1587,43 @@ function deleteImage(categoryName, imageName) {
 }
 
 function createNewCategory() {
+    console.log('[createNewCategory] 开始创建...');
+    
     const categoryName = document.getElementById('new-category-name').value.trim();
     const displayName = document.getElementById('new-display-name').value.trim();
     const description = document.getElementById('new-description').value.trim();
     const position = document.getElementById('new-category-position').value;
+    
+    console.log('[createNewCategory] categoryName:', categoryName);
+    console.log('[createNewCategory] displayName:', displayName);
+    console.log('[createNewCategory] description:', description);
+    console.log('[createNewCategory] position:', position);
 
     if (!categoryName) {
+        console.error('[createNewCategory] 缺少速写本名称');
         showToast('danger', '请输入速写本名称');
         return;
     }
     if (!/^[a-zA-Z0-9_-]+$/.test(categoryName)) {
+        console.error('[createNewCategory] 名称格式不正确:', categoryName);
         showToast('danger', '速写本名称只能包含字母、数字、下划线和连字符');
         return;
     }
 
     const existing = Array.from(document.querySelectorAll('.category-item')).map(item => item.dataset.category);
     if (existing.includes(categoryName)) {
+        console.error('[createNewCategory] 名称已存在:', categoryName);
         showToast('danger', '速写本名称已存在');
         return;
     }
 
     if (!confirm(`确定要创建速写本 "${displayName || categoryName}" 吗？`)) {
+        console.log('[createNewCategory] 用户取消创建');
         return;
     }
 
     const imageFiles = document.getElementById('imagesFileInput').files;
+    console.log('[createNewCategory] 图片文件数量:', imageFiles.length);
 
     const formData = new FormData();
     formData.append('category', categoryName);
@@ -1596,17 +1632,27 @@ function createNewCategory() {
     formData.append('position', position);
     
     if (imageFiles.length > 0) {
-        Array.from(imageFiles).forEach(file => formData.append('images[]', file));
+        Array.from(imageFiles).forEach(file => {
+            console.log('[createNewCategory] 添加图片:', file.name);
+            formData.append('images[]', file);
+        });
     }
 
     showToast('info', '正在创建速写本...');
+    
+    const url = `${controllerUrl}&ajax=create_category`;
+    console.log('[createNewCategory] 请求URL:', url);
 
-    fetch(`${controllerUrl}&ajax=create_category`, {
+    fetch(url, {
         method: 'POST',
         body: formData
     })
-    .then(res => res.json())
+    .then(res => {
+        console.log('[createNewCategory] 响应状态:', res.status);
+        return res.json();
+    })
     .then(data => {
+        console.log('[createNewCategory] 响应数据:', data);
         if (data.success) {
             showToast('success', '速写本创建成功，正在更新列表...');
             
