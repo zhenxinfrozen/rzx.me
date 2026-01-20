@@ -266,14 +266,14 @@ $current_user = [
             </li>
 
             <li class="menu-item <?= $current_page === 'tools' ? 'active' : '' ?>">
-                <a href="/admin/controllers/tools.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
+                <a href="/admin?page=tools<?= isset($_GET['dev']) ? '&dev' : '' ?>">
                     <i data-feather="tool"></i>
                     <span>管理工具</span>
                 </a>
             </li>
 
             <li class="menu-item <?= $current_page === 'thumbnail-center' ? 'active' : '' ?>">
-                <a href="/admin/controllers/thumbnail-center.php<?= isset($_GET['dev']) ? '?dev' : '' ?>">
+                <a href="/admin?page=thumbnail-center<?= isset($_GET['dev']) ? '&dev' : '' ?>">
                     <i data-feather="image"></i>
                     <span>缩略图中心</span>
                 </a>

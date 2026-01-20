@@ -663,7 +663,7 @@ $totalCategories = count($categoryData);
 
 <script>
 // AJAX 请求通过统一的 AJAX 入口
-const controllerUrl = '/admin/ajax.php?controller=single-works';
+const controllerUrl = '/admin/ajax?controller=single-works';
 const existingMeta = <?= json_encode($categoryData, JSON_UNESCAPED_UNICODE) ?>;
 
 let currentEditingCategory = null;

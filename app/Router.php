@@ -110,7 +110,8 @@ class Router
             }
             
             $this->currentRoute = $route;
-            $this->currentRoute['type'] = 'api';
+            // 使用路由配置中的type，如果没有则默认为'api'
+            $this->currentRoute['type'] = $route['type'] ?? 'api';
             $this->currentRoute['path'] = $path;
             return $this->currentRoute;
         }
@@ -235,6 +236,20 @@ class Router
         }
         
         return ($route['type'] ?? '') === 'static';
+    }
+
+    /**
+     * 检查是否为admin AJAX请求
+     * @param array $route
+     * @return bool
+     */
+    public function isAdminAjaxRoute($route = null) 
+    {
+        if ($route === null) {
+            $route = $this->currentRoute;
+        }
+        
+        return ($route['type'] ?? '') === 'admin_ajax';
     }
 
     /**

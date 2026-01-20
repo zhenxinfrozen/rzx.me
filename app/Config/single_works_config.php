@@ -26,7 +26,7 @@ return array (
   ),
   'category_thumbnails' => 
   array (
-    'test-fgdsfg333333' => '/assets/images/single-works/test-fgdsfg333333/thumbs/custom-thumb-20260120-234942.jpg',
+    'test-fgdsfg333333' => '/assets/images/single-works/test-fgdsfg333333/thumbs/custom-thumb-20260121-014902.webp',
     'rrrrrr' => '/assets/images/single-works/rrrrrr/thumbs/custom-thumb-20260121-001642.jpg',
   ),
 );
