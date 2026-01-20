@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX 测试工具</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-section { margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>后台 AJAX 调试工具</h1>
+    
+    <div class="test-section">
+        <h2>测试 Single-Works</h2>
+        <button onclick="testSingleWorks()">测试加载 Game+color 图片</button>
+        <div id="single-works-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试 Sketchbook</h2>
+        <button onclick="testSketchbook()">测试加载 FASHION 图片</button>
+        <div id="sketchbook-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>测试 Video Gallery</h2>
+        <button onclick="testVideoGallery()">测试加载视频</button>
+        <div id="video-result"></div>
+    </div>
+
+    <script>
+        async function testAjax(url, resultId) {
+            const resultDiv = document.getElementById(resultId);
+            resultDiv.innerHTML = '<p>⏳ 请求中...</p>';
+            
+            try {
+                console.log('Requesting:', url);
+                const response = await fetch(url);
+                
+                // 获取原始文本
+                const text = await response.text();
+                console.log('Raw response:', text);
+                
+                // 尝试解析JSON
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ JSON 解析失败</p>
+                        <p>HTTP Status: ${response.status}</p>
+                        <p>Content-Type: ${response.headers.get('content-type')}</p>
+                        <pre>${text}</pre>
+                    `;
+                    return;
+                }
+                
+                // 显示结果
+                if (data.success) {
+                    const count = data.images?.length || data.videos?.length || data.count || 0;
+                    resultDiv.innerHTML = `
+                        <p class="success">✅ 成功</p>
+                        <p>项目数量: ${count}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <p class="error">❌ 失败</p>
+                        <p>错误消息: ${data.message || data.error || '未知错误'}</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (err) {
+                resultDiv.innerHTML = `
+                    <p class="error">❌ 请求异常</p>
+                    <p>${err.message}</p>
+                `;
+                console.error('Error:', err);
+            }
+        }
+        
+        function testSingleWorks() {
+            testAjax('/admin/ajax.php?controller=single-works&ajax=thumbnails&category=Game+color', 'single-works-result');
+        }
+        
+        function testSketchbook() {
+            testAjax('/admin/ajax.php?controller=sketchbook&ajax=thumbnails&category=FASHION', 'sketchbook-result');
+        }
+        
+        function testVideoGallery() {
+            testAjax('/admin/ajax.php?controller=video-gallery&ajax=videos&category=Nature', 'video-result');
+        }
+    </script>
+</body>
+</html>

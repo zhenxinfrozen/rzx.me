@@ -857,12 +857,28 @@ function deleteCurrentCategory() {
 }
 
 function loadCategoryThumbnails(categoryName) {
+    console.log('[loadCategoryThumbnails] 开始加载:', categoryName);
+    console.log('[loadCategoryThumbnails] controllerUrl:', controllerUrl);
+    
     const container = document.getElementById('thumbnail-grid');
+    if (!container) {
+        console.error('[loadCategoryThumbnails] thumbnail-grid 元素不存在！');
+        return;
+    }
+    
     container.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm"></div> 加载中...</div>';
+    
+    const url = `${controllerUrl}?ajax=thumbnails&category=${encodeURIComponent(categoryName)}`;
+    console.log('[loadCategoryThumbnails] 请求URL:', url);
 
-    fetch(`${controllerUrl}?ajax=thumbnails&category=${encodeURIComponent(categoryName)}`)
-        .then(res => res.json())
+    fetch(url)
+        .then(res => {
+            console.log('[loadCategoryThumbnails] Response status:', res.status);
+            console.log('[loadCategoryThumbnails] Response headers:', res.headers);
+            return res.json();
+        })
         .then(data => {
+            console.log('[loadCategoryThumbnails] Response data:', data);
             container.innerHTML = '';
             
             // 添加方块上传按钮
