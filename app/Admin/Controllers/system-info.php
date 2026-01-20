@@ -10,7 +10,7 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 // 包含布局文件
-require_once __DIR__ . '/../../Views/Admin/layouts/header.php';
+require_once __DIR__ . '/../Views/layouts/header.php';
 ?>
 
 <div class="admin-page-content">
@@ -565,4 +565,4 @@ function updateRealTimeInfo() {
 }
 </script>
 
-<?php require_once __DIR__ . '/../../Views/Admin/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../Views/layouts/footer.php'; ?>

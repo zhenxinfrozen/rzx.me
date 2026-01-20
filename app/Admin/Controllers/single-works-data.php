@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../Utils/GalleryManager.php';
 
 $galleryManager = new GalleryManager();
-$configPath = __DIR__ . '/../../../app/Config/single_works_sort.php';
+$configPath = __DIR__ . '/../../Config/single_works_sort.php';
 $imagesRoot = __DIR__ . '/../../../public/assets/images/single-works';
 $trashRoot = __DIR__ . '/../../../storage/trash/single-works';
 
@@ -84,7 +84,7 @@ function getCategoryThumbnailInfo($category, $dirPath)
     ];
     
     // 检查是否有自定义缩略图（在config中保存的）
-    $configPath = __DIR__ . '/../../../app/Config/single_works_config.php';
+    $configPath = __DIR__ . '/../../Config/single_works_config.php';
     if (file_exists($configPath)) {
         $config = require $configPath;
         if (isset($config['category_thumbnails'][$category])) {

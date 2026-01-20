@@ -7,7 +7,7 @@
 require_once __DIR__ . '/../../Utils/GalleryManager.php';
 
 $galleryManager = new GalleryManager();
-$configPath = __DIR__ . '/../../../app/Config/sketchbook_sort.php';
+$configPath = __DIR__ . '/../../Config/sketchbook_sort.php';
 $imagesRoot = __DIR__ . '/../../../public/assets/images/sketchbook';
 $trashRoot = __DIR__ . '/../../../storage/trash/sketchbook';
 
@@ -145,7 +145,7 @@ function getCategoryThumbnailInfo($category, $dirPath)
         'first_image_thumb' => null,
     ];
 
-    $configPath = __DIR__ . '/../../../app/Config/sketchbook_config.php';
+    $configPath = __DIR__ . '/../../Config/sketchbook_config.php';
     if (file_exists($configPath)) {
         $config = require $configPath;
         if (isset($config['category_thumbnails'][$category])) {

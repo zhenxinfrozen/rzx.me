@@ -20,6 +20,6 @@ $_GET['page'] = 'tools';
 $dev_query = isset($_GET['dev']) ? '?dev' : '';
 
 // 包含布局和视图
-require_once __DIR__ . '/../../Views/Admin/layouts/header.php';
-require_once __DIR__ . '/../../Views/Admin/pages/tools.php';
-require_once __DIR__ . '/../../Views/Admin/layouts/footer.php';
+require_once __DIR__ . '/../Views/layouts/header.php';
+require_once __DIR__ . '/../Views/pages/tools.php';
+require_once __DIR__ . '/../Views/layouts/footer.php';

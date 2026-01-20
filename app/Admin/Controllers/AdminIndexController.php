@@ -152,11 +152,11 @@ class AdminIndexController
         }
         
         // 标准布局：header + content + footer
-        require_once __DIR__ . '/../../Views/Admin/layouts/header.php';
+        require_once __DIR__ . '/../Views/layouts/header.php';
         
         // 加载视图内容
         if ($pageConfig['view']) {
-            $viewFile = __DIR__ . '/../../Views/Admin/pages/' . $pageConfig['view'] . '.php';
+            $viewFile = __DIR__ . '/../Views/pages/' . $pageConfig['view'] . '.php';
             if (file_exists($viewFile)) {
                 require_once $viewFile;
             } else {
@@ -166,6 +166,6 @@ class AdminIndexController
             }
         }
         
-        require_once __DIR__ . '/../../Views/Admin/layouts/footer.php';
+        require_once __DIR__ . '/../Views/layouts/footer.php';
     }
 }

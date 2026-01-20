@@ -9,7 +9,7 @@ $page_title = '🛠️ 网站配置';
 $page_subtitle = '管理网站的基本设置和系统配置';
 $_GET['page'] = 'site-config';
 
-require_once __DIR__ . '/../../Views/Admin/layouts/header.php';
+require_once __DIR__ . '/../Views/layouts/header.php';
 
 // 处理配置更新
 $message = '';
@@ -271,4 +271,4 @@ function pageInit() {
 }
 </script>
 
-<?php require_once __DIR__ . '/../../Views/Admin/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../Views/layouts/footer.php'; ?>

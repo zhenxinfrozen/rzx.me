@@ -14,7 +14,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
-$configPath = __DIR__ . '/../../../app/Config/sketchbook_sort.php';
+$configPath = __DIR__ . '/../../Config/sketchbook_sort.php';
 $imagesRoot = __DIR__ . '/../../assets/images/sketchbook';
 $trashRoot = __DIR__ . '/../../assets/images/trash/sketchbook';
 $imageOrderPath = __DIR__ . '/../../../app/storage/config/image-orders.json';
@@ -735,7 +735,7 @@ function getCategoryThumbnailInfo($category, $dirPath)
     ];
     
     // 检查是否有自定义缩略图（在config中保存的）
-    $configPath = __DIR__ . '/../../../app/Config/sketchbook_config.php';
+    $configPath = __DIR__ . '/../../Config/sketchbook_config.php';
     if (file_exists($configPath)) {
         $config = require $configPath;
         if (isset($config['category_thumbnails'][$category])) {
@@ -818,7 +818,7 @@ function setAsThumbnail($imagesRoot, $configPath)
 
     // 保存到配置文件
     $config = [];
-    $configFile = __DIR__ . '/../../../app/Config/sketchbook_config.php';
+    $configFile = __DIR__ . '/../../Config/sketchbook_config.php';
     if (file_exists($configFile)) {
         $config = require $configFile;
     }
@@ -904,7 +904,7 @@ function uploadCategoryThumbnail(string $imagesRoot): void
 
         $publicUrl = '/assets/images/sketchbook/' . $category . '/thumbs/' . $filename;
 
-        $configFile = __DIR__ . '/../../../app/Config/sketchbook_config.php';
+        $configFile = __DIR__ . '/../../Config/sketchbook_config.php';
         $config = [];
         if (file_exists($configFile)) {
             $config = require $configFile;
@@ -960,7 +960,7 @@ function deleteThumbnail($imagesRoot, $configPath)
     }
     
     // 从配置文件中删除
-    $configFile = __DIR__ . '/../../../app/Config/sketchbook_config.php';
+    $configFile = __DIR__ . '/../../Config/sketchbook_config.php';
     $config = [];
     if (file_exists($configFile)) {
         $config = require $configFile;
@@ -1203,7 +1203,7 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
             }
             
             // 删除缩略图配置
-            $thumbnailConfigFile = __DIR__ . '/../../../app/Config/sketchbook_config.php';
+            $thumbnailConfigFile = __DIR__ . '/../../Config/sketchbook_config.php';
             if (file_exists($thumbnailConfigFile)) {
                 $thumbnailConfig = require $thumbnailConfigFile;
                 if (isset($thumbnailConfig['category_thumbnails'][$category])) {

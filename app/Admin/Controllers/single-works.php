@@ -14,7 +14,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
-$configPath = __DIR__ . '/../../../app/Config/single_works_sort.php';
+$configPath = __DIR__ . '/../../Config/single_works_sort.php';
 $imagesRoot = __DIR__ . '/../../assets/images/single-works';
 $trashRoot = __DIR__ . '/../../assets/images/trash';
 $imageOrderPath = __DIR__ . '/../../../app/storage/config/image-orders.json';
