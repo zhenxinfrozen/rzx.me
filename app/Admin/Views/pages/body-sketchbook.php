@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $page_title = $page_title ?? '🛠️ Sketchbook 管理';
 $page_subtitle = $page_subtitle ?? '管理 Sketchbook 页面速写本与图片';
 $_GET['page'] = $_GET['page'] ?? 'sketchbook';

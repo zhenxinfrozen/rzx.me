@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $page_title = $page_title ?? '🎬 Video Gallery 管理';
 $page_subtitle = $page_subtitle ?? '管理视频分组与文件';
 $_GET['page'] = $_GET['page'] ?? 'video-gallery';

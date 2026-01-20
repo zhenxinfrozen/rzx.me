@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $page_title = $page_title ?? '🛠️ Single-Works 管理';
 $page_subtitle = $page_subtitle ?? '管理 Single-Works 页面分组与图片';
 $_GET['page'] = $_GET['page'] ?? 'single-works';
