@@ -840,11 +840,8 @@ function saveCategory() {
             // 局部更新界面，不重新加载整个页面
             updateCategoryDisplayInList(currentEditingCategory, displayName, description);
             
-            // 更新缩略图信息
-            if (data.thumbnail_info) {
-                updateCategoryThumbnailInList(currentEditingCategory, 
-                    data.thumbnail_info.custom_thumbnail || data.thumbnail_info.first_image_thumb);
-            }
+            // 注意：不在这里更新缩略图，因为缩略图在上传时已经自动保存和更新
+            // 避免覆盖用户刚上传的新缩略图
 
             showToast('success', '分组信息已保存');
         } else {
