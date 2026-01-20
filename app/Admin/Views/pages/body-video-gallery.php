@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $page_title = $page_title ?? '🎬 Video Gallery 管理';
 $page_subtitle = $page_subtitle ?? '管理视频分组与文件';
 $_GET['page'] = $_GET['page'] ?? 'video-gallery';
@@ -732,7 +732,7 @@ function saveCategory() {
 
     showToast('info', '正在保存...');
 
-    fetch(`${controllerUrl}?ajax=save_category`, {
+    fetch(`${controllerUrl}&ajax=save_category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -769,7 +769,7 @@ function deleteCurrentCategory() {
     if (!currentEditingCategory) return;
     if (!confirm(`确定要删除分组 \"${currentEditingCategory}\" 吗？\n这将删除该分组下的所有视频文件。`)) return;
 
-    fetch(`${controllerUrl}?ajax=delete_category`, {
+    fetch(`${controllerUrl}&ajax=delete_category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -802,7 +802,7 @@ function loadCategoryVideos(categoryName) {
     const container = document.getElementById('video-grid');
     container.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm"></div> 加载中...</div>';
 
-    fetch(`${controllerUrl}?ajax=videos&category=${encodeURIComponent(categoryName)}`)
+    fetch(`${controllerUrl}&ajax=videos&category=${encodeURIComponent(categoryName)}`)
         .then(res => res.json())
         .then(data => {
             container.innerHTML = '';
@@ -865,7 +865,7 @@ function loadCategoryVideos(categoryName) {
 }
 
 function loadCategoryThumbnailImage(categoryName) {
-    fetch(`${controllerUrl}?ajax=category_thumbnail&category=${encodeURIComponent(categoryName)}`)
+    fetch(`${controllerUrl}&ajax=category_thumbnail&category=${encodeURIComponent(categoryName)}`)
         .then(res => res.json())
         .then(data => {
             const img = document.getElementById('edit-thumbnail-img');
@@ -984,7 +984,7 @@ function updateCategoryOrder() {
 
     // 实时保存分组顺序
     if (order) {
-        fetch(`${controllerUrl}?ajax=save_order`, {
+        fetch(`${controllerUrl}&ajax=save_order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ order: order })
@@ -1098,7 +1098,7 @@ function updateVideoOrder() {
         videoOrder.push(videoIndex);
     });
 
-    fetch(`${controllerUrl}?ajax=reorder_videos`, {
+    fetch(`${controllerUrl}&ajax=reorder_videos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1230,7 +1230,7 @@ function uploadThumbnail(categoryName, file) {
 
     showToast('info', '正在上传缩略图...');
 
-    fetch(`${controllerUrl}?ajax=upload_thumbnail`, {
+    fetch(`${controllerUrl}&ajax=upload_thumbnail`, {
         method: 'POST',
         body: formData
     })
@@ -1274,7 +1274,7 @@ function removeThumbnail(context) {
         console.log('删除缩略图：', currentEditingCategory);
         if (!confirm('确定要删除缩略图吗？将自动使用第一张视频缩略图作为分组缩略图。')) return;
 
-        fetch(`${controllerUrl}?ajax=delete_thumbnail`, {
+        fetch(`${controllerUrl}&ajax=delete_thumbnail`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ category: currentEditingCategory })
@@ -1410,7 +1410,7 @@ function uploadVideos(categoryName, files) {
     const totalSize = (Array.from(files).reduce((sum, file) => sum + file.size, 0) / (1024 * 1024)).toFixed(1);
     showToast('info', `正在上传 ${files.length} 个视频 (${totalSize}MB)...`);
 
-    fetch(`${controllerUrl}?ajax=upload_videos`, {
+    fetch(`${controllerUrl}&ajax=upload_videos`, {
         method: 'POST',
         body: formData
     })
@@ -1450,7 +1450,7 @@ function uploadVideos(categoryName, files) {
 function deleteVideo(categoryName, videoTitle) {
     if (!confirm(`确定要删除视频 "${videoTitle}" 吗？\n此操作将永久删除原文件。`)) return;
 
-    fetch(`${controllerUrl}?ajax=delete_video`, {
+    fetch(`${controllerUrl}&ajax=delete_video`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1553,7 +1553,7 @@ function createNewCategory() {
 
     showToast('info', '正在创建分组...');
 
-    fetch(`${controllerUrl}?ajax=create_category`, {
+    fetch(`${controllerUrl}&ajax=create_category`, {
         method: 'POST',
         body: formData
     })
@@ -1598,7 +1598,7 @@ function scanVideoDirectory() {
 
     showToast('info', '正在扫描视频目录...');
 
-    fetch(`${controllerUrl}?ajax=scan_directory`, {
+    fetch(`${controllerUrl}&ajax=scan_directory`, {
         method: 'POST'
     })
     .then(res => res.json())
@@ -1618,7 +1618,7 @@ function scanVideoDirectory() {
 }
 
 function showPhpConfigInfo() {
-    fetch(`${controllerUrl}?ajax=php_config`)
+    fetch(`${controllerUrl}&ajax=php_config`)
         .then(res => res.json())
         .then(data => {
             let message = `PHP上传配置：\n`;
@@ -1651,7 +1651,7 @@ function resetToDefault() {
 }
 
 function checkPhpConfig() {
-    fetch(`${controllerUrl}?ajax=php_config`)
+    fetch(`${controllerUrl}&ajax=php_config`)
         .then(res => res.json())
         .then(data => {
             if (data.status === 'warning' && data.issues.length > 0) {
