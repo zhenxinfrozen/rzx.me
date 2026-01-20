@@ -2,13 +2,13 @@
 <?php
 /**
  * 编码检测和修复工具
- * 
+ *
  * 功能：
  * 1. 检测项目中所有文件的编码
  * 2. 查找有 BOM 的文件
  * 3. 转换非 UTF-8 文件
  * 4. 移除 PHP 文件的 BOM
- * 
+ *
  * 使用：php tools/check-encoding.php [--fix]
  */
 
@@ -29,7 +29,7 @@ class EncodingChecker
 
     // 需要检查的文件扩展名
     private $extensions = ['php', 'js', 'html', 'css', 'json', 'md', 'txt', 'xml'];
-    
+
     // 排除的目录
     private $excludeDirs = ['vendor', 'node_modules', '.git', 'storage/cache', 'public/assets/images'];
 
@@ -52,13 +52,13 @@ class EncodingChecker
         echo "📊 统计结果:\n";
         echo str_repeat('=', 60) . "\n";
         echo sprintf("总文件数: %d\n", $this->stats['total']);
-        echo sprintf("✅ UTF-8 (无 BOM): %d (%.1f%%)\n", 
-            $this->stats['utf8'], 
+        echo sprintf("✅ UTF-8 (无 BOM): %d (%.1f%%)\n",
+            $this->stats['utf8'],
             $this->stats['total'] > 0 ? ($this->stats['utf8'] / $this->stats['total'] * 100) : 0
         );
         echo sprintf("⚠️  UTF-8 (有 BOM): %d\n", $this->stats['utf8_bom']);
         echo sprintf("❌ 其他编码: %d\n", $this->stats['other']);
-        
+
         if ($this->fixMode) {
             echo sprintf("🔧 已修复: %d\n", $this->stats['fixed']);
             echo sprintf("⚠️  错误: %d\n", $this->stats['errors']);
@@ -68,14 +68,14 @@ class EncodingChecker
             echo "\n" . str_repeat('=', 60) . "\n";
             echo "🔍 发现的问题:\n";
             echo str_repeat('=', 60) . "\n";
-            
+
             foreach ($this->issues as $issue) {
                 echo sprintf("[%s] %s\n", $issue['type'], $issue['file']);
                 if (isset($issue['detail'])) {
                     echo "    → {$issue['detail']}\n";
                 }
             }
-            
+
             if (!$this->fixMode) {
                 echo "\n💡 运行 'php tools/check-encoding.php --fix' 来自动修复问题\n";
             }
@@ -206,7 +206,7 @@ class EncodingChecker
     {
         try {
             $content = file_get_contents($fullPath);
-            
+
             if ($currentEncoding && $currentEncoding !== 'UTF-8') {
                 $content = mb_convert_encoding($content, 'UTF-8', $currentEncoding);
             }
@@ -227,7 +227,7 @@ class EncodingChecker
     {
         try {
             $content = file_get_contents($fullPath);
-            
+
             // 移除 UTF-8 BOM
             if (substr($content, 0, 3) === "\xEF\xBB\xBF") {
                 $content = substr($content, 3);

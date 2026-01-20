@@ -21,10 +21,10 @@ foreach ($files as $file) {
         echo "[-] $file - 文件不存在\n";
         continue;
     }
-    
+
     $content = file_get_contents($file);
     $first200 = mb_substr($content, 0, 200);
-    
+
     // 检测常见的乱码模式
     if (preg_match('/[缂╃暐鍥句腑蹇?鎵归噺绠＄悊閮ㄥ垎姝ｅ湪鍔犺浇娓呯悊鎵€鏈変腑蹇?]/u', $first200)) {
         echo "[❌] $file - 检测到乱码！\n";

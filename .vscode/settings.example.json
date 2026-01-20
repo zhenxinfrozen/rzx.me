@@ -2,42 +2,42 @@
   // ========================================
   // VS Code 工作区配置示例
   // ========================================
-  // 
+  //
   // 此文件提供推荐的 VS Code 配置，用于确保 UTF-8 编码一致性
-  // 
+  //
   // 使用方法：
   // 1. 将此文件复制为 .vscode/settings.json
   //    cp .vscode/settings.example.json .vscode/settings.json
-  // 
+  //
   // 2. 或者在 VS Code 中：
   //    文件 → 首选项 → 设置 → 工作区 → 在 settings.json 中编辑
   //    然后复制这些配置
   // ========================================
-  
+
   // 编码设置
   "files.encoding": "utf8",
   "files.autoGuessEncoding": true,
   "files.eol": "\n",
-  
+
   // 保存时自动清理
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
-  
+
   // PHP 特定设置
   "[php]": {
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
     "files.encoding": "utf8"
   },
-  
+
   // Markdown 设置
   "[markdown]": {
     "editor.tabSize": 2,
     "files.encoding": "utf8",
     "files.trimTrailingWhitespace": false
   },
-  
+
   // 显示空白字符（便于发现问题）
   "editor.renderWhitespace": "boundary",
   "editor.renderControlCharacters": true

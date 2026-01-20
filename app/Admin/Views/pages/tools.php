@@ -24,7 +24,7 @@
                     <p class="text-muted mb-4 flex-grow-1">
                         统一管理缩略图的批量生成、清理、配置预设和功能测试。
                     </p>
-                    <a href="thumbnail-center.php<?= $dev_query ?>" class="btn btn-primary btn-lg">
+                    <a href="/admin?page=thumbnail-center" class="btn btn-primary btn-lg">
                         <i data-feather="arrow-right-circle" class="me-2"></i>进入中心
                     </a>
                 </div>
@@ -46,7 +46,7 @@
                     <p class="text-muted mb-4 flex-grow-1">
                         查看缓存统计，清理各类临时文件和缩略图缓存，优化站点性能。
                     </p>
-                    <a href="cache-manager.php<?= $dev_query ?>" class="btn btn-info btn-lg">
+                    <a href="/admin?page=cache-manager" class="btn btn-info btn-lg">
                         <i data-feather="arrow-right-circle" class="me-2"></i>开始管理
                     </a>
                 </div>
@@ -68,7 +68,7 @@
                     <p class="text-muted mb-4 flex-grow-1">
                         查看服务器环境、PHP配置、磁盘空间和内存使用情况的详细报告。
                     </p>
-                    <a href="system-info.php<?= $dev_query ?>" class="btn btn-warning btn-lg">
+                    <a href="/admin?page=system-info" class="btn btn-warning btn-lg">
                         <i data-feather="arrow-right-circle" class="me-2"></i>查看报告
                     </a>
                 </div>
@@ -90,7 +90,7 @@
                     <p class="text-muted mb-4 flex-grow-1">
                         管理站点的核心配置文件。 (功能开发中)
                     </p>
-                    <a href="site-config.php<?= $dev_query ?>" class="btn btn-secondary btn-lg disabled">
+                    <a href="/admin?page=site-config" class="btn btn-secondary btn-lg disabled">
                         <i data-feather="arrow-right-circle" class="me-2"></i>进行配置
                     </a>
                 </div>
@@ -112,7 +112,7 @@
                     <p class="text-muted mb-4 flex-grow-1">
                         管理和恢复从 `single-works` 删除的分类。
                     </p>
-                    <a href="trash.php<?= $dev_query ?>" class="btn btn-danger btn-lg">
+                    <a href="/admin?page=trash" class="btn btn-danger btn-lg">
                         <i data-feather="arrow-right-circle" class="me-2"></i>查看回收站
                     </a>
                 </div>

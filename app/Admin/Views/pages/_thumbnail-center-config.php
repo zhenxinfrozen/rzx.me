@@ -50,7 +50,7 @@
                                 <?php endif; ?>
                             </td>
                             <td class="text-end">
-                                <form method="post" action="thumbnail-center.php#config-manager-tab" class="d-inline">
+                                <form method="post" action="/admin?page=thumbnail-center#config-manager-tab" class="d-inline">
                                     <?php if (empty($config['builtin'])): ?>
                                     <input type="hidden" name="action" value="load_edit">
                                     <input type="hidden" name="config_id" value="<?= htmlspecialchars($id) ?>">
@@ -82,7 +82,7 @@
                 <h5 class="mb-0"><i data-feather="play-circle" class="me-2"></i>配置测试</h5>
             </div>
             <div class="card-body">
-                <form method="post" id="test-form" action="thumbnail-center.php#config-manager-tab">
+                <form method="post" id="test-form" action="/admin?page=thumbnail-center#config-manager-tab">
                     <input type="hidden" name="action" value="test_generate">
                     <div class="mb-3">
                         <label for="config_id_test" class="form-label">选择配置</label>
@@ -100,7 +100,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary w-100">测试生成</button>
                 </form>
-                
+
                 <?php if ($test_result): ?>
                 <hr>
                 <div class="alert alert-<?= $test_result['success'] ? 'success' : 'danger' ?>">
@@ -122,14 +122,14 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-6 mb-4">
         <div class="card h-100">
             <div class="card-header">
                 <h5 class="mb-0"><i data-feather="sliders" class="me-2"></i><?= $edit_config ? '编辑' : '添加' ?>自定义预设</h5>
             </div>
             <div class="card-body">
-                <form method="post" action="thumbnail-center.php#config-manager-tab">
+                <form method="post" action="/admin?page=thumbnail-center#config-manager-tab">
                     <input type="hidden" name="action" value="<?= $edit_config ? 'update_config' : 'add_config' ?>">
                     <div class="mb-3">
                         <label class="form-label">配置ID *</label>
@@ -153,7 +153,7 @@
                     <div class="d-grid mt-3">
                         <button type="submit" class="btn btn-<?= $edit_config ? 'warning' : 'success' ?>"><?= $edit_config ? '保存更新' : '添加配置' ?></button>
                         <?php if ($edit_config): ?>
-                            <a href="thumbnail-center.php#config-manager-tab" class="btn btn-secondary mt-2">取消编辑</a>
+                            <a href="/admin?page=thumbnail-center#config-manager-tab" class="btn btn-secondary mt-2">取消编辑</a>
                         <?php endif; ?>
                     </div>
                 </form>
@@ -162,7 +162,7 @@
     </div>
 </div>
 
-<form method="post" id="delete-config-form" action="thumbnail-center.php#config-manager-tab" class="d-none">
+<form method="post" id="delete-config-form" action="/admin?page=thumbnail-center#config-manager-tab" class="d-none">
     <input type="hidden" name="action" value="delete_config">
     <input type="hidden" name="config_id" id="delete-config-id">
 </form>
@@ -171,7 +171,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const testButtons = document.querySelectorAll('.test-config');
     const configSelect = document.getElementById('config_id_test');
-    
+
     testButtons.forEach(button => {
         button.addEventListener('click', function() {
             const configId = this.getAttribute('data-id');

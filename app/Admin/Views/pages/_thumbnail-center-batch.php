@@ -62,13 +62,13 @@ async function loadGalleries() {
         formData.append('action', 'scan_galleries');
         formData.append('ajax', '1');
 
-        const response = await fetch('thumbnail-center.php', {
+        const response = await fetch('/admin/ajax?controller=thumbnail-center', {
             method: 'POST',
             body: formData
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
             galleriesData = data.galleries;
             renderGalleries();
@@ -84,7 +84,7 @@ async function loadGalleries() {
 function renderGalleries() {
     const container = document.getElementById('galleriesContainer');
     if (!container) return;
-    
+
     if (galleriesData.length === 0) {
         container.innerHTML = `<div class="content-card text-center p-5 text-muted">未找到任何Gallery</div>`;
         return;
@@ -98,7 +98,7 @@ function renderGalleries() {
                         <h5 class="mb-0">${gallery.display_name}</h5>
                         <span class="badge bg-secondary">${gallery.category_count} 个分类</span>
                     </div>
-                    
+
                     <div class="list-group list-group-flush category-list">
                         ${gallery.categories.map(category => `
                             <div class="list-group-item d-flex justify-content-between align-items-center">
@@ -110,7 +110,7 @@ function renderGalleries() {
                             </div>
                         `).join('')}
                     </div>
-                    
+
                     <div class="card-footer d-grid gap-2 d-md-flex justify-content-md-end">
                         <button class="btn btn-primary" onclick="generateThumbnails('${gallery.name}')">
                             <i data-feather="refresh-cw" class="me-1"></i>生成全部
@@ -123,7 +123,7 @@ function renderGalleries() {
             `).join('')}
         </div>
     `;
-    
+
     container.innerHTML = html;
     feather.replace();
 }
@@ -135,16 +135,16 @@ async function generateThumbnails(gallery, category = '') {
 
         const displayName = category ? `${gallery}/${category}` : gallery;
         showStatus(`正在生成 ${displayName} 的缩略图...`, 'info');
-        
+
         const formData = new FormData();
         formData.append('action', 'generate_thumbnails');
         formData.append('ajax', '1');
         formData.append('gallery', gallery);
         if (category) formData.append('category', category);
 
-        const response = await fetch('thumbnail-center.php', { method: 'POST', body: formData });
+        const response = await fetch('/admin/ajax?controller=thumbnail-center', { method: 'POST', body: formData });
         const data = await response.json();
-        
+
         if (data.success) {
             showStatus(`✅ ${displayName}: ${data.message} (${data.count} 个文件)`, 'success');
         } else {
@@ -167,16 +167,16 @@ async function cleanThumbnails(gallery, category = '') {
         if (card) card.style.opacity = '0.6';
 
         showStatus(`正在清理 ${displayName} 的缩略图...`, 'info');
-        
+
         const formData = new FormData();
         formData.append('action', 'clean_thumbnails');
         formData.append('ajax', '1');
         formData.append('gallery', gallery);
         if (category) formData.append('category', category);
 
-        const response = await fetch('thumbnail-center.php', { method: 'POST', body: formData });
+        const response = await fetch('/admin/ajax?controller=thumbnail-center', { method: 'POST', body: formData });
         const data = await response.json();
-        
+
         if (data.success) {
             showStatus(`🗑️ ${displayName}: ${data.message}`, 'success');
         } else {
@@ -216,7 +216,7 @@ function showStatus(message, type = 'info') {
     const panel = document.getElementById('statusPanel');
     const messageEl = document.getElementById('statusMessage');
     if (!panel || !messageEl) return;
-    
+
     panel.className = `alert alert-${type}`;
     panel.style.display = 'block';
     messageEl.textContent = message;
