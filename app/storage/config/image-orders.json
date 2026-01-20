@@ -1,11 +1,11 @@
 {
     "_comment": "统一图片排序配置文件 - 合并single-works和sketchbook的排序信息",
-    "_generated": "2025-10-13T00:00:00+00:00",
+    "_generated": "2026-01-20T23:38:57+08:00",
     "_description": "此文件统一管理所有模块的图片排序配置",
     "modules": {
         "single-works": {
             "_comment": "Single-Works 图片排序配置",
-            "_generated": "2025-10-02T22:34:09+00:00",
+            "_generated": "2026-01-20T23:38:57+08:00",
             "_description": "此文件记录每个分组中图片的自定义排序，文件名保持原始状态不会被修改",
             "categories": {
                 "_example_category": [
@@ -77,7 +77,8 @@
                 ],
                 "test-fgdsfg333333": [
                     "20190208_040324000_iOS.jpg",
-                    "20190208_035913297_iOS.jpg"
+                    "20190208_035913297_iOS.jpg",
+                    "IMG_20250811_165428.jpg"
                 ]
             }
         },

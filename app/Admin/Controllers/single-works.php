@@ -132,6 +132,10 @@ function handleSingleWorksAjax(string $action, string $configPath, string $image
             setAsThumbnail($imagesRoot, $configPath);
             return;
 
+        case 'upload_thumbnail':
+            uploadCategoryThumbnail($imagesRoot);
+            return;
+
         case 'delete_thumbnail':
             deleteThumbnail($imagesRoot, $configPath);
             return;
@@ -767,6 +771,110 @@ function setAsThumbnail($imagesRoot, $configPath)
         ]);
     } else {
         respondJson(['success' => false, 'error' => '保存配置失败'], 500);
+    }
+}
+
+function uploadCategoryThumbnail(string $imagesRoot): void
+{
+    header('Content-Type: application/json');
+
+    try {
+        if (empty($_POST['category']) || !isset($_FILES['thumbnail'])) {
+            throw new InvalidArgumentException('缺少必要参数');
+        }
+
+        $category = trim((string) $_POST['category']);
+        if (!preg_match('/^[a-zA-Z0-9_+-]+$/', $category)) {
+            throw new InvalidArgumentException('无效的分组名称');
+        }
+
+        $file = $_FILES['thumbnail'];
+        if ($file['error'] !== UPLOAD_ERR_OK || empty($file['tmp_name'])) {
+            throw new RuntimeException('缩略图上传失败');
+        }
+
+        if ($file['size'] > 10 * 1024 * 1024) {
+            throw new RuntimeException('缩略图不能超过10MB');
+        }
+
+        $imageInfo = @getimagesize($file['tmp_name']);
+        if (!$imageInfo) {
+            throw new RuntimeException('文件不是有效的图片');
+        }
+
+        $allowedTypes = [
+            IMAGETYPE_JPEG => 'jpg',
+            IMAGETYPE_PNG => 'png',
+            IMAGETYPE_GIF => 'gif',
+            IMAGETYPE_WEBP => 'webp',
+        ];
+
+        if (!isset($allowedTypes[$imageInfo[2]])) {
+            throw new RuntimeException('不支持的图片格式');
+        }
+
+        $categoryDir = $imagesRoot . '/' . $category;
+        if (!is_dir($categoryDir)) {
+            throw new InvalidArgumentException('分组目录不存在');
+        }
+
+        $thumbDir = $categoryDir . '/thumbs';
+        if (!is_dir($thumbDir) && !mkdir($thumbDir, 0755, true)) {
+            throw new RuntimeException('无法创建缩略图目录');
+        }
+
+        $extension = $allowedTypes[$imageInfo[2]];
+        $filename = 'custom-thumb-' . date('Ymd-His') . '.' . $extension;
+        $targetPath = $thumbDir . '/' . $filename;
+
+        if (!generateThumbnail($file['tmp_name'], $targetPath, 400, 400, $imageInfo[2])) {
+            if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
+                throw new RuntimeException('保存缩略图失败');
+            }
+        }
+
+        $publicUrl = '/assets/images/single-works/' . $category . '/thumbs/' . $filename;
+
+        $configFile = __DIR__ . '/../../Config/single_works_config.php';
+        $config = [];
+        if (file_exists($configFile)) {
+            $config = require $configFile;
+            if (!is_array($config)) {
+                $config = [];
+            }
+        }
+
+        if (!isset($config['category_thumbnails'])) {
+            $config['category_thumbnails'] = [];
+        }
+
+        // 删除旧缩略图文件
+        $previous = $config['category_thumbnails'][$category] ?? null;
+        if ($previous) {
+            $previousPath = realpath(__DIR__ . '/../../../public' . $previous);
+            $thumbRealDir = realpath($thumbDir);
+            if ($previousPath && $thumbRealDir && strpos($previousPath, $thumbRealDir) === 0 && is_file($previousPath)) {
+                @unlink($previousPath);
+            }
+        }
+
+        $config['category_thumbnails'][$category] = $publicUrl;
+
+        $configContent = "<?php\nreturn " . var_export($config, true) . ";\n";
+        if (!file_put_contents($configFile, $configContent, LOCK_EX)) {
+            throw new RuntimeException('保存缩略图配置失败');
+        }
+
+        respondJson([
+            'success' => true,
+            'thumbnail_url' => $publicUrl,
+            'message' => '缩略图已上传',
+        ]);
+    } catch (Throwable $e) {
+        respondJson([
+            'success' => false,
+            'error' => $e->getMessage(),
+        ], 400);
     }
 }
 
