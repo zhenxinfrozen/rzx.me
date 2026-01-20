@@ -1,9 +1,4 @@
 <?php
-/**
- * Single-Works 分组排序配置
- * 自动生成于: 2025-09-25 10:53:10
- */
-
 return array (
   'sort_method' => 'custom_order',
   'custom_order' => 
@@ -28,5 +23,10 @@ return array (
   array (
     'Ae-test' => '',
     'Special-Zone' => '',
+  ),
+  'category_thumbnails' => 
+  array (
+    'test-fgdsfg333333' => '/assets/images/single-works/test-fgdsfg333333/thumbs/custom-thumb-20260121-014902.webp',
+    'rrrrrr' => '/assets/images/single-works/rrrrrr/thumbs/custom-thumb-20260121-001642.jpg',
   ),
 );

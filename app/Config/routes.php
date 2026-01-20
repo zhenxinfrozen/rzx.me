@@ -82,7 +82,7 @@ return [
             'title' => '画廊 - RZX.ME',
             'handler' => 'get_page_data'
         ],
-        // 后台管理系统路由 (交给admin目录自己的.htaccess处理)
+        // 后台管理系统路由
         '~/^\/admin(\/.*)?$/~' => [
             'type' => 'admin',
             'allow_passthrough' => true
@@ -106,6 +106,12 @@ return [
         // 保持向后兼容
         '/api.php' => [
             'handler' => 'handle_legacy_api',
+            'method' => ['GET', 'POST']
+        ],
+        // Admin AJAX 请求
+        '/admin/ajax' => [
+            'type' => 'admin_ajax',
+            'handler' => 'handle_admin_ajax',
             'method' => ['GET', 'POST']
         ],
     ],

@@ -1,13 +1,13 @@
 <?php
 /**
  * 前端控制器 - 应用程序统一入口点
- * 
+ *
  * 功能:
  * - 接收所有HTTP请求 (通过.htaccess重定向)
  * - 初始化路由系统和依赖
  * - 分发请求到对应的处理器
  * - 渲染页面模板和输出HTML
- * 
+ *
  * 流程: 请求 → Router匹配 → Controller处理 → View渲染 → 响应
  * 配置: 使用 app/Config/ 下的配置文件
  */
@@ -37,7 +37,7 @@ if ($route && $router->isStaticRoute($route)) {
     // 不做任何处理，直接退出让服务器查找物理文件
     $requestUri = $_SERVER['REQUEST_URI'];
     $filePath = __DIR__ . parse_url($requestUri, PHP_URL_PATH);
-    
+
     // 检查文件是否存在
     if (file_exists($filePath)) {
         // 文件存在，让Web服务器处理
@@ -50,26 +50,63 @@ if ($route && $router->isStaticRoute($route)) {
     }
 }
 
-// 处理admin后台请求 (交给admin目录的.htaccess处理)
-if ($route && $router->isAdminRoute($route)) {
-    // admin路由请求，重定向到admin目录
-    $requestUri = $_SERVER['REQUEST_URI'];
-    $adminPath = __DIR__ . '/admin' . str_replace('/admin', '', parse_url($requestUri, PHP_URL_PATH));
-    
-    // 如果是admin根目录，重定向到admin/index.php
-    if ($requestUri === '/admin' || $requestUri === '/admin/') {
-        header('Location: /admin/index.php');
+// 处理admin AJAX请求（必须在admin页面请求之前处理）
+if ($route && $router->isAdminAjaxRoute($route)) {
+        // Admin AJAX 请求处理
+        $controller = $_GET['controller'] ?? '';
+
+        if (empty($controller)) {
+            http_response_code(400);
+            echo json_encode(['error' => 'Missing controller']);
+            exit;
+        }
+
+        // 允许的控制器列表
+        $allowedControllers = [
+            'sketchbook' => __DIR__ . '/../app/Admin/Controllers/sketchbook.php',
+            'single-works' => __DIR__ . '/../app/Admin/Controllers/single-works.php',
+            'video-gallery' => __DIR__ . '/../app/Admin/Controllers/video-gallery.php',
+            'comics' => __DIR__ . '/../app/Admin/Controllers/comics.php',
+            'thumbnail-center' => __DIR__ . '/../app/Admin/Controllers/thumbnail-center.php',
+        ];
+
+        // 验证控制器
+        if (!isset($allowedControllers[$controller])) {
+            http_response_code(404);
+            echo json_encode(['error' => 'Controller not found']);
+            exit;
+        }
+
+        $controllerFile = $allowedControllers[$controller];
+
+        if (!file_exists($controllerFile)) {
+            http_response_code(500);
+            echo json_encode(['error' => 'Controller file not found']);
+            exit;
+        }
+
+        // 加载必要的依赖
+        require_once __DIR__ . '/../app/bootstrap.php';
+
+        // 包含并执行控制器
+        require_once $controllerFile;
         exit;
-    }
-    
-    // 其他admin请求让admin目录的.htaccess处理
-    return false;
 }
 
-// 处理API请求
+// 处理admin后台页面请求
+if ($route && $router->isAdminRoute($route)) {
+    // 加载 AdminIndexController
+    require_once __DIR__ . '/../app/Admin/Controllers/AdminIndexController.php';
+
+    // 处理请求
+    AdminIndexController::handle();
+    exit;
+}
+
+// 处理常规API请求
 if ($route && $router->isApiRoute($route)) {
     require_once __DIR__ . '/../app/Controllers/api_comic_handler.php';
-    
+
     // 调用对应的处理器函数
     if (isset($route['handler']) && function_exists($route['handler'])) {
         call_user_func($route['handler']);
