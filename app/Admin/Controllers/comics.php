@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ];
             
             // 处理图片上传
-            $uploadDir = __DIR__ . '/../../assets/images/comic/';
+            $uploadDir = __DIR__ . '/../../../public/assets/images/comic/';
             $thumbsDir = $uploadDir . 'thumbs/';
             
             // 确保目录存在
@@ -179,9 +179,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
         }
         // 如果上传用于 icon_default/icon_hover，保存到 thumbs 目录
         if ($field === 'icon_default' || $field === 'icon_hover') {
-            $uploadDir = __DIR__ . '/../../assets/images/comic/thumbs/';
+            $uploadDir = __DIR__ . '/../../../public/assets/images/comic/thumbs/';
         } else {
-            $uploadDir = __DIR__ . '/../../assets/images/comic/';
+            $uploadDir = __DIR__ . '/../../../public/assets/images/comic/';
         }
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
         $file = $_FILES['image'];

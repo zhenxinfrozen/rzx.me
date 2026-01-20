@@ -17,8 +17,8 @@ $message_type = '';
 
 if ($_POST) {
     $action = $_POST['action'] ?? '';
-    $trashDir = '../assets/images/trash';
-    $singleWorksDir = '../assets/images/single-works';
+    $trashDir = __DIR__ . '/../../../public/assets/images/trash';
+    $singleWorksDir = __DIR__ . '/../../../public/assets/images/single-works';
     
     switch ($action) {
         case 'restore':

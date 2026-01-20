@@ -15,8 +15,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
 $configPath = __DIR__ . '/../../Config/sketchbook_sort.php';
-$imagesRoot = __DIR__ . '/../../assets/images/sketchbook';
-$trashRoot = __DIR__ . '/../../assets/images/trash/sketchbook';
+$imagesRoot = __DIR__ . '/../../../public/assets/images/sketchbook';
+$trashRoot = __DIR__ . '/../../../public/assets/images/trash/sketchbook';
 $imageOrderPath = __DIR__ . '/../../storage/config/image-orders.json';
 
 $galleryManager = new GalleryManager();

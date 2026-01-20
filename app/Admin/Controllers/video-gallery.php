@@ -28,7 +28,7 @@ if (!isset($_GET['dev'])) {
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
 $configPath = __DIR__ . '/../../Config/video_gallery_sort.php';
-$videosRoot = __DIR__ . '/../../assets/videos/video-gallery';
+$videosRoot = __DIR__ . '/../../../public/assets/videos/video-gallery';
 
 if ($ajaxAction) {
     handleVideoGalleryAjax($ajaxAction, $configPath, $videosRoot);
@@ -440,7 +440,7 @@ function handleVideoGalleryAjax(string $action, string $configPath, string $vide
                 if (!empty($_FILES['thumbnail'])) {
                     $file = $_FILES['thumbnail'];
                     if ($file['error'] === UPLOAD_ERR_OK) {
-                        $thumbnailDir = __DIR__ . '/../../assets/videos/thumbnails';
+                        $thumbnailDir = __DIR__ . '/../../../public/assets/videos/thumbnails';
                         if (!is_dir($thumbnailDir)) {
                             mkdir($thumbnailDir, 0755, true);
                         }

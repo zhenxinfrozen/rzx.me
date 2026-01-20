@@ -24,7 +24,7 @@ if ($isAjaxRequest) {
         switch ($_POST['action']) {
             case 'scan_galleries':
                 $galleries = [];
-                $imagesPath = realpath(__DIR__ . '/../../assets/images');
+                $imagesPath = realpath(__DIR__ . '/../../../public/assets/images');
                 if (is_dir($imagesPath)) {
                     $dirs = scandir($imagesPath);
                     foreach ($dirs as $dir) {
@@ -54,7 +54,7 @@ if ($isAjaxRequest) {
                 $gallery = $_POST['gallery'] ?? '';
                 $category = $_POST['category'] ?? '';
                 if (empty($gallery)) throw new Exception('Gallery参数不能为空');
-                $thumbsDir = realpath(__DIR__ . '/../../assets/images/' . $gallery) . (!empty($category) ? '/' . $category : '') . '/thumbs';
+                $thumbsDir = realpath(__DIR__ . '/../../../public/assets/images/' . $gallery) . (!empty($category) ? '/' . $category : '') . '/thumbs';
                 $count = 0;
                 if (is_dir($thumbsDir)) {
                     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($thumbsDir, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['ajax'])) {
                 $testImageRel = trim($_POST['test_image'] ?? '');
                 if (!$configId) throw new Exception('请选择配置');
                 if ($testImageRel === '') $testImageRel = 'single-works/Animals/20230727_002747775_iOS.jpg'; // 默认图片
-                $sourcePath = realpath(__DIR__ . '/../../assets/images/' . $testImageRel);
+                $sourcePath = realpath(__DIR__ . '/../../../public/assets/images/' . $testImageRel);
                 if (!$sourcePath || !file_exists($sourcePath)) throw new Exception('测试图片不存在：' . htmlspecialchars($testImageRel));
                 
                 $test_result = ThumbnailService::generate($sourcePath, $configId);
