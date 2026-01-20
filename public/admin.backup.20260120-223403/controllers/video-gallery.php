@@ -6,8 +6,8 @@
 
 define('ADMIN_ACCESS', true);
 
-require_once __DIR__ . '/../../bootstrap.php';
-require_once __DIR__ . '/../../Models/video_data.php';
+require_once __DIR__ . '/../../../app/bootstrap.php';
+require_once __DIR__ . '/../../../app/Models/video_data.php';
 
 // 开发模式跳过认证检查
 if (!isset($_GET['dev'])) {
@@ -76,7 +76,7 @@ $page_title = '🎬 Video Gallery 管理';
 $page_subtitle = '管理视频分组与文件';
 $_GET['page'] = 'video-gallery';
 
-// 控制器逻辑完成，返回给 AdminIndexController 渲染视图
+require_once __DIR__ . '/../index.php';
 
 /**
  * 处理表单提交

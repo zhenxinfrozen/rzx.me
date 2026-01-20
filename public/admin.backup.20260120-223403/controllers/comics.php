@@ -1,5 +1,5 @@
 <?php
-// app/Controllers/Admin/comics.php
+// public/admin/controllers/comics.php
 
 // 开发模式下显示错误
 if (isset($_GET['dev'])) {
@@ -11,7 +11,8 @@ if (isset($_GET['dev'])) {
     ini_set('error_log', __DIR__ . '/../../../debug.log');
 }
 
-// ADMIN_ACCESS 和 comic_data.php 由 AdminIndexController 预加载
+define('ADMIN_ACCESS', true);
+require_once __DIR__ . '/../../../app/Models/comic_data.php';
 
 // 处理POST请求
 $message = '';
@@ -401,4 +402,4 @@ $page_title = '🛠️ 漫画配置';
 $page_subtitle = '管理漫画分组和图片';
 $_GET['page'] = 'comics';
 
-// 控制器逻辑完成，返回给 AdminIndexController 渲染视图
+require_once __DIR__ . '/../index.php';

@@ -6,8 +6,8 @@
 
 define('ADMIN_ACCESS', true);
 
-require_once __DIR__ . '/../../bootstrap.php';
-require_once __DIR__ . '/../../Utils/GalleryManager.php';
+require_once __DIR__ . '/../../../app/bootstrap.php';
+require_once __DIR__ . '/../../../app/Utils/GalleryManager.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -64,7 +64,7 @@ $page_title = '🛠️ Single-Works 管理';
 $page_subtitle = '管理 Single-Works 页面分组与图片';
 $_GET['page'] = 'single-works';
 
-// 控制器逻辑完成，返回给 AdminIndexController 渲染视图
+require_once __DIR__ . '/../index.php';
 
 /**
  * 处理表单提交

@@ -26,25 +26,25 @@ class AdminIndexController
             ],
             'single-works' => [
                 'view' => 'body-single-works',
-                'controller' => 'single-works',
+                'controller' => 'single-works',  // 需要控制器处理逻辑
                 'title' => 'Single-Works 管理',
                 'subtitle' => '管理 Single-Works 页面分组与图片'
             ],
             'sketchbook' => [
                 'view' => 'body-sketchbook',
-                'controller' => 'sketchbook',
+                'controller' => 'sketchbook',  // 需要控制器处理逻辑
                 'title' => 'Sketchbook 管理',
                 'subtitle' => '管理 Sketchbook 页面图片集'
             ],
             'comics' => [
                 'view' => 'body-comics',
-                'controller' => 'comics',
+                'controller' => 'comics',  // 需要控制器处理逻辑
                 'title' => '漫画管理',
                 'subtitle' => '管理漫画分组和图片'
             ],
             'video-gallery' => [
                 'view' => 'body-video-gallery',
-                'controller' => 'video-gallery',
+                'controller' => 'video-gallery',  // 需要控制器处理逻辑
                 'title' => 'Video Gallery 管理',
                 'subtitle' => '管理视频集合'
             ],
@@ -128,8 +128,14 @@ class AdminIndexController
             $controllerFile = __DIR__ . '/' . $pageConfig['controller'] . '.php';
             if (file_exists($controllerFile)) {
                 // 某些控制器可能需要 bootstrap
-                if (in_array($page, ['thumbnail-center', 'video-gallery', 'sketchbook'])) {
+                if (in_array($page, ['thumbnail-center', 'video-gallery', 'sketchbook', 'single-works'])) {
                     require_once __DIR__ . '/../../bootstrap.php';
+                }
+                
+                // comics 需要 Models
+                if ($page === 'comics') {
+                    define('ADMIN_ACCESS', true);
+                    require_once __DIR__ . '/../../Models/comic_data.php';
                 }
                 
                 // 包含控制器（但不输出，只执行逻辑）

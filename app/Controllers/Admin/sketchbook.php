@@ -64,7 +64,7 @@ $page_title = '🛠️ Sketchbook 管理';
 $page_subtitle = '管理 Sketchbook 页面分组与图片';
 $_GET['page'] = 'sketchbook';
 
-require_once __DIR__ . '/../index.php';
+// 控制器逻辑完成，返回给 AdminIndexController 渲染视图
 
 /**
  * 处理表单提交

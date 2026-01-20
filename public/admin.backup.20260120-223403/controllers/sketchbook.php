@@ -1,39 +1,39 @@
 <?php
 /**
- * Single-Works 管理控制器
- * 负责 single-works 页面分组排序、图片管理及相关 AJAX 操作
+ * Sketchbook 管理控制器
+ * 负责 sketchbook 页面分组排序、图片管理及相关 AJAX 操作
  */
 
 define('ADMIN_ACCESS', true);
 
-require_once __DIR__ . '/../../bootstrap.php';
-require_once __DIR__ . '/../../Utils/GalleryManager.php';
+require_once __DIR__ . '/../../../app/bootstrap.php';
+require_once __DIR__ . '/../../../app/Utils/GalleryManager.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
-$configPath = __DIR__ . '/../../../app/Config/single_works_sort.php';
-$imagesRoot = __DIR__ . '/../../assets/images/single-works';
-$trashRoot = __DIR__ . '/../../assets/images/trash';
+$configPath = __DIR__ . '/../../../app/Config/sketchbook_sort.php';
+$imagesRoot = __DIR__ . '/../../assets/images/sketchbook';
+$trashRoot = __DIR__ . '/../../assets/images/trash/sketchbook';
 $imageOrderPath = __DIR__ . '/../../../app/storage/config/image-orders.json';
 
 $galleryManager = new GalleryManager();
 
 if ($ajaxAction) {
-    handleSingleWorksAjax($ajaxAction, $configPath, $imagesRoot, $trashRoot, $imageOrderPath);
+    handleSketchbookAjax($ajaxAction, $configPath, $imagesRoot, $trashRoot, $imageOrderPath);
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    handleSingleWorksFormSubmission($configPath, $imagesRoot, $trashRoot);
-    header('Location: ' . ($_SERVER['REQUEST_URI'] ?? './single-works.php'));
+    handleSketchbookFormSubmission($configPath, $imagesRoot, $trashRoot);
+    header('Location: ' . ($_SERVER['REQUEST_URI'] ?? './sketchbook.php'));
     exit;
 }
 
-$currentConfig = loadSingleWorksConfig($configPath);
-$categories = $galleryManager->getGalleryCategories('single-works');
+$currentConfig = loadSketchbookConfig($configPath);
+$categories = $galleryManager->getGalleryCategories('sketchbook');
 $orderedCategories = reorderCategories($categories, $currentConfig['custom_order'] ?? []);
 
 $categoryData = [];
@@ -57,19 +57,19 @@ foreach ($orderedCategories as $index => $category) {
     ];
 }
 
-$flashMessage = $_SESSION['single_works_flash'] ?? null;
-unset($_SESSION['single_works_flash']);
+$flashMessage = $_SESSION['sketchbook_flash'] ?? null;
+unset($_SESSION['sketchbook_flash']);
 
-$page_title = '🛠️ Single-Works 管理';
-$page_subtitle = '管理 Single-Works 页面分组与图片';
-$_GET['page'] = 'single-works';
+$page_title = '🛠️ Sketchbook 管理';
+$page_subtitle = '管理 Sketchbook 页面分组与图片';
+$_GET['page'] = 'sketchbook';
 
-// 控制器逻辑完成，返回给 AdminIndexController 渲染视图
+require_once __DIR__ . '/../index.php';
 
 /**
  * 处理表单提交
  */
-function handleSingleWorksFormSubmission(string $configPath, string $imagesRoot, string $trashRoot): void
+function handleSketchbookFormSubmission(string $configPath, string $imagesRoot, string $trashRoot): void
 {
     try {
         $deleted = array_filter(array_map('trim', explode(',', $_POST['deleted_categories'] ?? '')));
@@ -92,20 +92,20 @@ function handleSingleWorksFormSubmission(string $configPath, string $imagesRoot,
             $config['custom_order'] = array_values(array_filter(array_map('trim', explode(',', $_POST['category_order']))));
         }
 
-        if (saveSingleWorksConfig($configPath, $config)) {
-            $_SESSION['single_works_flash'] = ['type' => 'success', 'text' => '配置保存成功！'];
+        if (saveSketchbookConfig($configPath, $config)) {
+            $_SESSION['sketchbook_flash'] = ['type' => 'success', 'text' => '配置保存成功！'];
         } else {
             throw new RuntimeException('配置保存失败，请检查文件权限');
         }
     } catch (Throwable $e) {
-        $_SESSION['single_works_flash'] = ['type' => 'error', 'text' => '保存失败：' . $e->getMessage()];
+        $_SESSION['sketchbook_flash'] = ['type' => 'error', 'text' => '保存失败：' . $e->getMessage()];
     }
 }
 
 /**
  * 处理 AJAX 请求
  */
-function handleSingleWorksAjax(string $action, string $configPath, string $imagesRoot, string $trashRoot, string $imageOrderPath): void
+function handleSketchbookAjax(string $action, string $configPath, string $imagesRoot, string $trashRoot, string $imageOrderPath): void
 {
     switch ($action) {
         case 'thumbnails':
@@ -130,6 +130,10 @@ function handleSingleWorksAjax(string $action, string $configPath, string $image
 
         case 'set_thumbnail':
             setAsThumbnail($imagesRoot, $configPath);
+            return;
+
+        case 'upload_thumbnail':
+            uploadCategoryThumbnail($imagesRoot);
             return;
 
         case 'delete_thumbnail':
@@ -158,7 +162,7 @@ function handleSingleWorksAjax(string $action, string $configPath, string $image
     }
 }
 
-function loadSingleWorksConfig(string $configPath): array
+function loadSketchbookConfig(string $configPath): array
 {
     if (file_exists($configPath)) {
         $config = include $configPath;
@@ -176,9 +180,9 @@ function loadSingleWorksConfig(string $configPath): array
     ];
 }
 
-function saveSingleWorksConfig(string $configPath, array $config): bool
+function saveSketchbookConfig(string $configPath, array $config): bool
 {
-    $content = "<?php\n/**\n * Single-Works 分组排序配置\n * 自动生成于: " . date('Y-m-d H:i:s') . "\n */\n\nreturn " . var_export($config, true) . ";\n";
+    $content = "<?php\n/**\n * Sketchbook 分组排序配置\n * 自动生成于: " . date('Y-m-d H:i:s') . "\n */\n\nreturn " . var_export($config, true) . ";\n";
     return (bool) file_put_contents($configPath, $content, LOCK_EX);
 }
 
@@ -244,8 +248,8 @@ function outputThumbnails(string $imagesRoot, string $imageOrderPath): void
             throw new InvalidArgumentException('分组目录不存在');
         }
 
-        $supported = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        $allImageFiles = [];
+    $supported = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    $allImageFiles = [];
         $files = scandir($categoryDir);
 
         foreach ($files as $file) {
@@ -267,15 +271,16 @@ function outputThumbnails(string $imagesRoot, string $imageOrderPath): void
         $images = [];
         foreach ($orderedFiles as $file) {
             $filePath = $categoryDir . '/' . $file;
-            $thumbPath = $thumbDir . '/' . $file;
-            $thumbUrl = file_exists($thumbPath)
-                ? "/assets/images/single-works/{$category}/thumbs/{$file}"
-                : "/assets/images/single-works/{$category}/{$file}";
+            $thumbName = ensureSketchbookThumbnail($categoryDir, $file);
+            $thumbUrl = $thumbName
+                ? "/assets/images/sketchbook/{$category}/thumbs/{$thumbName}"
+                : "/assets/images/sketchbook/{$category}/{$file}";
 
             $images[] = [
                 'name' => $file,
-                'path' => "/assets/images/single-works/{$category}/{$file}",
+                'path' => "/assets/images/sketchbook/{$category}/{$file}",
                 'thumb_path' => $thumbUrl,
+                'thumb_name' => $thumbName,
                 'size' => filesize($filePath),
                 'modified' => filemtime($filePath),
             ];
@@ -284,8 +289,10 @@ function outputThumbnails(string $imagesRoot, string $imageOrderPath): void
         // 获取当前缩略图信息
         $thumbnailInfo = getCategoryThumbnailInfo($category, $categoryDir);
         $currentThumbnail = null;
-        if ($thumbnailInfo['custom_thumbnail']) {
+        if (!empty($thumbnailInfo['custom_thumbnail'])) {
             $currentThumbnail = basename($thumbnailInfo['custom_thumbnail']);
+        } elseif (!empty($thumbnailInfo['first_image_thumb'])) {
+            $currentThumbnail = basename($thumbnailInfo['first_image_thumb']);
         }
 
         respondJson([
@@ -469,7 +476,7 @@ function createCategory(string $configPath, string $imagesRoot): void
             }
         }
 
-        $config = loadSingleWorksConfig($configPath);
+        $config = loadSketchbookConfig($configPath);
         if ($position === 'first') {
             array_unshift($config['custom_order'], $category);
         } else {
@@ -481,7 +488,7 @@ function createCategory(string $configPath, string $imagesRoot): void
             $config['descriptions'][$category] = $description;
         }
 
-        if (!saveSingleWorksConfig($configPath, $config)) {
+        if (!saveSketchbookConfig($configPath, $config)) {
             throw new RuntimeException('保存配置失败');
         }
 
@@ -652,6 +659,71 @@ function respondJson(array $payload, int $status = 200): void
     echo json_encode($payload, JSON_UNESCAPED_UNICODE);
 }
 
+function findExistingThumbnail(string $categoryDir, string $originalFile): ?string
+{
+    $thumbDir = rtrim($categoryDir, '/\\') . '/thumbs';
+    if (!is_dir($thumbDir)) {
+        return null;
+    }
+
+    $baseName = pathinfo($originalFile, PATHINFO_FILENAME);
+    $originalExt = strtolower(pathinfo($originalFile, PATHINFO_EXTENSION));
+
+    $candidates = [];
+    if ($originalExt !== '') {
+        $candidates[] = $thumbDir . '/' . $baseName . '_gallery.' . $originalExt;
+        $candidates[] = $thumbDir . '/' . $baseName . '.' . $originalExt;
+    }
+
+    $galleryGlob = glob($thumbDir . '/' . $baseName . '_gallery.*') ?: [];
+    $directGlob = glob($thumbDir . '/' . $baseName . '.*') ?: [];
+
+    $candidates = array_merge($candidates, $galleryGlob, $directGlob);
+
+    foreach ($candidates as $candidate) {
+        if ($candidate && file_exists($candidate)) {
+            return basename($candidate);
+        }
+    }
+
+    return null;
+}
+
+function ensureSketchbookThumbnail(string $categoryDir, string $originalFile): ?string
+{
+    $existing = findExistingThumbnail($categoryDir, $originalFile);
+    if ($existing) {
+        return $existing;
+    }
+
+    $sourcePath = rtrim($categoryDir, '/\\') . '/' . $originalFile;
+    if (!file_exists($sourcePath)) {
+        return null;
+    }
+
+    $servicePath = __DIR__ . '/../../../app/Services/ThumbnailService.php';
+    if (file_exists($servicePath)) {
+        require_once $servicePath;
+        if (class_exists('ThumbnailService')) {
+            try {
+                $result = ThumbnailService::generate($sourcePath, 'sketchbook-thumb');
+                if (is_array($result) && !empty($result['success']) && !empty($result['output_path'])) {
+                    return basename($result['output_path']);
+                }
+
+                $expected = ThumbnailService::getOutputPath($sourcePath, 'sketchbook-thumb');
+                if ($expected && file_exists($expected)) {
+                    return basename($expected);
+                }
+            } catch (Throwable $e) {
+                error_log('Sketchbook thumbnail generation failed: ' . $e->getMessage());
+            }
+        }
+    }
+
+    return findExistingThumbnail($categoryDir, $originalFile);
+}
+
 /**
  * 获取分组的缩略图信息
  */
@@ -663,7 +735,7 @@ function getCategoryThumbnailInfo($category, $dirPath)
     ];
     
     // 检查是否有自定义缩略图（在config中保存的）
-    $configPath = __DIR__ . '/../../app/Config/single_works_config.php';
+    $configPath = __DIR__ . '/../../../app/Config/sketchbook_config.php';
     if (file_exists($configPath)) {
         $config = require $configPath;
         if (isset($config['category_thumbnails'][$category])) {
@@ -678,29 +750,13 @@ function getCategoryThumbnailInfo($category, $dirPath)
             // 按文件名排序，确保一致性
             sort($images);
             $firstImage = basename($images[0]);
-            $thumbPath = $dirPath . '/thumbs/' . $firstImage;
-            
-            // 如果缩略图不存在，尝试生成
-            if (!file_exists($thumbPath)) {
-                // 调用ThumbnailService生成缩略图
-                try {
-                    $thumbnailServicePath = __DIR__ . '/../../app/Services/ThumbnailService.php';
-                    if (file_exists($thumbnailServicePath)) {
-                        require_once $thumbnailServicePath;
-                        if (class_exists('ThumbnailService')) {
-                            ThumbnailService::generate($images[0], 'single-works');
-                        }
-                    }
-                } catch (Throwable $e) {
-                    error_log('缩略图生成失败: ' . $e->getMessage());
-                }
-            }
-            
-            if (file_exists($thumbPath)) {
-                $result['first_image_thumb'] = '/assets/images/single-works/' . $category . '/thumbs/' . $firstImage;
+            $thumbName = ensureSketchbookThumbnail($dirPath, $firstImage);
+
+            if ($thumbName) {
+                $result['first_image_thumb'] = '/assets/images/sketchbook/' . $category . '/thumbs/' . $thumbName;
             } else {
                 // 如果缩略图依然不存在，使用原图
-                $result['first_image_thumb'] = '/assets/images/single-works/' . $category . '/' . $firstImage;
+                $result['first_image_thumb'] = '/assets/images/sketchbook/' . $category . '/' . $firstImage;
             }
         }
     }
@@ -737,35 +793,156 @@ function setAsThumbnail($imagesRoot, $configPath)
     $input = json_decode(file_get_contents('php://input'), true);
     $category = $input['category'] ?? '';
     $image = $input['image'] ?? '';
-    
-    if (!$category || !$image) {
+    $thumbName = $input['thumb'] ?? ($input['thumb_name'] ?? '');
+
+    if (!$category || ($image === '' && $thumbName === '')) {
         respondJson(['success' => false, 'error' => '参数不完整'], 400);
         return;
     }
-    
+
+    $categoryDir = rtrim($imagesRoot, '/\\') . '/' . $category;
+    if ($thumbName === '' && $image !== '') {
+        $thumbName = ensureSketchbookThumbnail($categoryDir, $image) ?? $image;
+    }
+
+    if ($thumbName === '') {
+        respondJson(['success' => false, 'error' => '未找到对应的缩略图文件'], 400);
+        return;
+    }
+
+    $thumbPath = $categoryDir . '/thumbs/' . $thumbName;
+    if (!file_exists($thumbPath)) {
+        respondJson(['success' => false, 'error' => '缩略图文件不存在，请先生成'], 400);
+        return;
+    }
+
     // 保存到配置文件
     $config = [];
-    $configFile = __DIR__ . '/../../app/Config/single_works_config.php';
+    $configFile = __DIR__ . '/../../../app/Config/sketchbook_config.php';
     if (file_exists($configFile)) {
         $config = require $configFile;
     }
-    
+
     if (!isset($config['category_thumbnails'])) {
         $config['category_thumbnails'] = [];
     }
-    
-    $thumbnailUrl = '/assets/images/single-works/' . $category . '/thumbs/' . $image;
+
+    $thumbnailUrl = '/assets/images/sketchbook/' . $category . '/thumbs/' . $thumbName;
     $config['category_thumbnails'][$category] = $thumbnailUrl;
-    
+
     // 保存配置
     $configContent = "<?php\nreturn " . var_export($config, true) . ";\n";
     if (file_put_contents($configFile, $configContent)) {
         respondJson([
             'success' => true,
-            'thumbnail_url' => $thumbnailUrl
+            'thumbnail_url' => $thumbnailUrl,
+            'thumbnail_file' => $thumbName,
         ]);
     } else {
         respondJson(['success' => false, 'error' => '保存配置失败'], 500);
+    }
+}
+
+function uploadCategoryThumbnail(string $imagesRoot): void
+{
+    header('Content-Type: application/json');
+
+    try {
+        if (empty($_POST['category']) || !isset($_FILES['thumbnail'])) {
+            throw new InvalidArgumentException('缺少必要参数');
+        }
+
+        $category = trim((string) $_POST['category']);
+        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $category)) {
+            throw new InvalidArgumentException('无效的分组名称');
+        }
+
+        $file = $_FILES['thumbnail'];
+        if ($file['error'] !== UPLOAD_ERR_OK || empty($file['tmp_name'])) {
+            throw new RuntimeException('缩略图上传失败');
+        }
+
+        if ($file['size'] > 10 * 1024 * 1024) {
+            throw new RuntimeException('缩略图不能超过10MB');
+        }
+
+        $imageInfo = @getimagesize($file['tmp_name']);
+        if (!$imageInfo) {
+            throw new RuntimeException('文件不是有效的图片');
+        }
+
+        $allowedTypes = [
+            IMAGETYPE_JPEG => 'jpg',
+            IMAGETYPE_PNG => 'png',
+            IMAGETYPE_GIF => 'gif',
+            IMAGETYPE_WEBP => 'webp',
+        ];
+
+        if (!isset($allowedTypes[$imageInfo[2]])) {
+            throw new RuntimeException('不支持的图片格式');
+        }
+
+        $categoryDir = $imagesRoot . '/' . $category;
+        if (!is_dir($categoryDir)) {
+            throw new InvalidArgumentException('分组目录不存在');
+        }
+
+        $thumbDir = $categoryDir . '/thumbs';
+        if (!is_dir($thumbDir) && !mkdir($thumbDir, 0755, true)) {
+            throw new RuntimeException('无法创建缩略图目录');
+        }
+
+        $extension = $allowedTypes[$imageInfo[2]];
+        $filename = 'custom-thumb-' . date('Ymd-His') . '.' . $extension;
+        $targetPath = $thumbDir . '/' . $filename;
+
+        if (!generateThumbnail($file['tmp_name'], $targetPath, 400, 400, $imageInfo[2])) {
+            if (!move_uploaded_file($file['tmp_name'], $targetPath)) {
+                throw new RuntimeException('保存缩略图失败');
+            }
+        }
+
+        $publicUrl = '/assets/images/sketchbook/' . $category . '/thumbs/' . $filename;
+
+        $configFile = __DIR__ . '/../../../app/Config/sketchbook_config.php';
+        $config = [];
+        if (file_exists($configFile)) {
+            $config = require $configFile;
+            if (!is_array($config)) {
+                $config = [];
+            }
+        }
+
+        if (!isset($config['category_thumbnails'])) {
+            $config['category_thumbnails'] = [];
+        }
+
+        $previous = $config['category_thumbnails'][$category] ?? null;
+        if ($previous) {
+            $previousPath = realpath(__DIR__ . '/../../../public' . $previous);
+            $thumbRealDir = realpath($thumbDir);
+            if ($previousPath && $thumbRealDir && strpos($previousPath, $thumbRealDir) === 0 && is_file($previousPath)) {
+                @unlink($previousPath);
+            }
+        }
+
+        $config['category_thumbnails'][$category] = $publicUrl;
+
+        $configContent = "<?php\nreturn " . var_export($config, true) . ";\n";
+        if (!file_put_contents($configFile, $configContent, LOCK_EX)) {
+            throw new RuntimeException('保存缩略图配置失败');
+        }
+
+        respondJson([
+            'success' => true,
+            'thumbnail_url' => $publicUrl,
+            'message' => '缩略图已上传',
+        ]);
+    } catch (Throwable $e) {
+        respondJson([
+            'success' => false,
+            'error' => $e->getMessage(),
+        ], 400);
     }
 }
 
@@ -783,19 +960,29 @@ function deleteThumbnail($imagesRoot, $configPath)
     }
     
     // 从配置文件中删除
-    $configFile = __DIR__ . '/../../app/Config/single_works_config.php';
+    $configFile = __DIR__ . '/../../../app/Config/sketchbook_config.php';
     $config = [];
     if (file_exists($configFile)) {
         $config = require $configFile;
     }
     
+    $removedThumbnail = null;
     if (isset($config['category_thumbnails'][$category])) {
+        $removedThumbnail = $config['category_thumbnails'][$category];
         unset($config['category_thumbnails'][$category]);
     }
-    
+
     // 保存配置
     $configContent = "<?php\nreturn " . var_export($config, true) . ";\n";
     file_put_contents($configFile, $configContent);
+
+    if ($removedThumbnail) {
+        $fullPath = realpath(__DIR__ . '/../../../public' . $removedThumbnail);
+        $thumbRealDir = realpath($imagesRoot . '/' . $category . '/thumbs');
+        if ($fullPath && $thumbRealDir && strpos($fullPath, $thumbRealDir) === 0 && is_file($fullPath)) {
+            @unlink($fullPath);
+        }
+    }
     
     // 获取第一张图片作为新的缩略图
     $dirPath = $imagesRoot . '/' . $category;
@@ -806,7 +993,7 @@ function deleteThumbnail($imagesRoot, $configPath)
             $firstImage = basename($images[0]);
             $thumbPath = $dirPath . '/thumbs/' . $firstImage;
             if (file_exists($thumbPath)) {
-                $newThumbnailUrl = '/assets/images/single-works/' . $category . '/thumbs/' . $firstImage;
+                $newThumbnailUrl = '/assets/images/sketchbook/' . $category . '/thumbs/' . $firstImage;
             }
         }
     }
@@ -936,7 +1123,7 @@ function saveCategoryUpdate($configPath, $imagesRoot)
     }
     
     try {
-        $config = loadSingleWorksConfig($configPath);
+        $config = loadSketchbookConfig($configPath);
         
         // 更新显示名称和描述
         if ($displayName) {
@@ -951,7 +1138,7 @@ function saveCategoryUpdate($configPath, $imagesRoot)
             $config['custom_order'] = explode(',', $categoryOrder);
         }
         
-        if (saveSingleWorksConfig($configPath, $config)) {
+        if (saveSketchbookConfig($configPath, $config)) {
             // 获取更新后的缩略图信息
             $dirPath = $imagesRoot . '/' . $category;
             $thumbnailInfo = getCategoryThumbnailInfo($category, $dirPath);
@@ -998,7 +1185,7 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
         $trashTarget = $trashRoot . '/' . $category . '_deleted_' . date('Y-m-d_H-i-s');
         if (rename($categoryDir, $trashTarget)) {
             // 从配置中删除
-            $config = loadSingleWorksConfig($configPath);
+            $config = loadSketchbookConfig($configPath);
             
             // 从custom_order中删除
             if (isset($config['custom_order'])) {
@@ -1016,7 +1203,7 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
             }
             
             // 删除缩略图配置
-            $thumbnailConfigFile = __DIR__ . '/../../app/Config/single_works_config.php';
+            $thumbnailConfigFile = __DIR__ . '/../../../app/Config/sketchbook_config.php';
             if (file_exists($thumbnailConfigFile)) {
                 $thumbnailConfig = require $thumbnailConfigFile;
                 if (isset($thumbnailConfig['category_thumbnails'][$category])) {
@@ -1026,7 +1213,7 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
                 }
             }
             
-            if (saveSingleWorksConfig($configPath, $config)) {
+            if (saveSketchbookConfig($configPath, $config)) {
                 respondJson([
                     'success' => true,
                     'message' => '分组已删除并移至回收站'
@@ -1050,7 +1237,7 @@ function loadImageOrderConfig(string $imageOrderPath): array
 {
     if (!file_exists($imageOrderPath)) {
         return [
-            '_comment' => 'Single-Works 图片排序配置文件',
+            '_comment' => 'Sketchbook 图片排序配置文件',
             '_generated' => date('c'),
             'categories' => []
         ];
@@ -1061,15 +1248,15 @@ function loadImageOrderConfig(string $imageOrderPath): array
 
     if (!is_array($config)) {
         return [
-            '_comment' => 'Single-Works 图片排序配置文件',
+            '_comment' => 'Sketchbook 图片排序配置文件',
             '_generated' => date('c'),
             'categories' => []
         ];
     }
 
-    // 从新的合并结构中提取single-works模块的数据
-    if (isset($config['modules']['single-works'])) {
-        return $config['modules']['single-works'];
+    // 从新的合并结构中提取sketchbook模块的数据
+    if (isset($config['modules']['sketchbook'])) {
+        return $config['modules']['sketchbook'];
     }
 
     // 向后兼容：如果没有modules结构，直接返回旧格式
@@ -1100,8 +1287,8 @@ function saveImageOrderConfig(string $imageOrderPath, array $config): bool
         $fullConfig['modules'] = [];
     }
 
-    // 更新single-works模块的配置
-    $fullConfig['modules']['single-works'] = $config;
+    // 更新sketchbook模块的配置
+    $fullConfig['modules']['sketchbook'] = $config;
     $fullConfig['_generated'] = date('c');
 
     $content = json_encode($fullConfig, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
