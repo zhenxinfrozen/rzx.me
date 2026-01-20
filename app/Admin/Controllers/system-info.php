@@ -13,7 +13,8 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once __DIR__ . '/../Views/layouts/header.php';
 ?>
 
-<div class="admin-page-content">
+
+<div class="ray-body-box-useless">
     <!-- 页面标题 -->
     <div class="d-flex align-items-center mb-4">
         <div class="me-3">
@@ -84,7 +85,7 @@ require_once __DIR__ . '/../Views/layouts/header.php';
                         <div class="col-md-4">
                             <div class="border rounded-3 p-3 bg-light">
                                 <div class="small text-muted mb-1">
-                                    当前时间 
+                                    当前时间
                                     <span class="pulse-dot success ms-1"></span>
                                 </div>
                                 <div class="fw-bold text-secondary current-time"><?= date('Y-m-d H:i:s') ?></div>
@@ -110,7 +111,7 @@ require_once __DIR__ . '/../Views/layouts/header.php';
                     $memory_peak = memory_get_peak_usage(true);
                     $memory_limit = ini_get('memory_limit');
                     $memory_limit_bytes = 0;
-                    
+
                     if ($memory_limit != -1) {
                         $unit = strtoupper(substr($memory_limit, -1));
                         $memory_limit_numeric = (int)$memory_limit;
@@ -121,7 +122,7 @@ require_once __DIR__ . '/../Views/layouts/header.php';
                             default: $memory_limit_bytes = $memory_limit_numeric;
                         }
                     }
-                    
+
                     $usage_percent = $memory_limit_bytes > 0 ? round(($memory_usage / $memory_limit_bytes) * 100, 1) : 0;
                     ?>
                     <div class="mb-3">
@@ -132,7 +133,7 @@ require_once __DIR__ . '/../Views/layouts/header.php';
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <div class="progress mb-3 progress-animated" style="height: 12px;">
-                                    <div class="progress-bar bg-<?= $usage_percent > 80 ? 'danger' : ($usage_percent > 60 ? 'warning' : 'success') ?>" 
+                                    <div class="progress-bar bg-<?= $usage_percent > 80 ? 'danger' : ($usage_percent > 60 ? 'warning' : 'success') ?>"
                                          style="width: <?= min($usage_percent, 100) ?>%">
                                         <small class="text-white fw-bold"><?= $usage_percent ?>%</small>
                                     </div>
@@ -185,7 +186,7 @@ require_once __DIR__ . '/../Views/layouts/header.php';
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <div class="progress mb-3 progress-animated" style="height: 12px;">
-                                    <div class="progress-bar bg-<?= $disk_percent > 90 ? 'danger' : ($disk_percent > 75 ? 'warning' : 'primary') ?>" 
+                                    <div class="progress-bar bg-<?= $disk_percent > 90 ? 'danger' : ($disk_percent > 75 ? 'warning' : 'primary') ?>"
                                          style="width: <?= $disk_percent ?>%">
                                         <small class="text-white fw-bold"><?= $disk_percent ?>%</small>
                                     </div>
@@ -234,8 +235,8 @@ require_once __DIR__ . '/../Views/layouts/header.php';
                             'default_socket_timeout' => ['label' => '套接字超时', 'unit' => '秒', 'icon' => '🌐'],
                             'auto_prepend_file' => ['label' => '自动前置文件', 'unit' => '', 'icon' => '📋']
                         ];
-                        
-                        foreach ($important_settings as $setting => $info): 
+
+                        foreach ($important_settings as $setting => $info):
                             $value = ini_get($setting) ?: '未设置';
                         ?>
                         <div class="col-md-6">
@@ -319,11 +320,11 @@ require_once __DIR__ . '/../Views/layouts/header.php';
                         $security_extensions = ['openssl', 'hash', 'filter'];
                         $database_extensions = ['pdo', 'mysqli', 'sqlite3'];
                         $web_extensions = ['curl', 'session', 'zlib'];
-                        
+
                         foreach ($extensions as $ext):
                             $badge_class = 'secondary';
                             $icon = '📦';
-                            
+
                             if (in_array($ext, $core_extensions)) {
                                 $badge_class = 'primary';
                                 $icon = '⚙️';
@@ -339,7 +340,7 @@ require_once __DIR__ . '/../Views/layouts/header.php';
                             }
                         ?>
                         <div class="col-lg-3 col-md-4 col-sm-6 mb-2">
-                            <span class="badge bg-<?= $badge_class ?> me-1 d-inline-flex align-items-center extension-badge" 
+                            <span class="badge bg-<?= $badge_class ?> me-1 d-inline-flex align-items-center extension-badge"
                                   title="<?= htmlspecialchars($ext) ?> 扩展模块">
                                 <span class="me-1"><?= $icon ?></span>
                                 <?= htmlspecialchars($ext) ?>
@@ -452,12 +453,12 @@ require_once __DIR__ . '/../Views/layouts/header.php';
 <script>
 function pageInit() {
     console.log('系统信息页面已加载');
-    
+
     // 添加卡片悬停效果
     document.querySelectorAll('.card').forEach(card => {
         card.classList.add('system-info-card');
     });
-    
+
     // 为进度条添加动画效果
     document.querySelectorAll('.progress-bar').forEach(bar => {
         const width = bar.style.width;
@@ -467,13 +468,13 @@ function pageInit() {
             bar.parentElement.classList.add('progress-animated');
         }, 500);
     });
-    
+
     // 添加数字动画效果
     animateNumbers();
-    
+
     // 创建内存使用图表
     createMemoryChart();
-    
+
     // 创建磁盘使用图表
     createDiskChart();
 }
@@ -503,7 +504,7 @@ function animateValue(element, start, end, duration) {
 function createMemoryChart() {
     const ctx = document.getElementById('memoryChart');
     if (!ctx) return;
-    
+
     new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -527,7 +528,7 @@ function createMemoryChart() {
 function createDiskChart() {
     const ctx = document.getElementById('diskChart');
     if (!ctx) return;
-    
+
     new Chart(ctx, {
         type: 'doughnut',
         data: {
@@ -556,7 +557,7 @@ setInterval(() => {
 function updateRealTimeInfo() {
     // 这里可以添加AJAX调用来实时更新数据
     console.log('更新实时信息...');
-    
+
     // 更新当前时间
     const timeElement = document.querySelector('.current-time');
     if (timeElement) {

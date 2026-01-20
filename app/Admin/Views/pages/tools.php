@@ -6,8 +6,8 @@
  */
 ?>
 
-<div class="admin-page-content">
-    <!-- 工具卡片网格 -->
+<div class="ray-body-box-useless">
+<!-- 工具卡片网格 -->
     <div class="row g-3">
         <!-- 缩略图中心 -->
         <div class="col-lg-6 col-xl-4">

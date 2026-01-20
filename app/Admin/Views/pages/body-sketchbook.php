@@ -23,26 +23,26 @@ $totalCategories = count($categoryData);
 
 <style>
 .category-list { max-height: 70vh; overflow-y: auto; padding: 10px; }
-.category-item { 
-    margin-bottom: 10px; 
+.category-item {
+    margin-bottom: 10px;
     transition: all 0.3s ease;
 }
-.category-row { 
-    transition: all 0.2s ease; 
+.category-row {
+    transition: all 0.2s ease;
     border-radius: 8px;
     background: white;
     border: 1px solid #e9ecef;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: relative;
 }
-.category-row:hover { 
-    background: #f8f9fa !important; 
+.category-row:hover {
+    background: #f8f9fa !important;
     border-color: #007bff;
     box-shadow: 0 4px 8px rgba(0,123,255,0.2);
     transform: translateY(-1px);
 }
-.category-row.active { 
-    background: #e3f2fd !important; 
+.category-row.active {
+    background: #e3f2fd !important;
     border-color: #0d6efd;
     box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
 }
@@ -56,10 +56,10 @@ $totalCategories = count($categoryData);
     border-top: 3px solid #007bff;
     margin-top: 15px;
 }
-.drag-handle { 
-    color: #6c757d; 
-    cursor: grab; 
-    user-select: none; 
+.drag-handle {
+    color: #6c757d;
+    cursor: grab;
+    user-select: none;
     font-size: 18px;
     padding: 5px;
     margin-right: 5px;
@@ -70,8 +70,8 @@ $totalCategories = count($categoryData);
     background: rgba(0,123,255,0.1);
     color: #007bff;
 }
-.drag-handle:active, .drag-handle.grabbing { 
-    cursor: grabbing; 
+.drag-handle:active, .drag-handle.grabbing {
+    cursor: grabbing;
     background: rgba(0,123,255,0.2);
 }
 .category-content {
@@ -148,14 +148,14 @@ $totalCategories = count($categoryData);
     background: #e3f2fd;
     border-color: #0056b3;
 }
-.thumbnail-item { 
-    width: 80px; 
-    height: 80px; 
-    margin: 5px; 
-    border-radius: 4px; 
-    overflow: hidden; 
-    display: inline-block; 
-    border: 2px solid #dee2e6; 
+.thumbnail-item {
+    width: 80px;
+    height: 80px;
+    margin: 5px;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    border: 2px solid #dee2e6;
     position: relative;
     cursor: pointer;
 }
@@ -196,11 +196,11 @@ $totalCategories = count($categoryData);
 .thumbnail-action-btn.set-thumb:hover { background: #0b5ed7; }
 
 .add-image-btn {
-    width: 80px; 
-    height: 80px; 
-    margin: 5px; 
-    border-radius: 4px; 
-    border: 2px dashed #007bff; 
+    width: 80px;
+    height: 80px;
+    margin: 5px;
+    border-radius: 4px;
+    border: 2px dashed #007bff;
     background: #f8f9fa;
     display: inline-flex;
     align-items: center;
@@ -432,13 +432,12 @@ $totalCategories = count($categoryData);
 </div>
 <?php endif; ?>
 
-<div class="admin-page-content">
-        <div class="content-header d-flex justify-content-between align-items-center mb-4">
-            <p>管理 Sketchbook 页面的分类排序和显示设置</p>
-        </div>
+<div class="ray-body-box-useless">
+<div class="content-header d-flex justify-content-between align-items-center mb-4">
+    <p>管理 Sketchbook 页面的分类排序和显示设置</p>
+</div>
 
-        <div class="container-fluid">
-            <div class="row g-3">
+<div class="row g-3">
                 <div class="col-lg-3">
                     <div class="card shadow-sm h-100">
                         <div class="card-header bg-success text-white position-relative">
@@ -455,7 +454,7 @@ $totalCategories = count($categoryData);
                                     <div class="category-row d-flex align-items-center p-3">
                                         <span class="drag-handle" title="拖拽排序">⋮⋮</span>
                                         <!-- 速写本缩略图 -->
-                                        <?php 
+                                        <?php
                                         $thumbnailSrc = '';
                                         if (!empty($category['thumbnail'])) {
                                             $thumbnailSrc = $category['thumbnail'];
@@ -654,8 +653,6 @@ $totalCategories = count($categoryData);
             </div>
 
         </div>
-    </div>
-</div>
 
 <!-- 隐藏的文件输入 -->
 <input type="file" id="thumbnailFileInput" accept="image/*" style="display: none;" onchange="handleThumbnailUpload(event)">
@@ -699,7 +696,7 @@ function showAddCategoryPanel() {
     document.getElementById('new-category-name').value = '';
     document.getElementById('new-display-name').value = '';
     document.getElementById('new-description').value = '';
-    
+
     // 重置缩略图和图片预览
     const newThumbPreview = document.getElementById('new-thumbnail-preview');
     if (newThumbPreview) {
@@ -727,12 +724,12 @@ function cancelAddCategory() {
     document.getElementById('edit-icon').setAttribute('data-feather', 'edit-3');
     document.getElementById('edit-title').textContent = '编辑速写本';
     document.getElementById('edit-status').textContent = '选择左侧速写本进行编辑';
-    
+
     // 清空表单
     document.getElementById('new-category-name').value = '';
     document.getElementById('new-display-name').value = '';
     document.getElementById('new-description').value = '';
-    
+
     // 清空图片预览
     const previewContainer = document.getElementById('new-images-preview');
     if (previewContainer) {
@@ -743,10 +740,10 @@ function cancelAddCategory() {
             </div>
         `;
     }
-    
+
     // 清空文件输入
     document.getElementById('imagesFileInput').value = '';
-    
+
     feather.replace();
 }
 
@@ -806,10 +803,10 @@ function saveCategory() {
         if (data.success) {
             // 局部更新界面，不重新加载整个页面
             updateCategoryDisplayInList(currentEditingCategory, displayName, description);
-            
+
             // 更新缩略图信息
             if (data.thumbnail_info) {
-                updateCategoryThumbnailInList(currentEditingCategory, 
+                updateCategoryThumbnailInList(currentEditingCategory,
                     data.thumbnail_info.custom_thumbnail || data.thumbnail_info.first_image_thumb);
             }
 
@@ -831,8 +828,8 @@ function deleteCurrentCategory() {
     fetch(`${controllerUrl}?ajax=delete_category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-            category: currentEditingCategory 
+        body: JSON.stringify({
+            category: currentEditingCategory
         })
     })
     .then(res => res.json())
@@ -865,7 +862,7 @@ function loadCategoryThumbnails(categoryName) {
         .then(res => res.json())
         .then(data => {
             container.innerHTML = '';
-            
+
             // 添加方块上传按钮
             const addBtn = document.createElement('div');
             addBtn.className = 'add-image-btn';
@@ -938,7 +935,7 @@ function loadCategoryThumbnailImage(categoryName) {
             const img = document.getElementById('edit-thumbnail-img');
             const uploadBtn = document.getElementById('edit-thumbnail-upload');
             const removeBtn = document.getElementById('remove-thumbnail-btn');
-            
+
             if (data.success && (data.thumbnail || data.first_image_thumb)) {
                 // 有缩略图时显示图片，隐藏上传按钮
                 const thumbnailUrl = data.thumbnail || data.first_image_thumb;
@@ -1029,10 +1026,10 @@ function initializeImageSorting() {
         image.addEventListener('dragover', function(e) {
             e.preventDefault();
             if (!draggedImage || draggedImage === this) return;
-            
+
             const rect = this.getBoundingClientRect();
             const midX = rect.left + rect.width / 2;
-            
+
             if (e.clientX < midX) {
                 this.parentNode.insertBefore(draggedImage, this);
             } else {
@@ -1048,7 +1045,7 @@ function initializeImageSorting() {
 
 function updateCategoryOrder() {
     const order = getCurrentCategoryOrder();
-    
+
     // 实时保存速写本顺序
     if (order) {
         fetch(`${controllerUrl}?ajax=save_order`, {
@@ -1093,20 +1090,20 @@ function setAsThumbnail(categoryName, imageName, thumbName) {
             const editImg = document.getElementById('edit-thumbnail-img');
             const uploadBtn = document.getElementById('edit-thumbnail-upload');
             const removeBtn = document.getElementById('remove-thumbnail-btn');
-            
+
             if (editImg && data.thumbnail_url) {
                 editImg.src = data.thumbnail_url;
                 editImg.style.display = 'block';
                 uploadBtn.querySelector('span').textContent = '更换缩略图';
                 removeBtn.style.display = 'inline-block';
             }
-            
+
             // 更新左侧速写本列表的缩略图
             updateCategoryThumbnailInList(categoryName, data.thumbnail_url);
-            
+
             // 重新加载图片网格以更新视觉标识
             loadCategoryThumbnails(categoryName);
-            
+
             showToast('success', '缩略图已设置');
         } else {
             showToast('danger', data.message || '设置失败');
@@ -1121,7 +1118,7 @@ function setAsThumbnail(categoryName, imageName, thumbName) {
 function updateCategoryThumbnailInList(categoryName, thumbnailUrl) {
     const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
     const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
-    
+
     if (categoryThumb && thumbnailUrl) {
         categoryThumb.src = thumbnailUrl;
     } else if (categoryPlaceholder && thumbnailUrl) {
@@ -1136,10 +1133,10 @@ function updateCategoryDisplayInList(categoryName, displayName, description) {
     // 更新隐藏的input值
     const displayInput = document.querySelector(`input[name="display_names[${categoryName}]"]`);
     const descriptionInput = document.querySelector(`input[name="descriptions[${categoryName}]"]`);
-    
+
     if (displayInput) displayInput.value = displayName;
     if (descriptionInput) descriptionInput.value = description;
-    
+
     // 更新显示的名称
     const nameEl = document.querySelector(`[data-category="${categoryName}"] .category-name`);
     if (nameEl) nameEl.textContent = displayName || categoryName;
@@ -1151,19 +1148,19 @@ function updateCategoryDisplayInList(categoryName, displayName, description) {
 function addNewCategoryToList(categoryName, displayName, description, thumbnailInfo) {
     const categoryList = document.getElementById('categoryOrder');
     const position = document.getElementById('new-category-position').value;
-    
+
     // 创建新的速写本元素
     const newCategoryItem = document.createElement('li');
     newCategoryItem.className = 'category-item';
     newCategoryItem.setAttribute('data-category', categoryName);
     newCategoryItem.setAttribute('draggable', 'true');
-    
+
     // 确定缩略图显示
     const thumbnailUrl = thumbnailInfo?.custom_thumbnail || thumbnailInfo?.first_image_thumb;
-    const thumbnailHtml = thumbnailUrl 
+    const thumbnailHtml = thumbnailUrl
         ? `<img src="${thumbnailUrl}" alt="缩略图" class="category-thumbnail">`
         : `<div class="category-thumbnail-placeholder"><i data-feather="image"></i></div>`;
-    
+
     newCategoryItem.innerHTML = `
         <div class="category-row d-flex align-items-center p-3">
             <span class="drag-handle" title="拖拽排序">⋮⋮</span>
@@ -1179,25 +1176,25 @@ function addNewCategoryToList(categoryName, displayName, description, thumbnailI
         <input type="hidden" name="display_names[${categoryName}]" value="${displayName}" class="display-name-input">
         <input type="hidden" name="descriptions[${categoryName}]" value="${description}" class="description-input">
     `;
-    
+
     // 根据位置插入
     if (position === 'first') {
         categoryList.insertBefore(newCategoryItem, categoryList.firstChild);
     } else {
         categoryList.appendChild(newCategoryItem);
     }
-    
+
     // 重新初始化拖拽和feather图标
     initializeDragAndDrop();
     feather.replace();
-    
+
     // 更新速写本顺序
     updateCategoryOrder();
 }
 
 function updateImageOrder() {
     if (!currentEditingCategory) return;
-    
+
     const imageOrder = [];
     document.querySelectorAll('.thumbnail-sortable').forEach(item => {
         imageOrder.push(item.dataset.image);
@@ -1257,7 +1254,7 @@ function handleThumbnailUpload(event) {
         const imgId = `${currentFileInputContext}-thumbnail-img`;
         const previewId = `${currentFileInputContext}-thumbnail-preview`;
         const uploadId = `${currentFileInputContext}-thumbnail-upload`;
-        
+
         document.getElementById(imgId).src = e.target.result;
         document.getElementById(previewId).style.display = 'block';
         if (document.getElementById(uploadId)) {
@@ -1308,7 +1305,7 @@ function handleImagesUpload(event) {
                     addBtn.onclick = () => selectImagesFile('new');
                     previewContainer.appendChild(addBtn);
                 }
-                
+
                 // 创建图片预览项
                 const div = document.createElement('div');
                 div.className = 'thumbnail-item';
@@ -1344,13 +1341,13 @@ function uploadThumbnail(categoryName, file) {
     .then(data => {
         if (data.success) {
             showToast('success', '缩略图上传成功');
-            
+
             // 更新编辑区域的缩略图显示
             const editImg = document.getElementById('edit-thumbnail-img');
             const previewDiv = document.getElementById('edit-thumbnail-preview');
             const uploadDiv = document.getElementById('edit-thumbnail-upload');
             const removeBtn = document.getElementById('remove-thumbnail-btn');
-            
+
             if (editImg && data.thumbnail_url) {
                 editImg.src = data.thumbnail_url;
                 editImg.style.display = 'block';
@@ -1360,7 +1357,7 @@ function uploadThumbnail(categoryName, file) {
                     removeBtn.style.display = 'inline-block';
                 }
             }
-            
+
             // 更新左侧速写本列表的缩略图
             const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
             const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
@@ -1386,7 +1383,7 @@ function uploadThumbnail(categoryName, file) {
 function removeThumbnail(context) {
     if (context === 'edit' && currentEditingCategory) {
         if (!confirm('确定要删除缩略图吗？将自动使用第一张图片作为缩略图。')) return;
-        
+
         fetch(`${controllerUrl}?ajax=delete_thumbnail`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -1399,7 +1396,7 @@ function removeThumbnail(context) {
                 const editImg = document.getElementById('edit-thumbnail-img');
                 const uploadBtn = document.getElementById('edit-thumbnail-upload');
                 const removeBtn = document.getElementById('remove-thumbnail-btn');
-                
+
                 if (data.new_thumbnail_url) {
                     // 有新的缩略图（第一张图片）
                     editImg.src = data.new_thumbnail_url;
@@ -1412,10 +1409,10 @@ function removeThumbnail(context) {
                     uploadBtn.querySelector('span').textContent = '上传缩略图';
                     removeBtn.style.display = 'none';
                 }
-                
+
                 showToast('success', '缩略图已删除，已自动使用第一张图片');
                 loadCategoryThumbnails(currentEditingCategory);
-                
+
                 // 更新左侧速写本列表
                 const categoryThumb = document.querySelector(`[data-category="${currentEditingCategory}"] .category-thumbnail`);
                 if (categoryThumb) {
@@ -1485,18 +1482,18 @@ function uploadImages(categoryName, files) {
         if (data.success) {
             showToast('success', data.message || '上传成功');
             loadCategoryThumbnails(categoryName);
-            
+
             // 更新图片数量
             const countEl = document.querySelector(`[data-category="${categoryName}"] .category-item small`);
             if (countEl && data.total_count) {
                 countEl.textContent = `${data.total_count} 张图片`;
             }
-            
+
             // 如果是第一张图片且没有缩略图，自动设置为缩略图
             if (data.auto_set_thumbnail || data.thumbnail_set) {
                 showToast('info', '已自动设置第一张图片为缩略图');
                 loadCategoryThumbnailImage(categoryName);
-                
+
                 // 更新左侧速写本列表的缩略图
                 const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
                 if (categoryPlaceholder && data.thumbnail_url) {
@@ -1529,7 +1526,7 @@ function deleteImage(categoryName, imageName) {
         if (data.success) {
             showToast('success', '图片已删除');
             loadCategoryThumbnails(categoryName);
-            
+
             // 更新图片数量
             const countEl = document.querySelector(`[data-category="${categoryName}"] .category-item small`);
             if (countEl && data.total_count !== undefined) {
@@ -1577,7 +1574,7 @@ function createNewCategory() {
     formData.append('displayName', displayName);
     formData.append('description', description);
     formData.append('position', position);
-    
+
     if (imageFiles.length > 0) {
         Array.from(imageFiles).forEach(file => formData.append('images[]', file));
     }
@@ -1592,15 +1589,15 @@ function createNewCategory() {
     .then(data => {
         if (data.success) {
             showToast('success', '速写本创建成功，正在更新列表...');
-            
+
             // 动态添加新速写本到列表中，而不是刷新整个页面
             addNewCategoryToList(data.category, displayName, description, data.thumbnail_info);
-            
+
             // 清空表单
             document.getElementById('new-category-name').value = '';
             document.getElementById('new-display-name').value = '';
             document.getElementById('new-description').value = '';
-            
+
             // 清空图片预览
             const previewContainer = document.getElementById('new-images-preview');
             previewContainer.innerHTML = `
@@ -1608,10 +1605,10 @@ function createNewCategory() {
                     +
                 </div>
             `;
-            
+
             // 清空文件输入
             document.getElementById('imagesFileInput').value = '';
-            
+
             // 关闭添加面板
             cancelAddCategory();
         } else {
@@ -1692,3 +1689,4 @@ function showToast(type, message) {
     }, 3000);
 }
 </script>
+</div>

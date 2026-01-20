@@ -22,26 +22,26 @@ $totalCategories = count($categoryData);
 
 <style>
 .category-list { max-height: 70vh; overflow-y: auto; padding: 10px; }
-.category-item { 
-    margin-bottom: 10px; 
+.category-item {
+    margin-bottom: 10px;
     transition: all 0.3s ease;
 }
-.category-row { 
-    transition: all 0.2s ease; 
+.category-row {
+    transition: all 0.2s ease;
     border-radius: 8px;
     background: white;
     border: 1px solid #e9ecef;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     position: relative;
 }
-.category-row:hover { 
-    background: #f8f9fa !important; 
+.category-row:hover {
+    background: #f8f9fa !important;
     border-color: #007bff;
     box-shadow: 0 4px 8px rgba(0,123,255,0.2);
     transform: translateY(-1px);
 }
-.category-row.active { 
-    background: #e3f2fd !important; 
+.category-row.active {
+    background: #e3f2fd !important;
     border-color: #0d6efd;
     box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
 }
@@ -55,10 +55,10 @@ $totalCategories = count($categoryData);
     border-top: 3px solid #007bff;
     margin-top: 15px;
 }
-.drag-handle { 
-    color: #6c757d; 
-    cursor: grab; 
-    user-select: none; 
+.drag-handle {
+    color: #6c757d;
+    cursor: grab;
+    user-select: none;
     font-size: 18px;
     padding: 5px;
     margin-right: 5px;
@@ -69,8 +69,8 @@ $totalCategories = count($categoryData);
     background: rgba(0,123,255,0.1);
     color: #007bff;
 }
-.drag-handle:active, .drag-handle.grabbing { 
-    cursor: grabbing; 
+.drag-handle:active, .drag-handle.grabbing {
+    cursor: grabbing;
     background: rgba(0,123,255,0.2);
 }
 .category-content {
@@ -378,13 +378,12 @@ $totalCategories = count($categoryData);
 </div>
 <?php endif; ?>
 
-<div class="admin-page-content">
-    <div class="content-header d-flex justify-content-between align-items-center mb-4">
-        <p>管理 Video Gallery 页面的分组排序和显示设置</p>
-    </div>
+<div class="ray-body-box-useless">
+<div class="content-header d-flex justify-content-between align-items-center mb-4">
+    <p>管理 Video Gallery 页面的分组排序和显示设置</p>
+</div>
 
-    <div class="container-fluid">
-        <div class="row g-3">
+<div class="row g-3">
             <div class="col-lg-3">
                 <div class="card shadow-sm h-100">
                     <div class="card-header bg-success text-white position-relative">
@@ -599,8 +598,6 @@ $totalCategories = count($categoryData);
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 <!-- 隐藏的文件输入 -->
 <input type="file" id="thumbnailFileInput" accept="image/*" style="display: none;" onchange="handleThumbnailUpload(event)">
@@ -820,7 +817,7 @@ function loadCategoryVideos(categoryName) {
                     // 从sources中获取实际文件名
                     const sourceKeys = Object.keys(video.sources || {});
                     const fileName = sourceKeys.length > 0 ? video.sources[sourceKeys[0]].split('/').pop() : video.title;
-                    
+
                     const div = document.createElement('div');
                     div.className = `video-item video-sortable ${isThumb ? 'is-thumbnail' : ''}`;
                     div.dataset.video = video.title;
@@ -1680,3 +1677,4 @@ function showToast(type, message) {
     }, 3000);
 }
 </script>
+</div>

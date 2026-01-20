@@ -15,11 +15,10 @@ $message = $message ?? '';
 $messageType = $messageType ?? '';
 ?>
 
+<div class="ray-body-box-useless">
 <?php if (!empty($message)): ?>
-<div class="container-fluid pt-3">
-    <div class="alert alert-<?= htmlspecialchars($messageType ?: 'info') ?>">
-        <?= htmlspecialchars($message) ?>
-    </div>
+<div class="alert alert-<?= htmlspecialchars($messageType ?: 'info') ?> mb-3">
+    <?= htmlspecialchars($message) ?>
 </div>
 <?php endif; ?>
 
@@ -157,9 +156,8 @@ $messageType = $messageType ?? '';
 }
 </style>
 
-<div class="container-fluid mt-4 admin-page-content">
-    <!-- 顶部排序卡片已移除，排序 ID 已集成到编辑分组面板 -->
-    <div class="row g-3">
+<!-- 顶部排序卡片已移除，排序 ID 已集成到编辑分组面板 -->
+<div class="row g-3">
         <!-- 左栏：分组/侧栏 -->
         <div class="col-lg-3">
             <div class="card shadow-sm h-100">
@@ -178,7 +176,7 @@ $messageType = $messageType ?? '';
                             <div class="category-row d-flex align-items-center p-3">
                                 <span class="drag-handle" title="拖拽排序">⋮⋮</span>
                                 <!-- 漫画缩略图 -->
-                                <?php 
+                                <?php
                                 $thumbnailSrc = '';
                                 if (!empty($c['icon_default'])) {
                                     $thumbnailSrc = $c['icon_default'];
@@ -286,7 +284,7 @@ $messageType = $messageType ?? '';
                                     <div id="thumbnail-grid" class="thumbnail-area"></div>
                                     <div class="form-text">可上传/删除，并拖拽排序（会保存顺序）</div>
                                 </div>
-                                
+
                             </div>
                             <div class="form-actions d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">更新/添加漫画</button>
@@ -364,7 +362,7 @@ $messageType = $messageType ?? '';
             <form method="POST" enctype="multipart/form-data" id="addComicForm">
                 <div class="modal-body">
                     <input type="hidden" name="action" value="add">
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="title" class="form-label">标题 *</label>
@@ -375,23 +373,23 @@ $messageType = $messageType ?? '';
                             <input type="text" class="form-control" name="subtitle">
                         </div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="lines" class="form-label">描述内容</label>
                         <textarea class="form-control" name="lines" rows="3"></textarea>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="alt" class="form-label">Alt文本</label>
                         <input type="text" class="form-control" name="alt">
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="images" class="form-label">漫画图片 *</label>
                         <input type="file" class="form-control" name="images[]" multiple accept="image/*" required>
                         <div class="form-text">支持上传多张图片，将存储在 public/assets/images/comic/ 目录</div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="icon_default" class="form-label">默认图标</label>
@@ -403,7 +401,7 @@ $messageType = $messageType ?? '';
                             <input type="file" class="form-control" name="icon_hover" accept="image/*">
                         </div>
                     </div>
-                    
+
                     <div class="mb-3">
                         <label for="status" class="form-label">状态</label>
                         <select class="form-select" name="status">
@@ -418,8 +416,6 @@ $messageType = $messageType ?? '';
                 </div>
             </form>
         </div>
-    </div>
-</div>
 
 <!-- 使用外部样式文件 comic-manager.css 管理样式 -->
 
@@ -457,13 +453,13 @@ function editComic(id) {
     // 填充图标预览（删除按钮已移除）
     const def = document.getElementById('icon-default-img');
     const hov = document.getElementById('icon-hover-img');
-    if (def) { 
-        def.src = comic.icon_default || ''; 
-        def.style.display = comic.icon_default ? 'block' : 'none'; 
+    if (def) {
+        def.src = comic.icon_default || '';
+        def.style.display = comic.icon_default ? 'block' : 'none';
     }
-    if (hov) { 
-        hov.src = comic.icon_hover || ''; 
-        hov.style.display = comic.icon_hover ? 'block' : 'none'; 
+    if (hov) {
+        hov.src = comic.icon_hover || '';
+        hov.style.display = comic.icon_hover ? 'block' : 'none';
     }
     renderThumbnails(id);
 }
@@ -471,7 +467,7 @@ function editComic(id) {
 function deleteComic(id) {
     const comic = comics[id];
     if (!comic) return;
-    
+
     const imageCount = (comic.images || []).length;
     const hasIcons = (comic.icon_default || comic.icon_hover) ? true : false;
     let warningMsg = `确定要删除漫画"${comic.title}"吗？\n\n警告：此操作将删除：\n- 数据记录\n- 所有主图片文件 (${imageCount}个)`;
@@ -479,7 +475,7 @@ function deleteComic(id) {
         warningMsg += '\n- 图标文件';
     }
     warningMsg += '\n\n此操作无法撤销！';
-    
+
     if (confirm(warningMsg)) {
         const form = document.createElement('form');
         form.method = 'POST';
@@ -810,3 +806,4 @@ document.addEventListener('click', function(e){
 
 
 </script>
+</div>

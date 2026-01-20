@@ -1,16 +1,17 @@
-<?php
+﻿<?php
 /**
  * 项目文档查看器 - Wiki风格 AJAX版
  */
 
 if (!isset($files)) {
-    require_once __DIR__ . '/../../Controllers/docs-handler.php';
+    require_once __DIR__ . '/../../controllers/docs-handler.php';
 }
 
 $page_title = '项目文档';
 $page_subtitle = '查看和搜索项目的各类技术文档与记录';
 ?>
 
+<div class="ray-body-box-useless">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
 <style>
     /* 全局容器优化 */
@@ -75,7 +76,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
     }
     .section-header:first-child { margin-top: 0; border-top: none; }
     .section-header:hover { background: #4c86bdff; color: #ffffffff; }
-    
+
     .section-header .toggle-icon {
         margin-left: auto;
         font-size: 12px;
@@ -172,22 +173,22 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
         line-height: 1.8;
         color: #24292f;
     }
-    .markdown-body h1 { 
-        font-size: 2.25em; 
-        font-weight: 600; 
+    .markdown-body h1 {
+        font-size: 2.25em;
+        font-weight: 600;
         padding-bottom: 0.3em;
         border-bottom: 1px solid #eaecef;
         margin-bottom: 25px;
     }
     .markdown-body h2 { margin-top: 35px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-    .markdown-body pre { 
-        background-color: #f6f8fa; 
-        border-radius: 8px; 
-        padding: 20px; 
+    .markdown-body pre {
+        background-color: #f6f8fa;
+        border-radius: 8px;
+        padding: 20px;
         border: 1px solid #e1e4e8;
         position: relative;
     }
-    
+
     /* 复制按钮优化 */
     .copy-btn {
         position: absolute;
@@ -251,7 +252,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
                     <?php if (empty($files)): ?>
                         <div class="text-center text-muted p-4">没有发现文档</div>
                     <?php else: ?>
-                        <?php foreach ($files as $section): 
+                        <?php foreach ($files as $section):
                             $isSectionActive = false;
                             if ($selectedFile) {
                                 foreach ($section['files'] as $f) {
@@ -269,7 +270,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
                             </div>
                             <div class="section-content <?= $isSectionActive ? '' : 'collapsed' ?>">
                                 <?php foreach ($section['files'] as $fileMeta): ?>
-                                    <a href="/admin/index.php?page=docs&file=<?= urlencode($fileMeta['file']) ?>" 
+                                    <a href="/admin?page=docs&file=<?= urlencode($fileMeta['file']) ?>"
                                        class="doc-item ajax-load <?= $selectedFile === $fileMeta['file'] ? 'active' : '' ?>"
                                        data-file="<?= $fileMeta['file'] ?>"
                                        title="<?= htmlspecialchars($fileMeta['title']) ?>">
@@ -294,7 +295,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
                             <?php else: ?>
                                 <div class="list-group list-group-flush">
                                     <?php foreach ($searchResults as $result): ?>
-                                        <a href="/admin/index.php?page=docs&file=<?= urlencode($result['file']) ?>" class="list-group-item list-group-item-action py-3 ajax-load" data-file="<?= $result['file'] ?>">
+                                        <a href="/admin?page=docs&file=<?= urlencode($result['file']) ?>" class="list-group-item list-group-item-action py-3 ajax-load" data-file="<?= $result['file'] ?>">
                                             <h5 class="mb-1 text-primary"><?= htmlspecialchars($result['title']) ?></h5>
                                             <p class="mb-1 text-muted small"><?= $result['preview'] ?></p>
                                         </a>
@@ -306,7 +307,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
                     <?php elseif ($document): ?>
                         <div id="document-view">
                             <nav class="breadcrumb-nav" aria-label="breadcrumb">
-                                <a href="/admin/index.php?page=docs" class="ajax-load" data-file="">文档中心</a>
+                                <a href="/admin?page=docs" class="ajax-load" data-file="">文档中心</a>
                                 <span class="separator">/</span>
                                 <span><?= htmlspecialchars($document['title']) ?></span>
                             </nav>
@@ -341,13 +342,13 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
     function loadDocument(file, updateState = true) {
         const container = document.getElementById('docs-app-container');
         const contentCanvas = document.querySelector('.content-canvas');
-        
+
         container.classList.add('loading-active');
         contentCanvas.style.opacity = '0.5';
 
         // file 为空表示请求主页内容
-        const url = `/admin/index.php?page=docs${file ? '&file=' + encodeURIComponent(file) : ''}`;
-        
+        const url = `/admin?page=docs${file ? '&file=' + encodeURIComponent(file) : ''}`;
+
         fetch(url, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
@@ -363,7 +364,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
                 } else if (data.type === 'index') {
                     renderIndex();
                 }
-                
+
                 // 更新侧边栏激活状态
                 document.querySelectorAll('.doc-item').forEach(item => {
                     item.classList.toggle('active', item.getAttribute('data-file') === file);
@@ -373,7 +374,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
                 if (updateState) {
                     window.history.pushState({file: file}, data.title || '文档中心', url);
                 }
-                
+
                 document.title = (data.title || '文档中心') + ' - 项目文档';
             }
         })
@@ -407,7 +408,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
         contentCanvas.innerHTML = `
             <div id="document-view">
                 <nav class="breadcrumb-nav" aria-label="breadcrumb">
-                    <a href="/admin/index.php?page=docs" class="ajax-load" data-file="">文档中心</a>
+                    <a href="/admin?page=docs" class="ajax-load" data-file="">文档中心</a>
                     <span class="separator">/</span>
                     <span>${data.title}</span>
                 </nav>
@@ -422,7 +423,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
                 </article>
             </div>
         `;
-        
+
         // 重新初始化代码高亮和复制按钮
         initMarkdownFeatures();
     }
@@ -437,7 +438,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
             btn.innerHTML = '<i class="bi bi-clipboard"></i> 复制';
-            
+
             btn.addEventListener('click', () => {
                 const code = pre.querySelector('code').innerText;
                 navigator.clipboard.writeText(code).then(() => {
@@ -452,7 +453,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
     function toggleSection(header) {
         const section = header.nextElementSibling;
         const isCollapsed = section.classList.contains('collapsed');
-        
+
         if (isCollapsed) {
             section.classList.remove('collapsed');
             header.classList.remove('collapsed');
@@ -507,8 +508,8 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
         const query = this.querySelector('input[name="q"]').value;
         if (query.trim()) {
             e.preventDefault();
-            const url = `/admin/index.php?page=docs&q=${encodeURIComponent(query)}`;
-            
+            const url = `/admin?page=docs&q=${encodeURIComponent(query)}`;
+
             const container = document.getElementById('docs-app-container');
             container.classList.add('loading-active');
 
@@ -525,14 +526,14 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
                             <h3><i class="bi bi-search me-2"></i>搜索结果: "${query}"</h3>
                             <hr>
                     `;
-                    
+
                     if (!data.results || data.results.length === 0) {
                         resultsHtml += `<p class="text-muted">未找到匹配的结果。</p>`;
                     } else {
                         resultsHtml += `<div class="list-group list-group-flush">`;
                         data.results.forEach(res => {
                             resultsHtml += `
-                                <a href="/admin/index.php?page=docs&file=${encodeURIComponent(res.file)}" class="list-group-item list-group-item-action py-3 ajax-load" data-file="${res.file}">
+                                <a href="/admin?page=docs&file=${encodeURIComponent(res.file)}" class="list-group-item list-group-item-action py-3 ajax-load" data-file="${res.file}">
                                     <h5 class="mb-1 text-primary">${res.title}</h5>
                                     <p class="mb-1 text-muted small">${res.preview}</p>
                                 </a>
@@ -542,7 +543,7 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
                     }
                     resultsHtml += `</div>`;
                     contentCanvas.innerHTML = resultsHtml;
-                    
+
                     // 只要更新历史，不刷新页面
                     window.history.pushState({query: query}, `搜索: ${query}`, url);
                 }
@@ -555,10 +556,11 @@ $page_subtitle = '查看和搜索项目的各类技术文档与记录';
 
     document.addEventListener('DOMContentLoaded', function() {
         initMarkdownFeatures();
-        
+
         // 初始化侧边栏高度
         document.querySelectorAll('.section-content:not(.collapsed)').forEach(s => {
             s.style.maxHeight = s.scrollHeight + 'px';
         });
     });
 </script>
+</div>

@@ -12,12 +12,11 @@
  * @var array|null $edit_config
  * @var string $message
  * @var string $message_type
- */
+*/
 ?>
 
-<div class="container-fluid admin-page-content">
-
-    <!-- 页面头部 -->
+<div class="ray-body-box-useless">
+<!-- 页面头部 -->
     <div class="page-header">
         <h1><i data-feather="image" class="me-2"></i>缩略图中心</h1>
         <p class="text-muted">统一管理缩略图的批量操作、配置预设和功能测试。</p>
@@ -65,7 +64,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -81,3 +79,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+</div>

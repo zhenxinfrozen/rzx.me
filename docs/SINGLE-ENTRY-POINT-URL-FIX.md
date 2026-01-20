@@ -197,8 +197,49 @@ if ($page === 'docs' && isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
 - [重构计划 v1.2.0](./REFACTOR_PLAN_v1.2.0.md)
 - [重构报告](./REFACTOR_REPORT.md)
 
+## 第二轮修复（2026-01-21）
+
+用户反馈修复后仍有问题：
+
+### 问题1：缩略图中心列表无法加载
+
+**原因**：`public/index.php` 第57行检查 `$_GET['ajax']` 参数，但JavaScript通过POST方式发送 `formData.append('ajax', '1')`，且控制器自身已经检查 `$_POST['ajax']`。
+
+**修复**：移除admin AJAX路由中的 `$ajaxAction` 检查，只检查 `$controller` 参数。
+
+```php
+// 修改前
+$controller = $_GET['controller'] ?? '';
+$ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
+if (empty($controller) || empty($ajaxAction)) { ... }
+
+// 修改后
+$controller = $_GET['controller'] ?? '';
+if (empty($controller)) { ... }
+```
+
+### 问题2：项目文档页面无法加载
+
+**原因**：文档页面使用了错误的URL格式 `/admin/index.php?page=docs`，应该使用统一路由 `/admin?page=docs`。
+
+**修复**：更新8处URL引用：
+- JavaScript `loadDocument()` 函数的fetch URL
+- 搜索表单的action
+- 搜索AJAX的URL
+- 文档列表链接
+- 搜索结果链接
+- 面包屑导航链接
+- JavaScript `renderDocument()` 中的链接
+- JavaScript搜索结果渲染中的链接
+
+| 位置 | 修改前 | 修改后 |
+|------|--------|--------|
+| loadDocument() | `/admin/index.php?page=docs` | `/admin?page=docs` |
+| 搜索表单 | `action="index.php"` | `action="/admin"` |
+| 文档列表 | `href="/admin/index.php?page=docs&file=..."` | `href="/admin?page=docs&file=..."` |
+
 ---
 
-**修复日期**：2024-01-XX  
+**修复日期**：2026-01-21  
 **修复版本**：v1.2.1  
 **修复人员**：GitHub Copilot Agent
