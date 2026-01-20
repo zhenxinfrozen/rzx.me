@@ -9,7 +9,7 @@ $page_title = '🛠️ 缓存管理';
 $page_subtitle = '管理和优化网站缓存，提升加载性能';
 $_GET['page'] = 'cache-manager';
 
-require_once '../views/layouts/header.php';
+require_once __DIR__ . '/../../Views/Admin/layouts/header.php';
 
 // 处理缓存操作
 $message = '';
@@ -373,4 +373,4 @@ function pageInit() {
 }
 </script>
 
-<?php require_once '../views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../../Views/Admin/layouts/footer.php'; ?>

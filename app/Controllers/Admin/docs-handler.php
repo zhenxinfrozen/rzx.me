@@ -5,8 +5,8 @@
 
 define('ADMIN_ACCESS', true);
 
-require_once __DIR__ . '/../../../app/bootstrap.php';
-require_once __DIR__ . '/../../../app/Services/DocumentManager.php';
+require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../../Services/DocumentManager.php';
 
 use App\Services\DocumentManager;
 

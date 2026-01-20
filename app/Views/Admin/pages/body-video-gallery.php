@@ -6,7 +6,7 @@ $_GET['page'] = $_GET['page'] ?? 'video-gallery';
 // 如果控制器没有传入数据，则手动加载数据
 if (!isset($categoryData)) {
     // 手动加载必要的依赖和数据
-    require_once __DIR__ . '/../../controllers/video-gallery.php';
+    require_once __DIR__ . '/../../../Controllers/Admin/video-gallery.php';
 }
 
 $categoryData = $categoryData ?? [];

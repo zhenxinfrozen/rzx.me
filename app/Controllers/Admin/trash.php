@@ -9,7 +9,7 @@ $page_title = '🗑️ 回收站';
 $page_subtitle = '管理已删除的分类，提供恢复和永久删除功能';
 $_GET['page'] = 'trash';
 
-require_once '../views/layouts/header.php';
+require_once __DIR__ . '/../../Views/Admin/layouts/header.php';
 
 // 处理操作
 $message = '';
@@ -391,4 +391,4 @@ function pageInit() {
 }
 </script>
 
-<?php require_once '../views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../../Views/Admin/layouts/footer.php'; ?>

@@ -6,8 +6,8 @@
 
 define('ADMIN_ACCESS', true);
 
-require_once __DIR__ . '/../../../app/bootstrap.php';
-require_once __DIR__ . '/../../../app/Utils/GalleryManager.php';
+require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../../Utils/GalleryManager.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

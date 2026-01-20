@@ -12,7 +12,7 @@ if (isset($_GET['dev'])) {
 }
 
 define('ADMIN_ACCESS', true);
-require_once __DIR__ . '/../../../app/Models/comic_data.php';
+require_once __DIR__ . '/../../Models/comic_data.php';
 
 // 处理POST请求
 $message = '';

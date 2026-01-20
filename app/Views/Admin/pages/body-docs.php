@@ -4,7 +4,7 @@
  */
 
 if (!isset($files)) {
-    require_once __DIR__ . '/../../controllers/docs-handler.php';
+    require_once __DIR__ . '/../../../Controllers/Admin/docs-handler.php';
 }
 
 $page_title = '项目文档';

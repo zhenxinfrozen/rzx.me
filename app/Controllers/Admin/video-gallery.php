@@ -6,8 +6,8 @@
 
 define('ADMIN_ACCESS', true);
 
-require_once __DIR__ . '/../../../app/bootstrap.php';
-require_once __DIR__ . '/../../../app/Models/video_data.php';
+require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../../Models/video_data.php';
 
 // 开发模式跳过认证检查
 if (!isset($_GET['dev'])) {

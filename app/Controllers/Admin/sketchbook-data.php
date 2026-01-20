@@ -4,7 +4,7 @@
  * 提供视图所需的数据，不处理 AJAX 请求
  */
 
-require_once __DIR__ . '/../../../app/Utils/GalleryManager.php';
+require_once __DIR__ . '/../../Utils/GalleryManager.php';
 
 $galleryManager = new GalleryManager();
 $configPath = __DIR__ . '/../../../app/Config/sketchbook_sort.php';

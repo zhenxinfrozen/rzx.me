@@ -9,7 +9,7 @@ $page_title = '📁 画廊管理';
 $page_subtitle = '管理网站的图片画廊，包括上传、编辑、删除等功能';
 $_GET['page'] = 'gallery-manager';
 
-require_once '../views/layouts/header.php';
+require_once __DIR__ . '/../../Views/Admin/layouts/header.php';
 
 // 处理操作
 $message = '';
@@ -21,7 +21,7 @@ if ($_POST) {
     switch ($action) {
         case 'regenerate_thumbs':
             try {
-                require_once '../../../app/Utils/GalleryManager.php';
+                require_once __DIR__ . '/../../Utils/GalleryManager.php';
                 $galleryManager = new GalleryManager();
                 
                 $gallery = $_POST['gallery'] ?? 'single-works';
@@ -84,7 +84,7 @@ if ($_POST) {
 }
 
 // 获取画廊统计信息
-require_once '../../../app/Utils/GalleryManager.php';
+require_once __DIR__ . '/../../Utils/GalleryManager.php';
 $galleryManager = new GalleryManager();
 
 $galleries = ['single-works', 'galleries'];
@@ -277,4 +277,4 @@ function pageInit() {
 }
 </script>
 
-<?php require_once '../views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../../Views/Admin/layouts/footer.php'; ?>

@@ -2,9 +2,9 @@
 /**
  * 缩略图中心 控制器
  */
-require_once '../../../app/bootstrap.php';
-require_once __DIR__ . '/../../../app/Services/ThumbnailService.php';
-require_once __DIR__ . '/../../../app/Utils/GalleryManager.php';
+require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../../Services/ThumbnailService.php';
+require_once __DIR__ . '/../../Utils/GalleryManager.php';
 
 // 简单的认证检查
 session_start();
@@ -169,6 +169,6 @@ $all_configs = ThumbnailService::getAllConfigs();
 $galleries = []; // 初始为空，由JS加载
 
 // 包含布局和视图
-require_once '../views/layouts/header.php';
-require_once '../views/pages/thumbnail-center.php';
-require_once '../views/layouts/footer.php';
+require_once __DIR__ . '/../../Views/Admin/layouts/header.php';
+require_once __DIR__ . '/../../Views/Admin/pages/thumbnail-center.php';
+require_once __DIR__ . '/../../Views/Admin/layouts/footer.php';

@@ -16,23 +16,17 @@ if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
     exit;
 }
 
-// 动态确定资源路径
-$request_uri = $_SERVER['REQUEST_URI'];
-$is_in_controllers = strpos($request_uri, '/admin/controllers/') !== false;
+// 新架构：所有资源使用绝对路径或项目根路径
+// 当前文件在 app/Views/Admin/layouts/header.php
+// 资源文件在 public/assets/
 
-// 统一资源路径：所有admin页面都使用主assets目录
-if ($is_in_controllers) {
-    // 从 /admin/controllers/ 访问，需要返回两级到public/assets/
-    $assets_base = '../../assets';
-} else {
-    // 从 /admin/ 访问，只需要返回一级到public/assets/
-    $assets_base = '../assets';
-}
+// 使用 Web 根路径（推荐）
+$assets_base = '/assets';
 
 $GLOBALS['assets_base'] = $assets_base;
 
-// 动态确定导航链接基础路径
-$nav_base = $is_in_controllers ? '' : 'controllers/';
+// Admin 导航使用 /admin 作为基础
+$nav_base = '/admin?page=';
 
 // 获取当前页面信息（从页面文件中继承）
 $current_page = $_GET['page'] ?? 'dashboard';
@@ -208,42 +202,42 @@ $current_user = [
             </li>
 
             <li class="menu-item <?= $current_page === 'single-works' ? 'active' : '' ?>">
-                <a href="/admin/controllers/single-works.php">
+                <a href="/admin?page=single-works">
                     <i data-feather="image"></i>
                     <span>Single-Works分类管理</span>
                 </a>
             </li>
 
             <li class="menu-item <?= $current_page === 'sketchbook' ? 'active' : '' ?>">
-                <a href="/admin/controllers/sketchbook.php">
+                <a href="/admin?page=sketchbook">
                     <i data-feather="book-open"></i>
                     <span>Sketchbook管理</span>
                 </a>
             </li>
 
             <li class="menu-item <?= $current_page === 'comics' ? 'active' : '' ?>">
-                <a href="/admin/controllers/comics.php">
+                <a href="/admin?page=comics">
                     <i data-feather="layers"></i>
                     <span>Comics管理</span>
                 </a>
             </li>
 
             <li class="menu-item <?= $current_page === 'video-gallery' ? 'active' : '' ?>">
-                <a href="/admin/controllers/video-gallery.php">
+                <a href="/admin?page=video-gallery">
                     <i data-feather="film"></i>
                     <span>Video Gallery管理</span>
                 </a>
             </li>
 
             <li class="menu-item <?= $current_page === 'gallery-manager' ? 'active' : '' ?>">
-                <a href="/admin/controllers/gallery-manager.php">
+                <a href="/admin?page=gallery-manager">
                     <i data-feather="folder"></i>
                     <span>gallery管理</span>
                 </a>
             </li>
 
             <li class="menu-item <?= $current_page === 'trash' ? 'active' : '' ?>">
-                <a href="/admin/controllers/trash.php">
+                <a href="/admin?page=trash">
                     <i data-feather="trash-2"></i>
                     <span>回收站</span>
                 </a>
@@ -254,14 +248,14 @@ $current_user = [
             </li>
 
             <li class="menu-item <?= $current_page === 'site-config' ? 'active' : '' ?>">
-                <a href="/admin/controllers/site-config.php">
+                <a href="/admin?page=site-config">
                     <i data-feather="settings"></i>
                     <span>网站配置</span>
                 </a>
             </li>
 
             <li class="menu-item <?= $current_page === 'cache-manager' ? 'active' : '' ?>">
-                <a href="/admin/controllers/cache-manager.php">
+                <a href="/admin?page=cache-manager">
                     <i data-feather="database"></i>
                     <span>缓存管理</span>
                 </a>
@@ -286,14 +280,14 @@ $current_user = [
             </li>
 
             <li class="menu-item <?= $current_page === 'system-info' ? 'active' : '' ?>">
-                <a href="/admin/controllers/system-info.php">
+                <a href="/admin?page=system-info">
                     <i data-feather="info"></i>
                     <span>系统信息</span>
                 </a>
             </li>
 
             <li class="menu-item <?= $current_page === 'docs' ? 'active' : '' ?>">
-                <a href="/admin/index.php?page=docs">
+                <a href="/admin?page=docs">
                     <i data-feather="book"></i>
                     <span>项目文档</span>
                 </a>
