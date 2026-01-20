@@ -778,21 +778,25 @@ function uploadCategoryThumbnail(string $imagesRoot): void
 {
     header('Content-Type: application/json');
     
-    // 记录调试日志
-    error_log('[uploadCategoryThumbnail] 开始处理上传请求');
-    error_log('[uploadCategoryThumbnail] $_POST: ' . print_r($_POST, true));
-    error_log('[uploadCategoryThumbnail] $_FILES: ' . print_r($_FILES, true));
+    // 调试数组
+    $debugInfo = [];
+    $debugInfo['timestamp'] = date('Y-m-d H:i:s');
+    $debugInfo['POST_category'] = $_POST['category'] ?? 'null';
+    $debugInfo['FILES_present'] = isset($_FILES['thumbnail']) ? 'yes' : 'no';
 
     try {
         if (empty($_POST['category']) || !isset($_FILES['thumbnail'])) {
+            $debugInfo['error'] = '缺少必要参数';
             error_log('[uploadCategoryThumbnail] 缺少必要参数');
             throw new InvalidArgumentException('缺少必要参数');
         }
 
         $category = trim((string) $_POST['category']);
+        $debugInfo['category'] = $category;
         error_log('[uploadCategoryThumbnail] 分组名称: ' . $category);
         
         if (!preg_match('/^[a-zA-Z0-9_+-]+$/', $category)) {
+            $debugInfo['error'] = '无效的分组名称: ' . $category;
             error_log('[uploadCategoryThumbnail] 无效的分组名称: ' . $category);
             throw new InvalidArgumentException('无效的分组名称');
         }
@@ -844,10 +848,15 @@ function uploadCategoryThumbnail(string $imagesRoot): void
 
         $publicUrl = '/assets/images/single-works/' . $category . '/thumbs/' . $filename;
         
+        $debugInfo['thumbnail_saved_to'] = $targetPath;
+        $debugInfo['public_url'] = $publicUrl;
         error_log('[uploadCategoryThumbnail] 缩略图已保存到: ' . $targetPath);
         error_log('[uploadCategoryThumbnail] 公开URL: ' . $publicUrl);
 
         $configFile = __DIR__ . '/../../Config/single_works_config.php';
+        $debugInfo['config_file'] = $configFile;
+        $debugInfo['config_file_exists'] = file_exists($configFile) ? 'yes' : 'no';
+        $debugInfo['config_file_writable'] = is_writable($configFile) ? 'yes' : 'no';
         error_log('[uploadCategoryThumbnail] 配置文件路径: ' . $configFile);
         
         $config = [];
@@ -858,14 +867,17 @@ function uploadCategoryThumbnail(string $imagesRoot): void
             }
         }
         
-        error_log('[uploadCategoryThumbnail] 当前配置: ' . print_r($config, true));
+        $debugInfo['config_keys_before'] = array_keys($config);
+        error_log('[uploadCategoryThumbnail] 当前配置keys: ' . implode(', ', array_keys($config)));
 
         if (!isset($config['category_thumbnails'])) {
             $config['category_thumbnails'] = [];
+            $debugInfo['created_category_thumbnails_key'] = true;
         }
 
         // 删除旧缩略图文件
         $previous = $config['category_thumbnails'][$category] ?? null;
+        $debugInfo['previous_thumbnail'] = $previous ?? 'null';
         error_log('[uploadCategoryThumbnail] 之前的缩略图: ' . ($previous ?? 'null'));
         
         if ($previous) {
@@ -873,20 +885,36 @@ function uploadCategoryThumbnail(string $imagesRoot): void
             $thumbRealDir = realpath($thumbDir);
             if ($previousPath && $thumbRealDir && strpos($previousPath, $thumbRealDir) === 0 && is_file($previousPath)) {
                 @unlink($previousPath);
+                $debugInfo['deleted_old_thumbnail'] = $previousPath;
                 error_log('[uploadCategoryThumbnail] 已删除旧缩略图: ' . $previousPath);
             }
         }
 
         $config['category_thumbnails'][$category] = $publicUrl;
-        error_log('[uploadCategoryThumbnail] 更新后的配置: ' . print_r($config, true));
+        $debugInfo['config_updated'] = true;
+        $debugInfo['all_thumbnails'] = $config['category_thumbnails'];
+        error_log('[uploadCategoryThumbnail] 更新后的category_thumbnails: ' . print_r($config['category_thumbnails'], true));
 
         $configContent = "<?php\nreturn " . var_export($config, true) . ";\n";
-        $writeResult = file_put_contents($configFile, $configContent, LOCK_EX);
-        error_log('[uploadCategoryThumbnail] 写入配置结果: ' . ($writeResult ? '成功 (' . $writeResult . ' bytes)' : '失败'));
+            'debug' => $debugInfo // 添加调试信息
+        ]);
         
-        if (!$writeResult) {
-            throw new RuntimeException('保存缩略图配置失败');
-        }
+        error_log('[uploadCategoryThumbnail] 成功响应已发送');
+    } catch (Throwable $e) {
+        $debugInfo['exception'] = $e->getMessage();
+        $debugInfo['trace'] = $e->getTraceAsString();
+        error_log('[uploadCategoryThumbnail] 错误: ' . $e->getMessage());
+        error_log('[uploadCategoryThumbnail] 堆栈: ' . $e->getTraceAsString());
+        
+        respondJson([
+            'success' => false,
+            'error' => $e->getMessage(),
+            'debug' => $debugInfo // 添加调试信息
+        // 验证写入
+        clearstatcache();
+        $verifyConfig = require $configFile;
+        $debugInfo['verify_thumbnail_saved'] = isset($verifyConfig['category_thumbnails'][$category]) ? 'yes' : 'no';
+        $debugInfo['verify_thumbnail_value'] = $verifyConfig['category_thumbnails'][$category] ?? 'not found';
 
         respondJson([
             'success' => true,

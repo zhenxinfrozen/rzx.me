@@ -1404,6 +1404,21 @@ function uploadThumbnail(categoryName, file) {
     })
     .then(res => res.json())
     .then(data => {
+        console.log('[uploadThumbnail] 完整响应:', data);
+        
+        // 显示调试信息
+        if (data.debug) {
+            console.group('[uploadThumbnail] 调试信息');
+            console.log('分组:', data.debug.category);
+            console.log('缩略图URL:', data.debug.public_url);
+            console.log('配置文件:', data.debug.config_file);
+            console.log('配置文件可写:', data.debug.config_file_writable);
+            console.log('写入结果:', data.debug.write_result);
+            console.log('验证写入成功:', data.debug.verify_thumbnail_saved);
+            console.log('所有缩略图:', data.debug.all_thumbnails);
+            console.groupEnd();
+        }
+        
         if (data.success) {
             showToast('success', '缩略图上传成功');
             
