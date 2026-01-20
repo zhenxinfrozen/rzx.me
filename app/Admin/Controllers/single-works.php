@@ -787,17 +787,14 @@ function uploadCategoryThumbnail(string $imagesRoot): void
     try {
         if (empty($_POST['category']) || !isset($_FILES['thumbnail'])) {
             $debugInfo['error'] = '缺少必要参数';
-            error_log('[uploadCategoryThumbnail] 缺少必要参数');
             throw new InvalidArgumentException('缺少必要参数');
         }
 
         $category = trim((string) $_POST['category']);
         $debugInfo['category'] = $category;
-        error_log('[uploadCategoryThumbnail] 分组名称: ' . $category);
         
         if (!preg_match('/^[a-zA-Z0-9_+-]+$/', $category)) {
             $debugInfo['error'] = '无效的分组名称: ' . $category;
-            error_log('[uploadCategoryThumbnail] 无效的分组名称: ' . $category);
             throw new InvalidArgumentException('无效的分组名称');
         }
 
@@ -850,14 +847,11 @@ function uploadCategoryThumbnail(string $imagesRoot): void
         
         $debugInfo['thumbnail_saved_to'] = $targetPath;
         $debugInfo['public_url'] = $publicUrl;
-        error_log('[uploadCategoryThumbnail] 缩略图已保存到: ' . $targetPath);
-        error_log('[uploadCategoryThumbnail] 公开URL: ' . $publicUrl);
 
         $configFile = __DIR__ . '/../../Config/single_works_config.php';
         $debugInfo['config_file'] = $configFile;
         $debugInfo['config_file_exists'] = file_exists($configFile) ? 'yes' : 'no';
         $debugInfo['config_file_writable'] = is_writable($configFile) ? 'yes' : 'no';
-        error_log('[uploadCategoryThumbnail] 配置文件路径: ' . $configFile);
         
         $config = [];
         if (file_exists($configFile)) {
@@ -868,7 +862,6 @@ function uploadCategoryThumbnail(string $imagesRoot): void
         }
         
         $debugInfo['config_keys_before'] = array_keys($config);
-        error_log('[uploadCategoryThumbnail] 当前配置keys: ' . implode(', ', array_keys($config)));
 
         if (!isset($config['category_thumbnails'])) {
             $config['category_thumbnails'] = [];
@@ -878,7 +871,6 @@ function uploadCategoryThumbnail(string $imagesRoot): void
         // 删除旧缩略图文件
         $previous = $config['category_thumbnails'][$category] ?? null;
         $debugInfo['previous_thumbnail'] = $previous ?? 'null';
-        error_log('[uploadCategoryThumbnail] 之前的缩略图: ' . ($previous ?? 'null'));
         
         if ($previous) {
             $previousPath = realpath(__DIR__ . '/../../../public' . $previous);
@@ -886,30 +878,23 @@ function uploadCategoryThumbnail(string $imagesRoot): void
             if ($previousPath && $thumbRealDir && strpos($previousPath, $thumbRealDir) === 0 && is_file($previousPath)) {
                 @unlink($previousPath);
                 $debugInfo['deleted_old_thumbnail'] = $previousPath;
-                error_log('[uploadCategoryThumbnail] 已删除旧缩略图: ' . $previousPath);
             }
         }
 
         $config['category_thumbnails'][$category] = $publicUrl;
         $debugInfo['config_updated'] = true;
         $debugInfo['all_thumbnails'] = $config['category_thumbnails'];
-        error_log('[uploadCategoryThumbnail] 更新后的category_thumbnails: ' . print_r($config['category_thumbnails'], true));
 
         $configContent = "<?php\nreturn " . var_export($config, true) . ";\n";
-            'debug' => $debugInfo // 添加调试信息
-        ]);
+        $writeResult = file_put_contents($configFile, $configContent, LOCK_EX);
+        $debugInfo['write_result'] = $writeResult !== false ? $writeResult . ' bytes' : 'false';
+        $debugInfo['config_file_size_after'] = file_exists($configFile) ? filesize($configFile) : 0;
         
-        error_log('[uploadCategoryThumbnail] 成功响应已发送');
-    } catch (Throwable $e) {
-        $debugInfo['exception'] = $e->getMessage();
-        $debugInfo['trace'] = $e->getTraceAsString();
-        error_log('[uploadCategoryThumbnail] 错误: ' . $e->getMessage());
-        error_log('[uploadCategoryThumbnail] 堆栈: ' . $e->getTraceAsString());
+        if (!$writeResult) {
+            $debugInfo['error'] = '写入配置文件失败';
+            throw new RuntimeException('保存缩略图配置失败');
+        }
         
-        respondJson([
-            'success' => false,
-            'error' => $e->getMessage(),
-            'debug' => $debugInfo // 添加调试信息
         // 验证写入
         clearstatcache();
         $verifyConfig = require $configFile;
@@ -920,16 +905,16 @@ function uploadCategoryThumbnail(string $imagesRoot): void
             'success' => true,
             'thumbnail_url' => $publicUrl,
             'message' => '缩略图已上传',
+            'debug' => $debugInfo
         ]);
-        
-        error_log('[uploadCategoryThumbnail] 成功响应已发送');
     } catch (Throwable $e) {
-        error_log('[uploadCategoryThumbnail] 错误: ' . $e->getMessage());
-        error_log('[uploadCategoryThumbnail] 堆栈: ' . $e->getTraceAsString());
+        $debugInfo['exception'] = $e->getMessage();
+        $debugInfo['trace'] = $e->getTraceAsString();
         
         respondJson([
             'success' => false,
             'error' => $e->getMessage(),
+            'debug' => $debugInfo
         ], 400);
     }
 }
