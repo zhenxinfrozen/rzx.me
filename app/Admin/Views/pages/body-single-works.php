@@ -6,7 +6,7 @@ $_GET['page'] = $_GET['page'] ?? 'single-works';
 // 如果控制器没有传入数据，则手动加载数据
 if (!isset($categoryData)) {
     // 手动加载必要的依赖和数据
-    require_once __DIR__ . '/../../Controllers/single-works-data.php';
+    require_once __DIR__ . '/../../controllers/single-works-data.php';
 }
 
 $categoryData = $categoryData ?? [];
@@ -635,7 +635,7 @@ $totalCategories = count($categoryData);
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
-                                    <a href="/admin?page=trash" class="btn btn-outline-warning btn-sm">
+                                    <a href="controllers/trash.php" class="btn btn-outline-warning btn-sm">
                                         <i data-feather="trash-2" class="me-1"></i>回收站
                                     </a>
                                     <button type="button" class="btn btn-outline-info btn-sm" onclick="showPhpConfigInfo()">
@@ -662,8 +662,7 @@ $totalCategories = count($categoryData);
 <div id="toastContainer"></div>
 
 <script>
-// AJAX 请求通过统一的 AJAX 入口
-const controllerUrl = '/admin/ajax?controller=single-works';
+const controllerUrl = '/admin/controllers/single-works.php';
 const existingMeta = <?= json_encode($categoryData, JSON_UNESCAPED_UNICODE) ?>;
 
 let currentEditingCategory = null;
@@ -671,19 +670,6 @@ let deletedCategories = [];
 let currentFileInputType = null; // 'thumbnail' | 'images'
 let currentFileInputContext = null; // 'new' | 'edit'
 let selectedImages = []; // 当前选中的图片用于排序
-
-// HTML转义函数，防止XSS和HTML注入
-function escapeHtml(text) {
-    if (!text) return '';
-    const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-    };
-    return String(text).replace(/[&<>"']/g, m => map[m]);
-}
 
 document.addEventListener('DOMContentLoaded', function() {
     initializeDragAndDrop();
@@ -791,57 +777,39 @@ function editCategory(categoryName) {
 }
 
 function saveCategory() {
-    console.log('[saveCategory] 开始保存...');
-    console.log('[saveCategory] currentEditingCategory:', currentEditingCategory);
-    
-    if (!currentEditingCategory) {
-        console.error('[saveCategory] currentEditingCategory 为空!');
-        showToast('danger', '请先选择要编辑的分组');
-        return;
-    }
+    if (!currentEditingCategory) return;
 
     const displayName = document.getElementById('edit-display-name').value;
     const description = document.getElementById('edit-description').value;
-    
-    console.log('[saveCategory] displayName:', displayName);
-    console.log('[saveCategory] description:', description);
 
     // 添加确认对话框
     if (!confirm('确定要保存对分组 "' + currentEditingCategory + '" 的修改吗？')) {
-        console.log('[saveCategory] 用户取消保存');
         return;
     }
 
     showToast('info', '正在保存...');
-    
-    const requestBody = {
-        category: currentEditingCategory,
-        displayName: displayName,
-        description: description,
-        category_order: getCurrentCategoryOrder()
-    };
-    
-    const url = `${controllerUrl}&ajax=save_category`;
-    console.log('[saveCategory] 请求URL:', url);
-    console.log('[saveCategory] 请求体:', requestBody);
 
-    fetch(url, {
+    fetch(`${controllerUrl}?ajax=save_category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+            category: currentEditingCategory,
+            displayName: displayName,
+            description: description,
+            category_order: getCurrentCategoryOrder()
+        })
     })
-    .then(res => {
-        console.log('[saveCategory] 响应状态:', res.status);
-        return res.json();
-    })
+    .then(res => res.json())
     .then(data => {
-        console.log('[saveCategory] 响应数据:', data);
         if (data.success) {
             // 局部更新界面，不重新加载整个页面
             updateCategoryDisplayInList(currentEditingCategory, displayName, description);
             
-            // 注意：不在这里更新缩略图，因为缩略图在上传时已经自动保存和更新
-            // 避免覆盖用户刚上传的新缩略图
+            // 更新缩略图信息
+            if (data.thumbnail_info) {
+                updateCategoryThumbnailInList(currentEditingCategory, 
+                    data.thumbnail_info.custom_thumbnail || data.thumbnail_info.first_image_thumb);
+            }
 
             showToast('success', '分组信息已保存');
         } else {
@@ -858,7 +826,7 @@ function deleteCurrentCategory() {
     if (!currentEditingCategory) return;
     if (!confirm(`确定要删除分组 \"${currentEditingCategory}\" 吗？\n这将删除该分组下的所有图片文件。`)) return;
 
-    fetch(`${controllerUrl}&ajax=delete_category`, {
+    fetch(`${controllerUrl}?ajax=delete_category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -888,28 +856,12 @@ function deleteCurrentCategory() {
 }
 
 function loadCategoryThumbnails(categoryName) {
-    console.log('[loadCategoryThumbnails] 开始加载:', categoryName);
-    console.log('[loadCategoryThumbnails] controllerUrl:', controllerUrl);
-    
     const container = document.getElementById('thumbnail-grid');
-    if (!container) {
-        console.error('[loadCategoryThumbnails] thumbnail-grid 元素不存在！');
-        return;
-    }
-    
     container.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm"></div> 加载中...</div>';
-    
-    const url = `${controllerUrl}&ajax=thumbnails&category=${encodeURIComponent(categoryName)}`;
-    console.log('[loadCategoryThumbnails] 请求URL:', url);
 
-    fetch(url)
-        .then(res => {
-            console.log('[loadCategoryThumbnails] Response status:', res.status);
-            console.log('[loadCategoryThumbnails] Response headers:', res.headers);
-            return res.json();
-        })
+    fetch(`${controllerUrl}?ajax=thumbnails&category=${encodeURIComponent(categoryName)}`)
+        .then(res => res.json())
         .then(data => {
-            console.log('[loadCategoryThumbnails] Response data:', data);
             container.innerHTML = '';
             
             // 添加方块上传按钮
@@ -968,7 +920,7 @@ function loadCategoryThumbnails(categoryName) {
 }
 
 function loadCategoryThumbnailImage(categoryName) {
-    fetch(`${controllerUrl}&ajax=category_thumbnail&category=${encodeURIComponent(categoryName)}`)
+    fetch(`${controllerUrl}?ajax=category_thumbnail&category=${encodeURIComponent(categoryName)}`)
         .then(res => res.json())
         .then(data => {
             const img = document.getElementById('edit-thumbnail-img');
@@ -1087,7 +1039,7 @@ function updateCategoryOrder() {
     
     // 实时保存分组顺序
     if (order) {
-        fetch(`${controllerUrl}&ajax=save_order`, {
+        fetch(`${controllerUrl}?ajax=save_order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ order: order })
@@ -1113,7 +1065,7 @@ function getCurrentCategoryOrder() {
 }
 
 function setAsThumbnail(categoryName, imageName) {
-    fetch(`${controllerUrl}&ajax=set_thumbnail`, {
+    fetch(`${controllerUrl}?ajax=set_thumbnail`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1154,33 +1106,13 @@ function setAsThumbnail(categoryName, imageName) {
 }
 
 function updateCategoryThumbnailInList(categoryName, thumbnailUrl) {
-    if (!thumbnailUrl) {
-        console.warn('[updateCategoryThumbnailInList] thumbnailUrl 为空');
-        return;
-    }
-    
-    // 添加时间戳避免缓存
-    const timestamp = new Date().getTime();
-    const thumbnailUrlWithTimestamp = thumbnailUrl + '?t=' + timestamp;
-    
     const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
     const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
     
-    console.log('[updateCategoryThumbnailInList] 更新缩略图:', {
-        categoryName,
-        thumbnailUrl: thumbnailUrlWithTimestamp,
-        foundThumb: !!categoryThumb,
-        foundPlaceholder: !!categoryPlaceholder
-    });
-    
-    if (categoryThumb) {
-        categoryThumb.src = thumbnailUrlWithTimestamp;
-        console.log('[updateCategoryThumbnailInList] 已更新现有缩略图');
-    } else if (categoryPlaceholder) {
-        categoryPlaceholder.outerHTML = `<img src="${thumbnailUrlWithTimestamp}" alt="缩略图" class="category-thumbnail">`;
-        console.log('[updateCategoryThumbnailInList] 已替换占位符');
-    } else {
-        console.error('[updateCategoryThumbnailInList] 未找到缩略图元素或占位符');
+    if (categoryThumb && thumbnailUrl) {
+        categoryThumb.src = thumbnailUrl;
+    } else if (categoryPlaceholder && thumbnailUrl) {
+        categoryPlaceholder.outerHTML = `<img src="${thumbnailUrl}" alt="缩略图" class="category-thumbnail">`;
     }
 }
 
@@ -1213,33 +1145,26 @@ function addNewCategoryToList(categoryName, displayName, description, thumbnailI
     newCategoryItem.setAttribute('data-category', categoryName);
     newCategoryItem.setAttribute('draggable', 'true');
     
-    // 确定缩略图显示（添加时间戳避免缓存）
-    const timestamp = new Date().getTime();
+    // 确定缩略图显示
     const thumbnailUrl = thumbnailInfo?.custom_thumbnail || thumbnailInfo?.first_image_thumb;
-    const thumbnailUrlWithTimestamp = thumbnailUrl ? `${thumbnailUrl}?t=${timestamp}` : null;
-    const thumbnailHtml = thumbnailUrlWithTimestamp 
-        ? `<img src="${escapeHtml(thumbnailUrlWithTimestamp)}" alt="缩略图" class="category-thumbnail">`
+    const thumbnailHtml = thumbnailUrl 
+        ? `<img src="${thumbnailUrl}" alt="缩略图" class="category-thumbnail">`
         : `<div class="category-thumbnail-placeholder"><i data-feather="image"></i></div>`;
-    
-    // 转义所有文本内容防止HTML注入
-    const safeCategoryName = escapeHtml(categoryName);
-    const safeDisplayName = escapeHtml(displayName || categoryName);
-    const safeDescription = escapeHtml(description);
     
     newCategoryItem.innerHTML = `
         <div class="category-row d-flex align-items-center p-3">
             <span class="drag-handle" title="拖拽排序">⋮⋮</span>
             ${thumbnailHtml}
-            <div class="category-content d-flex align-items-center flex-grow-1" onclick="editCategory('${safeCategoryName}')">
+            <div class="category-content d-flex align-items-center flex-grow-1" onclick="editCategory('${categoryName}')">
                 <div class="flex-grow-1">
-                    <div class="fw-semibold category-name">${safeDisplayName}</div>
+                    <div class="fw-semibold category-name">${displayName || categoryName}</div>
                     <small class="text-muted">0 张图片</small>
                 </div>
                 <span class="badge bg-secondary">${categoryList.children.length + 1}</span>
             </div>
         </div>
-        <input type="hidden" name="display_names[${safeCategoryName}]" value="${safeDisplayName}" class="display-name-input">
-        <input type="hidden" name="descriptions[${safeCategoryName}]" value="${safeDescription}" class="description-input">
+        <input type="hidden" name="display_names[${categoryName}]" value="${displayName}" class="display-name-input">
+        <input type="hidden" name="descriptions[${categoryName}]" value="${description}" class="description-input">
     `;
     
     // 根据位置插入
@@ -1265,7 +1190,7 @@ function updateImageOrder() {
         imageOrder.push(item.dataset.image);
     });
 
-    fetch(`${controllerUrl}&ajax=reorder_images`, {
+    fetch(`${controllerUrl}?ajax=reorder_images`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1398,27 +1323,12 @@ function uploadThumbnail(categoryName, file) {
 
     showToast('info', '正在上传缩略图...');
 
-    fetch(`${controllerUrl}&ajax=upload_thumbnail`, {
+    fetch(`${controllerUrl}?ajax=upload_thumbnail`, {
         method: 'POST',
         body: formData
     })
     .then(res => res.json())
     .then(data => {
-        console.log('[uploadThumbnail] 完整响应:', data);
-        
-        // 显示调试信息
-        if (data.debug) {
-            console.group('[uploadThumbnail] 调试信息');
-            console.log('分组:', data.debug.category);
-            console.log('缩略图URL:', data.debug.public_url);
-            console.log('配置文件:', data.debug.config_file);
-            console.log('配置文件可写:', data.debug.config_file_writable);
-            console.log('写入结果:', data.debug.write_result);
-            console.log('验证写入成功:', data.debug.verify_thumbnail_saved);
-            console.log('所有缩略图:', data.debug.all_thumbnails);
-            console.groupEnd();
-        }
-        
         if (data.success) {
             showToast('success', '缩略图上传成功');
             
@@ -1434,22 +1344,13 @@ function uploadThumbnail(categoryName, file) {
                 uploadDiv.style.display = 'none';
             }
             
-            // 更新左侧分组列表的缩略图（添加时间戳避免缓存）
-            const timestamp = new Date().getTime();
-            const thumbnailUrlWithTimestamp = data.thumbnail_url + '?t=' + timestamp;
+            // 更新左侧分组列表的缩略图
             const categoryThumb = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail`);
             const categoryPlaceholder = document.querySelector(`[data-category="${categoryName}"] .category-thumbnail-placeholder`);
             if (categoryThumb && data.thumbnail_url) {
-                categoryThumb.src = thumbnailUrlWithTimestamp;
-                console.log('[uploadThumbnail] 已更新左侧列表缩略图:', thumbnailUrlWithTimestamp);
+                categoryThumb.src = data.thumbnail_url;
             } else if (categoryPlaceholder && data.thumbnail_url) {
-                categoryPlaceholder.outerHTML = `<img src="${thumbnailUrlWithTimestamp}" alt="缩略图" class="category-thumbnail">`;
-                console.log('[uploadThumbnail] 已替换占位符为缩略图:', thumbnailUrlWithTimestamp);
-            }
-            
-            // 同时更新编辑区域的显示
-            if (editImg && data.thumbnail_url) {
-                editImg.src = thumbnailUrlWithTimestamp;
+                categoryPlaceholder.outerHTML = `<img src="${data.thumbnail_url}" alt="缩略图" class="category-thumbnail">`;
             }
         } else {
             showToast('danger', data.message || '缩略图上传失败');
@@ -1465,7 +1366,7 @@ function removeThumbnail(context) {
     if (context === 'edit' && currentEditingCategory) {
         if (!confirm('确定要删除缩略图吗？将自动使用第一张图片作为缩略图。')) return;
         
-        fetch(`${controllerUrl}&ajax=delete_thumbnail`, {
+        fetch(`${controllerUrl}?ajax=delete_thumbnail`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ category: currentEditingCategory })
@@ -1554,7 +1455,7 @@ function uploadImages(categoryName, files) {
     const totalSize = (Array.from(files).reduce((sum, file) => sum + file.size, 0) / (1024 * 1024)).toFixed(1);
     showToast('info', `正在上传 ${files.length} 张图片 (${totalSize}MB)...`);
 
-    fetch(`${controllerUrl}&ajax=upload_images`, {
+    fetch(`${controllerUrl}?ajax=upload_images`, {
         method: 'POST',
         body: formData
     })
@@ -1594,7 +1495,7 @@ function uploadImages(categoryName, files) {
 function deleteImage(categoryName, imageName) {
     if (!confirm(`确定要删除图片 "${imageName}" 吗？\n此操作将永久删除原文件。`)) return;
 
-    fetch(`${controllerUrl}&ajax=delete_image`, {
+    fetch(`${controllerUrl}?ajax=delete_image`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1662,7 +1563,7 @@ function createNewCategory() {
 
     showToast('info', '正在创建分组...');
 
-    fetch(`${controllerUrl}&ajax=create_category`, {
+    fetch(`${controllerUrl}?ajax=create_category`, {
         method: 'POST',
         body: formData
     })
@@ -1703,7 +1604,7 @@ function createNewCategory() {
 }
 
 function showPhpConfigInfo() {
-    fetch(`${controllerUrl}&ajax=php_config`)
+    fetch(`${controllerUrl}?ajax=php_config`)
         .then(res => res.json())
         .then(data => {
             let message = `PHP上传配置：\n`;
@@ -1736,7 +1637,7 @@ function resetToDefault() {
 }
 
 function checkPhpConfig() {
-    fetch(`${controllerUrl}&ajax=php_config`)
+    fetch(`${controllerUrl}?ajax=php_config`)
         .then(res => res.json())
         .then(data => {
             if (data.status === 'warning' && data.issues.length > 0) {

@@ -6,7 +6,7 @@ $_GET['page'] = $_GET['page'] ?? 'comics';
 
 // 如果控制器没有传入 $comics，则尝试加载
 if (!isset($comics)) {
-    require_once __DIR__ . '/../../../Models/comic_data.php';
+    require_once __DIR__ . '/../../../app/Models/comic_data.php';
     $comics = get_all_comics_data();
 }
 
