@@ -637,7 +637,7 @@ $totalCategories = count($categoryData);
                             </div>
                             <div class="card-body">
                                 <div class="d-grid gap-2">
-                                    <a href="controllers/trash.php" class="btn btn-outline-warning btn-sm">
+                                    <a href="/admin?page=trash" class="btn btn-outline-warning btn-sm">
                                         <i data-feather="trash-2" class="me-1"></i>回收站
                                     </a>
                                     <button type="button" class="btn btn-outline-info btn-sm" onclick="showPhpConfigInfo()">

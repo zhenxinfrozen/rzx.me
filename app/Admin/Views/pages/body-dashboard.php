@@ -118,42 +118,42 @@ $stats = getStats();
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-lg-4 col-md-6">
-                        <a href="controllers/single-works.php" class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+                        <a href="/admin?page=single-works" class="btn btn-outline-primary w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
                             <i class="bi bi-image fs-4 mb-2"></i>
                             <span class="fw-medium">作品分类管理</span>
                             <small class="text-muted mt-1">管理作品分类配置</small>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                        <a href="controllers/gallery-manager.php" class="btn btn-outline-success w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+                        <a href="/admin?page=gallery-manager" class="btn btn-outline-success w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
                             <i class="bi bi-folder fs-4 mb-2"></i>
                             <span class="fw-medium">画廊管理</span>
                             <small class="text-muted mt-1">管理图片画廊</small>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                        <a href="controllers/thumbnail-config-manager.php" class="btn btn-outline-info w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+                        <a href="/admin?page=thumbnail-config-manager" class="btn btn-outline-info w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
                             <i class="bi bi-sliders fs-4 mb-2"></i>
                             <span class="fw-medium">缩略图配置</span>
                             <small class="text-muted mt-1">管理缩略图设置</small>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                        <a href="controllers/cache-manager.php" class="btn btn-outline-warning w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+                        <a href="/admin?page=cache-manager" class="btn btn-outline-warning w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
                             <i class="bi bi-arrow-clockwise fs-4 mb-2"></i>
                             <span class="fw-medium">缓存管理</span>
                             <small class="text-muted mt-1">清理系统缓存</small>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                        <a href="controllers/tools.php" class="btn btn-outline-secondary w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+                        <a href="/admin?page=tools" class="btn btn-outline-secondary w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
                             <i class="bi bi-tools fs-4 mb-2"></i>
                             <span class="fw-medium">系统工具</span>
                             <small class="text-muted mt-1">各种管理工具</small>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                        <a href="controllers/system-info.php" class="btn btn-outline-dark w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+                        <a href="/admin?page=system-info" class="btn btn-outline-dark w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
                             <i class="bi bi-info-circle fs-4 mb-2"></i>
                             <span class="fw-medium">系统信息</span>
                             <small class="text-muted mt-1">查看系统状态</small>
