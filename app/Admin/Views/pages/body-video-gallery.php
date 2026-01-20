@@ -609,7 +609,8 @@ $totalCategories = count($categoryData);
 <div id="toastContainer"></div>
 
 <script>
-const controllerUrl = '/admin/controllers/video-gallery.php';
+// AJAX 请求通过统一的 AJAX 入口
+const controllerUrl = '/admin/ajax.php?controller=video-gallery';
 const existingMeta = <?= json_encode($categoryData, JSON_UNESCAPED_UNICODE) ?>;
 
 let currentEditingCategory = null;

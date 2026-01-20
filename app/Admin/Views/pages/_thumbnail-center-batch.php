@@ -62,7 +62,7 @@ async function loadGalleries() {
         formData.append('action', 'scan_galleries');
         formData.append('ajax', '1');
 
-        const response = await fetch('thumbnail-center.php', {
+        const response = await fetch('/admin/ajax.php?controller=thumbnail-center', {
             method: 'POST',
             body: formData
         });
@@ -142,7 +142,7 @@ async function generateThumbnails(gallery, category = '') {
         formData.append('gallery', gallery);
         if (category) formData.append('category', category);
 
-        const response = await fetch('thumbnail-center.php', { method: 'POST', body: formData });
+        const response = await fetch('/admin/ajax.php?controller=thumbnail-center', { method: 'POST', body: formData });
         const data = await response.json();
         
         if (data.success) {
@@ -174,7 +174,7 @@ async function cleanThumbnails(gallery, category = '') {
         formData.append('gallery', gallery);
         if (category) formData.append('category', category);
 
-        const response = await fetch('thumbnail-center.php', { method: 'POST', body: formData });
+        const response = await fetch('/admin/ajax.php?controller=thumbnail-center', { method: 'POST', body: formData });
         const data = await response.json();
         
         if (data.success) {

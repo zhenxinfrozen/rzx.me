@@ -80,7 +80,7 @@ function sketchbook_ensure_thumbnail(string $categoryDir, string $originalFile):
         return null;
     }
 
-    $servicePath = __DIR__ . '/../../../app/Services/ThumbnailService.php';
+    $servicePath = __DIR__ . '/../../Services/ThumbnailService.php';
     if (file_exists($servicePath)) {
         require_once $servicePath;
         if (class_exists('ThumbnailService')) {

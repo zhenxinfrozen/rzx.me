@@ -17,7 +17,7 @@ $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
 $configPath = __DIR__ . '/../../Config/sketchbook_sort.php';
 $imagesRoot = __DIR__ . '/../../assets/images/sketchbook';
 $trashRoot = __DIR__ . '/../../assets/images/trash/sketchbook';
-$imageOrderPath = __DIR__ . '/../../../app/storage/config/image-orders.json';
+$imageOrderPath = __DIR__ . '/../../storage/config/image-orders.json';
 
 $galleryManager = new GalleryManager();
 
@@ -701,7 +701,7 @@ function ensureSketchbookThumbnail(string $categoryDir, string $originalFile): ?
         return null;
     }
 
-    $servicePath = __DIR__ . '/../../../app/Services/ThumbnailService.php';
+    $servicePath = __DIR__ . '/../../Services/ThumbnailService.php';
     if (file_exists($servicePath)) {
         require_once $servicePath;
         if (class_exists('ThumbnailService')) {
