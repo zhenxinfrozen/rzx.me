@@ -191,7 +191,7 @@ $current_user = [
 
         <ul class="sidebar-menu">
             <li class="menu-item <?= $current_page === 'dashboard' ? 'active' : '' ?>">
-                <a href="/admin/index.php">
+                <a href="/admin?page=dashboard">
                     <i data-feather="home"></i>
                     <span>控制台</span>
                 </a>
