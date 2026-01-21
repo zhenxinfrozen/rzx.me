@@ -27,7 +27,7 @@ if (!isset($_GET['dev'])) {
 }
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
-$configPath = __DIR__ . '/../../Config/video_gallery_sort.php';
+$configPath = __DIR__ . '/../../storage/config/video-gallery-sort.json';
 $videosRoot = __DIR__ . '/../../../public/assets/videos/video-gallery';
 
 if ($ajaxAction) {
@@ -127,8 +127,8 @@ function loadVideoGalleryConfig(string $path): array
  */
 function saveVideoGalleryConfig(string $path, array $config): bool
 {
-    $content = "<?php\n/**\n * Video Gallery 分组排序配置\n * 自动生成于: " . date('Y-m-d H:i:s') . "\n */\n\nreturn " . var_export($config, true) . ";\n";
-    return file_put_contents($path, $content) !== false;
+    $json = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    return file_put_contents($path, $json) !== false;
 }
 
 /**

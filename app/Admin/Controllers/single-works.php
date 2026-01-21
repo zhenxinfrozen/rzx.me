@@ -14,7 +14,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
-$configPath = __DIR__ . '/../../Config/single_works_sort.php';
+$configPath = __DIR__ . '/../../storage/config/single-works-sort.json';
 $imagesRoot = __DIR__ . '/../../../public/assets/images/single-works';
 $trashRoot = __DIR__ . '/../../../public/assets/images/trash';
 $imageOrderPath = __DIR__ . '/../../storage/config/image-orders.json';
@@ -165,7 +165,8 @@ function handleSingleWorksAjax(string $action, string $configPath, string $image
 function loadSingleWorksConfig(string $configPath): array
 {
     if (file_exists($configPath)) {
-        $config = include $configPath;
+        $json = file_get_contents($configPath);
+        $config = json_decode($json, true);
         if (is_array($config)) {
             return $config;
         }
@@ -182,8 +183,8 @@ function loadSingleWorksConfig(string $configPath): array
 
 function saveSingleWorksConfig(string $configPath, array $config): bool
 {
-    $content = "<?php\n/**\n * Single-Works 分组排序配置\n * 自动生成于: " . date('Y-m-d H:i:s') . "\n */\n\nreturn " . var_export($config, true) . ";\n";
-    return (bool) file_put_contents($configPath, $content, LOCK_EX);
+    $json = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    return (bool) file_put_contents($configPath, $json, LOCK_EX);
 }
 
 function reorderCategories(array $categories, array $customOrder): array

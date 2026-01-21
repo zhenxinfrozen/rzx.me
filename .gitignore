@@ -5,6 +5,10 @@ includes_css_backup.zip
 .vscode/
 node_modules/
 
+# 动态配置文件（由后台系统自动维护）
+app/storage/config/*.json
+!app/storage/config/.gitkeep
+
 # Media assets
 public/assets/images/*
 !public/assets/images/.gitkeep
