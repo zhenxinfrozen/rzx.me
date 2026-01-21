@@ -45,7 +45,7 @@ $stats = getStats();
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-3 col-md-6 mb-3">
         <div class="card bg-success text-white border-0 shadow-sm h-100 stat-card">
             <div class="card-body">
@@ -64,7 +64,7 @@ $stats = getStats();
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-3 col-md-6 mb-3">
         <div class="card bg-info text-white border-0 shadow-sm h-100 stat-card">
             <div class="card-body">
@@ -83,7 +83,7 @@ $stats = getStats();
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-3 col-md-6 mb-3">
         <div class="card bg-warning text-white border-0 shadow-sm h-100 stat-card">
             <div class="card-body">
@@ -125,17 +125,17 @@ $stats = getStats();
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                        <a href="/admin?page=gallery-manager" class="btn btn-outline-success w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+                        <a href="/admin?page=galleries-manager" class="btn btn-outline-success w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
                             <i class="bi bi-folder fs-4 mb-2"></i>
-                            <span class="fw-medium">画廊管理</span>
-                            <small class="text-muted mt-1">管理图片画廊</small>
+                            <span class="fw-medium">Galleries画廊管理</span>
+                            <small class="text-muted mt-1">管理前台画廊页面</small>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
-                        <a href="/admin?page=thumbnail-config-manager" class="btn btn-outline-info w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
-                            <i class="bi bi-sliders fs-4 mb-2"></i>
-                            <span class="fw-medium">缩略图配置</span>
-                            <small class="text-muted mt-1">管理缩略图设置</small>
+                        <a href="/admin?page=thumbnail-manager" class="btn btn-outline-info w-100 py-3 d-flex flex-column align-items-center text-decoration-none">
+                            <i class="bi bi-grid-3x3 fs-4 mb-2"></i>
+                            <span class="fw-medium">整站缩略图管理</span>
+                            <small class="text-muted mt-1">统计和管理缩略图</small>
                         </a>
                     </div>
                     <div class="col-lg-4 col-md-6">
@@ -163,7 +163,7 @@ $stats = getStats();
             </div>
         </div>
     </div>
-    
+
     <!-- 系统状态和最近更新 -->
     <div class="col-lg-4">
         <!-- 系统状态 -->
@@ -181,7 +181,7 @@ $stats = getStats();
                         <span class="badge bg-success"><?= $stats['php_version'] ?></span>
                     </div>
                 </div>
-                
+
                 <div class="system-status-item mb-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <span>内存使用</span>
@@ -210,7 +210,7 @@ $stats = getStats();
                 </div>
             </div>
         </div>
-        
+
         <!-- 最近更新 -->
         <div class="card border-0 shadow-sm">
             <div class="card-header bg-transparent border-bottom">
@@ -232,7 +232,7 @@ $stats = getStats();
                         <small class="text-muted">2小时前</small>
                     </div>
                 </div>
-                
+
                 <div class="d-flex mb-3 pb-3 border-bottom">
                     <div class="flex-shrink-0">
                         <div class="bg-info bg-opacity-10 text-info rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
@@ -245,7 +245,7 @@ $stats = getStats();
                         <small class="text-muted">昨天</small>
                     </div>
                 </div>
-                
+
                 <div class="d-flex">
                     <div class="flex-shrink-0">
                         <div class="bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
@@ -395,13 +395,13 @@ $stats = getStats();
 function dashboardInit() {
     // 页面初始化逻辑
     console.log('Enhanced Dashboard页面已加载');
-    
+
     // 延迟执行动画效果
     setTimeout(() => {
         updateStats();
         animateNumbers();
     }, 500);
-    
+
     // 定时更新服务器时间
     setInterval(updateServerTime, 1000);
 }
@@ -415,7 +415,7 @@ function updateStats() {
         uptime: '<?= $stats['uptime_days'] ?>天',
         storage: '<?= $stats['storage_used'] ?>'
     };
-    
+
     // 更新磁盘使用情况等动态数据
     document.getElementById('diskUsage').textContent = '65% 已使用';
 }
@@ -423,7 +423,7 @@ function updateStats() {
 // 数字动画效果
 function animateNumbers() {
     const counters = document.querySelectorAll('#totalWorks, #totalImages');
-    
+
     counters.forEach(counter => {
         const target = parseInt(counter.textContent.replace(/[^\d]/g, ''));
         if (target && !isNaN(target)) {
@@ -453,11 +453,11 @@ function animateNumbers() {
 // 更新服务器时间
 function updateServerTime() {
     const now = new Date();
-    const timeString = now.getFullYear() + '-' + 
-                      String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+    const timeString = now.getFullYear() + '-' +
+                      String(now.getMonth() + 1).padStart(2, '0') + '-' +
                       String(now.getDate()).padStart(2, '0') + ' ' +
-                      String(now.getHours()).padStart(2, '0') + ':' + 
-                      String(now.getMinutes()).padStart(2, '0') + ':' + 
+                      String(now.getHours()).padStart(2, '0') + ':' +
+                      String(now.getMinutes()).padStart(2, '0') + ':' +
                       String(now.getSeconds()).padStart(2, '0');
     const timeElement = document.getElementById('serverTime');
     if (timeElement) {

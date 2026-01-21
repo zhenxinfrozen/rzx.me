@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $page_title = $page_title ?? '🛠️ Single-Works 管理';
 $page_subtitle = $page_subtitle ?? '管理 Single-Works 页面分组与图片';
 $_GET['page'] = $_GET['page'] ?? 'single-works';
@@ -659,7 +659,7 @@ $totalCategories = count($categoryData);
 <div id="toastContainer"></div>
 
 <script>
-const controllerUrl = '/admin/controllers/single-works.php';
+const controllerUrl = '/admin/ajax?controller=single-works';
 const existingMeta = <?= json_encode($categoryData, JSON_UNESCAPED_UNICODE) ?>;
 
 let currentEditingCategory = null;
@@ -786,7 +786,7 @@ function saveCategory() {
 
     showToast('info', '正在保存...');
 
-    fetch(`${controllerUrl}?ajax=save_category`, {
+    fetch(`${controllerUrl}&ajax=save_category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -823,7 +823,7 @@ function deleteCurrentCategory() {
     if (!currentEditingCategory) return;
     if (!confirm(`确定要删除分组 \"${currentEditingCategory}\" 吗？\n这将删除该分组下的所有图片文件。`)) return;
 
-    fetch(`${controllerUrl}?ajax=delete_category`, {
+    fetch(`${controllerUrl}&ajax=delete_category`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -856,7 +856,7 @@ function loadCategoryThumbnails(categoryName) {
     const container = document.getElementById('thumbnail-grid');
     container.innerHTML = '<div class="text-center py-3"><div class="spinner-border spinner-border-sm"></div> 加载中...</div>';
 
-    fetch(`${controllerUrl}?ajax=thumbnails&category=${encodeURIComponent(categoryName)}`)
+    fetch(`${controllerUrl}&ajax=thumbnails&category=${encodeURIComponent(categoryName)}`)
         .then(res => res.json())
         .then(data => {
             container.innerHTML = '';
@@ -917,7 +917,7 @@ function loadCategoryThumbnails(categoryName) {
 }
 
 function loadCategoryThumbnailImage(categoryName) {
-    fetch(`${controllerUrl}?ajax=category_thumbnail&category=${encodeURIComponent(categoryName)}`)
+    fetch(`${controllerUrl}&ajax=category_thumbnail&category=${encodeURIComponent(categoryName)}`)
         .then(res => res.json())
         .then(data => {
             const img = document.getElementById('edit-thumbnail-img');
@@ -1036,7 +1036,7 @@ function updateCategoryOrder() {
 
     // 实时保存分组顺序
     if (order) {
-        fetch(`${controllerUrl}?ajax=save_order`, {
+        fetch(`${controllerUrl}&ajax=save_order`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ order: order })
@@ -1062,7 +1062,7 @@ function getCurrentCategoryOrder() {
 }
 
 function setAsThumbnail(categoryName, imageName) {
-    fetch(`${controllerUrl}?ajax=set_thumbnail`, {
+    fetch(`${controllerUrl}&ajax=set_thumbnail`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1187,7 +1187,7 @@ function updateImageOrder() {
         imageOrder.push(item.dataset.image);
     });
 
-    fetch(`${controllerUrl}?ajax=reorder_images`, {
+    fetch(`${controllerUrl}&ajax=reorder_images`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1320,7 +1320,7 @@ function uploadThumbnail(categoryName, file) {
 
     showToast('info', '正在上传缩略图...');
 
-    fetch(`${controllerUrl}?ajax=upload_thumbnail`, {
+    fetch(`${controllerUrl}&ajax=upload_thumbnail`, {
         method: 'POST',
         body: formData
     })
@@ -1363,7 +1363,7 @@ function removeThumbnail(context) {
     if (context === 'edit' && currentEditingCategory) {
         if (!confirm('确定要删除缩略图吗？将自动使用第一张图片作为缩略图。')) return;
 
-        fetch(`${controllerUrl}?ajax=delete_thumbnail`, {
+        fetch(`${controllerUrl}&ajax=delete_thumbnail`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ category: currentEditingCategory })
@@ -1452,7 +1452,7 @@ function uploadImages(categoryName, files) {
     const totalSize = (Array.from(files).reduce((sum, file) => sum + file.size, 0) / (1024 * 1024)).toFixed(1);
     showToast('info', `正在上传 ${files.length} 张图片 (${totalSize}MB)...`);
 
-    fetch(`${controllerUrl}?ajax=upload_images`, {
+    fetch(`${controllerUrl}&ajax=upload_images`, {
         method: 'POST',
         body: formData
     })
@@ -1492,7 +1492,7 @@ function uploadImages(categoryName, files) {
 function deleteImage(categoryName, imageName) {
     if (!confirm(`确定要删除图片 "${imageName}" 吗？\n此操作将永久删除原文件。`)) return;
 
-    fetch(`${controllerUrl}?ajax=delete_image`, {
+    fetch(`${controllerUrl}&ajax=delete_image`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1560,7 +1560,7 @@ function createNewCategory() {
 
     showToast('info', '正在创建分组...');
 
-    fetch(`${controllerUrl}?ajax=create_category`, {
+    fetch(`${controllerUrl}&ajax=create_category`, {
         method: 'POST',
         body: formData
     })
@@ -1601,7 +1601,7 @@ function createNewCategory() {
 }
 
 function showPhpConfigInfo() {
-    fetch(`${controllerUrl}?ajax=php_config`)
+    fetch(`${controllerUrl}&ajax=php_config`)
         .then(res => res.json())
         .then(data => {
             let message = `PHP上传配置：\n`;
@@ -1634,7 +1634,7 @@ function resetToDefault() {
 }
 
 function checkPhpConfig() {
-    fetch(`${controllerUrl}?ajax=php_config`)
+    fetch(`${controllerUrl}&ajax=php_config`)
         .then(res => res.json())
         .then(data => {
             if (data.status === 'warning' && data.issues.length > 0) {

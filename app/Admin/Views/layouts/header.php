@@ -39,7 +39,8 @@ if (!isset($page_title)) {
     'sketchbook' => 'Sketchbook 管理',
     'comics' => '漫画管理',
     'video-gallery' => 'Video Gallery 管理',
-        'gallery-manager' => '画廊管理',
+        'galleries-manager' => 'Galleries 画廊管理',
+        'thumbnail-manager' => '整站缩略图管理',
         'trash' => '回收站',
         'site-config' => '网站配置',
         'cache-manager' => '缓存管理',
@@ -201,13 +202,6 @@ $current_user = [
                 <span class="section-title">内容管理</span>
             </li>
 
-            <li class="menu-item <?= $current_page === 'single-works' ? 'active' : '' ?>">
-                <a href="/admin?page=single-works">
-                    <i data-feather="image"></i>
-                    <span>Single-Works分类管理</span>
-                </a>
-            </li>
-
             <li class="menu-item <?= $current_page === 'sketchbook' ? 'active' : '' ?>">
                 <a href="/admin?page=sketchbook">
                     <i data-feather="book-open"></i>
@@ -229,35 +223,17 @@ $current_user = [
                 </a>
             </li>
 
-            <li class="menu-item <?= $current_page === 'gallery-manager' ? 'active' : '' ?>">
-                <a href="/admin?page=gallery-manager">
+            <li class="menu-item <?= $current_page === 'galleries-manager' ? 'active' : '' ?>">
+                <a href="/admin?page=galleries-manager">
                     <i data-feather="folder"></i>
-                    <span>gallery管理</span>
+                    <span>Galleries画廊管理</span>
                 </a>
             </li>
 
-            <li class="menu-item <?= $current_page === 'trash' ? 'active' : '' ?>">
-                <a href="/admin?page=trash">
-                    <i data-feather="trash-2"></i>
-                    <span>回收站</span>
-                </a>
-            </li>
-
-            <li class="menu-section">
-                <span class="section-title">系统设置</span>
-            </li>
-
-            <li class="menu-item <?= $current_page === 'site-config' ? 'active' : '' ?>">
-                <a href="/admin?page=site-config">
-                    <i data-feather="settings"></i>
-                    <span>网站配置</span>
-                </a>
-            </li>
-
-            <li class="menu-item <?= $current_page === 'cache-manager' ? 'active' : '' ?>">
-                <a href="/admin?page=cache-manager">
-                    <i data-feather="database"></i>
-                    <span>缓存管理</span>
+            <li class="menu-item <?= $current_page === 'single-works' ? 'active' : '' ?>">
+                <a href="/admin?page=single-works">
+                    <i data-feather="image"></i>
+                    <span>Single-Works分类管理</span>
                 </a>
             </li>
 
@@ -274,8 +250,15 @@ $current_user = [
 
             <li class="menu-item <?= $current_page === 'thumbnail-center' ? 'active' : '' ?>">
                 <a href="/admin?page=thumbnail-center<?= isset($_GET['dev']) ? '&dev' : '' ?>">
-                    <i data-feather="image"></i>
+                    <i data-feather="grid"></i>
                     <span>缩略图中心</span>
+                </a>
+            </li>
+
+            <li class="menu-item <?= $current_page === 'thumbnail-manager' ? 'active' : '' ?>">
+                <a href="/admin?page=thumbnail-manager">
+                    <i data-feather="image"></i>
+                    <span>整站缩略图管理</span>
                 </a>
             </li>
 
@@ -302,6 +285,31 @@ $current_user = [
                 <a href="/dev/feather-icons-preview.html">
                     <i data-feather="printer"></i>
                     <span>feather-icons</span>
+                </a>
+            </li>
+
+
+            <li class="menu-section">
+                <span class="section-title">系统设置</span>
+            </li>
+
+            <li class="menu-item <?= $current_page === 'site-config' ? 'active' : '' ?>">
+                <a href="/admin?page=site-config">
+                    <i data-feather="settings"></i>
+                    <span>网站配置</span>
+                </a>
+            </li>
+
+            <li class="menu-item <?= $current_page === 'cache-manager' ? 'active' : '' ?>">
+                <a href="/admin?page=cache-manager">
+                    <i data-feather="database"></i>
+                    <span>缓存管理</span>
+                </a>
+            </li>
+            <li class="menu-item <?= $current_page === 'trash' ? 'active' : '' ?>">
+                <a href="/admin?page=trash">
+                    <i data-feather="trash-2"></i>
+                    <span>回收站</span>
                 </a>
             </li>
         </ul>
