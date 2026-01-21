@@ -5,7 +5,7 @@
  */
 
 return array (
-  'custom_order' => 
+  'custom_order' =>
   array (
     0 => 'animation-clips',
     1 => 'comic-anim',
@@ -14,13 +14,13 @@ return array (
     4 => 'test-ex',
     5 => 'test-videos',
   ),
-  'display_names' => 
+  'display_names' =>
   array (
     'comic-anim' => 'comic-anim',
     'storyboard' => '故事板',
     'animation-clips' => 'animation-clips',
   ),
-  'descriptions' => 
+  'descriptions' =>
   array (
     'comic-anim' => '',
     'storyboard' => '描述信息---test',

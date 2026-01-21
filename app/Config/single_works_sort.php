@@ -6,7 +6,7 @@
 
 return array (
   'sort_method' => 'custom_order',
-  'custom_order' => 
+  'custom_order' =>
   array (
     0 => '00-Archive',
     1 => 'Animals',
@@ -18,12 +18,12 @@ return array (
     7 => 'test-fgdsfg333333',
     8 => 'rrrrrr',
   ),
-  'prefix_settings' => 
+  'prefix_settings' =>
   array (
     'remove_prefix' => true,
     'separator' => '-',
   ),
-  'display_names' => 
+  'display_names' =>
   array (
     'Animals' => 'Animals',
     'Game+color' => 'Game+color',
@@ -36,7 +36,7 @@ return array (
     'rrrrrr' => 'rrrrr',
     'test-fpslqj333333' => '????',
   ),
-  'descriptions' => 
+  'descriptions' =>
   array (
     'Animals' => '各种动物主题的插画作品',
     'Game+color' => '',
