@@ -1,6 +1,6 @@
 {
     "_comment": "统一图片排序配置文件 - 合并single-works和sketchbook的排序信息",
-    "_generated": "2026-01-20T23:57:55+08:00",
+    "_generated": "2026-01-22T00:45:58+08:00",
     "_description": "此文件统一管理所有模块的图片排序配置",
     "modules": {
         "single-works": {
@@ -84,7 +84,7 @@
         },
         "sketchbook": {
             "_comment": "Sketchbook 图片排序配置",
-            "_generated": "2026-01-20T23:57:55+08:00",
+            "_generated": "2026-01-22T00:45:58+08:00",
             "categories": {
                 "PEOPLE": [
                     "14.jpg",
@@ -112,10 +112,28 @@
                     "6.jpg"
                 ],
                 "tetstst": [
-                    "videoframe_2187.png",
                     "unnamed__20_.jpg",
-                    "videoframe_4322.png",
-                    "zhongkui-wp-03.jpg"
+                    "videoframe_2187.png",
+                    "unnamed__12_.jpg"
+                ],
+                "test-sb-222": [
+                    "20180604_085400016_iOS.jpg",
+                    "20180716_005320918_iOS.jpg",
+                    "IMG_7715.jpg",
+                    "20180716_005320588_iOS.jpg"
+                ],
+                "test-f3333": [
+                    "Gemini_Generated_Image_qldrpuqldrpuqldr.png",
+                    "Gemini_Generated_Image_rd9bvwrd9bvwrd9b.png",
+                    "Gemini_Generated_Image_9bx4yy9bx4yy9bx4.png",
+                    "Gemini_Generated_Image_k34xbok34xbok34x.png"
+                ],
+                "tetstst33": [
+                    "unnamed__20_.jpg",
+                    "videoframe_2187.png",
+                    "unnamed__12_.jpg",
+                    "____________-08-13-2025_12_03_AM.png",
+                    "____________-08-13-2025_12_07_AM.png"
                 ]
             }
         }

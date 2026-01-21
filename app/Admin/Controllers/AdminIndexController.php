@@ -36,6 +36,12 @@ class AdminIndexController
                 'title' => 'Sketchbook 管理',
                 'subtitle' => '管理 Sketchbook 页面图片集'
             ],
+            'sketchbook-new' => [
+                'view' => 'admin-sketchbook-new',
+                'controller' => 'sketchbook',  // 使用相同的控制器
+                'title' => 'Sketchbook 管理 (新版)',
+                'subtitle' => '使用新组件的测试版本'
+            ],
             'comics' => [
                 'view' => 'admin-comics',
                 'controller' => 'comics',  // 需要控制器处理逻辑

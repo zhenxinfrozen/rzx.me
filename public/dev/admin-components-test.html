@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin 组件测试页面</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Admin 组件样式 -->
+    <link rel="stylesheet" href="/assets/admin/css/admin-common.css">
+    <link rel="stylesheet" href="/assets/admin/css/admin-three-column.css">
+    <link rel="stylesheet" href="/assets/admin/css/admin-image-manager.css">
+
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <h1 class="my-4">Admin 组件测试页面</h1>
+
+        <!-- 三栏布局示例 -->
+        <div class="admin-three-column">
+            <!-- 左栏 -->
+            <div class="admin-left-panel">
+                <div class="card">
+                    <div class="card-header bg-success text-white position-relative">
+                        <h6 class="mb-0">
+                            <i data-feather="list"></i>
+                            分类列表
+                        </h6>
+                        <div class="admin-add-button" title="添加新分类">+</div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="admin-category-list list-unstyled" id="categoryList">
+                            <li class="admin-list-item" data-category="category-1">
+                                <div class="d-flex align-items-center p-3">
+                                    <span class="admin-drag-handle">⋮⋮</span>
+                                    <img src="https://via.placeholder.com/44" alt="缩略图" class="admin-thumbnail">
+                                    <div class="flex-grow-1 ms-2">
+                                        <div class="fw-semibold">分类 1</div>
+                                        <small class="admin-text-muted">12 张图片</small>
+                                    </div>
+                                    <span class="admin-badge admin-badge-primary">1</span>
+                                </div>
+                            </li>
+                            <li class="admin-list-item" data-category="category-2">
+                                <div class="d-flex align-items-center p-3">
+                                    <span class="admin-drag-handle">⋮⋮</span>
+                                    <img src="https://via.placeholder.com/44" alt="缩略图" class="admin-thumbnail">
+                                    <div class="flex-grow-1 ms-2">
+                                        <div class="fw-semibold">分类 2</div>
+                                        <small class="admin-text-muted">8 张图片</small>
+                                    </div>
+                                    <span class="admin-badge admin-badge-primary">2</span>
+                                </div>
+                            </li>
+                            <li class="admin-list-item" data-category="category-3">
+                                <div class="d-flex align-items-center p-3">
+                                    <span class="admin-drag-handle">⋮⋮</span>
+                                    <div class="admin-thumbnail-placeholder">
+                                        <i data-feather="image"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-2">
+                                        <div class="fw-semibold">分类 3</div>
+                                        <small class="admin-text-muted">5 张图片</small>
+                                    </div>
+                                    <span class="admin-badge admin-badge-primary">3</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中栏 -->
+            <div class="admin-center-panel">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">
+                            <i data-feather="edit-3"></i>
+                            编辑分类
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">显示名称</label>
+                            <input type="text" class="form-control" placeholder="输入分类名称">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">描述信息</label>
+                            <textarea class="form-control" rows="2" placeholder="可选的描述"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">图片管理</label>
+                            <div id="imageManager" class="admin-thumbnail-grid-container">
+                                <div class="admin-image-grid">
+                                    <div class="admin-add-image-btn">+</div>
+
+                                    <div class="admin-image-item is-thumbnail" data-image-id="1">
+                                        <img src="https://via.placeholder.com/80" alt="Image 1">
+                                        <div class="admin-image-star-badge">★</div>
+                                        <div class="admin-image-actions">
+                                            <button class="admin-image-action-btn star active">★</button>
+                                            <button class="admin-image-action-btn delete">×</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin-image-item" data-image-id="2">
+                                        <img src="https://via.placeholder.com/80" alt="Image 2">
+                                        <div class="admin-image-actions">
+                                            <button class="admin-image-action-btn star">★</button>
+                                            <button class="admin-image-action-btn delete">×</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin-image-item" data-image-id="3">
+                                        <img src="https://via.placeholder.com/80" alt="Image 3">
+                                        <div class="admin-image-actions">
+                                            <button class="admin-image-action-btn star">★</button>
+                                            <button class="admin-image-action-btn delete">×</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button class="admin-btn admin-btn-primary">
+                                <i data-feather="save"></i>
+                                保存
+                            </button>
+                            <button class="admin-btn admin-btn-danger">
+                                <i data-feather="trash-2"></i>
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右栏 -->
+            <div class="admin-right-panel">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i data-feather="eye"></i>
+                            预览
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="admin-stat-card">
+                            <h3>12</h3>
+                            <p>总图片数</p>
+                        </div>
+
+                        <div class="admin-preview-section">
+                            <h6>快速操作</h6>
+                            <button class="btn btn-sm btn-outline-primary w-100 mb-2" onclick="testMessage()">
+                                测试消息提示
+                            </button>
+                            <button class="btn btn-sm btn-outline-success w-100 mb-2" onclick="testRequest()">
+                                测试API请求
+                            </button>
+                            <button class="btn btn-sm btn-outline-info w-100" onclick="testCopy()">
+                                测试复制功能
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">
+                            <i data-feather="info"></i>
+                            API测试
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <small class="admin-text-muted">组件功能演示区域</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Admin 组件 JS -->
+    <script src="/assets/admin/js/admin-utils.js"></script>
+    <script src="/assets/admin/js/admin-drag-sort.js"></script>
+    <script src="/assets/admin/js/admin-image-manager.js"></script>
+
+    <script>
+        // 初始化 Feather Icons
+        feather.replace();
+
+        // 初始化拖拽排序
+        const dragSort = new AdminDragSort('categoryList', {
+            itemSelector: '.admin-list-item',
+            handleSelector: '.admin-drag-handle',
+            onReorder: (order) => {
+                console.log('新排序:', order);
+                AdminUtils.showMessage('排序已更新', 'success');
+            }
+        });
+
+        // 测试函数
+        function testMessage() {
+            AdminUtils.showMessage('这是一条测试消息！', 'success');
+        }
+
+        function testRequest() {
+            AdminUtils.showMessage('API请求功能正常', 'info');
+        }
+
+        function testCopy() {
+            AdminUtils.copyToClipboard('测试文本');
+        }
+    </script>
+</body>
+</html>

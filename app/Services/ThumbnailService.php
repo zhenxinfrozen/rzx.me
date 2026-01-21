@@ -5,7 +5,7 @@
 require_once __DIR__ . '/../Utils/ImageProcessor.php';
 
 class ThumbnailService {
-    private static $configFile = __DIR__ . '/../storage/config/thumbnail-configs.json';
+    private static $configFile = __DIR__ . '/../storage/data/thumbnail-configs.json';
     private static $builtinConfigs = [
         'gallery' => [
             'name' => 'Gallery页面',
@@ -269,7 +269,7 @@ class ThumbnailService {
         if (!$config) {
             throw new Exception("缩略图配置 '{$configId}' 不存在");
         }
-        
+
         $options = [
             'width' => $config['width'],
             'height' => $config['height'],
@@ -277,10 +277,10 @@ class ThumbnailService {
             'crop' => $config['crop'] ?? false,
             'format' => $config['format']
         ];
-        
+
         return self::generateThumbnailInternal($sourcePath, $targetPath, $options) !== false;
     }
-    
+
     /**
      * 批量为页面生成缩略图（向后兼容方法）
      * @param string $directoryPath 目录路径
@@ -290,15 +290,15 @@ class ThumbnailService {
         // 获取页面对应的配置
         $pageConfigs = self::getAllPageConfigs();
         $configId = isset($pageConfigs[$pageType]) ? $pageType : 'single-works';
-        
+
         // 扫描目录中的图片文件
         if (!is_dir($directoryPath)) {
             return;
         }
-        
+
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
         $files = scandir($directoryPath);
-        
+
         foreach ($files as $file) {
             $filePath = $directoryPath . '/' . $file;
             if (is_file($filePath)) {
@@ -314,7 +314,7 @@ class ThumbnailService {
             }
         }
     }
-    
+
     /**
      * 内部缩略图生成方法（从ThumbnailGenerator集成）
      */
@@ -329,26 +329,26 @@ class ThumbnailService {
             'mode' => 'fit',
             'min_edge' => null,
         ];
-        
+
         $config = array_merge($defaultConfig, $config);
-        
+
         // 检查GD库
         if (!ImageProcessor::isGdAvailable()) {
             error_log("ThumbnailService: GD library not available");
             return false;
         }
-        
+
         // 检查源文件
         if (!file_exists($sourcePath)) {
             error_log("ThumbnailService: Source file not found: $sourcePath");
             return false;
         }
-        
+
         // 如果缩略图已存在且比源文件新，跳过生成
         if (file_exists($thumbnailPath) && filemtime($thumbnailPath) >= filemtime($sourcePath)) {
             return $thumbnailPath;
         }
-        
+
         try {
             // 获取源图片信息
             $imageInfo = ImageProcessor::getImageInfo($sourcePath);
@@ -356,34 +356,34 @@ class ThumbnailService {
                 error_log("ThumbnailService: Cannot get image info for: $sourcePath");
                 return false;
             }
-            
+
             // 创建源图片资源
             $sourceImage = ImageProcessor::createImageResource($sourcePath);
             if (!$sourceImage) {
                 error_log("ThumbnailService: Cannot create image resource for: $sourcePath");
                 return false;
             }
-            
+
             // 计算缩略图尺寸
             list($thumbWidth, $thumbHeight) = ImageProcessor::calculateDimensions(
-                $imageInfo['width'], 
-                $imageInfo['height'], 
-                $config['width'], 
-                $config['height'], 
+                $imageInfo['width'],
+                $imageInfo['height'],
+                $config['width'],
+                $config['height'],
                 $config['crop'],
                 [
                     'mode' => $config['mode'] ?? 'fit',
                     'min_edge' => $config['min_edge'] ?? null,
                 ]
             );
-            
+
             // 裁剪模式需要使用目标尺寸创建画布
             if ($config['crop']) {
                 $thumbnailImage = imagecreatetruecolor($config['width'], $config['height']);
             } else {
                 $thumbnailImage = imagecreatetruecolor($thumbWidth, $thumbHeight);
             }
-            
+
             // 处理背景色和透明度
             if ($imageInfo['type'] == IMAGETYPE_PNG || $imageInfo['type'] == IMAGETYPE_GIF) {
                 // PNG/GIF 保持透明度
@@ -397,13 +397,13 @@ class ThumbnailService {
                 $white = imagecolorallocate($thumbnailImage, 255, 255, 255);
                 imagefill($thumbnailImage, 0, 0, $white);
             }
-            
+
             // 生成缩略图
             if ($config['crop']) {
                 // 裁剪模式
                 $sourceRatio = $imageInfo['width'] / $imageInfo['height'];
                 $thumbRatio = $config['width'] / $config['height'];
-                
+
                 if ($sourceRatio > $thumbRatio) {
                     // 源图更宽，裁剪左右
                     $cropHeight = $imageInfo['height'];
@@ -417,7 +417,7 @@ class ThumbnailService {
                     $srcX = 0;
                     $srcY = ($imageInfo['height'] - $cropHeight) / 2;
                 }
-                
+
                 imagecopyresampled(
                     $thumbnailImage, $sourceImage,
                     0, 0, $srcX, $srcY,
@@ -433,16 +433,16 @@ class ThumbnailService {
                     $imageInfo['width'], $imageInfo['height']
                 );
             }
-            
+
             // 保存缩略图
             $result = ImageProcessor::saveImage($thumbnailImage, $thumbnailPath, $config['format'], $config['quality']);
-            
+
             // 清理资源
             imagedestroy($sourceImage);
             imagedestroy($thumbnailImage);
-            
+
             return $result ? $thumbnailPath : false;
-            
+
         } catch (Exception $e) {
             error_log("ThumbnailService: Error generating thumbnail - " . $e->getMessage());
             return false;

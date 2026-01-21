@@ -27,7 +27,7 @@ if (!isset($_GET['dev'])) {
 }
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
-$configPath = __DIR__ . '/../../storage/config/video-gallery-sort.json';
+$configPath = __DIR__ . '/../../storage/data/video-gallery-sort.json';
 $videosRoot = __DIR__ . '/../../../public/assets/videos/video-gallery';
 
 if ($ajaxAction) {

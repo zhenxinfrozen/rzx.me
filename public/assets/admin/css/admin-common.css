@@ -1,0 +1,270 @@
+/**
+ * Admin 后台通用样式
+ * 提供后台管理页面的基础样式和通用组件
+ *
+ * @version 1.0.0
+ * @date 2026-01-21
+ */
+
+/* ============================================
+   1. 基础变量定义
+   ============================================ */
+:root {
+    /* 主题色 */
+    --admin-primary: #007bff;
+    --admin-success: #28a745;
+    --admin-danger: #dc3545;
+    --admin-warning: #ffc107;
+    --admin-info: #17a2b8;
+
+    /* 灰度色 */
+    --admin-gray-100: #f8f9fa;
+    --admin-gray-200: #e9ecef;
+    --admin-gray-300: #dee2e6;
+    --admin-gray-400: #ced4da;
+    --admin-gray-500: #adb5bd;
+    --admin-gray-600: #6c757d;
+    --admin-gray-700: #495057;
+    --admin-gray-800: #343a40;
+    --admin-gray-900: #212529;
+
+    /* 间距 */
+    --admin-spacing-xs: 4px;
+    --admin-spacing-sm: 8px;
+    --admin-spacing-md: 12px;
+    --admin-spacing-lg: 16px;
+    --admin-spacing-xl: 24px;
+
+    /* 圆角 */
+    --admin-radius-sm: 4px;
+    --admin-radius-md: 6px;
+    --admin-radius-lg: 8px;
+    --admin-radius-xl: 12px;
+
+    /* 阴影 */
+    --admin-shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --admin-shadow-md: 0 4px 8px rgba(0,0,0,0.15);
+    --admin-shadow-lg: 0 8px 16px rgba(0,0,0,0.2);
+
+    /* 过渡 */
+    --admin-transition: all 0.3s ease;
+    --admin-transition-fast: all 0.15s ease;
+}
+
+/* ============================================
+   2. 卡片组件
+   ============================================ */
+.admin-card {
+    background: white;
+    border: 1px solid var(--admin-gray-200);
+    border-radius: var(--admin-radius-lg);
+    box-shadow: var(--admin-shadow-sm);
+    transition: var(--admin-transition);
+}
+
+.admin-card:hover {
+    box-shadow: var(--admin-shadow-md);
+}
+
+.admin-card-header {
+    padding: var(--admin-spacing-lg);
+    border-bottom: 1px solid var(--admin-gray-200);
+    font-weight: 600;
+}
+
+.admin-card-body {
+    padding: var(--admin-spacing-lg);
+}
+
+/* ============================================
+   3. 按钮组件
+   ============================================ */
+.admin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--admin-spacing-sm);
+    padding: var(--admin-spacing-sm) var(--admin-spacing-lg);
+    border-radius: var(--admin-radius-md);
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: var(--admin-transition-fast);
+}
+
+.admin-btn-primary {
+    background: var(--admin-primary);
+    color: white;
+}
+
+.admin-btn-primary:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.admin-btn-success {
+    background: var(--admin-success);
+    color: white;
+}
+
+.admin-btn-danger {
+    background: var(--admin-danger);
+    color: white;
+}
+
+/* ============================================
+   4. 拖拽手柄
+   ============================================ */
+.admin-drag-handle {
+    color: var(--admin-gray-500);
+    cursor: grab;
+    user-select: none;
+    font-size: 18px;
+    padding: var(--admin-spacing-xs);
+    margin-right: var(--admin-spacing-sm);
+    border-radius: var(--admin-radius-sm);
+    transition: var(--admin-transition-fast);
+}
+
+.admin-drag-handle:hover {
+    background: rgba(0,123,255,0.1);
+    color: var(--admin-primary);
+}
+
+.admin-drag-handle:active,
+.admin-drag-handle.grabbing {
+    cursor: grabbing;
+    background: rgba(0,123,255,0.2);
+}
+
+/* ============================================
+   5. 缩略图组件
+   ============================================ */
+.admin-thumbnail {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--admin-radius-md);
+    object-fit: cover;
+    border: 2px solid var(--admin-gray-300);
+    flex-shrink: 0;
+}
+
+.admin-thumbnail-placeholder {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--admin-radius-md);
+    border: 2px dashed var(--admin-gray-400);
+    background: var(--admin-gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--admin-gray-500);
+    flex-shrink: 0;
+}
+
+/* 视频缩略图 (16:9) */
+.admin-thumbnail-video {
+    width: 85px;
+    height: 48px;
+}
+
+/* ============================================
+   6. 列表项组件
+   ============================================ */
+.admin-list-item {
+    transition: var(--admin-transition-fast);
+    border-radius: var(--admin-radius-lg);
+    background: white;
+    border: 1px solid var(--admin-gray-200);
+    box-shadow: var(--admin-shadow-sm);
+    margin-bottom: var(--admin-spacing-md);
+}
+
+.admin-list-item:hover {
+    background: var(--admin-gray-100);
+    border-color: var(--admin-primary);
+    box-shadow: 0 4px 8px rgba(0,123,255,0.2);
+    transform: translateY(-1px);
+}
+
+.admin-list-item.active {
+    background: #e3f2fd;
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+.admin-list-item.dragging {
+    opacity: 0.8;
+    transform: scale(1.02) rotate(2deg);
+    z-index: 1000;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
+}
+
+/* ============================================
+   7. 图片网格
+   ============================================ */
+.admin-image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--admin-spacing-sm);
+    padding: var(--admin-spacing-md);
+}
+
+.admin-image-item {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: var(--admin-radius-md);
+    overflow: hidden;
+    border: 2px solid var(--admin-gray-300);
+    transition: var(--admin-transition-fast);
+}
+
+.admin-image-item:hover {
+    border-color: var(--admin-primary);
+    transform: scale(1.05);
+}
+
+.admin-image-item.is-thumbnail {
+    border-color: var(--admin-success);
+    box-shadow: 0 0 0 2px rgba(40,167,69,.25);
+}
+
+/* ============================================
+   8. 工具类
+   ============================================ */
+.admin-scrollable {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.admin-text-muted {
+    color: var(--admin-gray-600);
+}
+
+.admin-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.admin-badge-primary {
+    background: var(--admin-primary);
+    color: white;
+}
+
+.admin-badge-success {
+    background: var(--admin-success);
+    color: white;
+}
+
+/* ============================================
+   9. 响应式
+   ============================================ */
+@media (max-width: 992px) {
+    .admin-card-body {
+        padding: var(--admin-spacing-md);
+    }
+}

@@ -14,10 +14,10 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
-$configPath = __DIR__ . '/../../storage/config/single-works-sort.json';
+$configPath = __DIR__ . '/../../storage/data/single-works-sort.json';
 $imagesRoot = __DIR__ . '/../../../public/assets/images/single-works';
 $trashRoot = __DIR__ . '/../../../public/assets/images/trash';
-$imageOrderPath = __DIR__ . '/../../storage/config/image-orders.json';
+$imageOrderPath = __DIR__ . '/../../storage/data/image-orders.json';
 
 $galleryManager = new GalleryManager();
 
