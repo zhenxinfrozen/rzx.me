@@ -9,7 +9,7 @@ $page_title = '📁 Galleries 画廊管理';
 $page_subtitle = '管理前台画廊页面 (/galleries) 显示的作品集';
 $_GET['page'] = 'galleries-manager';
 
-require_once __DIR__ . '/../Views/layouts/header.php';
+require_once __DIR__ . '/../Views/layouts/admin-header.php';
 require_once __DIR__ . '/../../Utils/GalleryManager.php';
 
 $galleryManager = new GalleryManager();
@@ -244,4 +244,4 @@ function pageInit() {
 }
 </script>
 
-<?php require_once __DIR__ . '/../Views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../Views/layouts/admin-footer.php'; ?>

@@ -19,31 +19,31 @@ class AdminIndexController
         // 定义可用的页面和对应的控制器
         $pages = [
             'dashboard' => [
-                'view' => 'body-dashboard',
+                'view' => 'admin-dashboard',
                 'controller' => null, // dashboard 只需要视图
                 'title' => '控制台',
                 'subtitle' => '管理和监控您的网站'
             ],
             'single-works' => [
-                'view' => 'body-single-works',
+                'view' => 'admin-galleries',
                 'controller' => 'single-works',  // 需要控制器处理逻辑
                 'title' => 'Single-Works 管理',
                 'subtitle' => '管理 Single-Works 页面分组与图片'
             ],
             'sketchbook' => [
-                'view' => 'body-sketchbook',
+                'view' => 'admin-sketchbook',
                 'controller' => 'sketchbook',  // 需要控制器处理逻辑
                 'title' => 'Sketchbook 管理',
                 'subtitle' => '管理 Sketchbook 页面图片集'
             ],
             'comics' => [
-                'view' => 'body-comics',
+                'view' => 'admin-comics',
                 'controller' => 'comics',  // 需要控制器处理逻辑
                 'title' => '漫画管理',
                 'subtitle' => '管理漫画分组和图片'
             ],
             'video-gallery' => [
-                'view' => 'body-video-gallery',
+                'view' => 'admin-videos',
                 'controller' => 'video-gallery',  // 需要控制器处理逻辑
                 'title' => 'Video Gallery 管理',
                 'subtitle' => '管理视频集合'
@@ -79,13 +79,13 @@ class AdminIndexController
                 'subtitle' => '管理网站的全局配置'
             ],
             'tools' => [
-                'view' => 'tools',
+                'view' => 'admin-tools',
                 'controller' => null,
                 'title' => '管理工具',
                 'subtitle' => '网站管理工具集'
             ],
             'thumbnail-center' => [
-                'view' => 'thumbnail-center',
+                'view' => 'admin-thumbnail-center',
                 'controller' => 'thumbnail-center',
                 'title' => '缩略图中心',
                 'subtitle' => '管理和生成缩略图'
@@ -97,7 +97,7 @@ class AdminIndexController
                 'subtitle' => '查看服务器和PHP环境信息'
             ],
             'docs' => [
-                'view' => 'body-docs',
+                'view' => 'admin-docs',
                 'controller' => 'docs-handler',
                 'title' => '项目文档',
                 'subtitle' => '查看项目文档和开发指南'
@@ -158,7 +158,7 @@ class AdminIndexController
         }
 
         // 标准布局：header + content + footer
-        require_once __DIR__ . '/../Views/layouts/header.php';
+        require_once __DIR__ . '/../Views/layouts/admin-header.php';
 
         // 加载视图内容
         if ($pageConfig['view']) {
@@ -172,6 +172,6 @@ class AdminIndexController
             }
         }
 
-        require_once __DIR__ . '/../Views/layouts/footer.php';
+        require_once __DIR__ . '/../Views/layouts/admin-footer.php';
     }
 }

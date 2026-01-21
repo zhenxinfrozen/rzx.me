@@ -9,7 +9,7 @@ $page_title = '📁 画廊管理';
 $page_subtitle = '管理网站的图片画廊，包括上传、编辑、删除等功能';
 $_GET['page'] = 'gallery-manager';
 
-require_once __DIR__ . '/../Views/layouts/header.php';
+require_once __DIR__ . '/../Views/layouts/admin-header.php';
 
 // 处理操作
 $message = '';
@@ -277,4 +277,4 @@ function pageInit() {
 }
 </script>
 
-<?php require_once __DIR__ . '/../Views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../Views/layouts/admin-footer.php'; ?>

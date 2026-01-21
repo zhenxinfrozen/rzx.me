@@ -9,7 +9,7 @@ $page_title = '🖼️ 整站缩略图管理';
 $page_subtitle = '统计和管理整个网站的缩略图资源';
 $_GET['page'] = 'thumbnail-manager';
 
-require_once __DIR__ . '/../Views/layouts/header.php';
+require_once __DIR__ . '/../Views/layouts/admin-header.php';
 
 // 处理操作
 $message = '';
@@ -397,4 +397,4 @@ function pageInit() {
 }
 </script>
 
-<?php require_once __DIR__ . '/../Views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../Views/layouts/admin-footer.php'; ?>

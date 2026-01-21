@@ -53,14 +53,14 @@
         <!-- 批量管理面板 -->
         <div class="tab-pane fade show active" id="batch-manager" role="tabpanel" aria-labelledby="batch-manager-tab">
             <div class="p-3">
-                <?php require_once __DIR__ . '/_thumbnail-center-batch.php'; ?>
+                <?php require_once __DIR__ . '/admin-thumbnail-batch.php'; ?>
             </div>
         </div>
 
         <!-- 配置管理面板 -->
         <div class="tab-pane fade" id="config-manager" role="tabpanel" aria-labelledby="config-manager-tab">
             <div class="p-3">
-                <?php require_once __DIR__ . '/_thumbnail-center-config.php'; ?>
+                <?php require_once __DIR__ . '/admin-thumbnail-config.php'; ?>
             </div>
         </div>
     </div>

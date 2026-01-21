@@ -169,6 +169,6 @@ $all_configs = ThumbnailService::getAllConfigs();
 $galleries = []; // 初始为空，由JS加载
 
 // 包含布局和视图
-require_once __DIR__ . '/../Views/layouts/header.php';
-require_once __DIR__ . '/../Views/pages/thumbnail-center.php';
-require_once __DIR__ . '/../Views/layouts/footer.php';
+require_once __DIR__ . '/../Views/layouts/admin-header.php';
+require_once __DIR__ . '/../Views/pages/admin-thumbnail-center.php';
+require_once __DIR__ . '/../Views/layouts/admin-footer.php';
