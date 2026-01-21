@@ -471,7 +471,7 @@ function handleVideoGalleryAjax(string $action, string $configPath, string $vide
                     break;
                 }
 
-                $thumbnailDir = __DIR__ . '/../../assets/videos/thumbnails';
+                $thumbnailDir = __DIR__ . '/../../../public/assets/videos/thumbnails';
                 $thumbnailPath = $thumbnailDir . '/' . $category . '.jpg';
                 $fileDeleted = false;
 

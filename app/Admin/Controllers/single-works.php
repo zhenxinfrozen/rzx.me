@@ -272,13 +272,18 @@ function outputThumbnails(string $imagesRoot, string $imageOrderPath): void
         foreach ($orderedFiles as $file) {
             $filePath = $categoryDir . '/' . $file;
             $thumbPath = $thumbDir . '/' . $file;
+
+            // URL 编码处理，解决空格问题
+            $encodedCategory = rawurlencode($category);
+            $encodedFile = rawurlencode($file);
+
             $thumbUrl = file_exists($thumbPath)
-                ? "/assets/images/single-works/{$category}/thumbs/{$file}"
-                : "/assets/images/single-works/{$category}/{$file}";
+                ? "/assets/images/single-works/{$encodedCategory}/thumbs/{$encodedFile}"
+                : "/assets/images/single-works/{$encodedCategory}/{$encodedFile}";
 
             $images[] = [
                 'name' => $file,
-                'path' => "/assets/images/single-works/{$category}/{$file}",
+                'path' => "/assets/images/single-works/{$encodedCategory}/{$encodedFile}",
                 'thumb_path' => $thumbUrl,
                 'size' => filesize($filePath),
                 'modified' => filemtime($filePath),

@@ -19,7 +19,7 @@ $messageType = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
-    
+
     switch ($action) {
         case 'add':
             $comicData = [
@@ -29,18 +29,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'alt' => trim($_POST['alt'] ?? ''),
                 'status' => $_POST['status'] ?? 'active'
             ];
-            
+
             // 处理图片上传
-            $uploadDir = __DIR__ . '/../../assets/images/comic/';
+            $uploadDir = __DIR__ . '/../../../public/assets/images/comic/';
             $thumbsDir = $uploadDir . 'thumbs/';
-            
+
             // 确保目录存在
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
             if (!is_dir($thumbsDir)) mkdir($thumbsDir, 0755, true);
-            
+
             $images = [];
             $icons = [];
-            
+
             // 处理主图片上传
             if (!empty($_FILES['images']['name'][0])) {
                 foreach ($_FILES['images']['name'] as $key => $filename) {
@@ -49,58 +49,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $originalName = pathinfo($filename, PATHINFO_FILENAME);
                         $ext = pathinfo($filename, PATHINFO_EXTENSION);
                         $newFilename = $originalName . '.' . $ext;
-                        
+
                         // 如果文件已存在，添加数字后缀
                         $counter = 1;
                         while (file_exists($uploadDir . $newFilename)) {
                             $newFilename = $originalName . '_' . $counter . '.' . $ext;
                             $counter++;
                         }
-                        
+
                         $uploadPath = $uploadDir . $newFilename;
-                        
+
                         if (move_uploaded_file($_FILES['images']['tmp_name'][$key], $uploadPath)) {
                             $images[] = '/assets/images/comic/' . $newFilename;
                         }
                     }
                 }
             }
-            
+
             // 处理图标上传
             if (!empty($_FILES['icon_default']['name'])) {
                 $originalName = pathinfo($_FILES['icon_default']['name'], PATHINFO_FILENAME);
                 $ext = pathinfo($_FILES['icon_default']['name'], PATHINFO_EXTENSION);
                 $iconDefault = $originalName . '-icon-default.' . $ext;
-                
+
                 // 如果文件已存在，添加数字后缀
                 $counter = 1;
                 while (file_exists($thumbsDir . $iconDefault)) {
                     $iconDefault = $originalName . '-icon-default_' . $counter . '.' . $ext;
                     $counter++;
                 }
-                
+
                 if (move_uploaded_file($_FILES['icon_default']['tmp_name'], $thumbsDir . $iconDefault)) {
                     $comicData['icon_default'] = '/assets/images/comic/thumbs/' . $iconDefault;
                 }
             }
-            
+
             if (!empty($_FILES['icon_hover']['name'])) {
                 $originalName = pathinfo($_FILES['icon_hover']['name'], PATHINFO_FILENAME);
                 $ext = pathinfo($_FILES['icon_hover']['name'], PATHINFO_EXTENSION);
                 $iconHover = $originalName . '-icon-hover.' . $ext;
-                
+
                 // 如果文件已存在，添加数字后缀
                 $counter = 1;
                 while (file_exists($thumbsDir . $iconHover)) {
                     $iconHover = $originalName . '-icon-hover_' . $counter . '.' . $ext;
                     $counter++;
                 }
-                
+
                 if (move_uploaded_file($_FILES['icon_hover']['tmp_name'], $thumbsDir . $iconHover)) {
                     $comicData['icon_hover'] = '/assets/images/comic/thumbs/' . $iconHover;
                 }
             }
-            
+
             $comicData['images'] = $images;
             // 如果没有传入 order_id，则为新条目分配一个自增长的 order_id
             if (empty($comicData['order_id'])) {
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $comicData['order_id'] = $max + 1;
             }
-            
+
             try {
                 if (add_comic($comicData)) {
                     $message = '漫画添加成功！';
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $messageType = 'danger';
             }
             break;
-            
+
         case 'update':
             $id = $_POST['id'] ?? '';
             $comicData = [
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['order_id']) && $_POST['order_id'] !== '') {
                 $comicData['order_id'] = (int)$_POST['order_id'];
             }
-            
+
             if (update_comic($id, $comicData)) {
                 $message = '漫画更新成功！';
                 $messageType = 'success';
@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $messageType = 'danger';
             }
             break;
-            
+
         case 'delete':
             $id = $_POST['id'] ?? '';
             $result = delete_comic($id);
@@ -179,9 +179,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
         }
         // 如果上传用于 icon_default/icon_hover，保存到 thumbs 目录
         if ($field === 'icon_default' || $field === 'icon_hover') {
-            $uploadDir = __DIR__ . '/../../assets/images/comic/thumbs/';
+            $uploadDir = __DIR__ . '/../../../public/assets/images/comic/thumbs/';
         } else {
-            $uploadDir = __DIR__ . '/../../assets/images/comic/';
+            $uploadDir = __DIR__ . '/../../../public/assets/images/comic/';
         }
         if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
         $file = $_FILES['image'];
@@ -189,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
         $orig = pathinfo($file['name'], PATHINFO_FILENAME);
         $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
         $new = $orig . '.' . $ext;
-        
+
         // 如果文件已存在，添加数字后缀
         $counter = 1;
         while (file_exists($uploadDir . $new)) {
@@ -241,23 +241,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
         if (!$comicId || !$imageUrl) { echo json_encode(['ok'=>false,'error'=>'参数缺失']); exit; }
         $all = get_all_comics_data();
         if (!isset($all[$comicId])) { echo json_encode(['ok'=>false,'error'=>'未找到漫画']); exit; }
-        
+
         // 构建完整的文件路径 - 修复路径构造
         $projectRoot = dirname(dirname(dirname(__DIR__)));
         $localPath = $projectRoot . '/public' . $imageUrl;
         error_log("[删除请求] 路径: $localPath, URL: $imageUrl");
-        
+
         if ($field === 'icon_default' || $field === 'icon_hover') {
             // 清空对应字段
             if (isset($all[$comicId][$field]) && $all[$comicId][$field] === $imageUrl) {
                 $all[$comicId][$field] = '';
                 $saved = save_comics_data($all);
-                
+
                 // 删除物理文件
                 $fileDeleted = false;
                 $deleteError = '';
                 error_log("[图标删除] 尝试删除文件: {$localPath}");
-                
+
                 if (file_exists($localPath)) {
                     $fileDeleted = @unlink($localPath);
                     if ($fileDeleted) {
@@ -270,7 +270,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
                     $deleteError = '文件不存在';
                     error_log("[图标删除] 文件不存在: {$localPath}");
                 }
-                
+
                 if ($saved) {
                     if ($fileDeleted) {
                         $msg = "图标和文件已删除: {$imageUrl}";
@@ -288,12 +288,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
             if ($idx !== false && $idx !== null) {
                 array_splice($all[$comicId]['images'], $idx, 1);
                 $saved = save_comics_data($all);
-                
+
                 // 删除物理文件
                 $fileDeleted = false;
                 $deleteError = '';
                 error_log("[图片删除] 尝试删除文件: {$localPath}");
-                
+
                 if (file_exists($localPath)) {
                     $fileDeleted = @unlink($localPath);
                     if ($fileDeleted) {
@@ -306,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_action'])) {
                     $deleteError = '文件不存在';
                     error_log("[图片删除] 文件不存在: {$localPath}");
                 }
-                
+
                 if ($saved) {
                     if ($fileDeleted) {
                         $msg = "图片和文件已删除: {$imageUrl}";
