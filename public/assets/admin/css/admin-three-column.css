@@ -12,7 +12,7 @@
 .admin-three-column {
     display: flex;
     gap: var(--admin-spacing-lg, 16px);
-    padding: var(--admin-spacing-lg, 16px);
+    /* padding: var(--admin-spacing-lg, 16px); */
     min-height: calc(100vh - 200px);
 }
 

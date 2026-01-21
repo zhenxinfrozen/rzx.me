@@ -42,17 +42,35 @@ class AdminIndexController
                 'title' => 'Sketchbook 管理 (新版)',
                 'subtitle' => '使用新组件的测试版本'
             ],
+            'galleries-new' => [
+                'view' => 'admin-galleries-new',
+                'controller' => 'single-works',  // 使用 single-works 控制器
+                'title' => 'Single-Works 管理 (新版)',
+                'subtitle' => '使用新组件的测试版本'
+            ],
             'comics' => [
                 'view' => 'admin-comics',
                 'controller' => 'comics',  // 需要控制器处理逻辑
                 'title' => '漫画管理',
                 'subtitle' => '管理漫画分组和图片'
             ],
+            'comics-new' => [
+                'view' => 'admin-comics-new',
+                'controller' => 'comics',  // 使用相同的控制器
+                'title' => 'Comics 管理 (新版)',
+                'subtitle' => '使用新组件的测试版本'
+            ],
             'video-gallery' => [
                 'view' => 'admin-videos',
                 'controller' => 'video-gallery',  // 需要控制器处理逻辑
                 'title' => 'Video Gallery 管理',
                 'subtitle' => '管理视频集合'
+            ],
+            'videos-new' => [
+                'view' => 'admin-videos-new',
+                'controller' => 'video-gallery',  // 使用相同的控制器
+                'title' => 'Video Gallery 管理 (新版)',
+                'subtitle' => '使用新组件的测试版本'
             ],
             'galleries-manager' => [
                 'view' => null,
@@ -140,12 +158,12 @@ class AdminIndexController
             $controllerFile = __DIR__ . '/' . $pageConfig['controller'] . '.php';
             if (file_exists($controllerFile)) {
                 // 某些控制器可能需要 bootstrap
-                if (in_array($page, ['thumbnail-center', 'video-gallery', 'sketchbook', 'single-works'])) {
+                if (in_array($page, ['thumbnail-center', 'video-gallery', 'videos-new', 'sketchbook', 'sketchbook-new', 'single-works', 'galleries-new'])) {
                     require_once __DIR__ . '/../../bootstrap.php';
                 }
 
                 // comics 需要 Models
-                if ($page === 'comics') {
+                if ($page === 'comics' || $page === 'comics-new') {
                     define('ADMIN_ACCESS', true);
                     require_once __DIR__ . '/../../Models/comic_data.php';
                 }

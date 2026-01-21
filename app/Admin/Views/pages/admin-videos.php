@@ -379,9 +379,7 @@ $totalCategories = count($categoryData);
 <?php endif; ?>
 
 <div class="ray-body-box-useless">
-<div class="content-header d-flex justify-content-between align-items-center mb-4">
-    <p>管理 Video Gallery 页面的分组排序和显示设置</p>
-</div>
+
 
 <div class="row g-3">
             <div class="col-lg-3">
@@ -597,7 +595,8 @@ $totalCategories = count($categoryData);
                     </div>
                 </div>
             </div>
-        </div>
+</div>
+</div>
 
 <!-- 隐藏的文件输入 -->
 <input type="file" id="thumbnailFileInput" accept="image/*" style="display: none;" onchange="handleThumbnailUpload(event)">
@@ -1677,4 +1676,3 @@ function showToast(type, message) {
     }, 3000);
 }
 </script>
-</div>

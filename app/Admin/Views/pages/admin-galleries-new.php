@@ -1,51 +1,26 @@
-<?php
+﻿<?php
 /**
- * Sketchbook 管理页面 - 新版本
+ * Single-Works (Galleries) 管理页面 - 新版本
  * 使用标准化组件和三栏布局
  *
- * @version 2.5.5
+ * @version 1.0.0
  * @date 2026-01-22
  *
- * v2.5.5 更新日志:
- * - 修复：拖拽排序数据格式错误（order是对象数组而非DOM元素数组）
- * - 增强：添加详细的调试日志输出
- *
- * v2.5.4 更新日志:
- * - 修复：移动列表排序功能（添加save_category_order API）
- * - 修复：前端调用改为使用fetch+JSON格式
- * - 数据存储：app/storage/data/sketchbook-sort.json
- *
- * v2.5.3 更新日志:
- * - 优化：缩略图删除按钮移到右上角
- * - 优化：当前缩略图只长驻显示星标，hover后显示所有按钮
- * - 修复：星标活跃状态使用深色背景(#ff9800)，避免与黄色图标重复
- * - 优化：删除重复的提示文字，保留JS动态生成的那行
- *
- * v2.5.2 更新日志:
- * - 修复：设置缩略图功能（增强错误处理和日志）
- * - 优化：CSS样式，操作按钮移到右上角竖直排列
- * - 移除：移动按钮（拖拽功能已满足需求）
- * - 改进：当前缩略图始终显示星标，hover时显示其他操作
- *
- * v2.5.1 更新日志:
- * - 修复：缩略图扩展名不匹配问题（动态查找任意格式的缩略图文件）
- * - 改进：getCategoryThumbnailInfo 函数现在会验证配置中的缩略图是否存在
- * - 改进：如果配置的缩略图文件不存在，自动查找同名但不同扩展名的文件
- *
- * v2.5.0 更新日志:
- * - 修复：显示名称参数名称错误(display_name → displayName)，现在能正确保存
- * - 新增：文件夹重命名功能，支持修改category文件夹名
- * - 新增：后端自动处理文件夹重命名和配置更新
- * - 改进：前端验证文件夹名格式（仅允许英文、数字、下划线和短横线）
+ * v1.0.0 更新日志:
+ * - 基于 single-works-new v2.5.5 模板创建
+ * - 适配 Single Works 单图作品展示功能
+ * - 数据存储：app/storage/data/single-works-sort.json
+ * - 图片路径：public/assets/images/single-works/
+ * - 统一架构：三栏布局 + 组件化设计
  */
 
-$page_title = $page_title ?? '🛠️ Sketchbook 管理 (新版)';
-$page_subtitle = $page_subtitle ?? '管理 Sketchbook 页面速写本与图片 - 使用新组件';
-$_GET['page'] = $_GET['page'] ?? 'sketchbook-new';
+$page_title = $page_title ?? '🛠️ Single-Works 管理 (新版)';
+$page_subtitle = $page_subtitle ?? '管理 Single-Works 页面作品与图片 - 使用新组件';
+$_GET['page'] = $_GET['page'] ?? 'galleries-new';
 
 // 加载数据
 if (!isset($categoryData)) {
-    require_once __DIR__ . '/../../Controllers/sketchbook-data.php';
+    require_once __DIR__ . '/../../Controllers/single-works-data.php';
 }
 
 $categoryData = $categoryData ?? [];
@@ -61,9 +36,9 @@ $totalCategories = count($categoryData);
 ?>
 
 <!-- 引入新组件样式 -->
-<link rel="stylesheet" href="/assets/admin/css/admin-common.css?v=2.5.5">
-<link rel="stylesheet" href="/assets/admin/css/admin-three-column.css?v=2.5.5">
-<link rel="stylesheet" href="/assets/admin/css/admin-image-manager.css?v=2.5.5">
+<link rel="stylesheet" href="/assets/admin/css/admin-common.css?v=1.0.0">
+<link rel="stylesheet" href="/assets/admin/css/admin-three-column.css?v=1.0.0">
+<link rel="stylesheet" href="/assets/admin/css/admin-image-manager.css?v=1.0.0">
 
 <!-- 自定义样式（覆盖和补充） -->
 <style>
@@ -371,18 +346,19 @@ $totalCategories = count($categoryData);
 <?php endif; ?>
 
 
+
 <!-- 三栏布局 -->
 <div class="admin-three-column">
 
-    <!-- 左栏：速写本列表 -->
+    <!-- 左栏：作品分类列表 -->
     <div class="admin-left-panel">
         <div class="card shadow-sm">
             <div class="card-header bg-success text-white position-relative">
                 <h6 class="card-title mb-0">
                     <i data-feather="list" class="me-2"></i>
-                    速写本顺序
+                    作品分类顺序
                 </h6>
-                <button type="button" class="add-category-btn" onclick="showAddPanel()" title="添加新速写本">+</button>
+                <button type="button" class="add-category-btn" onclick="showAddPanel()" title="添加新作品分类">+</button>
             </div>
             <div class="card-body">
                 <ul class="admin-category-list list-unstyled mb-0" id="categoryList">
@@ -429,23 +405,23 @@ $totalCategories = count($categoryData);
             <div class="card-header bg-primary text-white">
                 <h6 class="card-title mb-0">
                     <i data-feather="edit-3" class="me-2" id="edit-icon"></i>
-                    <span id="edit-title">编辑速写本</span>
+                    <span id="edit-title">编辑作品分类</span>
                 </h6>
-                <small id="edit-status" class="opacity-75">选择左侧速写本进行编辑</small>
+                <small id="edit-status" class="opacity-75">选择左侧作品分类进行编辑</small>
             </div>
             <div class="card-body">
 
                 <!-- 占位符 -->
                 <div id="edit-placeholder" class="admin-edit-placeholder">
                     <i data-feather="arrow-left" style="width: 48px; height: 48px;"></i>
-                    <p class="mt-3">点击左侧速写本开始编辑</p>
+                    <p class="mt-3">点击左侧作品分类开始编辑</p>
                 </div>
 
                 <!-- 添加面板 -->
                 <div id="add-panel" style="display: none;">
                     <div class="mb-3">
-                        <label class="form-label">新速写本名称</label>
-                        <input type="text" id="new-category-name" class="form-control" placeholder="输入速写本名称（英文）">
+                        <label class="form-label">新作品分类名称</label>
+                        <input type="text" id="new-category-name" class="form-control" placeholder="输入作品分类名称（英文）">
                     </div>
                     <div class="row mb-3">
                         <div class="col-6">
@@ -467,7 +443,7 @@ $totalCategories = count($categoryData);
 
                     <div class="d-flex gap-2">
                         <button type="button" class="admin-btn admin-btn-success" onclick="createCategory()">
-                            <i data-feather="plus"></i>创建速写本
+                            <i data-feather="plus"></i>创建作品分类
                         </button>
                         <button type="button" class="admin-btn admin-btn-secondary" onclick="cancelAdd()">
                             <i data-feather="x"></i>取消
@@ -558,7 +534,7 @@ $totalCategories = count($categoryData);
             <div class="card-body">
                 <div class="admin-stat-card">
                     <h3><?= $totalCategories ?></h3>
-                    <p>速写本总数</p>
+                    <p>作品分类总数</p>
                 </div>
 
                 <div class="admin-stat-card" style="background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);">
@@ -611,12 +587,11 @@ $totalCategories = count($categoryData);
 </div>
 
 
-
 <!-- 版本提示 -->
 <div class="alert alert-info alert-dismissible fade show">
     <i data-feather="info"></i>
-    <strong>新版本 v2.5.5</strong> - ✓ 修复拖拽排序 ✓ 增强调试日志 ✓ 开发者工具(F12)查看。
-    <a href="/admin?page=sketchbook" class="alert-link">返回旧版本</a>
+    <strong>新版本 v1.0.0</strong> - ✓ 三栏布局 ✓ 组件化设计 ✓ 拖拽排序 ✓ 图片管理。
+    <a href="/admin?page=single-works" class="alert-link">返回旧版本</a>
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 
@@ -627,7 +602,7 @@ $totalCategories = count($categoryData);
 
 <script>
 // 全局变量
-const controllerUrl = '/admin/ajax?controller=sketchbook';
+const controllerUrl = '/admin/ajax?controller=single-works';
 const existingMeta = <?= json_encode($categoryData, JSON_UNESCAPED_UNICODE) ?>;
 
 // 当前编辑的分类
@@ -658,8 +633,8 @@ function showAddPanel() {
     document.getElementById('edit-panel').style.display = 'none';
     document.getElementById('add-panel').style.display = 'block';
 
-    document.getElementById('edit-title').textContent = '添加新速写本';
-    document.getElementById('edit-status').textContent = '创建新的速写本';
+    document.getElementById('edit-title').textContent = '添加新作品分类';
+    document.getElementById('edit-status').textContent = '创建新的作品分类';
 
     // 清空输入
     document.getElementById('new-category-name').value = '';
@@ -672,8 +647,8 @@ function cancelAdd() {
     document.getElementById('add-panel').style.display = 'none';
     document.getElementById('edit-placeholder').style.display = 'flex';
 
-    document.getElementById('edit-title').textContent = '编辑速写本';
-    document.getElementById('edit-status').textContent = '选择左侧速写本进行编辑';
+    document.getElementById('edit-title').textContent = '编辑作品分类';
+    document.getElementById('edit-status').textContent = '选择左侧作品分类进行编辑';
 }
 
 // 编辑分类
@@ -704,7 +679,7 @@ function editCategory(categoryId) {
     document.getElementById('edit-folder-name').value = categoryId;
 
     // 使用旧版本的API端点加载图片
-    const controllerUrl = '/admin/ajax?controller=sketchbook';
+    const controllerUrl = '/admin/ajax?controller=single-works';
 
     // 先加载缩略图列表
     fetch(`${controllerUrl}&ajax=thumbnails&category=${encodeURIComponent(categoryId)}`)
@@ -869,7 +844,7 @@ function selectImages() {
 // 上传图片
 function uploadImages(files) {
     if (!currentCategory) {
-        AdminUtils.showMessage('请先选择一个速写本', 'warning');
+        AdminUtils.showMessage('请先选择一个作品分类', 'warning');
         return;
     }
 
@@ -882,7 +857,7 @@ function uploadImages(files) {
     const totalSize = (Array.from(files).reduce((sum, file) => sum + file.size, 0) / (1024 * 1024)).toFixed(1);
     AdminUtils.showMessage(`正在上传 ${files.length} 张图片 (${totalSize}MB)...`, 'info');
 
-    const controllerUrl = '/admin/ajax?controller=sketchbook';
+    const controllerUrl = '/admin/ajax?controller=single-works';
 
     fetch(`${controllerUrl}&ajax=upload_images`, {
         method: 'POST',
@@ -933,7 +908,7 @@ function setThumbnail(imageName, thumbName) {
 
     console.log('设置缩略图:', { category: currentCategory, image: imageName, thumb: thumbName });
 
-    const controllerUrl = '/admin/ajax?controller=sketchbook';
+    const controllerUrl = '/admin/ajax?controller=single-works';
 
     // 使用旧版本的 API - 注意参数名是 thumb 不是 thumb_name
     fetch(`${controllerUrl}&ajax=set_thumbnail`, {
@@ -1009,7 +984,7 @@ function deleteImage(imageName) {
         return;
     }
 
-    const controllerUrl = '/admin/ajax?controller=sketchbook';
+    const controllerUrl = '/admin/ajax?controller=single-works';
 
     fetch(`${controllerUrl}&ajax=delete_image`, {
         method: 'POST',
@@ -1058,7 +1033,7 @@ function updateImageCount(categoryId) {
 function saveImageOrder(orderData) {
     if (!currentCategory) return;
 
-    const controllerUrl = '/admin/ajax?controller=sketchbook';
+    const controllerUrl = '/admin/ajax?controller=single-works';
 
     // 将对象数组转换为字符串数组（按顺序排列的图片名）
     const imageOrder = Array.isArray(orderData)
@@ -1093,7 +1068,7 @@ function saveOrder(order) {
     console.log('==== saveOrder被调用 ====');
     console.log('接收到的order:', order);
 
-    const controllerUrl = '/admin/ajax?controller=sketchbook';
+    const controllerUrl = '/admin/ajax?controller=single-works';
 
     // order 是对象数组 [{id: 'xxx', position: 1}, ...]
     // 提取所有的 id 并组成逗号分隔的字符串
@@ -1137,7 +1112,7 @@ function createCategory() {
     const description = document.getElementById('new-description').value.trim();
 
     if (!name) {
-        AdminUtils.showMessage('请输入速写本名称', 'warning');
+        AdminUtils.showMessage('请输入作品分类名称', 'warning');
         return;
     }
 
@@ -1161,13 +1136,13 @@ function saveCategory() {
     const willRename = folderName && folderName !== currentCategory;
     const confirmMsg = willRename
         ? `确定要保存并将文件夹从 "${currentCategory}" 重命名为 "${folderName}" 吗？`
-        : `确定要保存对速写本 "${currentCategory}" 的修改吗？`;
+        : `确定要保存对作品分类 "${currentCategory}" 的修改吗？`;
 
     if (!confirm(confirmMsg)) {
         return;
     }
 
-    const controllerUrl = '/admin/ajax?controller=sketchbook';
+    const controllerUrl = '/admin/ajax?controller=single-works';
 
     // 使用驼峰式参数名（与后端一致）
     fetch(`${controllerUrl}&ajax=save_category`, {
@@ -1183,7 +1158,7 @@ function saveCategory() {
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            AdminUtils.showMessage('速写本信息已保存', 'success');
+            AdminUtils.showMessage('作品分类信息已保存', 'success');
 
             // 如果重命名了文件夹
             if (data.renamed && data.newCategory) {
@@ -1259,11 +1234,11 @@ function getCurrentCategoryOrder() {
 function deleteCategory() {
     if (!currentCategory) return;
 
-    if (!confirm(`确定要删除速写本 "${currentCategory}" 吗？\n这将删除该速写本下的所有图片文件。`)) {
+    if (!confirm(`确定要删除作品分类 "${currentCategory}" 吗？\n这将删除该作品分类下的所有图片文件。`)) {
         return;
     }
 
-    const controllerUrl = '/admin/ajax?controller=sketchbook';
+    const controllerUrl = '/admin/ajax?controller=single-works';
 
     fetch(`${controllerUrl}&ajax=delete_category`, {
         method: 'POST',
@@ -1284,7 +1259,7 @@ function deleteCategory() {
             document.getElementById('edit-placeholder').style.display = 'flex';
             currentCategory = null;
 
-            AdminUtils.showMessage('速写本已删除', 'success');
+            AdminUtils.showMessage('作品分类已删除', 'success');
 
             // 更新统计
             updateTotalCount();
@@ -1343,7 +1318,7 @@ function handleThumbnailUpload(event) {
     AdminUtils.showMessage('正在上传缩略图...', 'info');
 
     // 上传到服务器
-    fetch('/admin/ajax?controller=sketchbook&ajax=upload_thumbnail', {
+    fetch('/admin/ajax?controller=single-works&ajax=upload_thumbnail', {
         method: 'POST',
         body: formData
     })
@@ -1393,7 +1368,7 @@ function removeThumbnail() {
 
     if (!confirm('确定要移除当前缩略图吗？')) return;
 
-    fetch('/admin/ajax?controller=sketchbook&ajax=remove_thumbnail', {
+    fetch('/admin/ajax?controller=single-works&ajax=remove_thumbnail', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ category: currentCategory })
@@ -1483,7 +1458,7 @@ if (typeof feather !== 'undefined') {
 }
 
 // 调试信息 - 版本 2.5.5
-console.log('Sketchbook 管理页面 v2.5.5 已加载');
+console.log('single-works 管理页面 v2.5.5 已加载');
 console.log('- ✓ 修复：拖拽排序数据格式问题');
 console.log('- ✓ 调试：添加详细日志输出');
 console.log('AdminDragSort:', typeof AdminDragSort !== 'undefined' ? '✓ 已加载' : '✗ 未加载');

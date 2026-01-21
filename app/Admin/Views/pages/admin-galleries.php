@@ -431,9 +431,7 @@ $totalCategories = count($categoryData);
 <?php endif; ?>
 
 <div class="ray-body-box-useless">
-<div class="content-header d-flex justify-content-between align-items-center mb-4">
-    <p>管理 Single-Works 页面的分类排序和显示设置</p>
-</div>
+
 
 <div class="row g-3">
                 <div class="col-lg-3">
