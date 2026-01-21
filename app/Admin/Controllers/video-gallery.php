@@ -52,12 +52,12 @@ $categoryData = [];
 foreach ($orderedCategories as $index => $category) {
     $groupData = $videoGroups[$category] ?? [];
     $videoCount = count($groupData['videos'] ?? []);
-    
+
     $firstThumb = null;
     if (!empty($groupData['videos'][0]['poster'])) {
         $firstThumb = $groupData['videos'][0]['poster'];
     }
-    
+
     $categoryData[] = [
         'id' => $category,
         'display_name' => $currentConfig['display_names'][$category] ?? $category,

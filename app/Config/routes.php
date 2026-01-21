@@ -1,13 +1,13 @@
 <?php
 /**
  * 路由配置文件 - 系统唯一路由规则定义
- * 
- * 功能: 
+ *
+ * 功能:
  * - 定义所有页面路由 (pages)
- * - 定义所有API路由 (api) 
+ * - 定义所有API路由 (api)
  * - 定义静态文件处理规则 (static)
  * - 定义错误页面配置 (errors)
- * 
+ *
  * 使用: 由 app/Router.php 加载和解析
  * 修改: 添加新页面时在此文件配置路由规则
  */
@@ -125,7 +125,7 @@ return [
         ],
         // 管理后台静态资源
         '~^\/admin\/(assets|css|js|images)\/(.+)$~' => [
-            'type' => 'static', 
+            'type' => 'static',
             'allow_direct' => true
         ],
         // 网站静态资源
