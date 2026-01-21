@@ -178,6 +178,8 @@ indent_size = 2
 
 ### Step 3: Git 配置 (如果使用 Git)
 
+#### 3.1 Git 全局配置
+
 ```bash
 # 中文路径不转义
 git config --global core.quotepath false
@@ -191,6 +193,39 @@ git config --global i18n.logoutputencoding utf-8
 git config --global core.autocrlf false
 git config --global core.eol lf
 ```
+
+#### 3.2 项目级 `.gitattributes` 配置 ⭐ 强烈推荐
+
+在项目根目录创建 `.gitattributes` 文件，确保所有协作者的文本文件处理一致：
+
+```gitattributes
+# Git 属性配置 - 确保文本文件正确处理
+* text=auto
+
+# 所有文本文件强制使用 LF 换行符
+*.php text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.css text eol=lf
+
+# Windows 脚本保持 CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 二进制文件
+*.png binary
+*.jpg binary
+*.mp4 binary
+```
+
+**关键作用**：
+- ✅ 确保跨平台协作时换行符统一（LF）
+- ✅ 防止 Windows 用户意外提交 CRLF
+- ✅ 二进制文件不会被当作文本处理
+- ✅ 所有克隆仓库的人都自动应用相同规则
 
 ---
 
@@ -337,8 +372,8 @@ git config --global core.quotepath false
 |---------|------|--------|
 | `$PROFILE.CurrentUserAllHosts` | PowerShell 自动 UTF-8 | ⭐ 必需 |
 | `.vscode/settings.json` | VSCode 项目配置 | ⭐ 必需 |
-| `.editorconfig` | 跨编辑器配置 | ✅ 推荐 |
-| `.gitattributes` | Git 文本文件配置 | ✅ 推荐 |
+| `.editorconfig` | 跨编辑器配置 | ⭐ 强烈推荐 |
+| `.gitattributes` | Git 仓库文本文件统一 | ⭐ 强烈推荐 |
 | `tools/check-encoding.ps1` | 编码检查工具 | ✅ 推荐 |
 
 ---
@@ -361,7 +396,7 @@ git config --global core.quotepath false
 │  ✓ PowerShell 全局 UTF-8 配置         │
 │  ✓ VSCode 终端 UTF-8 强制启动         │
 │  ✓ 项目文件默认 UTF-8                 │
-│  ✓ Git 中文支持                       │
+│  ✓ Git 中文支持 + .gitattributes      │
 │  ✓ EditorConfig 跨编辑器统一          │
 │  ✓ 自动检查工具                       │
 └────────────────────────────────────────┘
