@@ -35,10 +35,11 @@ $current_page = $_GET['page'] ?? 'dashboard';
 if (!isset($page_title)) {
     $page_titles = [
         'dashboard' => '控制台',
-    'single-works' => 'Single-Works 分类管理',
+    'drafts' => 'Drafts 草稿管理',
+    'drafts-new' => 'Drafts 草稿管理 (新版)',
     'sketchbook' => 'Sketchbook 管理',
     'comics' => '漫画管理',
-    'video-gallery' => 'Video Gallery 管理',
+    'videos' => 'Videos 管理',
         'galleries-manager' => 'Galleries 画廊管理',
         'thumbnail-manager' => '整站缩略图管理',
         'trash' => '回收站',
@@ -72,7 +73,8 @@ $current_user = [
     <title><?= htmlspecialchars($page_title) ?> - RZX.ME 后台管理</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Feather Icons (纯 JavaScript 渲染，无需 CSS 文件) -->
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons@4.29.0/dist/feather.min.js"></script>
     <!-- Font Awesome Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap Icons (用于页面中的 bi- 图标) -->
@@ -208,6 +210,12 @@ $current_user = [
                     <span>Sketchbook管理</span>
                 </a>
             </li>
+            <li class="menu-item <?= $current_page === 'sketchbook-new' ? 'active' : '' ?>">
+                <a href="/admin?page=sketchbook-new">
+                    <i data-feather="book-open"></i>
+                    <span>Sketchbook管理-new</span>
+                </a>
+            </li>
 
             <li class="menu-item <?= $current_page === 'comics' ? 'active' : '' ?>">
                 <a href="/admin?page=comics">
@@ -215,11 +223,23 @@ $current_user = [
                     <span>Comics管理</span>
                 </a>
             </li>
+            <li class="menu-item <?= $current_page === 'comics-new' ? 'active' : '' ?>">
+                <a href="/admin?page=comics-new">
+                    <i data-feather="layers"></i>
+                    <span>Comics管理-new</span>
+                </a>
+            </li>
 
-            <li class="menu-item <?= $current_page === 'video-gallery' ? 'active' : '' ?>">
-                <a href="/admin?page=video-gallery">
+            <li class="menu-item <?= $current_page === 'videos' ? 'active' : '' ?>">
+                <a href="/admin?page=videos">
                     <i data-feather="film"></i>
-                    <span>Video Gallery管理</span>
+                    <span>Videos管理</span>
+                </a>
+            </li>
+            <li class="menu-item <?= $current_page === 'videos-new' ? 'active' : '' ?>">
+                <a href="/admin?page=videos-new">
+                    <i data-feather="film"></i>
+                    <span>Videos管理-new</span>
                 </a>
             </li>
 
@@ -229,11 +249,23 @@ $current_user = [
                     <span>Galleries画廊管理</span>
                 </a>
             </li>
+            <li class="menu-item <?= $current_page === 'galleries-new' ? 'active' : '' ?>">
+                <a href="/admin?page=galleries-new">
+                    <i data-feather="folder"></i>
+                    <span>Galleries画廊管理-new</span>
+                </a>
+            </li>
 
-            <li class="menu-item <?= $current_page === 'single-works' ? 'active' : '' ?>">
-                <a href="/admin?page=single-works">
-                    <i data-feather="image"></i>
-                    <span>Single-Works分类管理</span>
+            <li class="menu-item <?= $current_page === 'drafts' ? 'active' : '' ?>">
+                <a href="/admin?page=drafts">
+                    <i data-feather="edit-3"></i>
+                    <span>Drafts 草稿管理</span>
+                </a>
+            </li>
+            <li class="menu-item <?= $current_page === 'drafts-new' ? 'active' : '' ?>">
+                <a href="/admin?page=drafts-new">
+                    <i data-feather="edit-3"></i>
+                    <span>Drafts 草稿管理-new</span>
                 </a>
             </li>
 
@@ -351,3 +383,10 @@ $current_user = [
 
         <!-- 页面内容区域开始 -->
         <div class="admin-page-content">
+
+<script>
+// 立即初始化 Feather Icons，确保 header 中的图标正常显示
+if (typeof feather !== 'undefined') {
+    feather.replace();
+}
+</script>

@@ -24,11 +24,11 @@ class AdminIndexController
                 'title' => '控制台',
                 'subtitle' => '管理和监控您的网站'
             ],
-            'single-works' => [
-                'view' => 'admin-galleries',
-                'controller' => 'single-works',  // 需要控制器处理逻辑
-                'title' => 'Single-Works 管理',
-                'subtitle' => '管理 Single-Works 页面分组与图片'
+            'drafts' => [
+                'view' => 'admin-drafts-new',
+                'controller' => 'drafts',
+                'title' => 'Drafts 草稿管理',
+                'subtitle' => '管理草稿分类与图片'
             ],
             'sketchbook' => [
                 'view' => 'admin-sketchbook',
@@ -44,8 +44,14 @@ class AdminIndexController
             ],
             'galleries-new' => [
                 'view' => 'admin-galleries-new',
-                'controller' => 'single-works',  // 使用 single-works 控制器
-                'title' => 'Single-Works 管理 (新版)',
+                'controller' => 'galleries-manager',  // 使用 galleries-manager 控制器
+                'title' => 'Galleries 画廊管理 (新版)',
+                'subtitle' => '使用新组件的测试版本'
+            ],
+            'drafts-new' => [
+                'view' => 'admin-drafts-new',
+                'controller' => 'drafts',
+                'title' => 'Drafts 草稿管理 (新版)',
                 'subtitle' => '使用新组件的测试版本'
             ],
             'comics' => [
@@ -60,16 +66,16 @@ class AdminIndexController
                 'title' => 'Comics 管理 (新版)',
                 'subtitle' => '使用新组件的测试版本'
             ],
-            'video-gallery' => [
+            'videos' => [
                 'view' => 'admin-videos',
-                'controller' => 'video-gallery',  // 需要控制器处理逻辑
-                'title' => 'Video Gallery 管理',
+                'controller' => 'videos',  // 需要控制器处理逻辑
+                'title' => 'Videos 管理',
                 'subtitle' => '管理视频集合'
             ],
             'videos-new' => [
                 'view' => 'admin-videos-new',
-                'controller' => 'video-gallery',  // 使用相同的控制器
-                'title' => 'Video Gallery 管理 (新版)',
+                'controller' => 'videos',  // 使用相同的控制器
+                'title' => 'Videos 管理 (新版)',
                 'subtitle' => '使用新组件的测试版本'
             ],
             'galleries-manager' => [
@@ -158,7 +164,7 @@ class AdminIndexController
             $controllerFile = __DIR__ . '/' . $pageConfig['controller'] . '.php';
             if (file_exists($controllerFile)) {
                 // 某些控制器可能需要 bootstrap
-                if (in_array($page, ['thumbnail-center', 'video-gallery', 'videos-new', 'sketchbook', 'sketchbook-new', 'single-works', 'galleries-new'])) {
+                if (in_array($page, ['thumbnail-center', 'videos', 'videos-new', 'sketchbook', 'sketchbook-new', 'drafts', 'drafts-new', 'galleries-new'])) {
                     require_once __DIR__ . '/../../bootstrap.php';
                 }
 

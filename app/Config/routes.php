@@ -51,9 +51,9 @@ return [
             'handler' => 'get_page_data'
         ],
 
-        '/single-works' => [
-            'view' => 'pages/single-works.php',
-            'title' => '图片作品集 - RZX.ME',
+        '/drafts' => [
+            'view' => 'pages/drafts.php',
+            'title' => '草稿 - RZX.ME',
             'handler' => 'get_page_data'
         ],
         '/sites' => [

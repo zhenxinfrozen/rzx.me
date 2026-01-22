@@ -12,7 +12,7 @@ return [
         'meta_keywords' => '动画，原画，速写，分镜头，颓废动画人，内真心，Comic，sketches，Story board，Digital painting，Concept art，games',
         'meta_description' => '颓废动画人的个人网站，涂鸦和作品练习，扯淡的东西。This site is a portfolio of Ray art. Hope you enjoy it!',
     ],
-    
+
     // 漫画
     'pages/comic.php' => [
         'page_id' => 'comic',
@@ -21,7 +21,7 @@ return [
         'meta_description' => '漫画作品展示，包括原创漫画和分镜头设计',
         'meta_keywords' => '漫画，Comic，分镜头，Story board，原创漫画，漫画设计',
     ],
-    
+
     // 动画
     'pages/animation.php' => [
         'page_id' => 'animation',
@@ -30,7 +30,7 @@ return [
         'meta_description' => '动画作品展示，包括原创动画短片和练习作品',
         'meta_keywords' => '动画，Flash动画，原创动画，动画短片，Motion Graphics',
     ],
-    
+
     // 视频
     'pages/videos.php' => [
         'page_id' => 'videos',
@@ -39,7 +39,7 @@ return [
         'meta_description' => '视频作品展示，包括动画分镜、特效和故事片段',
         'meta_keywords' => '视频，Video，动画视频，特效，分镜头，动画短片',
     ],
-    
+
     // 最新作品
     'pages/latest.php' => [
         'page_id' => 'latest',
@@ -48,18 +48,18 @@ return [
         'meta_description' => '最新作品和动态，了解Ray的最新创作',
         'meta_keywords' => '最新作品，动态更新，创作日志，艺术动态',
     ],
-    
 
-    
-    // 图片作品集（升级版）
-    'pages/single-works.php' => [
-        'page_id' => 'single-works',
-        'page_title' => '图片作品集 - rzx.me',
-        'css_file' => '/assets/css/single-works.css',
-        'meta_description' => '个人图片作品集展示，包括动物、游戏、插画等分类作品',
-        'meta_keywords' => '作品集，插画，动物，游戏，Single Works，Digital Art',
+
+
+    // 草稿（Drafts）
+    'pages/drafts.php' => [
+        'page_id' => 'drafts',
+        'page_title' => '草稿 - rzx.me',
+        'css_file' => '/assets/css/drafts.css',
+        'meta_description' => '草稿和创作过程展示，包括概念设计、未完成作品等',
+        'meta_keywords' => '草稿，Drafts，创作过程，概念设计，Works in Progress',
     ],
-    
+
     // 速写
     'pages/sketch.php' => [
         'page_id' => 'sketch',
@@ -68,7 +68,7 @@ return [
         'meta_description' => '速写作品展示，包括人物速写、场景练习和创意草图',
         'meta_keywords' => '速写，Sketch，人物速写，场景练习，创意草图',
     ],
-    
+
     // 网站链接
     'pages/sites.php' => [
         'page_id' => 'sites',
@@ -77,7 +77,7 @@ return [
         'meta_description' => '相关链接和推荐网站，发现更多有趣的创意资源',
         'meta_keywords' => '链接，推荐网站，Portal，相关资源，友情链接',
     ],
-    
+
     // 关于我
     'pages/about.php' => [
         'page_id' => 'about',
@@ -86,7 +86,7 @@ return [
         'meta_description' => '个人简介和联系方式，了解更多关于Ray的信息',
         'meta_keywords' => '关于我，个人简介，联系方式，动画师，分镜师，原画师',
     ],
-    
+
     // 画廊列表
     'pages/galleries.php' => [
         'page_id' => 'galleries',
@@ -95,7 +95,7 @@ return [
         'meta_description' => '图片画廊，展示各种艺术作品和创作',
         'meta_keywords' => '画廊，图片展示，艺术作品，创作展示，Gallery',
     ],
-    
+
     // 单个画廊浏览
     'pages/gallery.php' => [
         'page_id' => 'gallery',
@@ -104,7 +104,7 @@ return [
         'meta_description' => '画廊图片浏览，沉浸式艺术作品欣赏体验',
         'meta_keywords' => '画廊浏览，图片欣赏，艺术作品，Gallery viewer',
     ],
-    
+
     // 默认配置 - 用于未匹配的页面
     'default' => [
         'page_id' => 'default',

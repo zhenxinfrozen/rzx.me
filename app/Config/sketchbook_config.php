@@ -8,7 +8,7 @@ return array (
     'boutter-test' => '/assets/images/sketchbook/boutter-test/thumbs/Screenshot - 2025-10-07 02.55.13.webp',
     'tetstst' => '/assets/images/sketchbook/tetstst/thumbs/____________-08-13-2025_12_07_AM.png',
     'MAYBE A STORY' => '/assets/images/sketchbook/MAYBE A STORY/thumbs/1.webp',
-    'tetstst33' => '/assets/images/sketchbook/tetstst33/thumbs/videoframe_2187.webp',
+    'tetstst33' => '/assets/images/sketchbook/tetstst33/thumbs/____________-08-13-2025_12_03_AM.webp',
     'THIS MY WORLD' => '/assets/images/sketchbook/THIS MY WORLD/thumbs/1.webp',
   ),
 );

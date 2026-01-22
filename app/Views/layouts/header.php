@@ -29,7 +29,7 @@
                     $currentPath = $parsedPath ?: '/';
                 }
             }
-            
+
             // 确保以 / 开头
             if (strpos($currentPath, '/') !== 0) {
                 $currentPath = '/' . $currentPath;
@@ -44,7 +44,7 @@
                 'Gallery' => '/galleries',
                 'Blogs' => '/sites',
                 'Sketch' => '/sketch',
-                'Single-Works' => '/single-works',
+                'Drafts' => '/drafts',
                 'About' => '/about',
             ];
             ?>
@@ -56,7 +56,7 @@
                     } else {
                         $isActive = ($currentPath === $href) || (strpos($currentPath, $href . '/') === 0);
                     }
-                    
+
                     $class = 'site-nav__link' . ($isActive ? ' site-nav__link--active' : '');
                 ?>
                 <li class="site-nav__item"><a class="<?php echo $class ?>" href="<?php echo htmlspecialchars(url($href), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>"><?php echo htmlspecialchars($label, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></a></li>

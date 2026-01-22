@@ -1,12 +1,12 @@
 ﻿<?php
 $page_title = $page_title ?? '🎬 Video Gallery 管理';
 $page_subtitle = $page_subtitle ?? '管理视频分组与文件';
-$_GET['page'] = $_GET['page'] ?? 'video-gallery';
+$_GET['page'] = $_GET['page'] ?? 'videos';
 
 // 如果控制器没有传入数据，则手动加载数据
 if (!isset($categoryData)) {
     // 手动加载必要的依赖和数据
-    require_once __DIR__ . '/../../controllers/video-gallery.php';
+    require_once __DIR__ . '/../../controllers/videos.php';
 }
 
 $categoryData = $categoryData ?? [];
@@ -605,7 +605,7 @@ $totalCategories = count($categoryData);
 <div id="toastContainer"></div>
 
 <script>
-const controllerUrl = '/admin/ajax?controller=video-gallery';
+const controllerUrl = '/admin/ajax?controller=videos';
 const existingMeta = <?= json_encode($categoryData, JSON_UNESCAPED_UNICODE) ?>;
 
 let currentEditingCategory = null;

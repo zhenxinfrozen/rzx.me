@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Video Gallery 管理页面 - 新版本
  * 使用标准化组件和三栏布局
@@ -605,7 +605,7 @@ $totalCategories = count($categoryData);
 <div class="alert alert-info alert-dismissible fade show">
     <i data-feather="info"></i>
     <strong>新版本 v1.0.0</strong> - ✓ 修复拖拽排序 ✓ 增强调试日志 ✓ 开发者工具(F12)查看。
-    <a href="/admin?page=video-gallery" class="alert-link">返回旧版本</a>
+    <a href="/admin?page=videos" class="alert-link">返回旧版本</a>
     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 
@@ -617,7 +617,7 @@ $totalCategories = count($categoryData);
 
 <script>
 // 全局变量
-const controllerUrl = '/admin/ajax?controller=video-gallery';
+const controllerUrl = '/admin/ajax?controller=videos';
 const existingMeta = <?= json_encode($categoryData, JSON_UNESCAPED_UNICODE) ?>;
 
 // 当前编辑的分类
@@ -694,7 +694,7 @@ function editCategory(categoryId) {
     document.getElementById('edit-folder-name').value = categoryId;
 
     // 使用旧版本的API端点加载图片
-    const controllerUrl = '/admin/ajax?controller=video-gallery';
+    const controllerUrl = '/admin/ajax?controller=videos';
 
     // 先加载缩略图列表
     fetch(`${controllerUrl}&ajax=thumbnails&category=${encodeURIComponent(categoryId)}`)
@@ -872,7 +872,7 @@ function uploadImages(files) {
     const totalSize = (Array.from(files).reduce((sum, file) => sum + file.size, 0) / (1024 * 1024)).toFixed(1);
     AdminUtils.showMessage(`正在上传 ${files.length} 张图片 (${totalSize}MB)...`, 'info');
 
-    const controllerUrl = '/admin/ajax?controller=video-gallery';
+    const controllerUrl = '/admin/ajax?controller=videos';
 
     fetch(`${controllerUrl}&ajax=upload_images`, {
         method: 'POST',
@@ -923,7 +923,7 @@ function setThumbnail(imageName, thumbName) {
 
     console.log('设置缩略图:', { category: currentCategory, image: imageName, thumb: thumbName });
 
-    const controllerUrl = '/admin/ajax?controller=video-gallery';
+    const controllerUrl = '/admin/ajax?controller=videos';
 
     // 使用旧版本的 API - 注意参数名是 thumb 不是 thumb_name
     fetch(`${controllerUrl}&ajax=set_thumbnail`, {
@@ -999,7 +999,7 @@ function deleteImage(imageName) {
         return;
     }
 
-    const controllerUrl = '/admin/ajax?controller=video-gallery';
+    const controllerUrl = '/admin/ajax?controller=videos';
 
     fetch(`${controllerUrl}&ajax=delete_image`, {
         method: 'POST',
@@ -1048,7 +1048,7 @@ function updateImageCount(categoryId) {
 function saveImageOrder(orderData) {
     if (!currentCategory) return;
 
-    const controllerUrl = '/admin/ajax?controller=video-gallery';
+    const controllerUrl = '/admin/ajax?controller=videos';
 
     // 将对象数组转换为字符串数组（按顺序排列的图片名）
     const imageOrder = Array.isArray(orderData)
@@ -1083,7 +1083,7 @@ function saveOrder(order) {
     console.log('==== saveOrder被调用 ====');
     console.log('接收到的order:', order);
 
-    const controllerUrl = '/admin/ajax?controller=video-gallery';
+    const controllerUrl = '/admin/ajax?controller=videos';
 
     // order 是对象数组 [{id: 'xxx', position: 1}, ...]
     // 提取所有的 id 并组成逗号分隔的字符串
@@ -1157,7 +1157,7 @@ function saveCategory() {
         return;
     }
 
-    const controllerUrl = '/admin/ajax?controller=video-gallery';
+    const controllerUrl = '/admin/ajax?controller=videos';
 
     // 使用驼峰式参数名（与后端一致）
     fetch(`${controllerUrl}&ajax=save_category`, {
@@ -1253,7 +1253,7 @@ function deleteCategory() {
         return;
     }
 
-    const controllerUrl = '/admin/ajax?controller=video-gallery';
+    const controllerUrl = '/admin/ajax?controller=videos';
 
     fetch(`${controllerUrl}&ajax=delete_category`, {
         method: 'POST',
@@ -1333,7 +1333,7 @@ function handleThumbnailUpload(event) {
     AdminUtils.showMessage('正在上传缩略图...', 'info');
 
     // 上传到服务器
-    fetch('/admin/ajax?controller=video-gallery&ajax=upload_thumbnail', {
+    fetch('/admin/ajax?controller=videos&ajax=upload_thumbnail', {
         method: 'POST',
         body: formData
     })
@@ -1383,7 +1383,7 @@ function removeThumbnail() {
 
     if (!confirm('确定要移除当前缩略图吗？')) return;
 
-    fetch('/admin/ajax?controller=video-gallery&ajax=remove_thumbnail', {
+    fetch('/admin/ajax?controller=videos&ajax=remove_thumbnail', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ category: currentCategory })
