@@ -68,6 +68,8 @@ if ($route && $router->isAdminAjaxRoute($route)) {
             'videos' => __DIR__ . '/../app/Admin/Controllers/videos.php',
             'comics' => __DIR__ . '/../app/Admin/Controllers/comics.php',
             'thumbnail-center' => __DIR__ . '/../app/Admin/Controllers/thumbnail-center.php',
+            'media-manager' => __DIR__ . '/../app/Admin/Controllers/media-manager.php',
+            'galleries' => __DIR__ . '/../app/Admin/Controllers/galleries.php',
         ];
 
         // 验证控制器

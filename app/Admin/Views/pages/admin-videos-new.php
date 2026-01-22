@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Video Gallery 管理页面 - 新版本
  * 使用标准化组件和三栏布局
@@ -32,13 +32,53 @@ $page_title = $page_title ?? '🛠️ Video Gallery 管理 (新版)';
 $page_subtitle = $page_subtitle ?? '管理 Video Gallery 页面视频集与图片 - 使用新组件';
 $_GET['page'] = $_GET['page'] ?? 'videos-new';
 
+// 加载 media-manager 服务（使用命名空间）
+require_once __DIR__ . '/../../Services/Media/ImageService.php';
+require_once __DIR__ . '/../../Services/Media/VideoService.php';
+require_once __DIR__ . '/../../Services/Media/ConfigService.php';
+require_once __DIR__ . '/../../Services/Media/CategoryService.php';
+
+use App\Admin\Services\Media\ImageService;
+use App\Admin\Services\Media\VideoService;
+use App\Admin\Services\Media\ConfigService;
+use App\Admin\Services\Media\CategoryService;
+
 // 加载数据
 if (!isset($categoryData)) {
-    // Video Gallery 使用 video-gallery 控制器加载数据
-    // 控制器会在 AdminIndexController 中被加载
+    $categoryData = [];
+    try {
+        $imageService = new ImageService();
+        $videoService = new VideoService();
+        $configService = new ConfigService();
+        $categoryService = new CategoryService($imageService, $videoService, $configService);
+
+        // 使用 CategoryService 获取 videos 模块数据
+        $baseDir = realpath(__DIR__ . '/../../../public/assets/videos/video-gallery');
+        $configPath = __DIR__ . '/../../storage/data/video-gallery-sort.json';
+
+        // getCategories 直接返回数组，不是 ['success' => true, 'categories' => ...] 格式
+        $categories = $categoryService->getCategories($baseDir, 'videos', $configPath);
+
+        // 转换为页面需要的格式（添加 id 和 first_image_thumb 字段）
+        foreach ($categories as $cat) {
+            $categoryData[] = [
+                'id' => $cat['name'],
+                'display_name' => $cat['display_name'],
+                'video_count' => $cat['video_count'],
+                'thumbnail' => $cat['thumbnail'],
+                'first_image_thumb' => $cat['thumbnail'],
+                'position' => $cat['position']
+            ];
+        }
+
+    } catch (\Exception $e) {
+        error_log('Videos-new: Exception - ' . $e->getMessage());
+        error_log('Videos-new: Stack trace - ' . $e->getTraceAsString());
+    }
 }
 
 $categoryData = $categoryData ?? [];
+
 $currentConfig = $currentConfig ?? [
     'sort_method' => 'custom_order',
     'custom_order' => [],
@@ -92,6 +132,49 @@ $totalCategories = count($categoryData);
     padding: 12px;
     background: #f8f9fa;
     border-radius: 8px;
+}
+
+/* Videos 模块专用：左侧列表缩略图 16:9 */
+.category-thumbnail {
+    width: 85px;
+    height: 48px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 2px solid #dee2e6;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+/* Videos 模块：上传缩略图按钮 16:9 比例 */
+.thumbnail-upload-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    height: 90px;
+    border: 2px dashed #6c757d;
+    border-radius: 8px;
+    background: white;
+    color: #6c757d;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.thumbnail-upload-btn:hover {
+    border-color: #007bff;
+    color: #007bff;
+    background: #f8f9fa;
+}
+
+/* 当前缩略图预览 16:9 */
+#edit-thumbnail-img {
+    max-width: 160px;
+    max-height: 90px;
+    object-fit: contain;
+    border-radius: 6px;
+    border: 2px solid #dee2e6;
 }
 
 /* 调整图片管理操作按钮样式 */
@@ -239,9 +322,10 @@ $totalCategories = count($categoryData);
     justify-content: flex-start;
 }
 
+/* Videos 模块：上传按钮 16:9 */
 .admin-add-image-btn {
-    width: 80px;
-    height: 80px;
+    width: 160px;
+    height: 90px;
     border: 2px dashed #007bff;
     border-radius: 6px;
     background: #f8f9fa;
@@ -263,11 +347,11 @@ $totalCategories = count($categoryData);
     transform: scale(1.05);
 }
 
-/* 图片项样式增强 */
+/* 图片项样式增强 - Videos 模块 16:9 */
 .admin-image-item {
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 160px;
+    height: 90px;
     border-radius: 6px;
     overflow: hidden;
     border: 2px solid #dee2e6;
@@ -381,7 +465,7 @@ $totalCategories = count($categoryData);
                         <div class="d-flex align-items-center p-3">
                             <span class="admin-drag-handle" title="拖拽排序">⋮⋮</span>
 
-                            <!-- 缩略图 -->
+                            <!-- 缩略图（16:9） -->
                             <?php
                             $thumbnailSrc = '';
                             if (!empty($category['thumbnail'])) {
@@ -391,9 +475,9 @@ $totalCategories = count($categoryData);
                             }
                             ?>
                             <?php if ($thumbnailSrc): ?>
-                                <img src="<?= htmlspecialchars($thumbnailSrc) ?>" alt="缩略图" class="admin-thumbnail me-2">
+                                <img src="<?= htmlspecialchars($thumbnailSrc) ?>" alt="缩略图" class="category-thumbnail me-2">
                             <?php else: ?>
-                                <div class="admin-thumbnail-placeholder me-2">
+                                <div class="category-thumbnail-placeholder me-2">
                                     <i data-feather="image"></i>
                                 </div>
                             <?php endif; ?>
@@ -401,7 +485,7 @@ $totalCategories = count($categoryData);
                             <!-- 信息 -->
                             <div class="flex-grow-1" style="cursor: pointer;" onclick="editCategory('<?= htmlspecialchars($category['id']) ?>')">
                                 <div class="fw-semibold"><?= htmlspecialchars($category['display_name'] ?: $category['id']) ?></div>
-                                <small class="admin-text-muted"><?= (int) $category['image_count'] ?> 张图片</small>
+                                <small class="admin-text-muted"><?= (int) $category['video_count'] ?> 个视频</small>
                             </div>
 
                             <span class="admin-badge admin-badge-primary"><?= (int) $category['position'] ?></span>
@@ -617,7 +701,7 @@ $totalCategories = count($categoryData);
 
 <script>
 // 全局变量
-const controllerUrl = '/admin/ajax?controller=videos';
+const controllerUrl = '/admin/ajax?controller=media-manager&module=videos';
 const existingMeta = <?= json_encode($categoryData, JSON_UNESCAPED_UNICODE) ?>;
 
 // 当前编辑的分类
@@ -694,7 +778,7 @@ function editCategory(categoryId) {
     document.getElementById('edit-folder-name').value = categoryId;
 
     // 使用旧版本的API端点加载图片
-    const controllerUrl = '/admin/ajax?controller=videos';
+    const controllerUrl = '/admin/ajax?controller=media-manager&module=videos';
 
     // 先加载缩略图列表
     fetch(`${controllerUrl}&ajax=thumbnails&category=${encodeURIComponent(categoryId)}`)
@@ -872,7 +956,7 @@ function uploadImages(files) {
     const totalSize = (Array.from(files).reduce((sum, file) => sum + file.size, 0) / (1024 * 1024)).toFixed(1);
     AdminUtils.showMessage(`正在上传 ${files.length} 张图片 (${totalSize}MB)...`, 'info');
 
-    const controllerUrl = '/admin/ajax?controller=videos';
+    const controllerUrl = '/admin/ajax?controller=media-manager&module=videos';
 
     fetch(`${controllerUrl}&ajax=upload_images`, {
         method: 'POST',
@@ -923,7 +1007,7 @@ function setThumbnail(imageName, thumbName) {
 
     console.log('设置缩略图:', { category: currentCategory, image: imageName, thumb: thumbName });
 
-    const controllerUrl = '/admin/ajax?controller=videos';
+    const controllerUrl = '/admin/ajax?controller=media-manager&module=videos';
 
     // 使用旧版本的 API - 注意参数名是 thumb 不是 thumb_name
     fetch(`${controllerUrl}&ajax=set_thumbnail`, {
@@ -999,7 +1083,7 @@ function deleteImage(imageName) {
         return;
     }
 
-    const controllerUrl = '/admin/ajax?controller=videos';
+    const controllerUrl = '/admin/ajax?controller=media-manager&module=videos';
 
     fetch(`${controllerUrl}&ajax=delete_image`, {
         method: 'POST',
@@ -1048,7 +1132,7 @@ function updateImageCount(categoryId) {
 function saveImageOrder(orderData) {
     if (!currentCategory) return;
 
-    const controllerUrl = '/admin/ajax?controller=videos';
+    const controllerUrl = '/admin/ajax?controller=media-manager&module=videos';
 
     // 将对象数组转换为字符串数组（按顺序排列的图片名）
     const imageOrder = Array.isArray(orderData)
@@ -1083,7 +1167,7 @@ function saveOrder(order) {
     console.log('==== saveOrder被调用 ====');
     console.log('接收到的order:', order);
 
-    const controllerUrl = '/admin/ajax?controller=videos';
+    const controllerUrl = '/admin/ajax?controller=media-manager&module=videos';
 
     // order 是对象数组 [{id: 'xxx', position: 1}, ...]
     // 提取所有的 id 并组成逗号分隔的字符串
@@ -1157,7 +1241,7 @@ function saveCategory() {
         return;
     }
 
-    const controllerUrl = '/admin/ajax?controller=videos';
+    const controllerUrl = '/admin/ajax?controller=media-manager&module=videos';
 
     // 使用驼峰式参数名（与后端一致）
     fetch(`${controllerUrl}&ajax=save_category`, {
@@ -1253,7 +1337,7 @@ function deleteCategory() {
         return;
     }
 
-    const controllerUrl = '/admin/ajax?controller=videos';
+    const controllerUrl = '/admin/ajax?controller=media-manager&module=videos';
 
     fetch(`${controllerUrl}&ajax=delete_category`, {
         method: 'POST',
@@ -1333,7 +1417,7 @@ function handleThumbnailUpload(event) {
     AdminUtils.showMessage('正在上传缩略图...', 'info');
 
     // 上传到服务器
-    fetch('/admin/ajax?controller=videos&ajax=upload_thumbnail', {
+    fetch('/admin/ajax?controller=media-manager&module=videos&ajax=upload_thumbnail', {
         method: 'POST',
         body: formData
     })
@@ -1383,7 +1467,7 @@ function removeThumbnail() {
 
     if (!confirm('确定要移除当前缩略图吗？')) return;
 
-    fetch('/admin/ajax?controller=videos&ajax=remove_thumbnail', {
+    fetch('/admin/ajax?controller=media-manager&module=videos&ajax=delete_thumbnail', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ category: currentCategory })
@@ -1460,22 +1544,28 @@ function loadCategoryThumbnail(categoryId) {
     }
 }
 
-// 统计图片总数
-let totalImages = 0;
+// 计算总视频数
+let totalVideos = 0;
 <?php foreach ($categoryData as $cat): ?>
-totalImages += <?= (int) $cat['image_count'] ?>;
+    totalVideos += <?= (int) $cat['video_count'] ?>;
 <?php endforeach; ?>
-document.getElementById('total-images').textContent = totalImages;
 
 // 初始化 feather icons
-if (typeof feather !== 'undefined') {
-    feather.replace();
-}
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+            console.log('✓ Feather icons 初始化完成');
+        }
+    }, 100);
+});
 
-// 调试信息 - 版本 2.5.5
+// 调试信息 - 版本 v1.0.0
 console.log('Video Gallery 管理页面 v1.0.0 已加载');
-console.log('- ✓ 修复：拖拽排序数据格式问题');
-console.log('- ✓ 调试：添加详细日志输出');
+console.log('- ✓ 使用 media-manager 架构');
+console.log('- ✓ 使用 PHP 渲染分类列表');
+console.log('- ✓ 分类数:', <?= count($categoryData) ?>);
+console.log('- ✓ 总视频数:', totalVideos);
 console.log('AdminDragSort:', typeof AdminDragSort !== 'undefined' ? '✓ 已加载' : '✗ 未加载');
 console.log('AdminUtils:', typeof AdminUtils !== 'undefined' ? '✓ 已加载' : '✗ 未加载');
 </script>

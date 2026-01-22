@@ -1,0 +1,696 @@
+<?php
+/**
+ * 通用媒体管理控制器
+ * 为所有 -new 管理页面提供统一的 AJAX 接口
+ * 
+ * 支持的模块：sketchbook, galleries, drafts, videos, template 等
+ * 
+ * 目录结构要求：
+ * /assets/images/{module}/
+ *   ├── {category1}/          ← 左侧列表条目
+ *   │   ├── image1.jpg        ← 条目内的图片
+ *   │   ├── video1.mp4        ← 条目内的视频
+ *   │   └── thumbs/           ← 缩略图目录（可选）
+ *   │       ├── image1.jpg
+ *   │       └── icon-01.jpg   ← 100x100 列表图标
+ *   ├── {category2}/
+ *   └── {category3}/
+ */
+
+define('ADMIN_ACCESS', true);
+
+require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../../Utils/GalleryManager.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// 获取模块名称（从 URL 参数）
+$module = $_GET['module'] ?? '';
+$ajaxAction = $_GET['ajax'] ?? '';
+
+// 验证模块名称
+$allowedModules = ['sketchbook', 'galleries', 'drafts', 'videos', 'template', 'comics'];
+if (!in_array($module, $allowedModules)) {
+    respondJson(['success' => false, 'error' => '无效的模块名称'], 400);
+    exit;
+}
+
+// 设置路径
+$imagesRoot = __DIR__ . '/../../../public/assets/images/' . $module;
+$trashRoot = __DIR__ . '/../../../public/assets/images/trash/' . $module;
+$configPath = __DIR__ . '/../../storage/data/' . $module . '-sort.json';
+$imageOrderPath = __DIR__ . '/../../storage/data/image-orders.json';
+
+// 处理 AJAX 请求
+if ($ajaxAction) {
+    handleMediaAjax($ajaxAction, $module, $imagesRoot, $trashRoot, $configPath, $imageOrderPath);
+    exit;
+}
+
+/**
+ * 处理 AJAX 请求
+ */
+function handleMediaAjax(string $action, string $module, string $imagesRoot, string $trashRoot, string $configPath, string $imageOrderPath): void
+{
+    switch ($action) {
+        case 'categories':
+            // 获取分类列表（左侧条目）
+            outputCategories($module, $imagesRoot, $configPath);
+            break;
+
+        case 'thumbnails':
+        case 'videos':
+            // 获取分类下的图片/视频列表
+            outputThumbnails($module, $imagesRoot, $imageOrderPath, $configPath);
+            break;
+
+        case 'upload_images':
+        case 'upload_videos':
+            // 上传图片/视频到分类
+            uploadCategoryMedia($module, $imagesRoot);
+            break;
+
+        case 'create_category':
+            // 创建新分类
+            createCategory($module, $imagesRoot, $configPath);
+            break;
+
+        case 'delete_image':
+        case 'delete_video':
+            // 删除图片/视频
+            deleteCategoryMedia($module, $imagesRoot, $trashRoot, $imageOrderPath, $configPath);
+            break;
+
+        case 'reorder_images':
+        case 'reorder_videos':
+            // 重新排序图片/视频
+            reorderCategoryMedia($module, $imagesRoot, $imageOrderPath);
+            break;
+
+        case 'set_thumbnail':
+            // 设置分类封面
+            setAsThumbnail($module, $imagesRoot, $configPath);
+            break;
+
+        case 'upload_thumbnail':
+            // 上传自定义缩略图
+            uploadCustomThumbnail($module, $imagesRoot, $configPath);
+            break;
+
+        case 'delete_thumbnail':
+            // 删除自定义缩略图
+            deleteCustomThumbnail($module, $imagesRoot, $configPath);
+            break;
+
+        case 'save_category':
+            // 保存分类信息（包括重命名）
+            saveCategoryUpdate($module, $imagesRoot, $configPath);
+            break;
+
+        case 'delete_category':
+            // 删除分类
+            deleteCategoryAndFiles($module, $imagesRoot, $trashRoot, $configPath);
+            break;
+
+        case 'save_category_order':
+        case 'save_order':
+            // 保存分类排序
+            saveCategoryOrder($module, $configPath);
+            break;
+
+        case 'category_thumbnail':
+            // 获取分类缩略图信息
+            outputCategoryThumbnail($module, $imagesRoot, $configPath);
+            break;
+
+        case 'php_config':
+            // 获取 PHP 上传配置
+            outputPhpUploadConfig();
+            break;
+
+        case 'scan_directory':
+            // 扫描目录（视频模块用）
+            outputCategories($module, $imagesRoot, $configPath);
+            break;
+
+        case 'get_group_videos':
+            // 获取分组视频（兼容旧 API）
+            $groupId = $_GET['group_id'] ?? $_POST['group_id'] ?? '';
+            if ($groupId) {
+                $_GET['category'] = $groupId;
+                outputThumbnails($module, $imagesRoot, $imageOrderPath, $configPath);
+            } else {
+                respondJson(['success' => false, 'error' => 'Missing group_id'], 400);
+            }
+            break;
+
+        default:
+            respondJson(['success' => false, 'error' => '未知的操作'], 400);
+    }
+}
+
+/**
+ * 输出分类列表
+ */
+function outputCategories(string $module, string $imagesRoot, string $configPath): void
+{
+    header('Content-Type: application/json');
+
+    try {
+        if (!is_dir($imagesRoot)) {
+            respondJson(['success' => true, 'categories' => [], 'count' => 0]);
+            return;
+        }
+
+        // 读取配置
+        $config = loadModuleConfig($configPath);
+        
+        $dirs = scandir($imagesRoot);
+        $categories = [];
+
+        foreach ($dirs as $dir) {
+            if ($dir === '.' || $dir === '..') {
+                continue;
+            }
+
+            $fullPath = $imagesRoot . '/' . $dir;
+            if (!is_dir($fullPath)) {
+                continue;
+            }
+
+            // 统计图片/视频数量
+            $mediaFiles = glob($fullPath . '/*.{jpg,jpeg,png,gif,webp,mp4,mov,avi,mkv,webm}', GLOB_BRACE);
+            $imageCount = count($mediaFiles ?: []);
+
+            // 获取缩略图
+            $thumbnail = findCategoryThumbnail($module, $fullPath, $dir, $config);
+
+            $categories[] = [
+                'id' => $dir,
+                'name' => $dir,
+                'display_name' => $config['display_names'][$dir] ?? formatDisplayName($dir),
+                'description' => $config['descriptions'][$dir] ?? '',
+                'image_count' => $imageCount,
+                'thumbnail' => $thumbnail,
+                'position' => array_search($dir, $config['custom_order'] ?: []) !== false 
+                    ? array_search($dir, $config['custom_order']) + 1 
+                    : 999,
+            ];
+        }
+
+        // 按配置的顺序排序
+        if (!empty($config['custom_order'])) {
+            usort($categories, function($a, $b) use ($config) {
+                $posA = array_search($a['id'], $config['custom_order']);
+                $posB = array_search($b['id'], $config['custom_order']);
+                
+                if ($posA === false) $posA = 999;
+                if ($posB === false) $posB = 999;
+                
+                return $posA - $posB;
+            });
+        } else {
+            // 默认按名称排序
+            usort($categories, function($a, $b) {
+                return strcasecmp($a['name'], $b['name']);
+            });
+        }
+
+        respondJson([
+            'success' => true,
+            'categories' => $categories,
+            'count' => count($categories),
+            'groups' => count($categories), // 兼容视频模块
+            'data' => $categories, // 兼容视频模块
+        ]);
+
+    } catch (Throwable $e) {
+        respondJson([
+            'success' => false,
+            'error' => $e->getMessage(),
+            'categories' => [],
+        ], 400);
+    }
+}
+
+/**
+ * 输出分类下的图片/视频列表
+ */
+function outputThumbnails(string $module, string $imagesRoot, string $imageOrderPath, string $configPath): void
+{
+    header('Content-Type: application/json');
+
+    try {
+        $category = $_GET['category'] ?? '';
+        if ($category === '') {
+            throw new InvalidArgumentException('分类名称不能为空');
+        }
+
+        $category = basename($category);
+        $categoryDir = $imagesRoot . '/' . $category;
+
+        if (!is_dir($categoryDir)) {
+            throw new InvalidArgumentException('分类目录不存在');
+        }
+
+        // 读取配置
+        $config = loadModuleConfig($configPath);
+
+        // 扫描媒体文件
+        $supported = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'avi', 'mkv', 'webm'];
+        $allFiles = [];
+        $files = scandir($categoryDir);
+
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..' || $file === 'thumbs') {
+                continue;
+            }
+
+            $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            if (!in_array($extension, $supported, true)) {
+                continue;
+            }
+
+            $allFiles[] = $file;
+        }
+
+        // 按排序配置或自然排序
+        $orderedFiles = getCategoryMediaOrder($module, $category, $imageOrderPath, $allFiles);
+
+        // 获取当前缩略图
+        $currentThumbnail = $config['category_thumbnails'][$category] ?? null;
+        if ($currentThumbnail) {
+            $currentThumbnail = basename($currentThumbnail);
+        }
+
+        // 构建返回数据
+        $images = [];
+        foreach ($orderedFiles as $file) {
+            $filePath = $categoryDir . '/' . $file;
+            $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            $isVideo = in_array($extension, ['mp4', 'mov', 'avi', 'mkv', 'webm']);
+
+            // 查找缩略图
+            $thumbUrl = findMediaThumbnail($module, $categoryDir, $category, $file);
+
+            // 判断是否是当前封面
+            $isThumbnail = false;
+            if ($currentThumbnail) {
+                $isThumbnail = ($file === $currentThumbnail) || 
+                              (basename($thumbUrl) === $currentThumbnail);
+            }
+
+            $images[] = [
+                'id' => $file,
+                'name' => $file,
+                'path' => "/assets/images/{$module}/{$category}/{$file}",
+                'thumb_path' => $thumbUrl,
+                'thumb_name' => basename($thumbUrl),
+                'size' => filesize($filePath),
+                'modified' => filemtime($filePath),
+                'type' => $isVideo ? 'video' : 'image',
+                'is_thumbnail' => $isThumbnail,
+            ];
+        }
+
+        respondJson([
+            'success' => true,
+            'category' => $category,
+            'images' => $images,
+            'videos' => $images, // 兼容视频模块
+            'count' => count($images),
+            'current_thumbnail' => $currentThumbnail,
+        ]);
+
+    } catch (Throwable $e) {
+        respondJson([
+            'success' => false,
+            'error' => $e->getMessage(),
+            'images' => [],
+            'videos' => [],
+        ], 400);
+    }
+}
+
+/**
+ * 上传图片/视频到分类
+ */
+function uploadCategoryMedia(string $module, string $imagesRoot): void
+{
+    header('Content-Type: application/json');
+
+    try {
+        if (!isset($_POST['category'], $_FILES['images']) && !isset($_POST['category'], $_FILES['videos'])) {
+            throw new InvalidArgumentException('缺少必要参数');
+        }
+
+        $category = $_POST['category'];
+        $categoryDir = $imagesRoot . '/' . $category;
+        $thumbDir = $categoryDir . '/thumbs';
+
+        if (!is_dir($categoryDir)) {
+            throw new InvalidArgumentException('分类目录不存在');
+        }
+
+        if (!is_dir($thumbDir)) {
+            mkdir($thumbDir, 0755, true);
+        }
+
+        // 处理图片或视频上传
+        $files = $_FILES['images'] ?? $_FILES['videos'] ?? null;
+        if (!$files) {
+            throw new InvalidArgumentException('没有文件上传');
+        }
+
+        $fileCount = is_array($files['name']) ? count($files['name']) : 1;
+        $uploaded = 0;
+        $errors = [];
+
+        for ($i = 0; $i < $fileCount; $i++) {
+            $fileName = is_array($files['name']) ? $files['name'][$i] : $files['name'];
+            $tmpName = is_array($files['tmp_name']) ? $files['tmp_name'][$i] : $files['tmp_name'];
+            $fileError = is_array($files['error']) ? $files['error'][$i] : $files['error'];
+            $fileSize = is_array($files['size']) ? $files['size'][$i] : $files['size'];
+
+            if ($fileError !== UPLOAD_ERR_OK) {
+                $errors[] = "文件 {$fileName} 上传失败";
+                continue;
+            }
+
+            // 视频文件允许更大（200MB），图片50MB
+            $maxSize = (isset($_FILES['videos']) ? 200 : 50) * 1024 * 1024;
+            if ($fileSize > $maxSize) {
+                $maxMB = $maxSize / 1024 / 1024;
+                $errors[] = "文件 {$fileName} 太大（超过{$maxMB}MB）";
+                continue;
+            }
+
+            $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+            $safeName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($fileName, PATHINFO_FILENAME));
+            $finalName = $safeName . '.' . $extension;
+            
+            $counter = 1;
+            while (file_exists($categoryDir . '/' . $finalName)) {
+                $finalName = $safeName . '_' . $counter . '.' . $extension;
+                $counter++;
+            }
+
+            $targetPath = $categoryDir . '/' . $finalName;
+            if (!move_uploaded_file($tmpName, $targetPath)) {
+                $errors[] = "文件 {$fileName} 保存失败";
+                continue;
+            }
+
+            // 尝试生成缩略图
+            if (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                // 图片缩略图
+                generateImageThumbnail($targetPath, $thumbDir . '/' . $finalName, 200, 200);
+            } elseif (in_array($extension, ['mp4', 'mov', 'avi', 'mkv', 'webm'])) {
+                // 视频缩略图（需要 FFmpeg）
+                generateVideoThumbnail($targetPath, $thumbDir . '/' . pathinfo($finalName, PATHINFO_FILENAME) . '.jpg');
+            }
+
+            $uploaded++;
+        }
+
+        respondJson([
+            'success' => $uploaded > 0,
+            'uploaded' => $uploaded,
+            'errors' => $errors,
+            'message' => $uploaded > 0 ? "成功上传 {$uploaded} 个文件" : '上传失败'
+        ]);
+
+    } catch (Throwable $e) {
+        respondJson([
+            'success' => false,
+            'message' => $e->getMessage(),
+        ], 400);
+    }
+}
+
+/**
+ * 创建新分类
+ */
+function createCategory(string $module, string $imagesRoot, string $configPath): void
+{
+    header('Content-Type: application/json');
+
+    try {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $category = $input['category'] ?? '';
+        $displayName = $input['displayName'] ?? $category;
+
+        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $category)) {
+            throw new InvalidArgumentException('分类名称只能包含字母、数字、下划线和连字符');
+        }
+
+        $categoryDir = $imagesRoot . '/' . $category;
+        if (is_dir($categoryDir)) {
+            throw new InvalidArgumentException('分类已存在');
+        }
+
+        if (!mkdir($categoryDir, 0755, true)) {
+            throw new RuntimeException('创建分类目录失败');
+        }
+
+        $thumbDir = $categoryDir . '/thumbs';
+        if (!mkdir($thumbDir, 0755, true)) {
+            throw new RuntimeException('创建缩略图目录失败');
+        }
+
+        respondJson([
+            'success' => true,
+            'message' => '分类创建成功',
+            'category' => $category,
+        ]);
+
+    } catch (Throwable $e) {
+        respondJson([
+            'success' => false,
+            'message' => $e->getMessage(),
+        ], 400);
+    }
+}
+
+/**
+ * 删除图片/视频
+ */
+function deleteCategoryMedia(string $module, string $imagesRoot, string $trashRoot, string $imageOrderPath, string $configPath): void
+{
+    header('Content-Type: application/json');
+
+    try {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $category = $input['category'] ?? '';
+        $image = $input['image'] ?? ($input['video'] ?? '');
+
+        if (!$category || !$image) {
+            throw new InvalidArgumentException('参数不完整');
+        }
+
+        $imagePath = $imagesRoot . '/' . $category . '/' . $image;
+        if (!file_exists($imagePath)) {
+            throw new InvalidArgumentException('文件不存在');
+        }
+
+        // 移动到回收站
+        $trashCategoryDir = $trashRoot . '/' . $category;
+        if (!is_dir($trashCategoryDir)) {
+            mkdir($trashCategoryDir, 0755, true);
+        }
+        if (!is_dir($trashCategoryDir . '/thumbs')) {
+            mkdir($trashCategoryDir . '/thumbs', 0755, true);
+        }
+
+        $success = rename($imagePath, $trashCategoryDir . '/' . $image);
+
+        // 同时删除缩略图
+        $thumbPath = $imagesRoot . '/' . $category . '/thumbs/' . $image;
+        if (file_exists($thumbPath)) {
+            @rename($thumbPath, $trashCategoryDir . '/thumbs/' . $image);
+        }
+
+        // 视频可能有 .jpg 缩略图
+        $videoThumbPath = $imagesRoot . '/' . $category . '/thumbs/' . pathinfo($image, PATHINFO_FILENAME) . '.jpg';
+        if (file_exists($videoThumbPath)) {
+            @rename($videoThumbPath, $trashCategoryDir . '/thumbs/' . pathinfo($image, PATHINFO_FILENAME) . '.jpg');
+        }
+
+        // 从排序配置中移除
+        if ($success) {
+            removeFromMediaOrder($module, $category, $image, $imageOrderPath);
+        }
+
+        respondJson([
+            'success' => $success,
+            'message' => $success ? '文件已删除' : '删除失败'
+        ]);
+
+    } catch (Throwable $e) {
+        respondJson([
+            'success' => false,
+            'error' => $e->getMessage(),
+        ], 400);
+    }
+}
+
+/**
+ * 删除分类
+ */
+function deleteCategoryAndFiles(string $module, string $imagesRoot, string $trashRoot, string $configPath): void
+{
+    header('Content-Type: application/json');
+
+    try {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $category = $input['category'] ?? '';
+
+        if (!$category) {
+            throw new InvalidArgumentException('分类名称不能为空');
+        }
+
+        $categoryDir = $imagesRoot . '/' . $category;
+        if (!is_dir($categoryDir)) {
+            throw new InvalidArgumentException('分类不存在');
+        }
+
+        if (!is_dir($trashRoot)) {
+            mkdir($trashRoot, 0755, true);
+        }
+
+        $trashTarget = $trashRoot . '/' . $category . '_deleted_' . date('Y-m-d_H-i-s');
+        $success = rename($categoryDir, $trashTarget);
+
+        respondJson([
+            'success' => $success,
+            'message' => $success ? '分类已删除并移至回收站' : '删除失败'
+        ]);
+
+    } catch (Throwable $e) {
+        respondJson([
+            'success' => false,
+            'error' => $e->getMessage(),
+        ], 400);
+    }
+}
+
+/**
+ * 重新排序图片
+ */
+function reorderCategoryImages(string $module, string $imagesRoot, string $imageOrderPath): void
+{
+    // TODO: 实现图片排序逻辑
+    respondJson(['success' => true, 'message' => '排序功能待实现']);
+}
+
+/**
+ * 设置分类封面
+ */
+function setAsThumbnail(string $module, string $imagesRoot, string $configPath): void
+{
+    // TODO: 实现设置封面逻辑
+    respondJson(['success' => true, 'message' => '设置封面功能待实现']);
+}
+
+/**
+ * 保存分类信息
+ */
+function saveCategoryUpdate(string $module, string $imagesRoot, string $configPath): void
+{
+    // TODO: 实现保存分类信息逻辑
+    respondJson(['success' => true, 'message' => '保存功能待实现']);
+}
+
+/**
+ * 保存分类排序
+ */
+function saveCategoryOrder(string $module, string $configPath): void
+{
+    // TODO: 实现分类排序逻辑
+    respondJson(['success' => true, 'message' => '排序功能待实现']);
+}
+
+// ==================== 辅助函数 ====================
+
+/**
+ * 查找分类的缩略图
+ */
+function findCategoryThumbnail(string $module, string $categoryDir, string $categoryName): ?string
+{
+    $thumbDir = $categoryDir . '/thumbs';
+    
+    // 优先查找 icon-01.* 文件
+    if (is_dir($thumbDir)) {
+        $icons = glob($thumbDir . '/icon-01.*');
+        if (!empty($icons)) {
+            return "/assets/images/{$module}/{$categoryName}/thumbs/" . basename($icons[0]);
+        }
+    }
+
+    // 查找第一张图片
+    $images = glob($categoryDir . '/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
+    if (!empty($images)) {
+        sort($images);
+        $firstImage = basename($images[0]);
+        
+        // 检查是否有缩略图
+        if (is_dir($thumbDir) && file_exists($thumbDir . '/' . $firstImage)) {
+            return "/assets/images/{$module}/{$categoryName}/thumbs/{$firstImage}";
+        }
+        
+        return "/assets/images/{$module}/{$categoryName}/{$firstImage}";
+    }
+
+    return null;
+}
+
+/**
+ * 查找媒体文件的缩略图
+ */
+function findMediaThumbnail(string $module, string $categoryDir, string $categoryName, string $fileName): string
+{
+    $thumbDir = $categoryDir . '/thumbs';
+    
+    // 检查是否有对应的缩略图
+    if (is_dir($thumbDir) && file_exists($thumbDir . '/' . $fileName)) {
+        return "/assets/images/{$module}/{$categoryName}/thumbs/{$fileName}";
+    }
+
+    // 对于视频，查找同名的图片缩略图
+    $baseName = pathinfo($fileName, PATHINFO_FILENAME);
+    $thumbs = glob($thumbDir . '/' . $baseName . '.{jpg,jpeg,png}', GLOB_BRACE);
+    if (!empty($thumbs)) {
+        return "/assets/images/{$module}/{$categoryName}/thumbs/" . basename($thumbs[0]);
+    }
+
+    // 返回原文件
+    return "/assets/images/{$module}/{$categoryName}/{$fileName}";
+}
+
+/**
+ * 格式化显示名称
+ */
+function formatDisplayName(string $name): string
+{
+    // 移除数字前缀
+    $name = preg_replace('/^\d+-/', '', $name);
+    
+    // 替换连字符和下划线为空格
+    $name = str_replace(['-', '_'], ' ', $name);
+    
+    // 首字母大写
+    return ucwords($name);
+}
+
+/**
+ * 返回 JSON 响应
+ */
+function respondJson(array $payload, int $status = 200): void
+{
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}

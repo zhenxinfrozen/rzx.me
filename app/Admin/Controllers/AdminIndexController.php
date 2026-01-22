@@ -44,9 +44,9 @@ class AdminIndexController
             ],
             'galleries-new' => [
                 'view' => 'admin-galleries-new',
-                'controller' => 'galleries-manager',  // 使用 galleries-manager 控制器
-                'title' => 'Galleries 画廊管理 (新版)',
-                'subtitle' => '使用新组件的测试版本'
+                'controller' => null,  // 不使用控制器，直接加载 view
+                'title' => 'Galleries 画廊管理',
+                'subtitle' => '管理前台 Galleries 页面显示的画廊集合'
             ],
             'drafts-new' => [
                 'view' => 'admin-drafts-new',
@@ -74,9 +74,9 @@ class AdminIndexController
             ],
             'videos-new' => [
                 'view' => 'admin-videos-new',
-                'controller' => 'videos',  // 使用相同的控制器
+                'controller' => null,  // 使用前端AJAX加载，不需要控制器
                 'title' => 'Videos 管理 (新版)',
-                'subtitle' => '使用新组件的测试版本'
+                'subtitle' => '使用新组件和media-manager'
             ],
             'galleries-manager' => [
                 'view' => null,
