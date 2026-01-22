@@ -42,9 +42,9 @@ $totalComics = count($comics);
 ?>
 
 <!-- 引入新组件样式 -->
-<link rel="stylesheet" href="/assets/admin/css/admin-common.css?v=2.0">
-<link rel="stylesheet" href="/assets/admin/css/admin-three-column.css?v=2.0">
-<link rel="stylesheet" href="/assets/admin/css/admin-image-manager.css?v=2.0">
+<link rel="stylesheet" href="/assets/admin/css/admin-common.css?v=1.0.0">
+<link rel="stylesheet" href="/assets/admin/css/admin-three-column.css?v=1.0.0">
+<link rel="stylesheet" href="/assets/admin/css/admin-image-manager.css?v=1.0.0">
 
 <!-- 自定义样式（仅 Comics 特有部分） -->
 <style>
@@ -156,10 +156,10 @@ $totalComics = count($comics);
     <!-- 左栏：漫画列表 -->
     <div class="admin-left-panel">
         <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white position-relative">
+            <div class="card-header bg-success text-white position-relative">
                 <h6 class="card-title mb-0">
-                    <i data-feather="book-open" class="me-2"></i>
-                    漫画列表
+                    <i data-feather="list" class="me-2"></i>
+                    漫画顺序
                 </h6>
                 <button type="button" class="add-category-btn" onclick="showAddPanel()" title="添加新漫画">+</button>
             </div>
@@ -197,9 +197,12 @@ $totalComics = count($comics);
     <!-- 中栏：编辑区域 -->
     <div class="admin-center-panel">
         <div class="card shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0" id="edit-title">选择一个漫画开始编辑</h5>
-                <small class="admin-text-muted" id="edit-status">从左侧列表选择</small>
+            <div class="card-header bg-primary text-white">
+                <h6 class="card-title mb-0">
+                    <i data-feather="edit-3" class="me-2" id="edit-icon"></i>
+                    <span id="edit-title">编辑漫画</span>
+                </h6>
+                <small id="edit-status" class="opacity-75">选择左侧漫画进行编辑</small>
             </div>
             <div class="card-body">
 
@@ -393,8 +396,9 @@ $totalComics = count($comics);
 </div>
 
 <!-- 引入组件 JS -->
-<script src="/assets/admin/js/admin-utils.js?v=1.0"></script>
-<script src="/assets/admin/js/admin-drag-sort.js?v=1.0"></script>
+<script src="/assets/admin/js/admin-utils.js?v=2.4"></script>
+<script src="/assets/admin/js/admin-drag-sort.js?v=2.4"></script>
+<script src="/assets/admin/js/admin-image-manager.js?v=2.4"></script>
 
 <script>
 // ==================== 数据初始化 ====================

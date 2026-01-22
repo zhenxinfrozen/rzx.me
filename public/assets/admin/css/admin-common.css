@@ -251,7 +251,8 @@
 }
 
 .admin-badge-primary {
-    background: var(--admin-primary);
+    /* background: var(--admin-primary); */
+    background: var(--admin-gray-400);
     color: white;
 }
 

@@ -131,6 +131,12 @@ class AdminIndexController
                 'controller' => 'docs-handler',
                 'title' => '项目文档',
                 'subtitle' => '查看项目文档和开发指南'
+            ],
+            'template-new' => [
+                'view' => 'admin-template-new',
+                'controller' => null,
+                'title' => '📐 标准模板',
+                'subtitle' => 'New 架构页面开发模板 - 仅供参考'
             ]
         ];
 

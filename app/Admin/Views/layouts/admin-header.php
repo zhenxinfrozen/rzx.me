@@ -307,6 +307,12 @@ $current_user = [
                     <span>项目文档</span>
                 </a>
             </li>
+            <li class="menu-item <?= $current_page === 'template-new' ? 'active' : '' ?>">
+                <a href="/admin?page=template-new">
+                    <i data-feather="file-text"></i>
+                    <span>📐 标准模板</span>
+                </a>
+            </li>
             <li class="menu-item <?= $current_page === 'system-info' ? 'active' : '' ?>">
                 <a href="/dev/fontawesome-icons-preview.html">
                     <i class="fa-solid fa-book"></i>
