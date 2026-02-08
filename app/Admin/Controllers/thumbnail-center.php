@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['ajax'])) {
                 if ($testImageRel === '') $testImageRel = 'single-works/Animals/20230727_002747775_iOS.jpg'; // 默认图片
                 $sourcePath = realpath(__DIR__ . '/../../../public/assets/images/' . $testImageRel);
                 if (!$sourcePath || !file_exists($sourcePath)) throw new Exception('测试图片不存在：' . htmlspecialchars($testImageRel));
-                
+
                 $test_result = ThumbnailService::generate($sourcePath, $configId);
                 if ($test_result['success']) {
                     $message = '测试成功'; $message_type = 'success';
@@ -169,6 +169,6 @@ $all_configs = ThumbnailService::getAllConfigs();
 $galleries = []; // 初始为空，由JS加载
 
 // 包含布局和视图
-require_once __DIR__ . '/../Views/layouts/header.php';
-require_once __DIR__ . '/../Views/pages/thumbnail-center.php';
-require_once __DIR__ . '/../Views/layouts/footer.php';
+require_once __DIR__ . '/../Views/layouts/admin-header.php';
+require_once __DIR__ . '/../Views/pages/admin-thumbnail-center.php';
+require_once __DIR__ . '/../Views/layouts/admin-footer.php';

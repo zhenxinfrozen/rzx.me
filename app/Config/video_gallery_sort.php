@@ -1,11 +1,11 @@
 <?php
 /**
  * Video Gallery 分组排序配置
- * 自动生成于: 2026-01-21 01:52:37
+ * 由后台管理系统自动维护
  */
 
 return array (
-  'custom_order' => 
+  'custom_order' =>
   array (
     0 => 'animation-clips',
     1 => 'comic-anim',
@@ -14,13 +14,13 @@ return array (
     4 => 'test-ex',
     5 => 'test-videos',
   ),
-  'display_names' => 
+  'display_names' =>
   array (
     'comic-anim' => 'comic-anim',
     'storyboard' => '故事板',
     'animation-clips' => 'animation-clips',
   ),
-  'descriptions' => 
+  'descriptions' =>
   array (
     'comic-anim' => '',
     'storyboard' => '描述信息---test',

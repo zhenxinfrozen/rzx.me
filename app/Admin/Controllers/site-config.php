@@ -9,7 +9,7 @@ $page_title = '🛠️ 网站配置';
 $page_subtitle = '管理网站的基本设置和系统配置';
 $_GET['page'] = 'site-config';
 
-require_once __DIR__ . '/../Views/layouts/header.php';
+require_once __DIR__ . '/../Views/layouts/admin-header.php';
 
 // 处理配置更新
 $message = '';
@@ -23,7 +23,7 @@ $config_files = [
 
 if ($_POST) {
     $action = $_POST['action'] ?? '';
-    
+
     switch ($action) {
         case 'update_site_info':
             try {
@@ -36,7 +36,7 @@ if ($_POST) {
                 $message_type = 'error';
             }
             break;
-            
+
         case 'reset_config':
             $config_type = $_POST['config_type'] ?? '';
             if ($config_type && isset($config_files[$config_type])) {
@@ -44,7 +44,7 @@ if ($_POST) {
                     // 备份现有配置
                     $config_path = $config_files[$config_type];
                     $backup_path = $config_path . '.backup.' . date('Y-m-d-H-i-s');
-                    
+
                     if (file_exists($config_path)) {
                         copy($config_path, $backup_path);
                         $message = "配置已重置，备份文件: " . basename($backup_path);
@@ -102,32 +102,32 @@ $system_info = [
 <!-- 网站基本信息 -->
 <div class="content-card">
     <h3>🌐 网站基本信息</h3>
-    
+
     <form method="POST" style="margin-top: 20px;">
         <input type="hidden" name="action" value="update_site_info">
-        
+
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
             <div class="form-group">
                 <label for="site_title">网站标题</label>
                 <input type="text" id="site_title" name="site_title" class="form-control" value="RZX.ME - 个人作品展示">
             </div>
-            
+
             <div class="form-group">
                 <label for="site_subtitle">网站副标题</label>
                 <input type="text" id="site_subtitle" name="site_subtitle" class="form-control" value="创意作品 | 设计展示">
             </div>
-            
+
             <div class="form-group">
                 <label for="site_description">网站描述</label>
                 <textarea id="site_description" name="site_description" class="form-control" rows="3">RZX的个人作品展示网站，包含动画、漫画、设计作品等创意内容</textarea>
             </div>
-            
+
             <div class="form-group">
                 <label for="site_keywords">关键词</label>
                 <textarea id="site_keywords" name="site_keywords" class="form-control" rows="3">个人作品, 动画, 漫画, 设计, 创意, 艺术</textarea>
             </div>
         </div>
-        
+
         <div class="btn-group">
             <button type="submit" class="btn btn-primary">
                 <i data-feather="save"></i>
@@ -140,14 +140,14 @@ $system_info = [
 <!-- 配置文件管理 -->
 <div class="content-card">
     <h3>⚙️ 配置文件管理</h3>
-    
+
     <div style="margin-top: 20px;">
         <?php foreach ($current_configs as $name => $config): ?>
             <div style="border: 1px solid var(--border-light); border-radius: 8px; padding: 20px; margin-bottom: 15px;">
                 <h4 style="margin: 0 0 10px 0; color: var(--primary-color);">
                     <?= $name === 'page_config' ? '页面配置' : 'Single-Works 排序配置' ?>
                 </h4>
-                
+
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 15px;">
                     <div>
                         <strong>文件大小:</strong><br>
@@ -167,18 +167,18 @@ $system_info = [
                         </span>
                     </div>
                 </div>
-                
+
                 <div class="btn-group">
                     <button class="btn btn-outline" onclick="viewConfig('<?= htmlspecialchars($name) ?>')">
                         <i data-feather="eye"></i>
                         查看配置
                     </button>
-                    
+
                     <button class="btn btn-outline" onclick="editConfig('<?= htmlspecialchars($name) ?>')">
                         <i data-feather="edit"></i>
                         编辑配置
                     </button>
-                    
+
                     <form method="POST" style="display: inline;" onsubmit="return confirm('确定要重置此配置吗？')">
                         <input type="hidden" name="action" value="reset_config">
                         <input type="hidden" name="config_type" value="<?= htmlspecialchars($name) ?>">
@@ -196,7 +196,7 @@ $system_info = [
 <!-- 系统信息 -->
 <div class="content-card">
     <h3>🔧 系统环境信息</h3>
-    
+
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;">
         <?php foreach ($system_info as $key => $value): ?>
             <div style="border: 1px solid var(--border-light); border-radius: 8px; padding: 15px;">
@@ -214,23 +214,23 @@ $system_info = [
 <!-- 快速操作 -->
 <div class="content-card">
     <h3>⚡ 快速操作</h3>
-    
+
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
         <button class="btn btn-outline" onclick="clearCache()">
             <i data-feather="trash-2"></i>
             清理系统缓存
         </button>
-        
+
         <button class="btn btn-outline" onclick="optimizeDatabase()">
             <i data-feather="database"></i>
             优化数据库
         </button>
-        
+
         <button class="btn btn-outline" onclick="backupConfig()">
             <i data-feather="download"></i>
             备份配置文件
         </button>
-        
+
         <button class="btn btn-outline" onclick="checkUpdates()">
             <i data-feather="refresh-cw"></i>
             检查系统更新
@@ -244,31 +244,31 @@ function pageInit() {
     window.viewConfig = function(configName) {
         alert('查看配置功能：' + configName + '（待开发）');
     };
-    
+
     window.editConfig = function(configName) {
         alert('编辑配置功能：' + configName + '（待开发）');
     };
-    
+
     window.clearCache = function() {
         if (confirm('确定要清理系统缓存吗？')) {
             alert('清理缓存功能（待开发）');
         }
     };
-    
+
     window.optimizeDatabase = function() {
         if (confirm('确定要优化数据库吗？')) {
             alert('优化数据库功能（待开发）');
         }
     };
-    
+
     window.backupConfig = function() {
         alert('备份配置功能（待开发）');
     };
-    
+
     window.checkUpdates = function() {
         alert('检查更新功能（待开发）');
     };
 }
 </script>
 
-<?php require_once __DIR__ . '/../Views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../Views/layouts/admin-footer.php'; ?>

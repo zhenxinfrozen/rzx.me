@@ -149,12 +149,32 @@ function getCategoryThumbnailInfo($category, $dirPath)
     if (file_exists($configPath)) {
         $config = require $configPath;
         if (isset($config['category_thumbnails'][$category])) {
-            $result['custom_thumbnail'] = $config['category_thumbnails'][$category];
+            $configThumbnail = $config['category_thumbnails'][$category];
+
+            // 验证配置中的缩略图文件是否真实存在
+            // 如果文件不存在，尝试查找同名但不同扩展名的文件
+            $thumbnailFullPath = __DIR__ . '/../../../public' . $configThumbnail;
+            if (file_exists($thumbnailFullPath)) {
+                $result['custom_thumbnail'] = $configThumbnail;
+            } else {
+                // 尝试动态查找：从配置路径中提取文件名（不含扩展名）
+                $baseName = pathinfo($configThumbnail, PATHINFO_FILENAME);
+                $dirName = dirname($thumbnailFullPath);
+
+                // 使用 glob 查找任意扩展名的同名文件
+                $matches = glob($dirName . '/' . $baseName . '.*');
+                if (!empty($matches) && file_exists($matches[0])) {
+                    // 转换为相对URL路径
+                    $relativePath = str_replace(__DIR__ . '/../../../public', '', $matches[0]);
+                    $relativePath = str_replace('\\', '/', $relativePath);
+                    $result['custom_thumbnail'] = $relativePath;
+                }
+            }
         }
     }
 
     if (is_dir($dirPath)) {
-        $images = glob($dirPath . '/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
+        $images = glob($dirPath . '/.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
         if (!empty($images)) {
             sort($images);
             $firstImage = basename($images[0]);

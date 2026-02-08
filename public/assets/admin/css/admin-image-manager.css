@@ -1,0 +1,246 @@
+/**
+ * Admin 图片管理器样式
+ * 提供图片上传、排序、星标等功能的样式
+ *
+ * @version 1.0.0
+ * @date 2026-01-21
+ */
+
+/* ============================================
+   图片网格布局
+   ============================================ */
+.admin-image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--admin-spacing-sm, 8px);
+    padding: var(--admin-spacing-md, 12px);
+}
+
+/* ============================================
+   图片项
+   ============================================ */
+.admin-image-item {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: var(--admin-radius-md, 6px);
+    overflow: hidden;
+    border: 2px solid var(--admin-gray-300, #dee2e6);
+    transition: var(--admin-transition-fast, all 0.15s ease);
+    cursor: move;
+}
+
+.admin-image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.admin-image-item:hover {
+    border-color: var(--admin-primary, #007bff);
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.admin-image-item:hover .admin-image-actions {
+    opacity: 1;
+}
+
+/* 星标状态 */
+.admin-image-item.is-thumbnail {
+    border-color: var(--admin-success, #28a745);
+    box-shadow: 0 0 0 2px rgba(40,167,69,.25);
+}
+
+/* 拖拽状态 */
+.admin-image-item.dragging {
+    opacity: 0.5;
+    transform: scale(1.08) rotate(3deg);
+    z-index: 1000;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.admin-image-item.drag-over {
+    border-color: var(--admin-warning, #ffc107);
+    transform: scale(0.95);
+}
+
+/* ============================================
+   图片操作按钮
+   ============================================ */
+.admin-image-actions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--admin-spacing-xs, 4px);
+    opacity: 0;
+    transition: var(--admin-transition-fast, all 0.15s ease);
+}
+
+.admin-image-action-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--admin-transition-fast, all 0.15s ease);
+    color: var(--admin-gray-700, #495057);
+}
+
+.admin-image-action-btn:hover {
+    transform: scale(1.15);
+}
+
+.admin-image-action-btn.star {
+    color: var(--admin-gray-500, #adb5bd);
+}
+
+.admin-image-action-btn.star.active {
+    color: var(--admin-warning, #ffc107);
+}
+
+.admin-image-action-btn.delete {
+    color: var(--admin-danger, #dc3545);
+}
+
+/* 星标角标 */
+.admin-image-star-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    background: var(--admin-warning, #ffc107);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* ============================================
+   上传区域
+   ============================================ */
+.admin-upload-area {
+    border: 2px dashed var(--admin-gray-400, #ced4da);
+    border-radius: var(--admin-radius-lg, 8px);
+    padding: var(--admin-spacing-xl, 24px);
+    text-align: center;
+    background: var(--admin-gray-100, #f8f9fa);
+    transition: var(--admin-transition, all 0.3s ease);
+    cursor: pointer;
+}
+
+.admin-upload-area:hover {
+    border-color: var(--admin-primary, #007bff);
+    background: #e3f2fd;
+}
+
+.admin-upload-area.dragover {
+    border-color: var(--admin-success, #28a745);
+    background: #d4edda;
+    transform: scale(1.02);
+}
+
+.admin-upload-area i,
+.admin-upload-area svg {
+    font-size: 48px;
+    color: var(--admin-primary, #007bff);
+    margin-bottom: var(--admin-spacing-md, 12px);
+}
+
+.admin-upload-area p {
+    margin: 0;
+    color: var(--admin-gray-600, #6c757d);
+}
+
+/* ============================================
+   缩略图上传按钮（方形）
+   ============================================ */
+.admin-thumbnail-upload-btn {
+    width: 120px;
+    height: 120px;
+    border: 2px dashed var(--admin-primary, #007bff);
+    border-radius: var(--admin-radius-lg, 8px);
+    background: var(--admin-gray-100, #f8f9fa);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--admin-transition-fast, all 0.15s ease);
+    color: var(--admin-primary, #007bff);
+    font-size: 12px;
+    text-align: center;
+    gap: var(--admin-spacing-sm, 8px);
+}
+
+.admin-thumbnail-upload-btn:hover {
+    background: #e3f2fd;
+    border-color: #0056b3;
+    transform: scale(1.02);
+}
+
+.admin-thumbnail-upload-btn i,
+.admin-thumbnail-upload-btn svg {
+    font-size: 32px;
+}
+
+/* ============================================
+   进度条
+   ============================================ */
+.admin-upload-progress {
+    margin-top: var(--admin-spacing-md, 12px);
+}
+
+.admin-progress-bar {
+    height: 4px;
+    background: var(--admin-gray-200, #e9ecef);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.admin-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--admin-primary, #007bff), var(--admin-success, #28a745));
+    transition: width 0.3s ease;
+}
+
+/* ============================================
+   空状态
+   ============================================ */
+.admin-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--admin-spacing-xl, 24px);
+    color: var(--admin-gray-500, #adb5bd);
+    text-align: center;
+    min-height: 200px;
+}
+
+.admin-empty-state i,
+.admin-empty-state svg {
+    font-size: 64px;
+    opacity: 0.3;
+    margin-bottom: var(--admin-spacing-lg, 16px);
+}
+
+.admin-empty-state p {
+    margin: 0;
+    font-size: 14px;
+}

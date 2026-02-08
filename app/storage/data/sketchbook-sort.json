@@ -1,0 +1,22 @@
+{
+    "sort_method": "custom_order",
+    "custom_order": [
+        "NATURE",
+        "test-f3333",
+        "Continuity",
+        "MAYBE A STORY",
+        "FASHION",
+        "PEOPLE",
+        "THIS MY WORLD",
+        "boutter-test",
+        "qweqwe",
+        "test-sb-222",
+        "tetstst33"
+    ],
+    "prefix_settings": {
+        "remove_prefix": true,
+        "separator": "-"
+    },
+    "display_names": [],
+    "descriptions": []
+}

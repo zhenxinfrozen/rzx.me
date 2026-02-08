@@ -9,7 +9,7 @@ $page_title = '🗑️ 回收站';
 $page_subtitle = '管理已删除的分类，提供恢复和永久删除功能';
 $_GET['page'] = 'trash';
 
-require_once __DIR__ . '/../Views/layouts/header.php';
+require_once __DIR__ . '/../Views/layouts/admin-header.php';
 
 // 处理操作
 $message = '';
@@ -19,14 +19,14 @@ if ($_POST) {
     $action = $_POST['action'] ?? '';
     $trashDir = __DIR__ . '/../../../public/assets/images/trash';
     $singleWorksDir = __DIR__ . '/../../../public/assets/images/single-works';
-    
+
     switch ($action) {
         case 'restore':
             try {
                 $trashItemDir = $trashDir . '/' . $_POST['trash_dir'];
                 $category = $_POST['category'];
                 $targetDir = $singleWorksDir . '/' . $category;
-                
+
                 if (is_dir($trashItemDir)) {
                     if (is_dir($targetDir)) {
                         $message = "分类 '$category' 已存在，无法恢复";
@@ -49,7 +49,7 @@ if ($_POST) {
                 $message_type = 'error';
             }
             break;
-            
+
         case 'permanent_delete':
             try {
                 $trashItemDir = $trashDir . '/' . $_POST['trash_dir'];
@@ -59,7 +59,7 @@ if ($_POST) {
                         new RecursiveDirectoryIterator($trashItemDir),
                         RecursiveIteratorIterator::CHILD_FIRST
                     );
-                    
+
                     foreach ($iterator as $file) {
                         if ($file->isDir()) {
                             rmdir($file->getRealPath());
@@ -68,7 +68,7 @@ if ($_POST) {
                         }
                     }
                     rmdir($trashItemDir);
-                    
+
                     $message = "项目已永久删除";
                     $message_type = 'success';
                 } else {
@@ -80,23 +80,23 @@ if ($_POST) {
                 $message_type = 'error';
             }
             break;
-            
+
         case 'empty_trash':
             try {
                 if (is_dir($trashDir)) {
                     $deleted_count = 0;
                     $dirs = scandir($trashDir);
-                    
+
                     foreach ($dirs as $dir) {
                         if ($dir === '.' || $dir === '..') continue;
                         $dirPath = $trashDir . '/' . $dir;
-                        
+
                         if (is_dir($dirPath)) {
                             $iterator = new RecursiveIteratorIterator(
                                 new RecursiveDirectoryIterator($dirPath),
                                 RecursiveIteratorIterator::CHILD_FIRST
                             );
-                            
+
                             foreach ($iterator as $file) {
                                 if ($file->isDir()) {
                                     rmdir($file->getRealPath());
@@ -108,7 +108,7 @@ if ($_POST) {
                             $deleted_count++;
                         }
                     }
-                    
+
                     $message = "已清空回收站，删除了 $deleted_count 个项目";
                     $message_type = 'success';
                 } else {
@@ -143,10 +143,10 @@ if (is_dir($trashDir)) {
                 $time = 'Unknown';
                 $category = $dir;
             }
-            
+
             $itemPath = $trashDir . '/' . $dir;
             $fileCount = count(glob($itemPath . '/*'));
-            
+
             $trashItems[] = [
                 'dir' => $dir,
                 'category' => $category,
@@ -195,7 +195,7 @@ function getDirSize($dir) {
 <!-- 回收站统计 -->
 <div class="content-card">
     <h3>📊 回收站统计</h3>
-    
+
     <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
         <div class="stat-card">
             <div class="stat-icon">
@@ -206,7 +206,7 @@ function getDirSize($dir) {
                 <p>回收站项目</p>
             </div>
         </div>
-        
+
         <div class="stat-card">
             <div class="stat-icon">
                 <i data-feather="file"></i>
@@ -216,7 +216,7 @@ function getDirSize($dir) {
                 <p>文件总数</p>
             </div>
         </div>
-        
+
         <div class="stat-card">
             <div class="stat-icon">
                 <i data-feather="hard-drive"></i>
@@ -245,7 +245,7 @@ function getDirSize($dir) {
             </form>
         <?php endif; ?>
     </div>
-    
+
     <?php if (empty($trashItems)): ?>
         <div class="alert alert-info">
             <i data-feather="info"></i>
@@ -260,7 +260,7 @@ function getDirSize($dir) {
                             <h4 style="color: var(--primary-color); margin: 0 0 10px 0;">
                                 📁 <?= htmlspecialchars($item['category']) ?>
                             </h4>
-                            
+
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 15px;">
                                 <div>
                                     <small style="color: var(--text-secondary);">删除时间</small><br>
@@ -277,10 +277,10 @@ function getDirSize($dir) {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div style="display: flex; gap: 10px; margin-left: 20px;">
                             <!-- 恢复按钮 -->
-                            <form method="POST" style="display: inline;" 
+                            <form method="POST" style="display: inline;"
                                   onsubmit="return confirm('确定要恢复分类 \'<?= htmlspecialchars($item['category']) ?>\' 吗？')">
                                 <input type="hidden" name="action" value="restore">
                                 <input type="hidden" name="trash_dir" value="<?= htmlspecialchars($item['dir']) ?>">
@@ -290,9 +290,9 @@ function getDirSize($dir) {
                                     恢复
                                 </button>
                             </form>
-                            
+
                             <!-- 永久删除按钮 -->
-                            <form method="POST" style="display: inline;" 
+                            <form method="POST" style="display: inline;"
                                   onsubmit="return confirm('确定要永久删除分类 \'<?= htmlspecialchars($item['category']) ?>\' 吗？\n\n此操作不可恢复！')">
                                 <input type="hidden" name="action" value="permanent_delete">
                                 <input type="hidden" name="trash_dir" value="<?= htmlspecialchars($item['dir']) ?>">
@@ -312,7 +312,7 @@ function getDirSize($dir) {
 <!-- 回收站管理 -->
 <div class="content-card">
     <h3>⚙️ 回收站设置</h3>
-    
+
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
         <div>
             <h4>自动清理设置</h4>
@@ -322,20 +322,20 @@ function getDirSize($dir) {
                     启用自动清理（30天后自动删除）
                 </label>
             </div>
-            
+
             <div class="form-group">
                 <label for="cleanup_days">保留天数</label>
                 <input type="number" id="cleanup_days" class="form-control" value="30" min="1" max="365" disabled>
             </div>
         </div>
-        
+
         <div>
             <h4>存储限制</h4>
             <div class="form-group">
                 <label for="max_size">最大回收站大小 (MB)</label>
                 <input type="number" id="max_size" class="form-control" value="1000" min="100" max="10000">
             </div>
-            
+
             <div class="form-group">
                 <label>
                     <input type="checkbox" id="compress_items">
@@ -344,13 +344,13 @@ function getDirSize($dir) {
             </div>
         </div>
     </div>
-    
+
     <div class="btn-group" style="margin-top: 20px;">
         <button class="btn btn-primary" onclick="saveTrashSettings()">
             <i data-feather="save"></i>
             保存设置
         </button>
-        
+
         <button class="btn btn-outline" onclick="resetTrashSettings()">
             <i data-feather="rotate-ccw"></i>
             恢复默认
@@ -365,7 +365,7 @@ function pageInit() {
         const enabled = document.getElementById('auto_cleanup').checked;
         document.getElementById('cleanup_days').disabled = !enabled;
     };
-    
+
     window.saveTrashSettings = function() {
         const settings = {
             auto_cleanup: document.getElementById('auto_cleanup').checked,
@@ -373,11 +373,11 @@ function pageInit() {
             max_size: document.getElementById('max_size').value,
             compress_items: document.getElementById('compress_items').checked
         };
-        
+
         console.log('保存回收站设置:', settings);
         alert('回收站设置已保存（演示功能）');
     };
-    
+
     window.resetTrashSettings = function() {
         if (confirm('确定要恢复默认设置吗？')) {
             document.getElementById('auto_cleanup').checked = false;
@@ -391,4 +391,4 @@ function pageInit() {
 }
 </script>
 
-<?php require_once __DIR__ . '/../Views/layouts/footer.php'; ?>
+<?php require_once __DIR__ . '/../Views/layouts/admin-footer.php'; ?>

@@ -64,10 +64,12 @@ if ($route && $router->isAdminAjaxRoute($route)) {
         // 允许的控制器列表
         $allowedControllers = [
             'sketchbook' => __DIR__ . '/../app/Admin/Controllers/sketchbook.php',
-            'single-works' => __DIR__ . '/../app/Admin/Controllers/single-works.php',
-            'video-gallery' => __DIR__ . '/../app/Admin/Controllers/video-gallery.php',
+            'drafts' => __DIR__ . '/../app/Admin/Controllers/drafts.php',
+            'videos' => __DIR__ . '/../app/Admin/Controllers/videos.php',
             'comics' => __DIR__ . '/../app/Admin/Controllers/comics.php',
             'thumbnail-center' => __DIR__ . '/../app/Admin/Controllers/thumbnail-center.php',
+            'media-manager' => __DIR__ . '/../app/Admin/Controllers/media-manager.php',
+            'galleries' => __DIR__ . '/../app/Admin/Controllers/galleries.php',
         ];
 
         // 验证控制器

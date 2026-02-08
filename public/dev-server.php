@@ -7,13 +7,15 @@
 
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestPath = parse_url($requestUri, PHP_URL_PATH);
+// 解码 URL，处理空格等特殊字符
+$requestPath = rawurldecode($requestPath);
 $filePath = __DIR__ . $requestPath;
 
 // 静态文件直接访问的目录
 $allowDirectAccess = [
     '/dev/',
     '/admin/assets/',
-    '/admin/css/', 
+    '/admin/css/',
     '/admin/js/',
     '/admin/images/',
     '/assets/'

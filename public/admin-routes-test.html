@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理页面路由测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        h2 { color: #555; margin-top: 30px; }
+        .route-group { margin-bottom: 30px; }
+        .route-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 4px solid #28a745;
+        }
+        .route-item.new { border-left-color: #007bff; }
+        .route-item.pending { border-left-color: #ffc107; }
+        .route-name { flex: 1; font-weight: 600; color: #333; }
+        .route-btn {
+            padding: 8px 16px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .route-btn:hover { background: #0056b3; transform: translateY(-1px); }
+        .status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-right: 12px;
+        }
+        .status.completed { background: #d4edda; color: #155724; }
+        .status.new { background: #cce5ff; color: #004085; }
+        .status.pending { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ 后台管理页面路由测试</h1>
+        <p>点击下方链接测试各个页面的路由配置是否正确。</p>
+
+        <div class="route-group">
+            <h2>✅ 已完成页面</h2>
+
+            <div class="route-item">
+                <span class="status completed">v2.5.5</span>
+                <span class="route-name">Sketchbook 管理 (新版)</span>
+                <a href="http://localhost:8888/admin?page=sketchbook-new" class="route-btn" target="_blank">访问页面</a>
+            </div>
+
+            <div class="route-item">
+                <span class="status completed">v2.0</span>
+                <span class="route-name">Comics 管理 (新版)</span>
+                <a href="http://localhost:8888/admin?page=comics-new" class="route-btn" target="_blank">访问页面</a>
+            </div>
+        </div>
+
+        <div class="route-group">
+            <h2>🆕 新创建页面（初始结构）</h2>
+
+            <div class="route-item new">
+                <span class="status new">v1.0.0</span>
+                <span class="route-name">Single-Works 管理 (新版)</span>
+                <a href="http://localhost:8888/admin?page=galleries-new" class="route-btn" target="_blank">访问页面</a>
+            </div>
+
+            <div class="route-item new">
+                <span class="status new">v1.0.0</span>
+                <span class="route-name">Video Gallery 管理 (新版)</span>
+                <a href="http://localhost:8888/admin?page=videos-new" class="route-btn" target="_blank">访问页面</a>
+            </div>
+        </div>
+
+        <div class="route-group">
+            <h2>⏳ 待实现页面（文件已创建，未配置路由）</h2>
+
+            <div class="route-item pending">
+                <span class="status pending">待配置</span>
+                <span class="route-name">Dashboard 管理 (新版)</span>
+                <span style="color: #999; font-size: 12px;">路由未配置</span>
+            </div>
+
+            <div class="route-item pending">
+                <span class="status pending">待配置</span>
+                <span class="route-name">缩略图中心 (新版)</span>
+                <span style="color: #999; font-size: 12px;">路由未配置</span>
+            </div>
+
+            <div class="route-item pending">
+                <span class="status pending">待配置</span>
+                <span class="route-name">系统工具 (新版)</span>
+                <span style="color: #999; font-size: 12px;">路由未配置</span>
+            </div>
+
+            <div class="route-item pending">
+                <span class="status pending">待配置</span>
+                <span class="route-name">文档中心 (新版)</span>
+                <span style="color: #999; font-size: 12px;">路由未配置</span>
+            </div>
+        </div>
+
+        <div class="route-group">
+            <h2>📚 旧版本页面（参考）</h2>
+
+            <div class="route-item">
+                <span class="route-name">Sketchbook 管理 (旧版)</span>
+                <a href="http://localhost:8888/admin?page=sketchbook" class="route-btn" target="_blank">访问页面</a>
+            </div>
+
+            <div class="route-item">
+                <span class="route-name">Comics 管理 (旧版)</span>
+                <a href="http://localhost:8888/admin?page=comics" class="route-btn" target="_blank">访问页面</a>
+            </div>
+
+            <div class="route-item">
+                <span class="route-name">Single-Works 管理 (旧版)</span>
+                <a href="http://localhost:8888/admin?page=single-works" class="route-btn" target="_blank">访问页面</a>
+            </div>
+
+            <div class="route-item">
+                <span class="route-name">Video Gallery 管理 (旧版)</span>
+                <a href="http://localhost:8888/admin?page=video-gallery" class="route-btn" target="_blank">访问页面</a>
+            </div>
+
+            <div class="route-item">
+                <span class="route-name">Dashboard (旧版)</span>
+                <a href="http://localhost:8888/admin?page=dashboard" class="route-btn" target="_blank">访问页面</a>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; padding: 20px; background: #e3f2fd; border-radius: 6px;">
+            <h3 style="margin-top: 0; color: #0d47a1;">🔧 故障排查</h3>
+            <p><strong>如果页面跳转到首页，可能的原因：</strong></p>
+            <ul>
+                <li>路由未在 AdminIndexController.php 中配置</li>
+                <li>视图文件路径错误或文件不存在</li>
+                <li>控制器文件加载失败</li>
+                <li>bootstrap.php 未正确加载</li>
+                <li>数据加载路径错误</li>
+            </ul>
+            <p><strong>已修复的问题：</strong></p>
+            <ul>
+                <li>✅ galleries-new 控制器路径修复</li>
+                <li>✅ videos-new 页面变量修复</li>
+                <li>✅ AdminIndexController 添加新页面的 bootstrap 支持</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

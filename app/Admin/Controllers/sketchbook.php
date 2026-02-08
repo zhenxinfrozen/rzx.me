@@ -14,10 +14,10 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $ajaxAction = $_GET['ajax'] ?? ($_POST['ajax_action'] ?? null);
-$configPath = __DIR__ . '/../../Config/sketchbook_sort.php';
+$configPath = __DIR__ . '/../../storage/data/sketchbook-sort.json';
 $imagesRoot = __DIR__ . '/../../../public/assets/images/sketchbook';
 $trashRoot = __DIR__ . '/../../../public/assets/images/trash/sketchbook';
-$imageOrderPath = __DIR__ . '/../../storage/config/image-orders.json';
+$imageOrderPath = __DIR__ . '/../../storage/data/image-orders.json';
 
 $galleryManager = new GalleryManager();
 
@@ -152,6 +152,10 @@ function handleSketchbookAjax(string $action, string $configPath, string $images
             saveCategoryUpdate($configPath, $imagesRoot);
             return;
 
+        case 'save_category_order':
+            saveCategoryOrder($configPath);
+            return;
+
         case 'delete_category':
             deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot);
             return;
@@ -165,7 +169,8 @@ function handleSketchbookAjax(string $action, string $configPath, string $images
 function loadSketchbookConfig(string $configPath): array
 {
     if (file_exists($configPath)) {
-        $config = include $configPath;
+        $json = file_get_contents($configPath);
+        $config = json_decode($json, true);
         if (is_array($config)) {
             return $config;
         }
@@ -182,8 +187,8 @@ function loadSketchbookConfig(string $configPath): array
 
 function saveSketchbookConfig(string $configPath, array $config): bool
 {
-    $content = "<?php\n/**\n * Sketchbook 分组排序配置\n * 自动生成于: " . date('Y-m-d H:i:s') . "\n */\n\nreturn " . var_export($config, true) . ";\n";
-    return (bool) file_put_contents($configPath, $content, LOCK_EX);
+    $json = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    return (bool) file_put_contents($configPath, $json, LOCK_EX);
 }
 
 function reorderCategories(array $categories, array $customOrder): array
@@ -267,7 +272,7 @@ function outputThumbnails(string $imagesRoot, string $imageOrderPath): void
 
         // 使用新的排序逻辑获取有序的图片列表
         $orderedFiles = getCategoryImageOrder($category, $imageOrderPath, $allImageFiles);
-        
+
         $images = [];
         foreach ($orderedFiles as $file) {
             $filePath = $categoryDir . '/' . $file;
@@ -443,16 +448,16 @@ function createCategory(string $configPath, string $imagesRoot): void
                     $tmpName = $_FILES['images']['tmp_name'][$i];
                     $originalName = $_FILES['images']['name'][$i];
                     $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-                    
+
                     // 验证文件类型
                     if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
                         continue; // 跳过不支持的文件类型
                     }
-                    
+
                     // 生成安全的文件名
                     $safeFileName = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
                     $fileName = $safeFileName . '.' . $extension;
-                    
+
                     // 确保文件名唯一
                     $counter = 1;
                     $finalFileName = $fileName;
@@ -460,11 +465,11 @@ function createCategory(string $configPath, string $imagesRoot): void
                         $finalFileName = $safeFileName . '_' . $counter . '.' . $extension;
                         $counter++;
                     }
-                    
+
                     $targetPath = $categoryDir . '/' . $finalFileName;
                     if (move_uploaded_file($tmpName, $targetPath)) {
                         $uploadedFiles[] = $finalFileName;
-                        
+
                         // 生成缩略图
                         $imageInfo = getimagesize($targetPath);
                         if ($imageInfo && !generateThumbnail($targetPath, $thumbDir . '/' . $finalFileName, 200, 200, $imageInfo[2])) {
@@ -734,16 +739,36 @@ function getCategoryThumbnailInfo($category, $dirPath)
         'custom_thumbnail' => null,
         'first_image_thumb' => null
     ];
-    
+
     // 检查是否有自定义缩略图（在config中保存的）
     $configPath = __DIR__ . '/../../Config/sketchbook_config.php';
     if (file_exists($configPath)) {
         $config = require $configPath;
         if (isset($config['category_thumbnails'][$category])) {
-            $result['custom_thumbnail'] = $config['category_thumbnails'][$category];
+            $configThumbnail = $config['category_thumbnails'][$category];
+
+            // 验证配置中的缩略图文件是否真实存在
+            // 如果文件不存在，尝试查找同名但不同扩展名的文件
+            $thumbnailFullPath = __DIR__ . '/../../../public' . $configThumbnail;
+            if (file_exists($thumbnailFullPath)) {
+                $result['custom_thumbnail'] = $configThumbnail;
+            } else {
+                // 尝试动态查找：从配置路径中提取文件名（不含扩展名）
+                $baseName = pathinfo($configThumbnail, PATHINFO_FILENAME);
+                $dirName = dirname($thumbnailFullPath);
+
+                // 使用 glob 查找任意扩展名的同名文件
+                $matches = glob($dirName . '/' . $baseName . '.*');
+                if (!empty($matches) && file_exists($matches[0])) {
+                    // 转换为相对URL路径
+                    $relativePath = str_replace(__DIR__ . '/../../../public', '', $matches[0]);
+                    $relativePath = str_replace('\\', '/', $relativePath);
+                    $result['custom_thumbnail'] = $relativePath;
+                }
+            }
         }
     }
-    
+
     // 获取第一张图片的缩略图路径
     if (is_dir($dirPath)) {
         $images = glob($dirPath . '/*.{jpg,jpeg,png,gif,webp}', GLOB_BRACE);
@@ -761,7 +786,7 @@ function getCategoryThumbnailInfo($category, $dirPath)
             }
         }
     }
-    
+
     return $result;
 }
 
@@ -775,10 +800,10 @@ function outputCategoryThumbnail($imagesRoot)
         respondJson(['success' => false, 'error' => '分组名称不能为空'], 400);
         return;
     }
-    
+
     $dirPath = $imagesRoot . '/' . $category;
     $thumbnailInfo = getCategoryThumbnailInfo($category, $dirPath);
-    
+
     respondJson([
         'success' => true,
         'thumbnail' => $thumbnailInfo['custom_thumbnail'],
@@ -796,12 +821,17 @@ function setAsThumbnail($imagesRoot, $configPath)
     $image = $input['image'] ?? '';
     $thumbName = $input['thumb'] ?? ($input['thumb_name'] ?? '');
 
+    // 添加调试日志
+    error_log('setAsThumbnail called: ' . json_encode(['category' => $category, 'image' => $image, 'thumb' => $thumbName]));
+
     if (!$category || ($image === '' && $thumbName === '')) {
         respondJson(['success' => false, 'error' => '参数不完整'], 400);
         return;
     }
 
     $categoryDir = rtrim($imagesRoot, '/\\') . '/' . $category;
+
+    // 如果没有提供thumbName，尝试查找
     if ($thumbName === '' && $image !== '') {
         $thumbName = ensureSketchbookThumbnail($categoryDir, $image) ?? $image;
     }
@@ -811,9 +841,21 @@ function setAsThumbnail($imagesRoot, $configPath)
         return;
     }
 
+    // 检查缩略图文件是否存在
     $thumbPath = $categoryDir . '/thumbs/' . $thumbName;
+
+    // 如果原始thumbName不存在，尝试使用findExistingThumbnail查找
     if (!file_exists($thumbPath)) {
-        respondJson(['success' => false, 'error' => '缩略图文件不存在，请先生成'], 400);
+        $foundThumb = findExistingThumbnail($categoryDir, $image);
+        if ($foundThumb) {
+            $thumbName = $foundThumb;
+            $thumbPath = $categoryDir . '/thumbs/' . $thumbName;
+        }
+    }
+
+    if (!file_exists($thumbPath)) {
+        error_log("Thumbnail not found: $thumbPath");
+        respondJson(['success' => false, 'error' => "缩略图文件不存在: $thumbName，请先生成"], 400);
         return;
     }
 
@@ -834,6 +876,7 @@ function setAsThumbnail($imagesRoot, $configPath)
     // 保存配置
     $configContent = "<?php\nreturn " . var_export($config, true) . ";\n";
     if (file_put_contents($configFile, $configContent)) {
+        error_log("Thumbnail set successfully: $thumbnailUrl");
         respondJson([
             'success' => true,
             'thumbnail_url' => $thumbnailUrl,
@@ -954,19 +997,19 @@ function deleteThumbnail($imagesRoot, $configPath)
 {
     $input = json_decode(file_get_contents('php://input'), true);
     $category = $input['category'] ?? '';
-    
+
     if (!$category) {
         respondJson(['success' => false, 'error' => '分组名称不能为空'], 400);
         return;
     }
-    
+
     // 从配置文件中删除
     $configFile = __DIR__ . '/../../Config/sketchbook_config.php';
     $config = [];
     if (file_exists($configFile)) {
         $config = require $configFile;
     }
-    
+
     $removedThumbnail = null;
     if (isset($config['category_thumbnails'][$category])) {
         $removedThumbnail = $config['category_thumbnails'][$category];
@@ -984,7 +1027,7 @@ function deleteThumbnail($imagesRoot, $configPath)
             @unlink($fullPath);
         }
     }
-    
+
     // 获取第一张图片作为新的缩略图
     $dirPath = $imagesRoot . '/' . $category;
     $newThumbnailUrl = null;
@@ -998,7 +1041,7 @@ function deleteThumbnail($imagesRoot, $configPath)
             }
         }
     }
-    
+
     respondJson([
         'success' => true,
         'new_thumbnail_url' => $newThumbnailUrl
@@ -1013,22 +1056,22 @@ function reorderCategoryImages($imagesRoot, $imageOrderPath)
     $input = json_decode(file_get_contents('php://input'), true);
     $category = $input['category'] ?? '';
     $order = $input['order'] ?? [];
-    
+
     if (!$category || empty($order)) {
         respondJson(['success' => false, 'error' => '参数不完整'], 400);
         return;
     }
-    
+
     $dirPath = $imagesRoot . '/' . $category;
     if (!is_dir($dirPath)) {
         respondJson(['success' => false, 'error' => '分组不存在'], 404);
         return;
     }
-    
+
     try {
         // 读取或创建图片排序配置
         $orderConfig = loadImageOrderConfig($imageOrderPath);
-        
+
         // 验证所有文件都存在
         foreach ($order as $filename) {
             if (!file_exists($dirPath . '/' . $filename)) {
@@ -1036,13 +1079,13 @@ function reorderCategoryImages($imagesRoot, $imageOrderPath)
                 return;
             }
         }
-        
+
         // 保存新的排序
         $orderConfig['categories'][$category] = $order;
         saveImageOrderConfig($imageOrderPath, $orderConfig);
-        
+
         respondJson(['success' => true, 'message' => '排序保存成功']);
-        
+
     } catch (Exception $e) {
         respondJson(['success' => false, 'error' => '排序失败: ' . $e->getMessage()], 500);
     }
@@ -1056,20 +1099,20 @@ function deleteCategoryImage($imagesRoot, $trashRoot, $imageOrderPath)
     $input = json_decode(file_get_contents('php://input'), true);
     $category = $input['category'] ?? '';
     $image = $input['image'] ?? '';
-    
+
     if (!$category || !$image) {
         respondJson(['success' => false, 'error' => '参数不完整'], 400);
         return;
     }
-    
+
     $imagePath = $imagesRoot . '/' . $category . '/' . $image;
     $thumbPath = $imagesRoot . '/' . $category . '/thumbs/' . $image;
-    
+
     if (!file_exists($imagePath)) {
         respondJson(['success' => false, 'error' => '图片不存在'], 404);
         return;
     }
-    
+
     // 移动到回收站
     $trashCategoryDir = $trashRoot . '/' . $category;
     if (!is_dir($trashCategoryDir)) {
@@ -1078,12 +1121,12 @@ function deleteCategoryImage($imagesRoot, $trashRoot, $imageOrderPath)
     if (!is_dir($trashCategoryDir . '/thumbs')) {
         mkdir($trashCategoryDir . '/thumbs', 0755, true);
     }
-    
+
     $success = rename($imagePath, $trashCategoryDir . '/' . $image);
     if (file_exists($thumbPath)) {
         rename($thumbPath, $trashCategoryDir . '/thumbs/' . $image);
     }
-    
+
     if ($success) {
         // 从排序配置中移除已删除的图片
         $orderConfig = loadImageOrderConfig($imageOrderPath);
@@ -1096,7 +1139,7 @@ function deleteCategoryImage($imagesRoot, $trashRoot, $imageOrderPath)
             );
             saveImageOrderConfig($imageOrderPath, $orderConfig);
         }
-        
+
         respondJson(['success' => true]);
     } else {
         respondJson(['success' => false, 'error' => '删除失败'], 500);
@@ -1112,48 +1155,156 @@ function saveCategoryUpdate($configPath, $imagesRoot)
     if (!$input) {
         parse_str(file_get_contents('php://input'), $input);
     }
-    
+
     $category = $input['category'] ?? '';
     $displayName = $input['displayName'] ?? '';
     $description = $input['description'] ?? '';
     $categoryOrder = $input['category_order'] ?? '';
-    
+    $newFolderName = $input['newFolderName'] ?? null;
+
     if (!$category) {
         respondJson(['success' => false, 'error' => '分组名称不能为空'], 400);
         return;
     }
-    
+
     try {
         $config = loadSketchbookConfig($configPath);
-        
-        // 更新显示名称和描述
+        $renamed = false;
+        $actualCategory = $category;
+
+        // 处理文件夹重命名
+        if ($newFolderName && $newFolderName !== $category) {
+            // 验证新文件夹名
+            if (!preg_match('/^[a-zA-Z0-9_-]+$/', $newFolderName)) {
+                respondJson(['success' => false, 'error' => '文件夹名只能包含英文、数字、下划线和短横线'], 400);
+                return;
+            }
+
+            $oldDir = $imagesRoot . '/' . $category;
+            $newDir = $imagesRoot . '/' . $newFolderName;
+
+            // 检查目标文件夹是否已存在
+            if (file_exists($newDir)) {
+                respondJson(['success' => false, 'error' => '目标文件夹已存在'], 400);
+                return;
+            }
+
+            // 检查源文件夹是否存在
+            if (!is_dir($oldDir)) {
+                respondJson(['success' => false, 'error' => '源文件夹不存在'], 404);
+                return;
+            }
+
+            // 重命名文件夹
+            if (!rename($oldDir, $newDir)) {
+                respondJson(['success' => false, 'error' => '重命名文件夹失败'], 500);
+                return;
+            }
+
+            // 更新配置中的所有引用
+            // 1. 更新custom_order数组
+            if (isset($config['custom_order'])) {
+                $key = array_search($category, $config['custom_order']);
+                if ($key !== false) {
+                    $config['custom_order'][$key] = $newFolderName;
+                }
+            }
+
+            // 2. 移动display_names
+            if (isset($config['display_names'][$category])) {
+                $config['display_names'][$newFolderName] = $config['display_names'][$category];
+                unset($config['display_names'][$category]);
+            }
+
+            // 3. 移动descriptions
+            if (isset($config['descriptions'][$category])) {
+                $config['descriptions'][$newFolderName] = $config['descriptions'][$category];
+                unset($config['descriptions'][$category]);
+            }
+
+            // 4. 移动image_orders配置
+            $imageOrdersFile = $imagesRoot . '/image-orders.json';
+            if (file_exists($imageOrdersFile)) {
+                $imageOrders = json_decode(file_get_contents($imageOrdersFile), true) ?? [];
+                if (isset($imageOrders[$category])) {
+                    $imageOrders[$newFolderName] = $imageOrders[$category];
+                    unset($imageOrders[$category]);
+                    file_put_contents($imageOrdersFile, json_encode($imageOrders, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                }
+            }
+
+            $renamed = true;
+            $actualCategory = $newFolderName;
+        }
+
+        // 更新显示名称和描述（使用实际的分类名）
         if ($displayName) {
-            $config['display_names'][$category] = $displayName;
+            $config['display_names'][$actualCategory] = $displayName;
         }
         if ($description) {
-            $config['descriptions'][$category] = $description;
+            $config['descriptions'][$actualCategory] = $description;
         }
-        
+
         // 更新分组顺序
         if ($categoryOrder) {
             $config['custom_order'] = explode(',', $categoryOrder);
         }
-        
+
         if (saveSketchbookConfig($configPath, $config)) {
             // 获取更新后的缩略图信息
-            $dirPath = $imagesRoot . '/' . $category;
-            $thumbnailInfo = getCategoryThumbnailInfo($category, $dirPath);
-            
-            respondJson([
+            $dirPath = $imagesRoot . '/' . $actualCategory;
+            $thumbnailInfo = getCategoryThumbnailInfo($actualCategory, $dirPath);
+
+            $response = [
                 'success' => true,
                 'message' => '分组信息已更新',
                 'thumbnail_info' => $thumbnailInfo
-            ]);
+            ];
+
+            if ($renamed) {
+                $response['renamed'] = true;
+                $response['newCategory'] = $actualCategory;
+            }
+
+            respondJson($response);
         } else {
             respondJson(['success' => false, 'error' => '保存配置失败'], 500);
         }
     } catch (Exception $e) {
         respondJson(['success' => false, 'error' => '更新失败: ' . $e->getMessage()], 500);
+    }
+}
+
+/**
+ * 保存分类排序
+ */
+function saveCategoryOrder($configPath)
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+    $categoryOrder = $input['category_order'] ?? '';
+
+    if (!$categoryOrder) {
+        respondJson(['success' => false, 'error' => '分类排序不能为空'], 400);
+        return;
+    }
+
+    try {
+        $config = loadSketchbookConfig($configPath);
+
+        // 更新分组顺序
+        $config['custom_order'] = array_filter(array_map('trim', explode(',', $categoryOrder)));
+
+        if (saveSketchbookConfig($configPath, $config)) {
+            respondJson([
+                'success' => true,
+                'message' => '排序已保存',
+                'order' => $config['custom_order']
+            ]);
+        } else {
+            respondJson(['success' => false, 'error' => '保存配置失败'], 500);
+        }
+    } catch (Exception $e) {
+        respondJson(['success' => false, 'error' => '保存失败: ' . $e->getMessage()], 500);
     }
 }
 
@@ -1164,37 +1315,37 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
 {
     $input = json_decode(file_get_contents('php://input'), true);
     $category = $input['category'] ?? '';
-    
+
     if (!$category) {
         respondJson(['success' => false, 'error' => '分组名称不能为空'], 400);
         return;
     }
-    
+
     try {
         $categoryDir = $imagesRoot . '/' . $category;
-        
+
         if (!is_dir($categoryDir)) {
             respondJson(['success' => false, 'error' => '分组不存在'], 404);
             return;
         }
-        
+
         // 移动到回收站
         if (!is_dir($trashRoot)) {
             mkdir($trashRoot, 0755, true);
         }
-        
+
         $trashTarget = $trashRoot . '/' . $category . '_deleted_' . date('Y-m-d_H-i-s');
         if (rename($categoryDir, $trashTarget)) {
             // 从配置中删除
             $config = loadSketchbookConfig($configPath);
-            
+
             // 从custom_order中删除
             if (isset($config['custom_order'])) {
                 $config['custom_order'] = array_values(array_filter($config['custom_order'], function($item) use ($category) {
                     return $item !== $category;
                 }));
             }
-            
+
             // 删除显示名称和描述
             if (isset($config['display_names'][$category])) {
                 unset($config['display_names'][$category]);
@@ -1202,7 +1353,7 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
             if (isset($config['descriptions'][$category])) {
                 unset($config['descriptions'][$category]);
             }
-            
+
             // 删除缩略图配置
             $thumbnailConfigFile = __DIR__ . '/../../Config/sketchbook_config.php';
             if (file_exists($thumbnailConfigFile)) {
@@ -1213,7 +1364,7 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
                     file_put_contents($thumbnailConfigFile, $configContent);
                 }
             }
-            
+
             if (saveSketchbookConfig($configPath, $config)) {
                 respondJson([
                     'success' => true,
@@ -1225,7 +1376,7 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
         } else {
             respondJson(['success' => false, 'error' => '无法移动分组到回收站'], 500);
         }
-        
+
     } catch (Exception $e) {
         respondJson(['success' => false, 'error' => '删除失败: ' . $e->getMessage()], 500);
     }
@@ -1303,17 +1454,17 @@ function getCategoryImageOrder(string $category, string $imageOrderPath, array $
 {
     $orderConfig = loadImageOrderConfig($imageOrderPath);
     $savedOrder = $orderConfig['categories'][$category] ?? [];
-    
+
     if (empty($savedOrder)) {
         // 如果没有保存的排序，按文件名自然排序
         sort($allImages, SORT_NATURAL | SORT_FLAG_CASE);
         return $allImages;
     }
-    
+
     // 合并保存的排序和新文件
     $orderedImages = [];
     $remainingImages = $allImages;
-    
+
     // 首先添加已排序的文件（如果它们仍然存在）
     foreach ($savedOrder as $filename) {
         if (in_array($filename, $allImages)) {
@@ -1321,12 +1472,12 @@ function getCategoryImageOrder(string $category, string $imageOrderPath, array $
             $remainingImages = array_diff($remainingImages, [$filename]);
         }
     }
-    
+
     // 然后添加新的文件（按自然排序）
     if (!empty($remainingImages)) {
         sort($remainingImages, SORT_NATURAL | SORT_FLAG_CASE);
         $orderedImages = array_merge($orderedImages, $remainingImages);
     }
-    
+
     return $orderedImages;
 }

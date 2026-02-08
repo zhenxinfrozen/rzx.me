@@ -68,7 +68,7 @@ function reorderSketchbookAlbums(array $albumNames): array {
  * 根据后台记录的排序调整图片顺序
  */
 function reorderSketchbookImages(string $albumName, array $images): array {
-    $orderFile = __DIR__ . '/../../storage/config/image-orders.json';
+    $orderFile = __DIR__ . '/../../storage/data/image-orders.json';
     if (!file_exists($orderFile)) {
         return $images;
     }
@@ -229,18 +229,18 @@ foreach ($albumNames as $albumName) {
         var albumEl = this;
         album = albums.indexOf(albumEl);
         // 其他相册下沉，添加动效
-        albums.forEach(function(a){ 
-            if(a!==albumEl){ 
+        albums.forEach(function(a){
+            if(a!==albumEl){
                 animateElement(a, 'bottom', '-150px', 300);
-            } 
+            }
         });
         // 当前相册移到左边，隐藏描述
         albumEl.removeEventListener('click', spreadPictures);
         albumEl.dataset.left = albumEl.style.left || '0px';
         animateElement(albumEl, 'left', '0px', 500);
-        var descr = albumEl.querySelector('.descr'); 
+        var descr = albumEl.querySelector('.descr');
         if(descr) animateElement(descr, 'bottom', '-30px', 200);
-        
+
         // 保持缩略图在当前相册内，通过窗口宽度均分定位（与旧版一致）
         var contents = bySelAll('.content', albumEl);
         var total = contents.length;
@@ -258,7 +258,7 @@ foreach ($albumNames as $albumName) {
                 content.addEventListener('mouseleave', downImage);
             });
             // 图片旋转动效
-            var img = content.querySelector('img'); 
+            var img = content.querySelector('img');
             if(img) animateElement(img, 'transform', 'rotate('+r+'deg)', 300);
         });
         if(backBtn) animateElement(backBtn, 'left', '0px', 300);
@@ -267,10 +267,10 @@ foreach ($albumNames as $albumName) {
     if(backBtn) backBtn.addEventListener('click', function(){
         animateElement(backBtn, 'left', '-100px', 300);
         hideNavigation();
-        
+
         // 清理当前预览
         hideCurrentPicture();
-        
+
         var currentAlbum = albums[album];
         if(currentAlbum){
             // 先重置当前相册内缩略图位置 - 完全移除left样式恢复初始状态
@@ -287,24 +287,24 @@ foreach ($albumNames as $albumName) {
                 // 移除事件监听：通过替换节点实现
                 var n = c.cloneNode(true); currentAlbum.replaceChild(n, c);
             });
-            
+
             // 然后移动当前相册回原位置
             animateElement(currentAlbum, 'left', currentAlbum.dataset.left||'0px', 500, function(){
                 // 动画完成后重新绑定点击事件
                 currentAlbum.addEventListener('click', spreadPictures);
             });
-            
-            var descr = currentAlbum.querySelector('.descr'); 
+
+            var descr = currentAlbum.querySelector('.descr');
             if(descr) animateElement(descr, 'bottom', '0px', 500);
         }
-        
+
         // 其他相册从底部滑入
-        albums.forEach(function(a){ 
-            if(a!==currentAlbum){ 
+        albums.forEach(function(a){
+            if(a!==currentAlbum){
                 animateElement(a, 'bottom', '0px', 500);
-            } 
+            }
         });
-        
+
         // 重置状态
         album = -1;
         current = -1;
@@ -330,7 +330,7 @@ foreach ($albumNames as $albumName) {
         if(loader) loader.style.display='block';
         // 当前 index - 排除非content元素
         if(nav !== 1 && nav !== -1) {
-            var albumEl = albums[album]; 
+            var albumEl = albums[album];
             var list = bySelAll('.content', albumEl);
             current = Array.prototype.indexOf.call(list, contentEl);
         }
@@ -365,19 +365,19 @@ foreach ($albumNames as $albumName) {
         large.src = src;
     }
 
-    if(nextBtn) nextBtn.addEventListener('click', function(){ 
-        var albumEl = albums[album]; 
+    if(nextBtn) nextBtn.addEventListener('click', function(){
+        var albumEl = albums[album];
         var list = bySelAll('.content', albumEl);
         current++;
         if(current >= list.length) current = 0; // 循环到第一张
-        showImage.call(null, 1); 
+        showImage.call(null, 1);
     });
-    if(prevBtn) prevBtn.addEventListener('click', function(){ 
-        var albumEl = albums[album]; 
+    if(prevBtn) prevBtn.addEventListener('click', function(){
+        var albumEl = albums[album];
         var list = bySelAll('.content', albumEl);
         current--;
         if(current < 0) current = list.length - 1; // 循环到最后一张
-        showImage.call(null, -1); 
+        showImage.call(null, -1);
     });
 
     function hideCurrentPicture(done){
@@ -388,32 +388,32 @@ foreach ($albumNames as $albumName) {
         pp.addEventListener('transitionend', onEnd); setTimeout(onEnd,700);
     }
 
-    function showNavigation(){ 
+    function showNavigation(){
         if(nextBtn) animateElement(nextBtn, 'right', '0px', 100);
         if(prevBtn) animateElement(prevBtn, 'left', '0px', 100);
     }
-    function hideNavigation(){ 
+    function hideNavigation(){
         if(nextBtn) animateElement(nextBtn, 'right', '-40px', 300);
         if(prevBtn) animateElement(prevBtn, 'left', '-40px', 300);
     }
-    function upImage(){ 
-        var img = this.querySelector('img'); 
+    function upImage(){
+        var img = this.querySelector('img');
         // 添加平滑上升动效
         animateElement(this, 'marginTop', '-70px', 400);
-        if(img){ 
-            img.style.transform='rotate(0deg)'; 
-            img.style.webkitTransform='rotate(0deg)'; 
-        } 
+        if(img){
+            img.style.transform='rotate(0deg)';
+            img.style.webkitTransform='rotate(0deg)';
+        }
     }
-    function downImage(){ 
-        var img = this.querySelector('img'); 
-        var r = Math.floor(Math.random()*41)-20; 
+    function downImage(){
+        var img = this.querySelector('img');
+        var r = Math.floor(Math.random()*41)-20;
         // 添加平滑下降动效
         animateElement(this, 'marginTop', '0px', 400);
-        if(img){ 
-            img.style.transform='rotate('+r+'deg)'; 
-            img.style.webkitTransform='rotate('+r+'deg)'; 
-        } 
+        if(img){
+            img.style.transform='rotate('+r+'deg)';
+            img.style.webkitTransform='rotate('+r+'deg)';
+        }
     }
 
     function resizeNative(imageEl){
@@ -437,43 +437,43 @@ foreach ($albumNames as $albumName) {
     // 简单的动画函数，模拟jQuery的animate
     function animateElement(element, property, targetValue, duration, callback) {
         if (!element) return;
-        
+
         var startTime = performance.now();
         var startValue = getComputedStyle(element)[property];
-        
+
         // 解析数值和单位
         var parseValue = function(val) {
             if (property === 'transform') return val;
             var match = val.match(/(-?\d*\.?\d+)(.*)/);
             return match ? { value: parseFloat(match[1]), unit: match[2] || 'px' } : { value: 0, unit: 'px' };
         };
-        
+
         var start = parseValue(startValue);
         var target = parseValue(targetValue);
-        
+
         if (property === 'transform') {
             element.style[property] = targetValue;
             if (callback) setTimeout(callback, duration);
             return;
         }
-        
+
         function animate() {
             var elapsed = performance.now() - startTime;
             var progress = Math.min(elapsed / duration, 1);
-            
+
             // 缓动函数 (easeOutQuart)
             var eased = 1 - Math.pow(1 - progress, 4);
-            
+
             var currentValue = start.value + (target.value - start.value) * eased;
             element.style[property] = currentValue + target.unit;
-            
+
             if (progress < 1) {
                 requestAnimationFrame(animate);
             } else if (callback) {
                 callback();
             }
         }
-        
+
         requestAnimationFrame(animate);
     }
 

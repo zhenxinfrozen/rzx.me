@@ -1,12 +1,12 @@
 <?php
 /**
  * Sketchbook 分组排序配置
- * 自动生成于: 2026-01-20 23:57:58
+ * 由后台管理系统自动维护
  */
 
 return array (
   'sort_method' => 'custom_order',
-  'custom_order' => 
+  'custom_order' =>
   array (
     0 => 'NATURE',
     1 => 'FASHION',
@@ -20,12 +20,12 @@ return array (
     9 => 'qweqwe',
     10 => 'tetstst',
   ),
-  'prefix_settings' => 
+  'prefix_settings' =>
   array (
     'remove_prefix' => true,
     'separator' => '-',
   ),
-  'display_names' => 
+  'display_names' =>
   array (
     'PEOPLE' => 'PEOPLE',
     'test-sb-222' => 'test-sb-222',
@@ -34,7 +34,7 @@ return array (
     'qweqwe' => 'qweqwe',
     'tetstst' => 'ststeset',
   ),
-  'descriptions' => 
+  'descriptions' =>
   array (
     'test-sb-222' => 'test-sb-222',
     'test-f3333' => 'test-f3333test-f3333',
