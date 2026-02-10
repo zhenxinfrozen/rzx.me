@@ -1,2 +1,6 @@
 # Obsidian 配置目录
 .obsidian/
+
+# FTP server listing files
+.listing
+**/.listing
