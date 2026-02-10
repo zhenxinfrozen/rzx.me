@@ -38,9 +38,9 @@ php -S localhost:8000
 以下为 v3.0.0 下的页面截图，文件位于 `img/screenshots/`。可用于 UI 归档与回溯。
 
 
-### 界面预览（全部展开）
+### 界面预览
 
-以下为 v3.0.0 的页面截图，按双列展示。图片下方为文件名，点击图片可查看原图。
+以下为 v3.0.0 的页面截图，点击图片可查看原图。
 
 <div style="display:flex;flex-wrap:wrap;gap:18px;">
 
