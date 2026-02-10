@@ -1,75 +1,101 @@
-﻿<!DOCTYPE html>
-<html lang="zh-CN">
+﻿<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dream-颓废动画人</title>
-    <link rel="stylesheet" href="gallery.css">
 
-    <!-- 谷歌Analytics代码 -->
-    <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-18450539-1']);
-        _gaq.push(['_trackPageview']);
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-        (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-    </script>
+<meta name="generator" content="Adobe Lightroom"/>
+
+<title>Dream-颓废动画人</title>
+
+<!-- Download AutoViewer at www.airtightinteractive.com/projects/autoviewer -->
+
+<script type="text/javascript" src="swfobject.js"></script>
+
+<style type="text/css">	
+
+	/* hide from ie on mac \*/
+
+	html {
+
+		height: 100%;
+
+		overflow: hidden;
+
+	}
+
+	
+
+	#flashcontent {
+
+		height: 100%;
+
+	}
+
+	/* end hide */
+
+
+
+	body {
+
+		height: 100%;
+
+		margin: 0;
+
+		padding: 0;
+
+		background-color: fcfcfc;
+
+		color: #ffffff;
+
+	}
+
+</style>
+
+<!-- 谷歌Analytics代码 -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-18450539-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </head>
+
 <body>
-    <div class="gallery-container">
-        <div class="gallery-header">
-            <h1 class="gallery-title">Dream-颓废动画人</h1>
-        </div>
 
-        <div class="gallery-main">
-            <div class="image-container">
-                <img id="currentImage" src="" alt="Gallery Image" class="gallery-image">
-                <div class="loading-spinner"></div>
-            </div>
+	<div id="flashcontent">AutoViewer 要求使用 Adobe Flash。 <a href="http://www.macromedia.com/go/getflashplayer/">获取 Adobe Flash。</a> 如果已安装 Flash， <a href="index.html?detectflash=false">单击查看画廊</a></div>	
 
-            <div class="image-caption" id="imageCaption"></div>
-        </div>
+	<script type="text/javascript">
 
-        <div class="gallery-controls">
-            <button class="control-btn prev-btn" id="prevBtn" title="上一张">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-            </button>
+		var fo = new SWFObject("viewer.swf", "viewer", "100%", "100%", "8", "fcfcfc" );
 
-            <div class="play-controls">
-                <button class="control-btn play-btn" id="playBtn" title="播放/暂停">
-                    <svg id="playIcon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                    <svg id="pauseIcon" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:none;">
-                        <rect x="6" y="4" width="4" height="16"></rect>
-                        <rect x="14" y="4" width="4" height="16"></rect>
-                    </svg>
-                </button>
-                <span class="counter" id="counter">1 / 14</span>
-            </div>
+		fo.addParam("scale", "noscale");
 
-            <button class="control-btn next-btn" id="nextBtn" title="下一张">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </button>
-        </div>
+		fo.addParam("quality", "best");
+		
+		fo.addParam("wmode", "opaque");
 
-        <div class="thumbnail-strip" id="thumbnailStrip"></div>
+		fo.write("flashcontent");
 
-        <div class="gallery-info">
-            <a href="http://www.airtightinteractive.com/projects/autoviewer/" target="_blank" class="info-link">
-                Modernized from AutoViewer
-            </a>
-        </div>
-    </div>
+		fo.addVariable( "langOpenImage", "在新窗口中打开图像");
 
-    <script src="gallery.js"></script>
+		fo.addVariable("langAbout", "关于");
+
+	</script>	
+
+
 </body>
+
 </html>
+
+
+
+
+
