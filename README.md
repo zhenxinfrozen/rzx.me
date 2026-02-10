@@ -42,54 +42,78 @@ php -S localhost:8000
 
 以下为 v3.0.0 的页面截图，点击图片可查看原图。
 
-<div style="display:flex;flex-wrap:wrap;gap:18px;">
+<table>
+<tr>
+<td width="50%">
+<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-home.png">
+<img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-home.png" alt="Home" width="100%"/>
+</a>
+<p align="center"><b>Home - 首页</b></p>
+</td>
+<td width="50%">
+<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-animation.png">
+<img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-animation.png" alt="Animation" width="100%"/>
+</a>
+<p align="center"><b>Animation - 动画作品</b></p>
+</td>
+</tr>
 
-	<div style="flex:1 1 48%;text-align:center;">
-		<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-home.png"><img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-home.png" alt="Home" style="max-width:100%;height:auto;border:1px solid #eee" /></a>
-		<div style="font-size:0.9em;color:#666;margin-top:6px">Screenshot-v3.0.0-home.png</div>
-	</div>
+<tr>
+<td width="50%">
+<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-latest.png">
+<img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-latest.png" alt="Latest" width="100%"/>
+</a>
+<p align="center"><b>Latest - 最新作品</b></p>
+</td>
+<td width="50%">
+<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-comic.png">
+<img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-comic.png" alt="Comic" width="100%"/>
+</a>
+<p align="center"><b>Comic - 漫画作品</b></p>
+</td>
+</tr>
 
-	<div style="flex:1 1 48%;text-align:center;">
-		<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-animation.png"><img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-animation.png" alt="Animation" style="max-width:100%;height:auto;border:1px solid #eee" /></a>
-		<div style="font-size:0.9em;color:#666;margin-top:6px">Screenshot-v3.0.0-animation.png</div>
-	</div>
+<tr>
+<td width="50%">
+<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-sites.png">
+<img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-sites.png" alt="Sites" width="100%"/>
+</a>
+<p align="center"><b>Sites - 网站设计</b></p>
+</td>
+<td width="50%">
+<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-sketch.png">
+<img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-sketch.png" alt="Sketch" width="100%"/>
+</a>
+<p align="center"><b>Sketch - 手绘本</b></p>
+</td>
+</tr>
 
-	<div style="flex:1 1 48%;text-align:center;">
-		<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-latest.png"><img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-latest.png" alt="Latest" style="max-width:100%;height:auto;border:1px solid #eee" /></a>
-		<div style="font-size:0.9em;color:#666;margin-top:6px">Screenshot-v3.0.0-latest.png</div>
-	</div>
+<tr>
+<td width="50%">
+<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-pictures.png">
+<img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-pictures.png" alt="Pictures" width="100%"/>
+</a>
+<p align="center"><b>Pictures - 图片作品</b></p>
+</td>
+<td width="50%">
+<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-contact.png">
+<img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-contact.png" alt="Contact" width="100%"/>
+</a>
+<p align="center"><b>Contact - 联系方式</b></p>
+</td>
+</tr>
 
-	<div style="flex:1 1 48%;text-align:center;">
-		<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-comic.png"><img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-comic.png" alt="Comic" style="max-width:100%;height:auto;border:1px solid #eee" /></a>
-		<div style="font-size:0.9em;color:#666;margin-top:6px">Screenshot-v3.0.0-comic.png</div>
-	</div>
-
-	<div style="flex:1 1 48%;text-align:center;">
-		<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-sites.png"><img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-sites.png" alt="Sites" style="max-width:100%;height:auto;border:1px solid #eee" /></a>
-		<div style="font-size:0.9em;color:#666;margin-top:6px">Screenshot-v3.0.0-sites.png</div>
-	</div>
-
-	<div style="flex:1 1 48%;text-align:center;">
-		<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-sketch.png"><img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-sketch.png" alt="Sketch" style="max-width:100%;height:auto;border:1px solid #eee" /></a>
-		<div style="font-size:0.9em;color:#666;margin-top:6px">Screenshot-v3.0.0-sketch.png</div>
-	</div>
-
-	<div style="flex:1 1 48%;text-align:center;">
-		<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-pictures.png"><img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-pictures.png" alt="Pictures" style="max-width:100%;height:auto;border:1px solid #eee" /></a>
-		<div style="font-size:0.9em;color:#666;margin-top:6px">Screenshot-v3.0.0-pictures.png</div>
-	</div>
-
-	<div style="flex:1 1 48%;text-align:center;">
-		<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-contact.png"><img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-contact.png" alt="Contact" style="max-width:100%;height:auto;border:1px solid #eee" /></a>
-		<div style="font-size:0.9em;color:#666;margin-top:6px">Screenshot-v3.0.0-contact.png</div>
-	</div>
-
-	<div style="flex:1 1 48%;text-align:center;">
-		<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-404.png"><img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-404.png" alt="404" style="max-width:100%;height:auto;border:1px solid #eee" /></a>
-		<div style="font-size:0.9em;color:#666;margin-top:6px">Screenshot-v3.0.0-404.png</div>
-	</div>
-
-</div>
+<tr>
+<td width="50%">
+<a href="img/screenshots/v3.0.0/Screenshot-v3.0.0-404.png">
+<img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-404.png" alt="404" width="100%"/>
+</a>
+<p align="center"><b>404 - 错误页面</b></p>
+</td>
+<td width="50%">
+</td>
+</tr>
+</table>
 
 ---
 
