@@ -36,15 +36,15 @@ text-decoration:none;
 	
 }
 #site1{
-	background:#c53 url(http://pic.rzx.me/rzxme/web/images/sites.bolg.rzx.me.gif) ;
+	background:#c53 url(../images/sites.bolg.rzx.me.gif) ;
 	opacity:0.7;
 }
 #site2{
-	background:url(http://pic.rzx.me/rzxme/web/images/sites.pic.rzx.me.gif);
+	background:url(../images/sites.pic.rzx.me.gif);
 	opacity:0.7;
 }
 #site3{
-	background:url(http://pic.rzx.me/rzxme/web/images/sites.acglook.com.gif);
+	background:url(../images/sites.acglook.com.gif);
 	opacity:0.7;
 }
 #site4{
@@ -52,7 +52,7 @@ text-decoration:none;
 	opacity:0.7;
 }
 #site5{
-	background:url(http://pic.rzx.me/rzxme/web/images/sites.tumblr1280.gif) no-repeat;
+	background:url(../images/sites.tumblr1280.gif) no-repeat;
 	opacity:0.7;
 }
 #site6{
@@ -60,15 +60,15 @@ text-decoration:none;
 	opacity:0.7;
 }
 #site7{
-	background:url(http://pic.rzx.me/rzxme/web/images/sites.music.gif);
+	background:url(../images/sites.music.gif);
 	opacity:0.7;
 }
 #site8{
-	background:url(http://pic.rzx.me/rzxme/web/images/sites.html5.png);
+	background:url(../images/sites.html5.png);
 	opacity:0.7;
 }
 #site9{
-	background:url(http://pic.rzx.me/rzxme/web/images/sites.lab.rzx.me.gif);
+	background:url(../images/sites.lab.rzx.me.gif);
 }
 
 
@@ -99,7 +99,7 @@ text-decoration:none;
 	width:400px;
 	height:200px;
 	border:2px #444 solid;
-	background:#00c url(http://pic.rzx.me/rzxme/web/images/follow.jpg);
+	background:#00c url(../images/follow.jpg);
 	position:fixed;
 	right:200px;
 	bottom:-10px;

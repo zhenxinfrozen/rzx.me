@@ -4,3 +4,6 @@ RewriteCond %{HTTP_HOST} ^ruizhenxin.com [NC,OR]
 RewriteCond %{HTTP_HOST} ^www.ruizhenxin.com [NC,OR]
 RewriteCond %{HTTP_HOST} ^www.rzx.me [NC]
 RewriteRule ^(.*)$ http://rzx.me/$1 [R=301,L]
+
+# 自定义404错误页面
+ErrorDocument 404 /404.html

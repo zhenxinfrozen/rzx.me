@@ -5,12 +5,12 @@
 	margin:100px auto;
 }
 .latest_show{
-	background:url(http://pic.rzx.me/rzxme/web/images/wing.jpg) no-repeat 50% 0;
+	background:url(../images/wing.jpg) no-repeat 50% 0;
 	height:253px;
 	margin:0 auto;
 }
 .loading{
-	background:url(http://pic.rzx.me/rzxme/web/images/grid-loading.gif) no-repeat center;
+	background:url(../images/grid-loading.gif) no-repeat center;
 	width:100px;
 	height:20px;
 	margin:5px auto;

@@ -9,7 +9,7 @@ body{
 	color: #fff;
 	overflow: hidden;
 	background-attachment: fixed;
-	background-image: url(http://pic.rzx.me/rzxme/web/images/album1/bg.jpg);
+	background-image: url(../images/album1/bg.jpg);
 	background-repeat: no-repeat;
 	background-position: center bottom;
 }
@@ -44,7 +44,7 @@ h2.title_name small {
 	top: 50%;
 	left: 50%;
 	margin: -35px 0px 0px -35px;
-	background: #fff url(http://pic.rzx.me/rzxme/web/images/album1/loader.gif) no-repeat center center;
+	background: #fff url(../images/album1/loader.gif) no-repeat center center;
 	width: 70px;
 	height: 70px;
 	z-index: 999;
@@ -65,27 +65,27 @@ h2.title_name small {
 }
 .pp_next {
 	right: -100px;
-	background: url(http://pic.rzx.me/rzxme/web/images/album1/next.gif) no-repeat 0 0;
+	background: url(../images/album1/next.gif) no-repeat 0 0;
 	position: fixed;
 	_position: absolute;
 }
 .pp_next:hover {
-	background: url(http://pic.rzx.me/rzxme/web/images/album1/next.gif) no-repeat 10px 0;
+	background: url(../images/album1/next.gif) no-repeat 10px 0;
 }
 .pp_next:active {
-	background: url(http://pic.rzx.me/rzxme/web/images/album1/next.gif) no-repeat 20px 0;
+	background: url(../images/album1/next.gif) no-repeat 20px 0;
 }
 .pp_prev {
 	left: -100px;
-	background: url(http://pic.rzx.me/rzxme/web/images/album1/next.gif) no-repeat 0 -57px;
+	background: url(../images/album1/next.gif) no-repeat 0 -57px;
 	position: fixed;
 	_position: absolute;
 }
 .pp_prev:hover {
-	background: url(http://pic.rzx.me/rzxme/web/images/album1/next.gif) no-repeat -10px -57px;
+	background: url(../images/album1/next.gif) no-repeat -10px -57px;
 }
 .pp_prev:active {
-	background: url(http://pic.rzx.me/rzxme/web/images/album1/next.gif) no-repeat -20px -57px;
+	background: url(../images/album1/next.gif) no-repeat -20px -57px;
 }
 #pp_thumbContainer{
 	position: fixed;

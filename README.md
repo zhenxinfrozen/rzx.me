@@ -1,7 +1,7 @@
 
 # rzx.me
 
-**项目版本：** v3.0.0  
+**项目版本：** v3.0.0
 **历史时期：** 2009–2012（大学期间）
 
 ## 简介
@@ -42,15 +42,15 @@ php -S localhost:8000
 
 | 页面 | 预览 |
 |---|---|
-| 主页 | <img src="img/screenshots/Screenshot-v3.0.0-home.png" alt="Home" width="420" /> |
-| Animation | <img src="img/screenshots/Screenshot-v3.0.0-animation.png" alt="Animation" width="420" /> |
-| Latest | <img src="img/screenshots/Screenshot-v3.0.0-latest.png" alt="Latest" width="420" /> |
-| Comic | <img src="img/screenshots/Screenshot-v3.0.0-comic.png" alt="Comic" width="420" /> |
-| Sites / Blog | <img src="img/screenshots/Screenshot-v3.0.0-sites.png" alt="Sites" width="420" /> |
-| SketchBooks | <img src="img/screenshots/Screenshot-v3.0.0-sketch.png" alt="Sketch" width="420" /> |
-| Pictures | <img src="img/screenshots/Screenshot-v3.0.0-pictures.png" alt="Pictures" width="420" /> |
-| Contact | <img src="img/screenshots/Screenshot-v3.0.0-contact.png" alt="Contact" width="420" /> |
-| 404 页面 | <img src="img/screenshots/Screenshot-v3.0.0-404.png" alt="404" width="420" /> |
+| 主页 | <img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-home.png" alt="Home" width="420" /> |
+| Animation | <img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-animation.png" alt="Animation" width="420" /> |
+| Latest | <img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-latest.png" alt="Latest" width="420" /> |
+| Comic | <img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-comic.png" alt="Comic" width="420" /> |
+| Sites / Blog | <img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-sites.png" alt="Sites" width="420" /> |
+| SketchBooks | <img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-sketch.png" alt="Sketch" width="420" /> |
+| Pictures | <img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-pictures.png" alt="Pictures" width="420" /> |
+| Contact | <img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-contact.png" alt="Contact" width="420" /> |
+| 404 页面 | <img src="img/screenshots/v3.0.0/Screenshot-v3.0.0-404.png" alt="404" width="420" /> |
 
 </details>
 

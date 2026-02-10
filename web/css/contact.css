@@ -2,7 +2,7 @@
 /* CSS Document */
 
 body {
-	background-image:url(http://pic.rzx.me/rzxme/web/images/try.jpg);
+	background-image:url(../images/try.jpg);
 	background-repeat: no-repeat;
 }
 .center{
@@ -16,13 +16,13 @@ body {
 .center-pic{
 }
 .email{
-	background:url(http://pic.rzx.me/rzxme/web/images/email.jpg);
+	background:url(../images/email.jpg);
 	height:36px;
 	margin:0 auto;
 }
 
 .email:hover{
-	background:url(http://pic.rzx.me/rzxme/web/images/email.jpg) no-repeat 0 -36px;
+	background:url(../images/email.jpg) no-repeat 0 -36px;
 	height:36px;
 	margin:0 auto;
 }
@@ -34,28 +34,28 @@ body {
 	overflow:hidden;
 }
 .follow1{
-	background:url(http://pic.rzx.me/rzxme/web/images/follow.jpg) no-repeat 0 0;
+	background:url(../images/follow.jpg) no-repeat 0 0;
 }
 .follow1:hover{
-	background:url(http://pic.rzx.me/rzxme/web/images/follow.jpg) no-repeat 0 -50px;
+	background:url(../images/follow.jpg) no-repeat 0 -50px;
 }
 .follow2{
-	background:url(http://pic.rzx.me/rzxme/web/images/follow.jpg) no-repeat -50px 0;
+	background:url(../images/follow.jpg) no-repeat -50px 0;
 }
 .follow2:hover{
-	background:url(http://pic.rzx.me/rzxme/web/images/follow.jpg) no-repeat -50px -50px;
+	background:url(../images/follow.jpg) no-repeat -50px -50px;
 }
 .follow3{
-	background:url(http://pic.rzx.me/rzxme/web/images/follow.jpg) no-repeat -100px 0;
+	background:url(../images/follow.jpg) no-repeat -100px 0;
 }
 .follow3:hover{
-	background:url(http://pic.rzx.me/rzxme/web/images/follow.jpg) no-repeat -100px -50px;
+	background:url(../images/follow.jpg) no-repeat -100px -50px;
 }
 .follow4{
-	background:url(http://pic.rzx.me/rzxme/web/images/follow.jpg) no-repeat -150px 0;
+	background:url(../images/follow.jpg) no-repeat -150px 0;
 }
 .follow4:hover{
-	background:url(http://pic.rzx.me/rzxme/web/images/follow.jpg) no-repeat -150px -50px;
+	background:url(../images/follow.jpg) no-repeat -150px -50px;
 }
 .note{
 }
