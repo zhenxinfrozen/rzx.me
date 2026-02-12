@@ -1,0 +1,200 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>照片模板实验 | HTML5 相册</title>
+<style>
+	:root {
+		color-scheme: dark;
+		--bg: #101010;
+		--fg: #f4f4f4;
+		--accent: #6dd3ff;
+		--muted: #a0a0a0;
+	}
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: radial-gradient(circle at 20% 20%, rgba(109,211,255,0.08), transparent 35%),
+								radial-gradient(circle at 80% 10%, rgba(255,255,255,0.05), transparent 30%),
+								var(--bg);
+		color: var(--fg);
+		font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+		min-height: 100vh;
+	}
+	header {
+		padding: 18px 16px 8px;
+		text-align: center;
+	}
+	header h1 { margin: 0; font-size: 24px; letter-spacing: 0.5px; }
+	header p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
+	.stage {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 0 16px 28px;
+	}
+	.hero {
+		position: relative;
+		border-radius: 14px;
+		overflow: hidden;
+		background: #161616;
+		min-height: 420px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 20px 70px rgba(0,0,0,0.55);
+	}
+	.hero img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		display: block;
+		background: #0f0f0f;
+	}
+	.nav-btn {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 46px;
+		height: 46px;
+		border-radius: 50%;
+		border: 1px solid rgba(255,255,255,0.24);
+		background: rgba(0,0,0,0.45);
+		color: var(--fg);
+		cursor: pointer;
+		display: grid;
+		place-items: center;
+		backdrop-filter: blur(6px);
+		transition: transform 140ms ease, background 140ms ease;
+	}
+	.nav-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-50%) scale(1.05); }
+	.nav-btn:active { transform: translateY(-50%) scale(0.96); }
+	.nav-btn.left { left: 14px; }
+	.nav-btn.right { right: 14px; }
+	.nav-btn span { font-size: 18px; font-weight: 700; }
+	.thumbs {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+		gap: 12px;
+		margin-top: 18px;
+	}
+	.thumb {
+		position: relative;
+		border-radius: 10px;
+		overflow: hidden;
+		cursor: pointer;
+		background: #181818;
+		border: 1px solid transparent;
+		transition: border-color 120ms ease, transform 120ms ease;
+		min-height: 90px;
+	}
+	.thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+	.thumb:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
+	.thumb.active { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(109,211,255,0.25); }
+	.meta {
+		margin-top: 10px;
+		color: var(--muted);
+		font-size: 13px;
+		text-align: center;
+	}
+	@media (max-width: 640px) {
+		.hero { min-height: 280px; }
+		header h1 { font-size: 20px; }
+	}
+</style>
+</head>
+<body>
+<header>
+	<h1>g 照片模板实验</h1>
+	<p>已移除 Flash，使用本地图片的 HTML5 相册</p>
+</header>
+
+<main class="stage">
+	<section class="hero" aria-label="当前图片">
+		<button class="nav-btn left" type="button" aria-label="上一张"><span>‹</span></button>
+		<img id="heroImage" src="" alt="" />
+		<button class="nav-btn right" type="button" aria-label="下一张"><span>›</span></button>
+	</section>
+	<div class="meta" id="meta"></div>
+	<section class="thumbs" id="thumbs" aria-label="缩略图列表"></section>
+</main>
+
+<script>
+// 纯前端相册，使用 lab/images 下现有照片
+const images = [
+	{ src: '../images/201051%2091213.jpg', alt: '201051 91213' },
+	{ src: '../images/201051%2092655.jpg', alt: '201051 92655' },
+	{ src: '../images/car1232324.jpg', alt: 'car1232324' },
+	{ src: '../images/car12324.JPG', alt: 'car12324' },
+	{ src: '../images/car123245.JPG', alt: 'car123245' },
+	{ src: '../images/car123344245.jpg', alt: 'car123344245' },
+	{ src: '../images/Dangerous2.jpg', alt: 'Dangerous2' },
+	{ src: '../images/Dangerous3.jpg', alt: 'Dangerous3' },
+	{ src: '../images/Dangerous4.jpg', alt: 'Dangerous4' },
+	{ src: '../images/window.jpg', alt: 'window' },
+	{ src: '../images/window2.jpg', alt: 'window2' },
+	{ src: '../images/window3.jpg', alt: 'window3' },
+	{ src: '../images/windows-big.JPG', alt: 'windows big' }
+];
+
+const hero = document.getElementById('heroImage');
+const thumbs = document.getElementById('thumbs');
+const meta = document.getElementById('meta');
+const btnPrev = document.querySelector('.nav-btn.left');
+const btnNext = document.querySelector('.nav-btn.right');
+let current = 0;
+
+function renderThumbs() {
+	const frag = document.createDocumentFragment();
+	images.forEach((img, idx) => {
+		const item = document.createElement('div');
+		item.className = 'thumb';
+		const pic = document.createElement('img');
+		pic.src = img.src;
+		pic.alt = img.alt;
+		item.appendChild(pic);
+		item.addEventListener('click', () => show(idx));
+		frag.appendChild(item);
+	});
+	thumbs.innerHTML = '';
+	thumbs.appendChild(frag);
+}
+
+function updateActive() {
+	thumbs.querySelectorAll('.thumb').forEach((node, idx) => {
+		node.classList.toggle('active', idx === current);
+	});
+}
+
+function show(index) {
+	if (index < 0) index = images.length - 1;
+	if (index >= images.length) index = 0;
+	current = index;
+	const item = images[current];
+	hero.src = item.src;
+	hero.alt = item.alt;
+	meta.textContent = `${current + 1} / ${images.length} · ${item.alt}`;
+	updateActive();
+}
+
+function next(step = 1) { show(current + step); }
+
+btnPrev.addEventListener('click', () => next(-1));
+btnNext.addEventListener('click', () => next(1));
+document.addEventListener('keydown', (e) => {
+	if (e.key === 'ArrowLeft') next(-1);
+	if (e.key === 'ArrowRight') next(1);
+});
+
+renderThumbs();
+show(0);
+</script>
+</body>
+</html>
+
+

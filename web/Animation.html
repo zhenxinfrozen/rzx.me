@@ -2,18 +2,63 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>ANIMATION</title>
-<meta name="copyright" content="站点所有原创图片版权归作者所有. 转载注明出处....." />
-<meta name="keywords" content="动画，漫画，图片，电影，动漫，芮真心，分镜头台本，颓废的动画人" />
-<meta name="description" content="作为动画专业的身份,还是有动画的练习和认真作品的.虽然不是真心感兴趣" />
-<meta name="author" content="ray,ruizhenxin,rzx.me">
-<link href="css/animation.css" rel="stylesheet" type="text/css" />
-<!-- 谷歌Analytics代码 -->
+<title>Animaion-动画</title>
+<script src="../SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
+<script type="text/javascript">
+<!--
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_nbGroup(event, grpName) { //v6.0
+  var i,img,nbArr,args=MM_nbGroup.arguments;
+  if (event == "init" && args.length > 2) {
+    if ((img = MM_findObj(args[2])) != null && !img.MM_init) {
+      img.MM_init = true; img.MM_up = args[3]; img.MM_dn = img.src;
+      if ((nbArr = document[grpName]) == null) nbArr = document[grpName] = new Array();
+      nbArr[nbArr.length] = img;
+      for (i=4; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
+        if (!img.MM_up) img.MM_up = img.src;
+        img.src = img.MM_dn = args[i+1];
+        nbArr[nbArr.length] = img;
+    } }
+  } else if (event == "over") {
+    document.MM_nbOver = nbArr = new Array();
+    for (i=1; i < args.length-1; i+=3) if ((img = MM_findObj(args[i])) != null) {
+      if (!img.MM_up) img.MM_up = img.src;
+      img.src = (img.MM_dn && args[i+2]) ? args[i+2] : ((args[i+1])? args[i+1] : img.MM_up);
+      nbArr[nbArr.length] = img;
+    }
+  } else if (event == "out" ) {
+    for (i=0; i < document.MM_nbOver.length; i++) {
+      img = document.MM_nbOver[i]; img.src = (img.MM_dn) ? img.MM_dn : img.MM_up; }
+  } else if (event == "down") {
+    nbArr = document[grpName];
+    if (nbArr)
+      for (i=0; i < nbArr.length; i++) { img=nbArr[i]; img.src = img.MM_up; img.MM_dn = 0; }
+    document[grpName] = nbArr = new Array();
+    for (i=2; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
+      if (!img.MM_up) img.MM_up = img.src;
+      img.src = img.MM_dn = (args[i+1])? args[i+1] : img.MM_up;
+      nbArr[nbArr.length] = img;
+  } }
+}
+//-->
+</script>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-18450539-1']);
-  _gaq.push(['_setDomainName', 'rzx.me']);
   _gaq.push(['_trackPageview']);
 
   (function() {
@@ -23,88 +68,368 @@
   })();
 
 </script>
-<!-- 腾讯代码 -->
-<script type="text/javascript" src="http://tajs.qq.com/stats?sId=21583056" charset="UTF-8"></script>
-<!-- 腾讯代码结束 -->
+<link href="SpryAssets/SpryAssets-ani/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
+<link href="Scripts/swfobject_modified.js.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
-<div class="title">
+
+<body onload="MM_preloadImages('images/FJ-JW03.jpg','images/FJ-JW02.jpg','images/FJ-JS03.jpg','images/FJ-JS02.jpg','images/FJ-KIll03.jpg','images/FJ-KILL02.jpg','images/FJ-GUN-03.jpg','images/FJ-GUN-02.jpg')">
+<div align="center"><b><font color="#CC3300" size="“13”"><font color="#999999" size="7" face="Tahoma, Geneva, sans-serif">动画Animation</font></font></b></div></h3>
+<div align="center"></div>
+<div align="center"></div>
+<div align="center"></div>
+<div align="center"></div>
+<div align="center">
+  <table width="983" border="0">
+    <tr>
+      <td width="977">&nbsp;</td>
+    </tr>
+    <tr>
+      <td><div align="center"> <a href="javascript:;" target="_top" onclick="MM_nbGroup('down','group1','jw','images/FJ-JW03.jpg',1)" onmouseover="MM_nbGroup('over','jw','images/FJ-JW02.jpg','images/FJ-JW02.jpg',1)" onmouseout="MM_nbGroup('out')"><img src="images/FJ-JW01.jpg" alt="JW" name="jw" width="200" height="360" border="0" id="jw" onload="" /> </a> <a href="javascript:;" target="_top" onclick="MM_nbGroup('down','group1','js','images/FJ-JS03.jpg',1)" onmouseover="MM_nbGroup('over','js','images/FJ-JS02.jpg','images/FJ-JS02.jpg',1)" onmouseout="MM_nbGroup('out')"><img name="js" src="images/FJ-JS01.jpg" border="0" alt="js" onload="" /></a>
+      <a href="javascript:;" target="_top" onClick="MM_nbGroup('down','group1','gun','images/FJ-GUN-03.jpg',1)" onMouseOver="MM_nbGroup('over','gun','images/FJ-GUN-02.jpg','images/FJ-GUN-02.jpg',1)" onMouseOut="MM_nbGroup('out')"><img name="gun" src="images/FJ-GUN01.jpg" border="0" alt="gun" onLoad="" /></a><a href="javascript:;" target="_top" onclick="MM_nbGroup('down','group1','kill','images/FJ-KIll03.jpg',1)" onmouseover="MM_nbGroup('over','kill','images/FJ-KILL02.jpg','images/FJ-KILL02.jpg',1)" onmouseout="MM_nbGroup('out')"> <img name="kill" src="images/FJ-KILL01.jpg" border="0" alt="kill" onload="" /></a></div></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
 </div>
-<div class="anim_pic">
-	<a href="#"><div class="pi1"></div></a>
-	<a href="#"><div class="pi2"></div></a>
-	<a href="#"><div class="pi3"></div></a>
-	<a href="#"><div class="pi4"></div></a>
+<div align="center">
+  <table width="60%" border="0">
+    <tr>
+      <td><div id="CollapsiblePanel1" class="CollapsiblePanel">
+        <div class="CollapsiblePanelTab" tabindex="0">
+          <div align="left"> <font color="#FFFFFF">.</font><font color="#666666">Flash动画</font></div>
+        </div>
+        <div class="CollapsiblePanelContent">
+          <p align="left"><font color="#333333" size="2" face="Tahoma, Geneva, sans-serif">Loading</font><font color="#999999" size="2" face="Tahoma, Geneva, sans-serif"><br />
+            如果你的网速也像我一样的悲剧，可能需要等等等...</font><div align="center">
+            <table width="500" border="0">
+              <tr>
+                <td><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="356" height="233" id="FLVPlayer5">
+                  <param name="movie" value="FLVPlayer_Progressive.swf" />
+                  <param name="quality" value="high" />
+                  <param name="wmode" value="opaque" />
+                  <param name="scale" value="noscale" />
+                  <param name="salign" value="lt" />
+                  <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/piss-little&amp;autoPlay=false&amp;autoRewind=false" />
+                  <param name="swfversion" value="8,0,0,0" />
+                  <!-- 此 param 标签提示使用 Flash Player 6.0 r65 和更高版本的用户下载最新版本的 Flash Player。如果您不想让用户看到该提示，请将其删除。 -->
+                  <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                  <!-- 下一个对象标签用于非 IE 浏览器。所以使用 IECC 将其从 IE 隐藏。 -->
+                  <!--[if !IE]>-->
+                  <object type="application/x-shockwave-flash" data="FLVPlayer_Progressive.swf" width="356" height="233">
+                    <!--<![endif]-->
+                    <param name="quality" value="high" />
+                    <param name="wmode" value="opaque" />
+                    <param name="scale" value="noscale" />
+                    <param name="salign" value="lt" />
+                    <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/piss-little&amp;autoPlay=false&amp;autoRewind=false" />
+                    <param name="swfversion" value="8,0,0,0" />
+                    <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                    <!-- 浏览器将以下替代内容显示给使用 Flash Player 6.0 和更低版本的用户。 -->
+                    <div>
+                      <h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
+                      <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获取 Adobe Flash Player" /></a></p>
+                    </div>
+                    <!--[if !IE]>-->
+                  </object>
+                  <!--<![endif]-->
+                </object></td>
+                <td><object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="356" height="233" id="FLVPlayer6">
+                  <param name="movie" value="FLVPlayer_Progressive.swf" />
+                  <param name="quality" value="high" />
+                  <param name="wmode" value="opaque" />
+                  <param name="scale" value="noscale" />
+                  <param name="salign" value="lt" />
+                  <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/JumpKill&amp;autoPlay=false&amp;autoRewind=false" />
+                  <param name="swfversion" value="8,0,0,0" />
+                  <!-- 此 param 标签提示使用 Flash Player 6.0 r65 和更高版本的用户下载最新版本的 Flash Player。如果您不想让用户看到该提示，请将其删除。 -->
+                  <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                  <!-- 下一个对象标签用于非 IE 浏览器。所以使用 IECC 将其从 IE 隐藏。 -->
+                  <!--[if !IE]>-->
+                  <object type="application/x-shockwave-flash" data="FLVPlayer_Progressive.swf" width="356" height="233">
+                    <!--<![endif]-->
+                    <param name="quality" value="high" />
+                    <param name="wmode" value="opaque" />
+                    <param name="scale" value="noscale" />
+                    <param name="salign" value="lt" />
+                    <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/JumpKill&amp;autoPlay=false&amp;autoRewind=false" />
+                    <param name="swfversion" value="8,0,0,0" />
+                    <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                    <!-- 浏览器将以下替代内容显示给使用 Flash Player 6.0 和更低版本的用户。 -->
+                    <div>
+                      <h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
+                      <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获取 Adobe Flash Player" /></a></p>
+                    </div>
+                    <!--[if !IE]>-->
+                  </object>
+                  <!--<![endif]-->
+                </object></td>
+                <td>&nbsp;</td>
+                </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                </tr>
+            </table>
+            <div align="left"><font color="#999999" size="2" face="Tahoma, Geneva, sans-serif">转底部外链<br />
+              <br />
+              <br />
+            </font></div>
+          </div></div>
+      </div></td>
+    </tr>
+  </table>
 </div>
-<div class="vider-1">
-            <div class="video">
-           	  <div class="video-x">
-           	  <div class="shipin00">
-            	<video poster="http://pic.rzx.me/rzxme/web/movie/shooting-01.jpg" id="movie" preload controls  width=355 height=200>
- <source src='http://pic.rzx.me/rzxme/web/movie/shooting-01.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='http://pic.rzx.me/rzxme/web/movie/shooting-01.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
-				</video>
-            	</div>
-           	  </div>
-           	  <div class="video-x"> 
-              	<div id="shipin05">
-            	<video poster="http://pic.rzx.me/rzxme/web/movie/flower.jpg" id="movie" preload controls  width=355 height=200>
- <source src='http://pic.rzx.me/rzxme/web/movie/flower.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='http://pic.rzx.me/rzxme/web/movie/flower.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
- <div class="html5-tip"><p><img src="'http://pic.rzx.me/rzxme/web/movie/html5-150.png" /></p>
- <p>本页面视频采用HTML5标准</p>
- <p>请使用<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh">Chrome</a>,Firefox,或者Safari浏览该网页.</p>
- </div>
-            	</video>
-            	</div>
-              </div>	
-           	  <div class="video-x">
-              	<div class="shipin05">
-            	<video poster="http://pic.rzx.me/rzxme/web/movie/dragonfire.jpg" id="movie" preload controls  width=355 height=200>
- <source src='http://pic.rzx.me/rzxme/web/movie/dragonfire.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='http://pic.rzx.me/rzxme/web/movie/dragonfire.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
-				</video>
-            	</div>
-              </div>
-              <div class="video-x">
-              	<div class="shipin00">
-            	<video poster="http://pic.rzx.me/rzxme/web/movie/begin-01.jpg" id="movie" preload controls  width=355 height=200>
- <source src='http://pic.rzx.me/rzxme/web/movie/begin-01.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='http://pic.rzx.me/rzxme/web/movie/begin-01.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
-				</video>
-            	</div>
-              </div>
-              <div class="video-x">
-              	<div class="shipin00">
-            	<video poster="http://pic.rzx.me/rzxme/web/movie/Gunman.jpg" id="movie" preload controls  width=355 height=200>
- <source src='http://pic.rzx.me/rzxme/web/movie/Gunman.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='http://pic.rzx.me/rzxme/web/movie/Gunman.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
-				</video>
-            	</div>
-              </div>
-              <div class="video-x">
-              	<div class="shipin00">
-            	<video poster="http://pic.rzx.me/rzxme/web/movie/gun-shooting.jpg" id="movie" preload controls  width=355 height=200>
- <source src='http://pic.rzx.me/rzxme/web/movie/xxx06.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='http://pic.rzx.me/rzxme/web/movie/xxx06.webm' type='video/webm; codecs="vp8.0, vorbis"'/>
-				</video>
-            	</div>
-              </div>
-          	</div>
-</div>          <div align="center">
-            <div class="shipin00">
-              <video poster="http://pic.rzx.me/rzxme/web/movie/nervous640.jpg" id="movie" preload controls width=640 height=360> 
- <source src='http://pic.rzx.me/rzxme/web/movie/nervous640.mp4' type='video/mp4; codecs="avc1.4D401E, mp4a.40.2"'/>
- <source src='http://pic.rzx.me/rzxme/web/movie/nervous640.webm' type='video/webm; codecs="vp8.0, vorbis"'/> 
-          <div class="html5-tip"><p><img src="http://pic.rzx.me/rzxme/web/movie/html5-150.png" /></p>
- <p>本页面视频采用HTML5标准</p>
- <p>请使用<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh" title="谷歌浏览器,本人推荐!!">Chrome</a>,<a href="http://firefox.com.cn/" title="火狐浏览器">Firefox</a>,或者<a href="http://www.apple.com.cn/safari/" title="苹果旗下浏览器">Safari</a>浏览该网页视频.</p>
-          </div>
-        </video>
+<div align="center">
+  <table width="60%" border="0">
+    <tr>
+      <td><table width="34%" border="0">
+        <tr>
+          <td><div id="CollapsiblePanel2" class="CollapsiblePanel">
+            <div class="CollapsiblePanelTab" tabindex="0">
+              <div align="left"><font color="#666666">漫画截镜</font></div>
             </div>
-           
-            <div class="loading">
+            <div class="CollapsiblePanelContent">
+              <p align="left"><font color="#999999" size="3" face="Tahoma, Geneva, sans-serif">Gun-man2.1</font><br />
+                <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="260" height="150" id="FLVPlayer7">
+                  <param name="movie" value="FLVPlayer_Progressive.swf" />
+                  <param name="quality" value="high" />
+                  <param name="wmode" value="opaque" />
+                  <param name="scale" value="noscale" />
+                  <param name="salign" value="lt" />
+                  <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/Gunman&amp;autoPlay=false&amp;autoRewind=false" />
+                  <param name="swfversion" value="8,0,0,0" />
+                  <!-- 此 param 标签提示使用 Flash Player 6.0 r65 和更高版本的用户下载最新版本的 Flash Player。如果您不想让用户看到该提示，请将其删除。 -->
+                  <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                  <!-- 下一个对象标签用于非 IE 浏览器。所以使用 IECC 将其从 IE 隐藏。 -->
+                  <!--[if !IE]>-->
+                  <object type="application/x-shockwave-flash" data="FLVPlayer_Progressive.swf" width="260" height="150">
+                    <!--<![endif]-->
+                    <param name="quality" value="high" />
+                    <param name="wmode" value="opaque" />
+                    <param name="scale" value="noscale" />
+                    <param name="salign" value="lt" />
+                    <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/Gunman&amp;autoPlay=false&amp;autoRewind=false" />
+                    <param name="swfversion" value="8,0,0,0" />
+                    <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                    <!-- 浏览器将以下替代内容显示给使用 Flash Player 6.0 和更低版本的用户。 -->
+                    <div>
+                      <h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
+                      <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获取 Adobe Flash Player" /></a></p>
+                    </div>
+                    <!--[if !IE]>-->
+                  </object>
+                  <!--<![endif]-->
+                </object>
+                <br />
+</p>
+              <p align="left"><font color="#999999" size="3" face="Tahoma, Geneva, sans-serif">JS</font><br />
+                <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="260" height="142" id="FLVPlayer3">
+                  <param name="movie" value="FLVPlayer_Progressive.swf" />
+                  <param name="quality" value="high" />
+                  <param name="wmode" value="opaque" />
+                  <param name="scale" value="noscale" />
+                  <param name="salign" value="lt" />
+                  <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/Gun-JS&amp;autoPlay=false&amp;autoRewind=false" />
+                  <param name="swfversion" value="8,0,0,0" />
+                  <!-- 此 param 标签提示使用 Flash Player 6.0 r65 和更高版本的用户下载最新版本的 Flash Player。如果您不想让用户看到该提示，请将其删除。 -->
+                  <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                  <!-- 下一个对象标签用于非 IE 浏览器。所以使用 IECC 将其从 IE 隐藏。 -->
+                  <!--[if !IE]>-->
+                  <object type="application/x-shockwave-flash" data="FLVPlayer_Progressive.swf" width="260" height="142">
+                    <!--<![endif]-->
+                    <param name="quality" value="high" />
+                    <param name="wmode" value="opaque" />
+                    <param name="scale" value="noscale" />
+                    <param name="salign" value="lt" />
+                    <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/Gun-JS&amp;autoPlay=false&amp;autoRewind=false" />
+                    <param name="swfversion" value="8,0,0,0" />
+                    <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                    <!-- 浏览器将以下替代内容显示给使用 Flash Player 6.0 和更低版本的用户。 -->
+                    <div>
+                      <h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
+                      <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获取 Adobe Flash Player" /></a></p>
+                    </div>
+                    <!--[if !IE]>-->
+                  </object>
+                  <!--<![endif]-->
+                </object>
+                <br />
+              </p>
+              <p align="left"><font color="#999999" size="3" face="Tahoma, Geneva, sans-serif">ShR-JW</font>
+                <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="260" height="152" id="FLVPlayer">
+                  <param name="movie" value="FLVPlayer_Progressive.swf" />
+                  <param name="quality" value="high" />
+                  <param name="wmode" value="opaque" />
+                  <param name="scale" value="noscale" />
+                  <param name="salign" value="lt" />
+                  <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/JW&amp;autoPlay=false&amp;autoRewind=false" />
+                  <param name="swfversion" value="8,0,0,0" />
+                  <!-- 此 param 标签提示使用 Flash Player 6.0 r65 和更高版本的用户下载最新版本的 Flash Player。如果您不想让用户看到该提示，请将其删除。 -->
+                  <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                  <!-- 下一个对象标签用于非 IE 浏览器。所以使用 IECC 将其从 IE 隐藏。 -->
+                  <!--[if !IE]>-->
+                  <object type="application/x-shockwave-flash" data="FLVPlayer_Progressive.swf" width="260" height="152">
+                    <!--<![endif]-->
+                    <param name="quality" value="high" />
+                    <param name="wmode" value="opaque" />
+                    <param name="scale" value="noscale" />
+                    <param name="salign" value="lt" />
+                    <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/JW&amp;autoPlay=false&amp;autoRewind=false" />
+                    <param name="swfversion" value="8,0,0,0" />
+                    <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                    <!-- 浏览器将以下替代内容显示给使用 Flash Player 6.0 和更低版本的用户。 -->
+                    <div>
+                      <h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
+                      <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获取 Adobe Flash Player" /></a></p>
+                    </div>
+                    <!--[if !IE]>-->
+                  </object>
+                  <!--<![endif]-->
+                </object>
+                <br />
+                <br />
+</p>
+              <p align="left"><font color="#999999" size="3" face="Tahoma, Geneva, sans-serif">Killer<br />
+                <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="260" height="160" id="FLVPlayer2">
+                  <param name="movie" value="FLVPlayer_Progressive.swf" />
+                  <param name="quality" value="high" />
+                  <param name="wmode" value="opaque" />
+                  <param name="scale" value="noscale" />
+                  <param name="salign" value="lt" />
+                  <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/Killer&amp;autoPlay=false&amp;autoRewind=false" />
+                  <param name="swfversion" value="8,0,0,0" />
+                  <!-- 此 param 标签提示使用 Flash Player 6.0 r65 和更高版本的用户下载最新版本的 Flash Player。如果您不想让用户看到该提示，请将其删除。 -->
+                  <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                  <!-- 下一个对象标签用于非 IE 浏览器。所以使用 IECC 将其从 IE 隐藏。 -->
+                  <!--[if !IE]>-->
+                  <object type="application/x-shockwave-flash" data="FLVPlayer_Progressive.swf" width="260" height="160">
+                    <!--<![endif]-->
+                    <param name="quality" value="high" />
+                    <param name="wmode" value="opaque" />
+                    <param name="scale" value="noscale" />
+                    <param name="salign" value="lt" />
+                    <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/Killer&amp;autoPlay=false&amp;autoRewind=false" />
+                    <param name="swfversion" value="8,0,0,0" />
+                    <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                    <!-- 浏览器将以下替代内容显示给使用 Flash Player 6.0 和更低版本的用户。 -->
+                    <div>
+                      <h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
+                      <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获取 Adobe Flash Player" /></a></p>
+                    </div>
+                    <!--[if !IE]>-->
+                  </object>
+                  <!--<![endif]-->
+                </object>
+              </font><br />
+              </p>
+              <p align="left"><font color="#999999" size="3" face="Tahoma, Geneva, sans-serif">Sword</font><br />
+                <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="260" height="195" id="FLVPlayer4">
+                  <param name="movie" value="FLVPlayer_Progressive.swf" />
+                  <param name="quality" value="high" />
+                  <param name="wmode" value="opaque" />
+                  <param name="scale" value="noscale" />
+                  <param name="salign" value="lt" />
+                  <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/SworldP&amp;autoPlay=false&amp;autoRewind=false" />
+                  <param name="swfversion" value="8,0,0,0" />
+                  <!-- 此 param 标签提示使用 Flash Player 6.0 r65 和更高版本的用户下载最新版本的 Flash Player。如果您不想让用户看到该提示，请将其删除。 -->
+                  <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                  <!-- 下一个对象标签用于非 IE 浏览器。所以使用 IECC 将其从 IE 隐藏。 -->
+                  <!--[if !IE]>-->
+                  <object type="application/x-shockwave-flash" data="FLVPlayer_Progressive.swf" width="260" height="195">
+                    <!--<![endif]-->
+                    <param name="quality" value="high" />
+                    <param name="wmode" value="opaque" />
+                    <param name="scale" value="noscale" />
+                    <param name="salign" value="lt" />
+                    <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/SworldP&amp;autoPlay=false&amp;autoRewind=false" />
+                    <param name="swfversion" value="8,0,0,0" />
+                    <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                    <!-- 浏览器将以下替代内容显示给使用 Flash Player 6.0 和更低版本的用户。 -->
+                    <div>
+                      <h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
+                      <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获取 Adobe Flash Player" /></a></p>
+                    </div>
+                    <!--[if !IE]>-->
+                  </object>
+                  <!--<![endif]-->
+                </object>
+                <br />
+              </p>
+              <p align="left"><font color="#999999" size="3" face="Tahoma, Geneva, sans-serif">Ts</font><br />
+                <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="260" height="158" id="FLVPlayer1">
+                  <param name="movie" value="FLVPlayer_Progressive.swf" />
+                  <param name="quality" value="high" />
+                  <param name="wmode" value="opaque" />
+                  <param name="scale" value="noscale" />
+                  <param name="salign" value="lt" />
+                  <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/Ts&amp;autoPlay=false&amp;autoRewind=false" />
+                  <param name="swfversion" value="8,0,0,0" />
+                  <!-- 此 param 标签提示使用 Flash Player 6.0 r65 和更高版本的用户下载最新版本的 Flash Player。如果您不想让用户看到该提示，请将其删除。 -->
+                  <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                  <!-- 下一个对象标签用于非 IE 浏览器。所以使用 IECC 将其从 IE 隐藏。 -->
+                  <!--[if !IE]>-->
+                  <object type="application/x-shockwave-flash" data="FLVPlayer_Progressive.swf" width="260" height="158">
+                    <!--<![endif]-->
+                    <param name="quality" value="high" />
+                    <param name="wmode" value="opaque" />
+                    <param name="scale" value="noscale" />
+                    <param name="salign" value="lt" />
+                    <param name="FlashVars" value="&amp;MM_ComponentVersion=1&amp;skinName=Corona_Skin_2&amp;streamName=http://www.ruizhenxin.com/web/flash/Ts&amp;autoPlay=false&amp;autoRewind=false" />
+                    <param name="swfversion" value="8,0,0,0" />
+                    <param name="expressinstall" value="../Scripts/expressInstall.swf" />
+                    <!-- 浏览器将以下替代内容显示给使用 Flash Player 6.0 和更低版本的用户。 -->
+                    <div>
+                      <h4>此页面上的内容需要较新版本的 Adobe Flash Player。</h4>
+                      <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获取 Adobe Flash Player" /></a></p>
+                    </div>
+                    <!--[if !IE]>-->
+                  </object>
+                  <!--<![endif]-->
+                </object>
+                <br />
+</p>
             </div>
-          </div>
+          </div></td>
+        </tr>
+      </table></td>
+    </tr>
+  </table>
+  <table width="60%" border="0">
+    <tr>
+      <td><table width="34%" border="0">
+        <tr>
+          <td><div id="CollapsiblePanel3" class="CollapsiblePanel">
+            <div class="CollapsiblePanelTab" tabindex="0">
+              <div align="left"><font color="#666666">电影-Movies</font></div>
+            </div>
+            <div class="CollapsiblePanelContent"><font color="#999999" size="2"><br />
+              整理中....</font></div>
+          </div></td>
+        </tr>
+      </table></td>
+    </tr>
+  </table>
+</div>
+<p><br />
+</p>
+<p align="center"><img src="images/Gunm.jpg" width="800" height="1422" alt="Gunman-imgs" /></p>
+<p align="center"><a href=" http://u.youku.com/zhenxinfrozen"><font color="#999999" size="2">优酷空间</font></a></p>
+<script type="text/javascript">
+<!--
+var CollapsiblePanel1 = new Spry.Widget.CollapsiblePanel("CollapsiblePanel1", {contentIsOpen:false});
+var CollapsiblePanel2 = new Spry.Widget.CollapsiblePanel("CollapsiblePanel2", {contentIsOpen:false});
+var CollapsiblePanel3 = new Spry.Widget.CollapsiblePanel("CollapsiblePanel3", {contentIsOpen:false});
+swfobject.registerObject("FLVPlayer");
+swfobject.registerObject("FLVPlayer1");
+swfobject.registerObject("FLVPlayer2");
+swfobject.registerObject("FLVPlayer3");
+swfobject.registerObject("FLVPlayer4");
+swfobject.registerObject("FLVPlayer5");
+swfobject.registerObject("FLVPlayer6");
+swfobject.registerObject("FLVPlayer7");
+//-->
+</script>
 </body>
 </html>

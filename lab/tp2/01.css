@@ -1,0 +1,8 @@
+@charset "utf-8";
+body {
+	background-attachment: scroll;
+	background-color: #666;
+	background-image: url(images/yan.JPG);
+	background-repeat: repeat;
+	background-position: center center;
+}
