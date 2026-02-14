@@ -1,255 +1,357 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xn="http://www.renren.com/2009/xnml">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-<link rel="icon" href="favicon.ico" type="x-icon" />
-      <link REL="SHORTCUT ICON" HREF="favicon.ico" type="x-icon" />
-<meta name="copyright" content="站点所有原创图片版权归作者所有. 转载注明出处....." />
-<meta name="keywords" content="动画，漫画，图片，电影，动漫，芮真心，分镜头台本，颓废的动画人" />
-<meta name="description" content="颓废动画人的个人网站，动画，漫画，电影，涂鸦和作品练习.扯淡的东西..." />
-<meta http-equiv="refresh" content="600" />
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>颓废动画人-zhenxinfrozen</title>
-<style type="text/css">
-<!--
-body,td,th {
-	color: #300;
-}
-body {
-	background-color: #FFF;
-	color: #303;
-}
-a:visited {
-	color: #333;
-}
--->
-</style>
-<script src="SpryAssets/SpryCollapsiblePanel.js" type="text/javascript"></script>
-<script src="SpryAssets/SpryMenuBar.js" type="text/javascript"></script>
-<script type="text/javascript">
-<!--
-function MM_preloadImages() { //v3.0
-  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
-    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
-    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
-}
-function MM_swapImgRestore() { //v3.0
-  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
-}
-function MM_findObj(n, d) { //v4.01
-  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
-    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
-  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
-  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
-  if(!x && d.getElementById) x=d.getElementById(n); return x;
-}
-
-function MM_swapImage() { //v3.0
-  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
-   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
-}
-function MM_nbGroup(event, grpName) { //v6.0
-  var i,img,nbArr,args=MM_nbGroup.arguments;
-  if (event == "init" && args.length > 2) {
-    if ((img = MM_findObj(args[2])) != null && !img.MM_init) {
-      img.MM_init = true; img.MM_up = args[3]; img.MM_dn = img.src;
-      if ((nbArr = document[grpName]) == null) nbArr = document[grpName] = new Array();
-      nbArr[nbArr.length] = img;
-      for (i=4; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
-        if (!img.MM_up) img.MM_up = img.src;
-        img.src = img.MM_dn = args[i+1];
-        nbArr[nbArr.length] = img;
-    } }
-  } else if (event == "over") {
-    document.MM_nbOver = nbArr = new Array();
-    for (i=1; i < args.length-1; i+=3) if ((img = MM_findObj(args[i])) != null) {
-      if (!img.MM_up) img.MM_up = img.src;
-      img.src = (img.MM_dn && args[i+2]) ? args[i+2] : ((args[i+1])? args[i+1] : img.MM_up);
-      nbArr[nbArr.length] = img;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="copyright" content="站点所有原创图片版权归作者所有. 转载注明出处....." />
+  <meta name="keywords" content="动画，漫画，图片，电影，动漫，芮真心，分镜头台本，颓废的动画人" />
+  <meta name="description" content="颓废动画人的个人网站，动画，漫画，电影，涂鸦和作品练习.扯淡的东西..." />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <title>颓废动画人-zhenxinfrozen</title>
+  <style>
+    :root {
+      --text-color: rgb(55, 55, 55);
+      --secondary-text: #9b9b9b;
+      --bg-color: #fff;
+      --panel-bg: #f0f0f0;
+      --panel-border: #ccc;
+      --accent: #ff8600;
+      --link-visited-color: #333;
+      --about-color: #336600;
     }
-  } else if (event == "out" ) {
-    for (i=0; i < document.MM_nbOver.length; i++) {
-      img = document.MM_nbOver[i]; img.src = (img.MM_dn) ? img.MM_dn : img.MM_up; }
-  } else if (event == "down") {
-    nbArr = document[grpName];
-    if (nbArr)
-      for (i=0; i < nbArr.length; i++) { img=nbArr[i]; img.src = img.MM_up; img.MM_dn = 0; }
-    document[grpName] = nbArr = new Array();
-    for (i=2; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
-      if (!img.MM_up) img.MM_up = img.src;
-      img.src = img.MM_dn = (args[i+1])? args[i+1] : img.MM_up;
-      nbArr[nbArr.length] = img;
-  } }
-}
-//-->
-</script>
-<link href="SpryAssets/SpryCollapsiblePanel.css" rel="stylesheet" type="text/css" />
-<link href="SpryAssets/SpryMenuBarHorizontal.css" rel="stylesheet" type="text/css" />
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:visited {
+      color: var(--link-visited-color);
+    }
+
+    header {
+      text-align: center;
+      /* border-bottom: 1px solid var(--panel-border); */
+    }
+
+    .banner-trigger {
+      padding: 12px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      color: var(--secondary-text);
+      font-size: 1.1rem;
+      font-family: Tahoma, Geneva, sans-serif;
+    }
+
+    .banner-trigger:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .collapsible {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      background: #fff;
+    }
+
+    .collapsible.open {
+      border-top: 1px solid var(--panel-border);
+    }
+
+    .collapsible-inner {
+      padding: 16px 24px 24px;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 8px 18px;
+      display: inline-flex;
+      justify-content: center;
+      gap: 18px;
+      background: var(--panel-bg);
+      flex-wrap: wrap;
+      border-radius: 2px;
+    }
+
+    nav li {
+      font-weight: bold;
+      position: relative;
+      padding: 8px 4px;
+    }
+
+    nav li:not(:last-child)::after {
+      content: "|";
+      color: #999;
+      position: absolute;
+      right: -12px;
+    }
+
+    .beta-note {
+      margin: 0;
+      padding: 20px 0 10px;
+      color: var(--secondary-text);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px 24px;
+      gap: 32px;
+    }
+
+    .hero img {
+      max-height: 400px;
+      height: 400px;
+      width: auto;
+      max-width: 90vw;
+      object-fit: contain;
+    }
+
+    .icon-grid {
+      width: 100%;
+      max-width: 1080px;
+    }
+
+    .icon-grid ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+
+    .icon-card {
+      text-align: center;
+    }
+
+    .icon-card img {
+      width: 100px;
+      height: 100px;
+      border: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .icon-card span {
+      display: block;
+      margin-top: 8px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .icon-card span.about {
+      color: var(--about-color);
+    }
+
+    .side-panel {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 280px;
+      border: 1px solid var(--panel-border);
+      background: #fff;
+    }
+
+    .side-panel-header {
+      padding: 10px;
+      background: var(--panel-bg);
+      cursor: pointer;
+      transition: background 0.3s ease;
+      font-size: 0.95rem;
+      color: var(--secondary-text);
+      text-align: center;
+    }
+
+    .side-panel-header:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .side-panel-content {
+      display: none;
+      padding: 16px;
+      font-size: 0.85rem;
+      color: #666;
+      text-align: left;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #cdcdcd;
+      padding: 16px 0 32px;
+    }
+
+    @media (max-width: 640px) {
+      nav li:not(:last-child)::after {
+        display: none;
+      }
+    }
+  </style>
 </head>
+<body>
+  <header>
+    <div class="banner-trigger" id="bannerToggle">zhenxinfrozen</div>
+    <div class="collapsible" id="bannerContent">
+      <div class="collapsible-inner">
+        <nav>
+          <ul>
+            <li><a href="web/Animation.html">Animation</a></li>
+            <li><a href="web/Latest.html">Latest</a></li>
+            <li><a href="web/comic.html">Comic</a></li>
+            <li><a href="web/blog.html">Blog</a></li>
+            <li><a href="web/Sketch.html">MySketchBook</a></li>
+            <li><a href="web/Pictures.html">Pictures</a></li>
+            <li><a href="web/contact.html">About Me</a></li>
+          </ul>
+        </nav>
+        <p class="beta-note"><strong>Beta： 1.3</strong><br />日子那么长,时间这么短</p>
+      </div>
+    </div>
+  </header>
 
-<body onload="MM_preloadImages('web/images/c02.jpg','web/images/b02.jpg','web/images/e04.jpg','web/images/g02.jpg','web/images/a02.jpg','web/images/d03.jpg','web/images/21111111120.jpg','web/images/21111111119.jpg','web/images/21111111121.jpg')">
-<table width="100%" border="0">
-  <tr>
-    <td><div id="CollapsiblePanel1" class="CollapsiblePanel">
-      <div class="CollapsiblePanelTab" tabindex="0">
-        <div align="center"><font color="#666666" size="3" face="Tahoma, Geneva, sans-serif">zhenxinfrozen</font></div>
-      </div>
-      <div align="center"> 
-        <table width="40%" border="0">
-          <tr>
-            <td><div align="center">
-              <ul id="MenuBar1" class="MenuBarHorizontal"><b>
-                <li><a class="MenuBarItemSubmenu" href="web/Animation.html">Animation</a>
-                  <ul>
-                    <li><a href="#">Flash</a></li>
-                    <li><a href="#">分镜头</a></li>
-                    <li><a href="#">电影</a></li>
-                  </ul>
-                </li>
-                <li><a href="web/Latest.html">Latest</a></li>
-                <li><a class="MenuBarItemSubmenu" href="web/comic.html">Comic</a>
-                  <ul>
-                    <li><a class="MenuBarItemSubmenu" href="#">Now</a>
-                      <ul>
-                        <li><a href="#">女王蜂</a></li>
-                        <li><a href="#">郎朗STORY</a></li>
-                      </ul>
-                    </li>
-                    <li><a href="#">散页</a></li>
-                    <li><a href="lab/tp/index.html">小时候</a></li>
-                  </ul>
-                </li>
-                <li><a href="web/Pictures.html">Pictures</a></li></b>
-              </ul> 
-                </div></td>
-            </tr>
-        </table>
-        <p><font color="#999999" size="2" face="Tahoma, Geneva, sans-serif"><b>Beta： 1.3<br />
-        日子那么长,时间这么短<br />
-        </b></font></p>
-        
-      </div>
-      <div align="center"></div>
-    </div></td>
-  </tr>
-</table>
-<div align="center">
-  <table width="200" border="0">
-    <tr>
-      <td><div align="center">
-        <table border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td><a href="javascript:;" target="_top" onclick="MM_nbGroup('down','group1','donkey','web/images/21111111120.jpg',1)" onmouseover="MM_nbGroup('over','donkey','web/images/21111111119.jpg','web/images/21111111121.jpg',1)" onmouseout="MM_nbGroup('out')"><img src="web/images/21111111118.jpg" alt="doney" name="donkey" border="0" id="donkey" onload="" /></a></td>
-          </tr>
-        </table>
-      </div></td>
-    </tr>
-  </table>
-</div>
-<p align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small><small>&nbsp;</small></small></p>
-<div align="center"></div>
-<div align="center">
-  <table width="1059" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <th width="128" scope="col">&nbsp;</th>
-      <th width="132" scope="col">&nbsp;</th>
-      <th width="189" scope="col">&nbsp;</th>
-      <th width="182" scope="col"><div align="center"></div></th>
-      <th width="154" scope="col">&nbsp;</th>
-      <th width="150" scope="col">&nbsp;</th>
-      <th width="124" scope="col">&nbsp;</th>
-    </tr>
-    <tr>
-      <td><div align="center"><a href="web/Animation.html" target="_blank" onmouseover="MM_swapImage('Image9','','web/images/b02.jpg',1)" onmouseout="MM_swapImgRestore()"><img src="web/images/b03.jpg" alt="daxiao" name="Image9" width="100" height="100" border="0" id="Image9" /></a></div></td>
-      <td><div align="center"><a href="web/Latest.html" target="_blank" onmouseover="MM_swapImage('Image13','','web/images/d03.jpg',1)" onmouseout="MM_swapImgRestore()"><img src="web/images/d02.jpg" alt="nvren" name="Image13" width="100" height="100" border="0" id="Image13" /></a></div></td>
-      <td><div align="center"><a href="web/comic.html" target="_blank" onmouseover="MM_swapImage('Image10','','web/images/e04.jpg',1)" onmouseout="MM_swapImgRestore()"><img src="web/images/e03.jpg" alt="manhua02" name="Image10" width="100" height="100" border="0" id="Image10" /></a></div></td>
-      <td><div align="center"><a href="/blog2.html" target="_blank" onmouseover="MM_swapImage('Image11','','web/images/g02.jpg',1)" onmouseout="MM_swapImgRestore()"><img src="web/images/g03.jpg" alt="wordpress" name="Image11" width="100" height="100" border="0" id="Image11" /></a></div></td>
-      <td><div align="center"><a href="web/Sketch.html" target="_blank" onmouseover="MM_swapImage('Image14','','web/images/f03.jpg',0)" onmouseout="MM_swapImgRestore()"><img src="web/images/f04.jpg" alt="book" name="Image14" width="100" height="100" border="0" id="Image14" /></a></div></td>
-      <td><div align="center"><a href="web/Pictures.html" target="_blank" onmouseover="MM_swapImage('Image8','','web/images/c02.jpg',1)" onmouseout="MM_swapImgRestore()"><img src="web/images/c023.jpg" alt="ANDACHONG" name="Image8" width="100" height="100" border="0" id="Image8" /></a></div></td>
-      <td><a href="/web/contact.html" target="_blank" onmouseover="MM_swapImage('Image12','','web/images/a02.jpg',1)" onmouseout="MM_swapImgRestore()"><img src="web/images/a03.jpg" alt="nadao" name="Image12" width="100" height="100" border="0" id="Image12" /></a></td>
-    </tr>
-  </table>
-</div>
-<div align="center">
-  <table width="1077" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <th width="136" scope="col">Animation</th>
-      <th width="132" scope="col">Latest</th>
-      <th width="190" scope="col"><div align="center">Comic</div></th>
-      <th width="182" scope="col"><div align="center">Blog</div></th>
-      <th width="156" scope="col">MySketchBook</th>
-      <th width="147" scope="col"><div align="center">Pictures</div></th>
-      <th width="134" scope="col"><div align="center"><font color="#336600">About Me</font></div></th>
-    </tr>
-  </table>
-</div>
-<p align="center">&nbsp;</p>
-<table width="283" border="0" align="right">
-  <tr>
-    <td><div id="CollapsiblePanel2" class="CollapsiblePanel">
-      <div class="CollapsiblePanelTab" tabindex="0">
-        <div align="center"><font size="1.5" color="#666666" >说点什么</font></div>
-        </div>
-      <div class="CollapsiblePanelContent"><div align="right"><!-- Include the Google Friend Connect javascript library. -->
-  <script type="text/javascript" src="http://www.google.com/friendconnect/script/friendconnect.js"></script>
-  <!-- Define the div tag where the gadget will be inserted. -->
-  <div id="div-383471402362208564" style="width:282px;border:1px solid #cccccc;"></div>
-  <!-- Render the gadget into a div. -->
-  <script type="text/javascript">
-var skin = {};
-skin['BORDER_COLOR'] = '#cccccc';
-skin['ENDCAP_BG_COLOR'] = '#cccccc';
-skin['ENDCAP_TEXT_COLOR'] = '#333333';
-skin['ENDCAP_LINK_COLOR'] = '#0000cc';
-skin['ALTERNATE_BG_COLOR'] = '#ffffff';
-skin['CONTENT_BG_COLOR'] = '#ffffff';
-skin['CONTENT_LINK_COLOR'] = '#0000cc';
-skin['CONTENT_TEXT_COLOR'] = '#333333';
-skin['CONTENT_SECONDARY_LINK_COLOR'] = '#7777cc';
-skin['CONTENT_SECONDARY_TEXT_COLOR'] = '#666666';
-skin['CONTENT_HEADLINE_COLOR'] = '#999999';
-skin['DEFAULT_COMMENT_TEXT'] = '- \u6765\u70b9\u6279\u8bc4\u6216\u5efa\u8bae\u5427\uff01 -';
-skin['HEADER_TEXT'] = '\u968f\u4fbf\u55b7\u55b7\uff5e';
-skin['POSTS_PER_PAGE'] = '5';
-google.friendconnect.container.setParentUrl('/' /* location of rpc_relay.html and canvas.html */);
-google.friendconnect.container.renderReviewGadget(
- { id: 'div-383471402362208564',
-   site: '03787454109798873283',
-   'view-params':{"disableMinMax":"false","scope":"SITE","allowAnonymousPost":"true","startMaximized":"true"}
- },
-  skin);
-</script>
-  </div></div>
-    </div></td>
-  </tr>
-  <tr>
-    <td><div align="center"><xn:login-button size="medium" background="white" label="连接" show-faces="true" face-size="small" max-rows="2" face-space="5" width="217"></xn:login-button>
-<script type="text/javascript" src="http://static.connect.renren.com/js/v1.0/FeatureLoader.jsp"></script>
-  <script type="text/javascript">
-    XN_RequireFeatures(["EXNML"], function()
-    {
-      XN.Main.init("b6ddefbfbd5e4a5a90a1336fbfa1ac1b", "/xd_receiver.html");
+  <main>
+    <section class="hero">
+      <img src="web/images/21111111118.jpg" alt="donkey sketch" id="heroDrawing" />
+    </section>
+
+    <section class="icon-grid">
+      <ul>
+        <li class="icon-card">
+          <a href="web/Animation.html" target="_blank">
+            <img src="web/images/b03.jpg" alt="Animation" data-default="web/images/b03.jpg" data-hover="web/images/b02.jpg" />
+          </a>
+          <span>Animation</span>
+        </li>
+        <li class="icon-card">
+          <a href="web/Latest.html" target="_blank">
+            <img src="web/images/d02.jpg" alt="Latest" data-default="web/images/d02.jpg" data-hover="web/images/d03.jpg" />
+          </a>
+          <span>Latest</span>
+        </li>
+        <li class="icon-card">
+          <a href="web/comic.html" target="_blank">
+            <img src="web/images/e03.jpg" alt="Comic" data-default="web/images/e03.jpg" data-hover="web/images/e04.jpg" />
+          </a>
+          <span>Comic</span>
+        </li>
+        <li class="icon-card">
+          <a href="web/blog.html" target="_blank">
+            <img src="web/images/g03.jpg" alt="Blog" data-default="web/images/g03.jpg" data-hover="web/images/g02.jpg" />
+          </a>
+          <span>Blog</span>
+        </li>
+        <li class="icon-card">
+          <a href="web/Sketch.html" target="_blank">
+            <img src="web/images/f04.jpg" alt="MySketchBook" data-default="web/images/f04.jpg" data-hover="web/images/f03.jpg" />
+          </a>
+          <span>MySketchBook</span>
+        </li>
+        <li class="icon-card">
+          <a href="web/Pictures.html" target="_blank">
+            <img src="web/images/c023.jpg" alt="Pictures" data-default="web/images/c023.jpg" data-hover="web/images/c02.jpg" />
+          </a>
+          <span>Pictures</span>
+        </li>
+        <li class="icon-card">
+          <a href="web/contact.html" target="_blank">
+            <img src="web/images/a03.jpg" alt="About Me" data-default="web/images/a03.jpg" data-hover="web/images/a02.jpg" />
+          </a>
+          <span class="about">About Me</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <aside class="side-panel" id="commentPanel">
+    <div class="side-panel-header" id="panelToggle">说点什么</div>
+    <div class="side-panel-content" id="panelContent">
+      <p>原google，微博 留言组件已失效。</p>
+      <p>这里暂时保存提示文案。</p>
+      <p>欢迎通过站点其他渠道留言或来点批评建议！</p>
+    </div>
+  </aside>
+
+  <footer>© zhenxinfrozen</footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const bannerToggle = document.getElementById('bannerToggle');
+      const bannerContent = document.getElementById('bannerContent');
+      const panelToggle = document.getElementById('panelToggle');
+      const panelContent = document.getElementById('panelContent');
+      const heroDrawing = document.getElementById('heroDrawing');
+      const heroFrames = [
+        'web/images/21111111118.jpg',
+        'web/images/21111111119.jpg',
+        'web/images/21111111120.jpg',
+        'web/images/21111111121.jpg'
+      ];
+      let heroIndex = 0;
+
+      if (bannerToggle && bannerContent) {
+        bannerToggle.addEventListener('click', () => {
+          const isOpen = bannerContent.classList.toggle('open');
+          bannerContent.style.maxHeight = isOpen ? bannerContent.scrollHeight + 'px' : '0px';
+        });
+      }
+
+      if (panelToggle && panelContent) {
+        panelToggle.addEventListener('click', () => {
+          const isVisible = panelContent.style.display === 'block';
+          panelContent.style.display = isVisible ? 'none' : 'block';
+        });
+      }
+
+      if (heroDrawing) {
+        heroDrawing.addEventListener('click', () => {
+          heroIndex = (heroIndex + 1) % heroFrames.length;
+          heroDrawing.src = heroFrames[heroIndex];
+        });
+      }
+
+      document.querySelectorAll('.icon-card img').forEach((img) => {
+        const defaultSrc = img.dataset.default;
+        const hoverSrc = img.dataset.hover;
+        if (!defaultSrc || !hoverSrc) return;
+        img.addEventListener('mouseenter', () => {
+          img.src = hoverSrc;
+        });
+        img.addEventListener('mouseleave', () => {
+          img.src = defaultSrc;
+        });
+      });
     });
-</script></div></td>
-  </tr>
-</table>
-<div align="right"></div>
-<p align="right">&nbsp;  </p>
-<p align="right">&nbsp;</p>
-<p align="right">. </p>
-<script type="text/javascript">
-var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-18450539-1']);
-  _gaq.push(['_trackPageview']);
+  </script>
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-var CollapsiblePanel1 = new Spry.Widget.CollapsiblePanel("CollapsiblePanel1", {contentIsOpen:false});
-var MenuBar1 = new Spry.Widget.MenuBar("MenuBar1", {imgDown:"SpryAssets/SpryMenuBarDownHover.gif", imgRight:"SpryAssets/SpryMenuBarRightHover.gif"});
-var CollapsiblePanel2 = new Spry.Widget.CollapsiblePanel("CollapsiblePanel2", {contentIsOpen:false});
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-18450539-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-18450539-1');
+  </script>
 </body>
 </html>
