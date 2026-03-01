@@ -9,7 +9,7 @@ require_once __DIR__ . '/../../Utils/GalleryManager.php';
 // 简单的认证检查
 session_start();
 if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
-    header('Location: ../login.php');
+    header('Location: /admin?page=login');
     exit;
 }
 

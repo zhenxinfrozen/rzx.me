@@ -12,7 +12,7 @@ if (!headers_sent()) {
 session_start();
 if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
     // 强制跳转到 admin 目录下的 login.php
-    header('Location: /admin/login.php');
+    header('Location: /admin?page=login');
     exit;
 }
 

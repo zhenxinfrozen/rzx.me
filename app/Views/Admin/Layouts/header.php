@@ -12,7 +12,7 @@ if (!headers_sent()) {
 session_start();
 if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
     // 强制跳转到 admin 目录下的 login.php
-    header('Location: /admin/login.php');
+    header('Location: /admin?page=login');
     exit;
 }
 
@@ -84,23 +84,23 @@ $current_user = [
             padding: var(--spacing-xl);
             flex: 1;
         }
-        
+
         .page-header {
             margin-bottom: var(--spacing-xl);
         }
-        
+
         .page-header h1 {
             font-size: 28px;
             font-weight: 600;
             margin-bottom: var(--spacing-xs);
             color: var(--text-primary);
         }
-        
+
         .page-header p {
             color: var(--text-secondary);
             font-size: 16px;
         }
-        
+
         .content-card {
             background: var(--bg-secondary);
             border-radius: var(--radius-medium);
@@ -108,29 +108,29 @@ $current_user = [
             box-shadow: var(--shadow-light);
             margin-bottom: var(--spacing-lg);
         }
-        
+
         .form-section {
             margin-bottom: var(--spacing-xl);
         }
-        
+
         .form-section h3 {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: var(--spacing-md);
             color: var(--text-primary);
         }
-        
+
         .form-group {
             margin-bottom: var(--spacing-md);
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: var(--spacing-xs);
             font-weight: 500;
             color: var(--text-primary);
         }
-        
+
         .form-control {
             width: 100%;
             padding: var(--spacing-sm) var(--spacing-md);
@@ -139,37 +139,37 @@ $current_user = [
             font-size: 14px;
             transition: border-color 0.2s ease;
         }
-        
+
         .form-control:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 2px rgba(0,115,170,0.1);
         }
-        
+
         .btn-group {
             display: flex;
             gap: var(--spacing-sm);
             margin-top: var(--spacing-lg);
         }
-        
+
         .alert {
             padding: var(--spacing-md);
             border-radius: var(--radius-small);
             margin-bottom: var(--spacing-md);
         }
-        
+
         .alert-success {
             background-color: #f0f9ff;
             color: #00a32a;
             border: 1px solid #bfdbfe;
         }
-        
+
         .alert-error {
             background-color: #fef2f2;
             color: #d63638;
             border: 1px solid #fecaca;
         }
-        
+
         .alert-info {
             background-color: #eff6ff;
             color: #0073aa;
@@ -188,7 +188,7 @@ $current_user = [
             <h2 class="site-title">RZX.ME</h2>
             <span class="site-subtitle">后台管理</span>
         </div>
-        
+
         <ul class="sidebar-menu">
             <li class="menu-item <?= $current_page === 'dashboard' ? 'active' : '' ?>">
                 <a href="/admin/index.php">
@@ -305,7 +305,7 @@ $current_user = [
                 </a>
             </li>
         </ul>
-        
+
         <div class="sidebar-footer">
             <div class="user-info">
                 <div class="user-avatar">R</div>
@@ -316,7 +316,7 @@ $current_user = [
             </div>
         </div>
     </nav>
-    
+
     <!-- 主内容区域 -->
     <main class="admin-main">
         <!-- 顶部导航栏 -->
@@ -325,13 +325,13 @@ $current_user = [
                 <h1 class="page-title"><?= htmlspecialchars($page_title) ?></h1>
                 <span class="page-subtitle"><?= htmlspecialchars($page_subtitle) ?></span>
             </div>
-            
+
             <div class="header-right">
                 <button class="btn btn-outline" onclick="window.open('/', '_blank')">
                     <i data-feather="external-link"></i>
                     访问网站
                 </button>
-                
+
                 <div class="user-menu">
                     <button class="user-menu-trigger">
                         <div class="user-avatar small">R</div>
@@ -340,5 +340,5 @@ $current_user = [
                 </div>
             </div>
         </header>
-        
+
         <!-- 页面内容区域开始 -->
