@@ -16,6 +16,11 @@ class AdminIndexController
         // 获取请求的页面
         $page = $_GET['page'] ?? 'dashboard';
 
+        if ($page === 'login') {
+            require_once __DIR__ . '/../Views/login.php';
+            return;
+        }
+
         // 定义可用的页面和对应的控制器
         $pages = [
             'dashboard' => [

@@ -15,7 +15,7 @@ if (!isset($_GET['dev'])) {
         session_start();
     }
     if (!isset($_SESSION['admin_authenticated'])) {
-        header('Location: ../login.php');
+            header('Location: /admin?page=login');
         exit;
     }
 } else {
