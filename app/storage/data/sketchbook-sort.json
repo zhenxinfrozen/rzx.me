@@ -17,6 +17,8 @@
         "remove_prefix": true,
         "separator": "-"
     },
-    "display_names": [],
+    "display_names": {
+        "boutter-test": "boutter-test"
+    },
     "descriptions": []
 }

@@ -1,6 +1,6 @@
 {
     "_comment": "统一图片排序配置文件 - 合并single-works和sketchbook的排序信息",
-    "_generated": "2026-01-22T22:57:40+08:00",
+    "_generated": "2026-03-02T23:14:29+08:00",
     "_description": "此文件统一管理所有模块的图片排序配置",
     "modules": {
         "single-works": {
@@ -148,7 +148,7 @@
         },
         "galleries": {
             "_comment": "统一图片排序配置文件 - 合并single-works和sketchbook的排序信息",
-            "_generated": "2026-01-22T22:11:33+08:00",
+            "_generated": "2026-03-02T23:14:29+08:00",
             "_description": "此文件统一管理所有模块的图片排序配置",
             "modules": {
                 "single-works": {
@@ -309,21 +309,15 @@
                 ],
                 "bwfs": [
                     "11111.jpg",
-                    "bbbbf01.jpg",
-                    "bbbbf02.jpg",
-                    "bbbbf03.jpg",
-                    "bbbbf04.jpg",
                     "bbbbf05.jpg",
-                    "bbbbf06.jpg",
                     "bbbbf07.jpg",
-                    "bbbbf08.jpg",
                     "wp.gif"
                 ]
             }
         },
         "Drafts": {
             "_comment": "统一图片排序配置文件 - 合并single-works和sketchbook的排序信息",
-            "_generated": "2026-01-22T22:57:40+08:00",
+            "_generated": "2026-03-02T23:07:48+08:00",
             "_description": "此文件统一管理所有模块的图片排序配置",
             "modules": {
                 "single-works": {
@@ -650,6 +644,11 @@
                     "009_010_009_011_1.jpg",
                     "010_011_010_009_ray-pic-color-2010.jpg",
                     "011_005_011_010_ray-pic-color-test.jpg"
+                ],
+                "rrrrrr": [
+                    "2018-01-14_13_12_07.jpg",
+                    "draw-2012-12-18_16-24-17-0072.jpg",
+                    "13-11-00000.jpg"
                 ]
             }
         }

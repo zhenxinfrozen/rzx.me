@@ -210,23 +210,11 @@ $current_user = [
                     <span>Sketchbook管理</span>
                 </a>
             </li>
-            <li class="menu-item <?= $current_page === 'sketchbook-new' ? 'active' : '' ?>">
-                <a href="/admin?page=sketchbook-new">
-                    <i data-feather="book-open"></i>
-                    <span>Sketchbook管理-new</span>
-                </a>
-            </li>
 
             <li class="menu-item <?= $current_page === 'comics' ? 'active' : '' ?>">
                 <a href="/admin?page=comics">
                     <i data-feather="layers"></i>
                     <span>Comics管理</span>
-                </a>
-            </li>
-            <li class="menu-item <?= $current_page === 'comics-new' ? 'active' : '' ?>">
-                <a href="/admin?page=comics-new">
-                    <i data-feather="layers"></i>
-                    <span>Comics管理-new</span>
                 </a>
             </li>
 
@@ -236,23 +224,11 @@ $current_user = [
                     <span>Videos管理</span>
                 </a>
             </li>
-            <li class="menu-item <?= $current_page === 'videos-new' ? 'active' : '' ?>">
-                <a href="/admin?page=videos-new">
-                    <i data-feather="film"></i>
-                    <span>Videos管理-new</span>
-                </a>
-            </li>
 
-            <li class="menu-item <?= $current_page === 'galleries-manager' ? 'active' : '' ?>">
-                <a href="/admin?page=galleries-manager">
+            <li class="menu-item <?= $current_page === 'galleries' ? 'active' : '' ?>">
+                <a href="/admin?page=galleries">
                     <i data-feather="folder"></i>
                     <span>Galleries画廊管理</span>
-                </a>
-            </li>
-            <li class="menu-item <?= $current_page === 'galleries-new' ? 'active' : '' ?>">
-                <a href="/admin?page=galleries-new">
-                    <i data-feather="folder"></i>
-                    <span>Galleries画廊管理-new</span>
                 </a>
             </li>
 
@@ -260,12 +236,6 @@ $current_user = [
                 <a href="/admin?page=drafts">
                     <i data-feather="edit-3"></i>
                     <span>Drafts 草稿管理</span>
-                </a>
-            </li>
-            <li class="menu-item <?= $current_page === 'drafts-new' ? 'active' : '' ?>">
-                <a href="/admin?page=drafts-new">
-                    <i data-feather="edit-3"></i>
-                    <span>Drafts 草稿管理-new</span>
                 </a>
             </li>
 

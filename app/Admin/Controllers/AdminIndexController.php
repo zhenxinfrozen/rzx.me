@@ -30,58 +30,34 @@ class AdminIndexController
                 'subtitle' => '管理和监控您的网站'
             ],
             'drafts' => [
-                'view' => 'admin-drafts-new',
+                'view' => 'admin-drafts',
                 'controller' => 'drafts',
                 'title' => 'Drafts 草稿管理',
                 'subtitle' => '管理草稿分类与图片'
             ],
             'sketchbook' => [
                 'view' => 'admin-sketchbook',
-                'controller' => 'sketchbook',  // 需要控制器处理逻辑
+                'controller' => 'sketchbook',
                 'title' => 'Sketchbook 管理',
                 'subtitle' => '管理 Sketchbook 页面图片集'
             ],
-            'sketchbook-new' => [
-                'view' => 'admin-sketchbook-new',
-                'controller' => 'sketchbook',  // 使用相同的控制器
-                'title' => 'Sketchbook 管理 (新版)',
-                'subtitle' => '使用新组件的测试版本'
-            ],
-            'galleries-new' => [
-                'view' => 'admin-galleries-new',
-                'controller' => null,  // 不使用控制器，直接加载 view
+            'galleries' => [
+                'view' => 'admin-galleries',
+                'controller' => null,
                 'title' => 'Galleries 画廊管理',
                 'subtitle' => '管理前台 Galleries 页面显示的画廊集合'
             ],
-            'drafts-new' => [
-                'view' => 'admin-drafts-new',
-                'controller' => 'drafts',
-                'title' => 'Drafts 草稿管理 (新版)',
-                'subtitle' => '使用新组件的测试版本'
-            ],
             'comics' => [
                 'view' => 'admin-comics',
-                'controller' => 'comics',  // 需要控制器处理逻辑
+                'controller' => 'comics',
                 'title' => '漫画管理',
                 'subtitle' => '管理漫画分组和图片'
             ],
-            'comics-new' => [
-                'view' => 'admin-comics-new',
-                'controller' => 'comics',  // 使用相同的控制器
-                'title' => 'Comics 管理 (新版)',
-                'subtitle' => '使用新组件的测试版本'
-            ],
             'videos' => [
                 'view' => 'admin-videos',
-                'controller' => 'videos',  // 需要控制器处理逻辑
+                'controller' => null,
                 'title' => 'Videos 管理',
                 'subtitle' => '管理视频集合'
-            ],
-            'videos-new' => [
-                'view' => 'admin-videos-new',
-                'controller' => null,  // 使用前端AJAX加载，不需要控制器
-                'title' => 'Videos 管理 (新版)',
-                'subtitle' => '使用新组件和media-manager'
             ],
             'galleries-manager' => [
                 'view' => null,
@@ -175,12 +151,12 @@ class AdminIndexController
             $controllerFile = __DIR__ . '/' . $pageConfig['controller'] . '.php';
             if (file_exists($controllerFile)) {
                 // 某些控制器可能需要 bootstrap
-                if (in_array($page, ['thumbnail-center', 'videos', 'videos-new', 'sketchbook', 'sketchbook-new', 'drafts', 'drafts-new', 'galleries-new'])) {
+                if (in_array($page, ['thumbnail-center', 'videos', 'sketchbook', 'drafts', 'galleries'])) {
                     require_once __DIR__ . '/../../bootstrap.php';
                 }
 
                 // comics 需要 Models
-                if ($page === 'comics' || $page === 'comics-new') {
+                if ($page === 'comics') {
                     define('ADMIN_ACCESS', true);
                     require_once __DIR__ . '/../../Models/comic_data.php';
                 }

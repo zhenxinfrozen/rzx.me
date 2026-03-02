@@ -1,15 +1,23 @@
-﻿{
-  "custom_order": [
-    "00-Archive",
-    "Animals",
-    "Game+color",
-    "Gallery comic",
-    "Special-Zone",
-    "Ae-test",
-    "test-2025-10-3",
-    "test-fgdsfg333333",
-    "rrrrrr"
-  ],
-  "display_names": {},
-  "descriptions": {}
+{
+    "sort_method": "custom_order",
+    "custom_order": [
+        "00-Archive",
+        "Ae-test",
+        "Animals",
+        "Gallery comic",
+        "Game+color",
+        "Special-Zone",
+        "test-2025-10-3",
+        "test-fgdsfg333333",
+        "rrrrrr"
+    ],
+    "prefix_settings": {
+        "remove_prefix": true,
+        "separator": "-"
+    },
+    "display_names": {
+        "rrrrrr": "rrrrrr",
+        "test-2025-10-3": "test-2025-10-3"
+    },
+    "descriptions": []
 }

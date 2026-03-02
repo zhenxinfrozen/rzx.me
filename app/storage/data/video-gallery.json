@@ -102,14 +102,6 @@
         "order": 3,
         "videos": [
             {
-                "title": "0XS72ZySvSR5TfeM",
-                "description": "",
-                "poster": "/assets/videos/video-gallery/storyboard/0XS72ZySvSR5TfeM.jpg",
-                "sources": {
-                    "mp4": "/assets/videos/video-gallery/storyboard/0XS72ZySvSR5TfeM.mp4"
-                }
-            },
-            {
                 "title": "0r0weUsMPu4GTfUG",
                 "description": "",
                 "poster": "/assets/videos/video-gallery/storyboard/0r0weUsMPu4GTfUG.jpg",
@@ -147,6 +139,14 @@
                 "poster": "/assets/videos/video-gallery/storyboard/flower.jpg",
                 "sources": {
                     "mp4": "/assets/videos/video-gallery/storyboard/flower.mp4"
+                }
+            },
+            {
+                "title": "0XS72ZySvSR5TfeM",
+                "description": "",
+                "poster": "/assets/videos/video-gallery/storyboard/0XS72ZySvSR5TfeM.jpg",
+                "sources": {
+                    "mp4": "/assets/videos/video-gallery/storyboard/0XS72ZySvSR5TfeM.mp4"
                 }
             }
         ]

@@ -213,7 +213,13 @@ class CategoryService
         foreach ($orderedFiles as $filename) {
             $filePath = $categoryDir . '/' . $filename;
             $isVideo = $this->videoService->isVideoFile($filename);
-            $thumbFilename = $isVideo ? pathinfo($filename, PATHINFO_FILENAME) . '.jpg' : $filename;
+            if ($isVideo) {
+                $thumbFilename = pathinfo($filename, PATHINFO_FILENAME) . '.jpg';
+            } elseif ($module === 'galleries') {
+                $thumbFilename = $this->detectGalleryThumbnailName($categoryDir, $filename);
+            } else {
+                $thumbFilename = $filename;
+            }
             $thumbPath = $categoryDir . '/thumbs/' . $thumbFilename;
 
             // 根据模块类型构建URL前缀
@@ -302,6 +308,34 @@ class CategoryService
         }
 
         return null;
+    }
+
+    private function detectGalleryThumbnailName(string $categoryDir, string $originalFile): string
+    {
+        $thumbsPath = $categoryDir . '/thumbs';
+        $baseName = pathinfo($originalFile, PATHINFO_FILENAME);
+        $originalExt = strtolower(pathinfo($originalFile, PATHINFO_EXTENSION));
+
+        $galleryThumbName = $baseName . '_gallery.' . $originalExt;
+        if (file_exists($thumbsPath . '/' . $galleryThumbName)) {
+            return $galleryThumbName;
+        }
+
+        if (file_exists($thumbsPath . '/' . $originalFile)) {
+            return $originalFile;
+        }
+
+        $galleryCandidates = glob($thumbsPath . '/' . $baseName . '_gallery.*');
+        if (!empty($galleryCandidates)) {
+            return basename($galleryCandidates[0]);
+        }
+
+        $directCandidates = glob($thumbsPath . '/' . $baseName . '.*');
+        if (!empty($directCandidates)) {
+            return basename($directCandidates[0]);
+        }
+
+        return $originalFile;
     }
 
     /**

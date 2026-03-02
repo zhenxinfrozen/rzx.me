@@ -219,10 +219,68 @@ function handleAjaxRequest(string $action, string $module, string $baseDir, stri
             case 'set_thumbnail':
                 $input = json_decode(file_get_contents('php://input'), true);
                 $category = $input['category'] ?? '';
+                $image = $input['image'] ?? '';
                 $thumbName = $input['thumb'] ?? $input['thumb_name'] ?? '';
 
+                // Debug Logging
+                $logFile = __DIR__ . '/../../storage/logs/media_manager.log';
+                if (!is_dir(dirname($logFile))) mkdir(dirname($logFile), 0755, true);
+                $logMsg = date('Y-m-d H:i:s') . " [set_thumbnail] Cat: $category, Img: $image, Thumb: $thumbName\n";
+
                 $thumbnailUrl = "/assets/images/{$module}/{$category}/thumbs/{$thumbName}";
-                $configService->setCategoryThumbnail($configPath, $category, $thumbnailUrl);
+                $categoryDir = $baseDir . '/' . $category;
+                $thumbPath = $thumbName ? $categoryDir . '/thumbs/' . $thumbName : '';
+
+                // Enhanced logic for galleries to ensure valid thumbnail path
+                if ($module === 'galleries') {
+                    $thumbExists = $thumbName && file_exists($thumbPath);
+                    $logMsg .= "Thumb Path: $thumbPath, Exists: " . ($thumbExists ? 'YES' : 'NO') . "\n";
+
+                    if (!$thumbExists) {
+                        $baseName = $image ? pathinfo($image, PATHINFO_FILENAME) : '';
+                        $found = false;
+
+                        if ($baseName !== '') {
+                            // Try 1: _gallery.* in thumbs
+                            $galleryCandidates = glob($categoryDir . '/thumbs/' . $baseName . '_gallery.*');
+                            if (!empty($galleryCandidates)) {
+                                $thumbName = basename($galleryCandidates[0]);
+                                $thumbnailUrl = "/assets/images/{$module}/{$category}/thumbs/{$thumbName}";
+                                $logMsg .= "Found gallery thumb: $thumbName\n";
+                                $found = true;
+                            }
+                            // Try 2: original basename in thumbs
+                            else {
+                                $directCandidates = glob($categoryDir . '/thumbs/' . $baseName . '.*');
+                                if (!empty($directCandidates)) {
+                                    $thumbName = basename($directCandidates[0]);
+                                    $thumbnailUrl = "/assets/images/{$module}/{$category}/thumbs/{$thumbName}";
+                                    $logMsg .= "Found direct thumb: $thumbName\n";
+                                    $found = true;
+                                }
+                                // Try 3: original image in parent folder
+                                elseif ($image && file_exists($categoryDir . '/' . $image)) {
+                                    $thumbnailUrl = "/assets/images/{$module}/{$category}/{$image}";
+                                    $logMsg .= "Fallback to original: $image\n";
+                                    $found = true;
+                                }
+                            }
+                        }
+
+                        if (!$found) {
+                            $logMsg .= "No valid image found. Reverting to default logic.\n";
+                        }
+                    }
+                } elseif ($thumbName === '' && $image) {
+                     // For other modules, fallback to original if thumb empty
+                     $thumbnailUrl = "/assets/images/{$module}/{$category}/{$image}";
+                }
+
+                $logMsg .= "Final URL: $thumbnailUrl\n";
+                // Write to config
+                $saveResult = $configService->setCategoryThumbnail($configPath, $category, $thumbnailUrl);
+                $logMsg .= "Save Result: " . ($saveResult ? 'SUCCESS' : 'FAIL') . "\n";
+                file_put_contents($logFile, $logMsg, FILE_APPEND);
 
                 respondJson([
                     'success' => true,

@@ -156,6 +156,11 @@ function handleDraftsAjax(string $action, string $configPath, string $imagesRoot
             deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot);
             return;
 
+        case 'save_category_order':
+        case 'save_order':
+            saveCategoryOrder($configPath);
+            return;
+
         default:
             respondJson(['success' => false, 'error' => '未知的操作'], 400);
             return;
@@ -279,12 +284,12 @@ function outputThumbnails(string $imagesRoot, string $imageOrderPath): void
             $encodedFile = rawurlencode($file);
 
             $thumbUrl = file_exists($thumbPath)
-                ? "/assets/images/Drafts/{$encodedCategory}/thumbs/{$encodedFile}"
-                : "/assets/images/Drafts/{$encodedCategory}/{$encodedFile}";
+                ? "/assets/images/drafts/{$encodedCategory}/thumbs/{$encodedFile}"
+                : "/assets/images/drafts/{$encodedCategory}/{$encodedFile}";
 
             $images[] = [
                 'name' => $file,
-                'path' => "/assets/images/Drafts/{$encodedCategory}/{$encodedFile}",
+                'path' => "/assets/images/drafts/{$encodedCategory}/{$encodedFile}",
                 'thumb_path' => $thumbUrl,
                 'size' => filesize($filePath),
                 'modified' => filemtime($filePath),
@@ -695,11 +700,11 @@ function getCategoryThumbnailInfo($category, $dirPath)
             if (!file_exists($thumbPath)) {
                 // 调用ThumbnailService生成缩略图
                 try {
-                    $thumbnailServicePath = __DIR__ . '/../../app/Services/ThumbnailService.php';
+                    $thumbnailServicePath = __DIR__ . '/../../Services/ThumbnailService.php';
                     if (file_exists($thumbnailServicePath)) {
                         require_once $thumbnailServicePath;
                         if (class_exists('ThumbnailService')) {
-                            ThumbnailService::generate($images[0], 'Drafts');
+                            ThumbnailService::generate($images[0], 'drafts');
                         }
                     }
                 } catch (Throwable $e) {
@@ -708,10 +713,10 @@ function getCategoryThumbnailInfo($category, $dirPath)
             }
 
             if (file_exists($thumbPath)) {
-                $result['first_image_thumb'] = '/assets/images/Drafts/' . $category . '/thumbs/' . $firstImage;
+                $result['first_image_thumb'] = '/assets/images/drafts/' . $category . '/thumbs/' . $firstImage;
             } else {
                 // 如果缩略图依然不存在，使用原图
-                $result['first_image_thumb'] = '/assets/images/Drafts/' . $category . '/' . $firstImage;
+                $result['first_image_thumb'] = '/assets/images/drafts/' . $category . '/' . $firstImage;
             }
         }
     }
@@ -756,7 +761,7 @@ function setAsThumbnail($imagesRoot, $configPath)
 
     // 保存到配置文件
     $config = [];
-    $configFile = __DIR__ . '/../../app/Config/drafts_config.php';
+    $configFile = __DIR__ . '/../../Config/drafts_config.php';
     if (file_exists($configFile)) {
         $config = require $configFile;
     }
@@ -765,7 +770,8 @@ function setAsThumbnail($imagesRoot, $configPath)
         $config['category_thumbnails'] = [];
     }
 
-    $thumbnailUrl = '/assets/images/Drafts/' . $category . '/thumbs/' . $image;
+    $thumbName = $input['thumb'] ?? $image;
+    $thumbnailUrl = '/assets/images/drafts/' . $category . '/thumbs/' . $thumbName;
     $config['category_thumbnails'][$category] = $thumbnailUrl;
 
     // 保存配置
@@ -849,7 +855,7 @@ function uploadCategoryThumbnail(string $imagesRoot): void
             }
         }
 
-        $publicUrl = '/assets/images/Drafts/' . $category . '/thumbs/' . $filename;
+        $publicUrl = '/assets/images/drafts/' . $category . '/thumbs/' . $filename;
 
         $debugInfo['thumbnail_saved_to'] = $targetPath;
         $debugInfo['public_url'] = $publicUrl;
@@ -939,7 +945,7 @@ function deleteThumbnail($imagesRoot, $configPath)
     }
 
     // 从配置文件中删除
-    $configFile = __DIR__ . '/../../app/Config/drafts_config.php';
+    $configFile = __DIR__ . '/../../Config/drafts_config.php';
     $config = [];
     if (file_exists($configFile)) {
         $config = require $configFile;
@@ -962,7 +968,7 @@ function deleteThumbnail($imagesRoot, $configPath)
             $firstImage = basename($images[0]);
             $thumbPath = $dirPath . '/thumbs/' . $firstImage;
             if (file_exists($thumbPath)) {
-                $newThumbnailUrl = '/assets/images/Drafts/' . $category . '/thumbs/' . $firstImage;
+                $newThumbnailUrl = '/assets/images/drafts/' . $category . '/thumbs/' . $firstImage;
             }
         }
     }
@@ -1125,6 +1131,31 @@ function saveCategoryUpdate($configPath, $imagesRoot)
     }
 }
 
+function saveCategoryOrder(string $configPath): void
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (!$input) {
+        parse_str(file_get_contents('php://input'), $input);
+    }
+
+    $order = $input['category_order'] ?? ($input['order'] ?? '');
+    if (is_string($order)) {
+        $order = array_values(array_filter(array_map('trim', explode(',', $order))));
+    }
+
+    try {
+        $config = loadDraftsConfig($configPath);
+        $config['custom_order'] = is_array($order) ? $order : [];
+        if (saveDraftsConfig($configPath, $config)) {
+            respondJson(['success' => true, 'message' => '排序已保存']);
+        } else {
+            respondJson(['success' => false, 'error' => '保存失败'], 500);
+        }
+    } catch (Throwable $e) {
+        respondJson(['success' => false, 'error' => '保存失败: ' . $e->getMessage()], 500);
+    }
+}
+
 /**
  * 删除分组和文件
  */
@@ -1172,7 +1203,7 @@ function deleteCategoryAndFiles($configPath, $imagesRoot, $trashRoot)
             }
 
             // 删除缩略图配置
-            $thumbnailConfigFile = __DIR__ . '/../../app/Config/drafts_config.php';
+            $thumbnailConfigFile = __DIR__ . '/../../Config/drafts_config.php';
             if (file_exists($thumbnailConfigFile)) {
                 $thumbnailConfig = require $thumbnailConfigFile;
                 if (isset($thumbnailConfig['category_thumbnails'][$category])) {

@@ -47,6 +47,9 @@ if ($isAjaxRequest) {
                 if (empty($gallery)) throw new Exception('Gallery参数不能为空');
                 $path = $gallery . (!empty($category) ? '/' . $category : '');
                 $result = $galleryManager->generateThumbnails($path);
+                if (!is_array($result)) {
+                    $result = [];
+                }
                 echo json_encode(['success' => true, 'message' => '缩略图生成完成', 'results' => $result, 'count' => count($result)]);
                 exit;
 

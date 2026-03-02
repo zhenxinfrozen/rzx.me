@@ -287,13 +287,14 @@ class ThumbnailService {
      * @param string $pageType 页面类型 (single-works, gallery, etc.)
      */
     public static function generateBatchForPage($directoryPath, $pageType = 'single-works') {
+        $results = [];
         // 获取页面对应的配置
         $pageConfigs = self::getAllPageConfigs();
         $configId = isset($pageConfigs[$pageType]) ? $pageType : 'single-works';
 
         // 扫描目录中的图片文件
         if (!is_dir($directoryPath)) {
-            return;
+            return [];
         }
 
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
@@ -305,14 +306,16 @@ class ThumbnailService {
                 $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
                 if (in_array($ext, $allowedExtensions)) {
                     try {
-                        self::generate($filePath, $configId);
+                        $results[] = self::generate($filePath, $configId);
                     } catch (Exception $e) {
                         // 忽略单个文件的错误，继续处理其他文件
                         error_log("Thumbnail generation failed for {$filePath}: " . $e->getMessage());
+                        $results[] = ['success' => false, 'file' => $file, 'error' => $e->getMessage()];
                     }
                 }
             }
         }
+        return $results;
     }
 
     /**

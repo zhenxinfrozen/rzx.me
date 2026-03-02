@@ -476,12 +476,18 @@ $totalCategories = count($categoryData);
                                     <?= htmlspecialchars($category['display_name'] ?? $category['id']) ?>
                                 </div>
                                 <small class="admin-text-muted">
-                                    <?= (int)($category['image_count'] ?? 0) ?> 项
+                                    <?php
+                                    $descText = trim($category['description'] ?? '');
+                                    if ($descText === '') {
+                                        $descText = '【描述信息】';
+                                    }
+                                    ?>
+                                    <?= htmlspecialchars($descText) ?>
                                 </small>
                             </div>
 
                             <span class="badge bg-secondary" style="opacity: 0.5;">
-                                <?= (int)($category['position'] ?? 0) ?>
+                                <?= (int)($category['image_count'] ?? 0) ?>
                             </span>
                         </div>
                     </li>
