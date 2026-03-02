@@ -199,7 +199,7 @@ if ($viewFile && file_exists($viewsPath . $viewFile)) {
 // 渲染页脚（某些页面不显示）
 // 检测当前URL路径来决定是否显示页脚
 $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-$hideFooterPages = ['sketch', 'comic-reader'];
+$hideFooterPages = ['home', 'animation', 'comic','latest','videos','sketch','sites','drafts'];
 $hideFooter = false;
 
 // 检查固定页面ID

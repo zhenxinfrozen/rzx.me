@@ -3,7 +3,7 @@
 // Main body content for public/index.php — kept as a view for easier edits.
 ?>
 <div class="wrap">
-  
+
     <div class="main">
         <div id="wallpaper">
             <?php
@@ -80,7 +80,7 @@
             <div class="menu-text">Latest</div>
         </div>
     </a>
-    
+
     <a href="comic" target="_self">
         <div class="ray-home-menu-icon">
             <div id="ray-home-menu-comic" class="menu_icon_wrapper">
@@ -106,7 +106,7 @@
         </div>
     </a>
 
-    <a href="single-works" target="_self">
+    <a href="drafts" target="_self">
         <div id="ray-home-menu-pictures" class="ray-home-menu-icon">
             <div class="menu_icon_wrapper">
                 <img src="assets/images/ray-home-menu-pictures.png" alt="Blog" class="menu_icon" width="100" height="100">
