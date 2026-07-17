@@ -28,7 +28,10 @@
 # Python 3
 python -m http.server 8000
 
-# 或使用 PHP 内置服务器
+# 或使用 PHP 内置服务器（推荐：启用本地路由，包含自定义 404）
+php -S localhost:8000 router.php
+
+# 纯静态直出模式（不走自定义路由）
 php -S localhost:8000
 ```
 
