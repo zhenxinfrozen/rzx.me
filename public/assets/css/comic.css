@@ -1,0 +1,178 @@
+@charset "utf-8";
+/* CSS Document */
+
+.comic_title{
+	margin:0 auto;
+	text-align:center;
+}
+.comic-title-text{
+	font-family: Tahoma, Geneva, sans-serif;
+	color: #999999;
+	font-size: 2.5rem; /* 与原来 size="7" 的视觉相近，可能需微调 */
+}
+.comic_dog{
+	background:url(/assets/images/ray-comic-welcome-dog.jpg) no-repeat 0 0;
+	width:300px;
+	height:300px;
+	margin:0 auto;
+}
+.comic_dog:hover{
+	background:url(/assets/images/ray-comic-welcome-dog.jpg) no-repeat 0 -300px;
+	width:300px;
+	height:300px;
+	margin:0 auto;
+}
+#ray-comic-menu{
+	display: flex;
+	justify-content: center;
+	gap: 0 10px;
+	height:80px;
+	margin:0 auto;
+}
+.ray-comic-menu-icon{
+	width: 60px;
+	height: 60px;
+	border: #efeeee 1px solid;
+	border-radius: 10px;
+	overflow: hidden;
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+.ray-comic-menu-icon:hover{
+	/* 取消放大与阴影，保留图像切换的视觉（overlay handled by .default-img/.hover-img opacity） */
+	border: 1px solid #a7a7a7	;
+	box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	transform: scale(1.1);
+}
+.ray-comic-menu-icon > img,
+.ray-comic-menu-icon img{
+	width: 60px;
+	height: 60px;
+	display: block;
+	transition: opacity 0.3s ease;
+	object-fit: cover;
+}
+
+/* 图标悬停效果 */
+.ray-comic-menu-icon .default-img {
+	opacity: 1;
+}
+
+.ray-comic-menu-icon .hover-img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+}
+
+.ray-comic-menu-icon:hover .default-img {
+	opacity: 0;
+}
+
+.ray-comic-menu-icon:hover .hover-img {
+	opacity: 1;
+}
+
+/* 文字图标样式 */
+.ray-comic-menu-icon .icon-text {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 60px;
+	height: 60px;
+	font-weight: bold;
+	font-size: 12px;
+	color: #666;
+	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	transition: all 0.3s ease;
+	border-radius: 10px;
+}
+
+.ray-comic-menu-icon:hover .icon-text {
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	color: white;
+}
+
+/* 统一的图标hover效果，移除了特定ID样式 */
+
+.comic_show{
+	margin:0 auto;
+	clear:both;
+}
+
+/* Styles for comic content injected into #comic_show */
+#comic-wrapper {
+	background: #fff;
+}
+
+#comic-titlebox {
+	color: #696969;
+	font-size: small;
+	width: 500px;
+	margin: 0 auto;
+	float: none;
+	padding: 10px 20px;
+	background: #9BD1FA; /* 与原 JS 模板一致的背景色 */
+	border-radius: 10px;
+}
+#comic-titlebox >h1{
+	/* text-align: center; */
+	color: #fff;
+	font-size: 250%;
+	margin: 0 auto;
+}
+
+/* 单个漫画图片容器 */
+.comic-item {
+	display: flex;
+	justify-content: center;
+	margin: 0 auto;
+	padding: 20px 0;
+}
+
+.comic-item img {
+	max-width: 90%;
+	height: auto;
+	display: block;
+}
+
+/* 多图片画廊容器 */
+.comic-gallery {
+	width: 100%;
+	margin: 20px auto;
+	padding: 0 20px;
+}
+
+.comic-gallery .comic-item {
+	margin-bottom: 30px;
+	animation: fadeInUp 0.6s ease forwards;
+	opacity: 0;
+	transform: translateY(30px);
+}
+
+.comic-gallery .comic-item:nth-child(1) { animation-delay: 0.1s; }
+.comic-gallery .comic-item:nth-child(2) { animation-delay: 0.2s; }
+.comic-gallery .comic-item:nth-child(3) { animation-delay: 0.3s; }
+.comic-gallery .comic-item:nth-child(4) { animation-delay: 0.4s; }
+.comic-gallery .comic-item:nth-child(n+5) { animation-delay: 0.5s; }
+
+/* 占位符样式 */
+.comic-placeholder {
+	text-align: center;
+	padding: 60px 20px;
+	color: #999;
+	font-style: italic;
+	background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+	border-radius: 15px;
+	margin: 20px;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

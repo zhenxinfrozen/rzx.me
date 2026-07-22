@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feather Icons 图标库预览 - RZX.ME</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .usage-section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .usage-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .code-block {
+            background: #f4f4f4;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        
+        .icons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .icon-item {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .icon-item:hover {
+            border-color: #007bff;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .icon-item.copied {
+            border-color: #28a745;
+            background-color: #f8fff9;
+        }
+        
+        .icon-display {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 10px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .icon-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .icon-code {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #666;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+        
+        .current-usage {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .current-usage h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .current-icon {
+            display: inline-flex;
+            align-items: center;
+            background: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 5px;
+            border: 1px solid #bbdefb;
+        }
+        
+        .current-icon i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .stats {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transform: translateX(300px);
+            transition: transform 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🎨 Feather Icons 图标库预览</h1>
+            <p>一个轻量级、美观的开源图标库，专为现代 Web 设计而生</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 使用说明 -->
+        <div class="usage-section">
+            <h2>📖 使用说明</h2>
+            <p>在 HTML 中引入 Feather Icons 脚本，然后使用 <code>data-feather</code> 属性即可：</p>
+            
+            <div class="code-block">
+&lt;!-- 引入 Feather Icons 脚本 --&gt;
+&lt;script src="https://unpkg.com/feather-icons"&gt;&lt;/script&gt;
+
+&lt;!-- 使用图标 --&gt;
+&lt;i data-feather="home"&gt;&lt;/i&gt;
+&lt;i data-feather="user"&gt;&lt;/i&gt;
+&lt;i data-feather="settings"&gt;&lt;/i&gt;
+
+&lt;!-- 渲染图标 --&gt;
+&lt;script&gt;
+  feather.replace();
+&lt;/script&gt;
+            </div>
+        </div>
+
+        <!-- 当前项目中的使用 -->
+        <div class="current-usage">
+            <h3>🔧 RZX.ME 后台当前使用的图标</h3>
+            <div class="current-icon"><i data-feather="home"></i>控制台 (home)</div>
+            <div class="current-icon"><i data-feather="image"></i>Single-Works分类管理 (image)</div>
+            <div class="current-icon"><i data-feather="layers"></i>漫画管理 (layers)</div>
+            <div class="current-icon"><i data-feather="folder"></i>gallery管理 (folder)</div>
+            <div class="current-icon"><i data-feather="trash-2"></i>回收站 (trash-2)</div>
+            <div class="current-icon"><i data-feather="settings"></i>网站配置 (settings)</div>
+            <div class="current-icon"><i data-feather="database"></i>缓存管理 (database)</div>
+            <div class="current-icon"><i data-feather="tool"></i>管理工具 (tool)</div>
+            <div class="current-icon"><i data-feather="sliders"></i>缩略图配置 (sliders)</div>
+            <div class="current-icon"><i data-feather="info"></i>系统信息 (info)</div>
+            <div class="current-icon"><i data-feather="external-link"></i>访问网站 (external-link)</div>
+            <div class="current-icon"><i data-feather="chevron-down"></i>下拉菜单 (chevron-down)</div>
+        </div>
+
+        <!-- 搜索框 -->
+        <input type="text" class="search-box" placeholder="🔍 搜索图标名称..." id="searchInput">
+        
+        <!-- 统计信息 -->
+        <div class="stats">
+            <span id="iconCount">加载中...</span> 个图标可用
+        </div>
+
+        <!-- 图标网格 -->
+        <div class="icons-grid" id="iconsGrid">
+            <!-- 图标将在这里动态生成 -->
+        </div>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div class="toast" id="toast">
+        代码已复制到剪贴板！
+    </div>
+
+    <!-- Feather Icons 脚本 -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
+    <script>
+        // 所有 Feather Icons 图标列表
+        const allIcons = [
+            'activity', 'airplay', 'alert-circle', 'alert-octagon', 'alert-triangle', 'align-center',
+            'align-justify', 'align-left', 'align-right', 'anchor', 'aperture', 'archive', 'arrow-down',
+            'arrow-down-circle', 'arrow-down-left', 'arrow-down-right', 'arrow-left', 'arrow-left-circle',
+            'arrow-right', 'arrow-right-circle', 'arrow-up', 'arrow-up-circle', 'arrow-up-left',
+            'arrow-up-right', 'at-sign', 'award', 'bar-chart', 'bar-chart-2', 'battery', 'battery-charging',
+            'bell', 'bell-off', 'bluetooth', 'bold', 'book', 'book-open', 'bookmark', 'box', 'briefcase',
+            'calendar', 'camera', 'camera-off', 'cast', 'check', 'check-circle', 'check-square',
+            'chevron-down', 'chevron-left', 'chevron-right', 'chevron-up', 'chevrons-down', 'chevrons-left',
+            'chevrons-right', 'chevrons-up', 'chrome', 'circle', 'clipboard', 'clock', 'cloud',
+            'cloud-drizzle', 'cloud-lightning', 'cloud-off', 'cloud-rain', 'cloud-snow', 'code',
+            'codepen', 'codesandbox', 'coffee', 'columns', 'command', 'compass', 'copy', 'corner-down-left',
+            'corner-down-right', 'corner-left-down', 'corner-left-up', 'corner-right-down',
+            'corner-right-up', 'corner-up-left', 'corner-up-right', 'cpu', 'credit-card', 'crop',
+            'crosshair', 'database', 'delete', 'disc', 'divide', 'divide-circle', 'divide-square',
+            'dollar-sign', 'download', 'download-cloud', 'dribbble', 'droplet', 'edit', 'edit-2',
+            'edit-3', 'external-link', 'eye', 'eye-off', 'facebook', 'fast-forward', 'feather',
+            'figma', 'file', 'file-minus', 'file-plus', 'file-text', 'film', 'filter', 'flag',
+            'folder', 'folder-minus', 'folder-plus', 'framer', 'frown', 'gift', 'git-branch',
+            'git-commit', 'git-merge', 'git-pull-request', 'github', 'gitlab', 'globe', 'grid',
+            'hard-drive', 'hash', 'headphones', 'heart', 'help-circle', 'hexagon', 'home', 'image',
+            'inbox', 'info', 'instagram', 'italic', 'key', 'layers', 'layout', 'life-buoy', 'link',
+            'link-2', 'linkedin', 'list', 'loader', 'lock', 'log-in', 'log-out', 'mail', 'map',
+            'map-pin', 'maximize', 'maximize-2', 'meh', 'menu', 'message-circle', 'message-square',
+            'mic', 'mic-off', 'minimize', 'minimize-2', 'minus', 'minus-circle', 'minus-square',
+            'monitor', 'moon', 'more-horizontal', 'more-vertical', 'mouse-pointer', 'move', 'music',
+            'navigation', 'navigation-2', 'octagon', 'package', 'paperclip', 'pause', 'pause-circle',
+            'pen-tool', 'percent', 'phone', 'phone-call', 'phone-forwarded', 'phone-incoming',
+            'phone-missed', 'phone-off', 'phone-outgoing', 'pie-chart', 'play', 'play-circle',
+            'plus', 'plus-circle', 'plus-square', 'pocket', 'power', 'printer', 'radio', 'refresh-ccw',
+            'refresh-cw', 'repeat', 'rewind', 'rotate-ccw', 'rotate-cw', 'rss', 'save', 'scissors',
+            'search', 'send', 'server', 'settings', 'share', 'share-2', 'shield', 'shield-off',
+            'shopping-bag', 'shopping-cart', 'shuffle', 'sidebar', 'skip-back', 'skip-forward',
+            'slack', 'slash', 'sliders', 'smartphone', 'smile', 'speaker', 'square', 'star',
+            'stop-circle', 'sun', 'sunrise', 'sunset', 'tablet', 'tag', 'target', 'terminal',
+            'thermometer', 'thumbs-down', 'thumbs-up', 'toggle-left', 'toggle-right', 'tool',
+            'trash', 'trash-2', 'triangle', 'truck', 'tv', 'twitch', 'twitter', 'type', 'umbrella',
+            'underline', 'unlock', 'upload', 'upload-cloud', 'user', 'user-check', 'user-minus',
+            'user-plus', 'user-x', 'users', 'video', 'video-off', 'voicemail', 'volume', 'volume-1',
+            'volume-2', 'volume-x', 'watch', 'wifi', 'wifi-off', 'wind', 'x', 'x-circle', 'x-octagon',
+            'x-square', 'youtube', 'zap', 'zap-off', 'zoom-in', 'zoom-out'
+        ];
+
+        // 生成图标网格
+        function generateIconsGrid(icons = allIcons) {
+            const grid = document.getElementById('iconsGrid');
+            grid.innerHTML = '';
+
+            icons.forEach(iconName => {
+                const iconItem = document.createElement('div');
+                iconItem.className = 'icon-item';
+                iconItem.innerHTML = `
+                    <div class="icon-display">
+                        <i data-feather="${iconName}"></i>
+                    </div>
+                    <div class="icon-name">${iconName}</div>
+                    <div class="icon-code">data-feather="${iconName}"</div>
+                `;
+
+                iconItem.addEventListener('click', () => copyIconCode(iconName, iconItem));
+                grid.appendChild(iconItem);
+            });
+
+            // 渲染所有 Feather 图标
+            feather.replace();
+
+            // 更新计数
+            document.getElementById('iconCount').textContent = icons.length;
+        }
+
+        // 复制图标代码到剪贴板
+        function copyIconCode(iconName, element) {
+            const code = `<i data-feather="${iconName}"></i>`;
+            
+            // 使用 Clipboard API
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(code).then(() => {
+                    showToast();
+                    highlightIcon(element);
+                });
+            } else {
+                // 备用方案
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast();
+                highlightIcon(element);
+            }
+        }
+
+        // 显示复制成功提示
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 高亮图标
+        function highlightIcon(element) {
+            element.classList.add('copied');
+            setTimeout(() => {
+                element.classList.remove('copied');
+            }, 2000);
+        }
+
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredIcons = allIcons.filter(icon => 
+                icon.toLowerCase().includes(searchTerm)
+            );
+            generateIconsGrid(filteredIcons);
+        });
+
+        // 页面加载完成后生成图标
+        document.addEventListener('DOMContentLoaded', () => {
+            generateIconsGrid();
+            feather.replace(); // 渲染当前使用的图标
+        });
+    </script>
+</body>
+</html>

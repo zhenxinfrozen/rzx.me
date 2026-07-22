@@ -1,0 +1,329 @@
+body,td,th {
+	color: #300;
+}
+html,body {
+	color: #303;
+	margin:0;
+	padding:0;
+}
+a{
+	text-decoration:none;
+}
+
+.wrap{
+	/* overflow:hidden; */
+	margin:0 auto;
+}
+.main{
+	margin:0 auto;
+	background:#ffffff00;
+	+background:url(../images/IE6-7.jpg) no-repeat center;
+	_background:url(../images/IE6-7.jpg) no-repeat center;
+}
+
+#wallpaper{
+	float: center;
+	margin:0 auto;
+	height:700px;
+}
+#ray-home-wallpaper-item{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin:0 auto;
+	height:100%;
+}
+#ray-home-wallpaper-item >img{
+	display: block;
+	margin: 0 auto;
+	height:100%;
+}
+.header{
+	margin:0 auto;
+	/*height:20px;*/
+	+height:300px; /*IE7*/ 
+	_height:300px; /*IE6*/
+	background:#ffffff00;
+	+background:url(../images/IE6-7.jpg) no-repeat center;
+	_background:url(../images/IE6-7.jpg) no-repeat center;
+}
+
+
+
+	
+
+/*menu,css开始*/
+.menu{
+	width:1000px;
+	height:100px;
+	margin: 30px auto;
+}
+.ray-home-menu-icon{
+	width:100px;
+	height:135px;
+	margin:0 21px;
+	float:left;
+}
+
+#ray-home-menu-animation-hover {
+	position: relative;
+	background: none;
+	overflow: hidden;
+	border-radius: 12px;
+	transition: transform 0.2s ease;
+}
+
+/* 顶端透明图标框架 */
+#ray-home-menu-animation-hover::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url(../images/ray-home-menu-anim-alpha.png) no-repeat center;
+	background-size: contain;
+	z-index: 5;
+	pointer-events: none;
+}
+
+/* 波浪共有样式 */
+#ray-home-menu-animation-hover::before,
+#ray-home-menu-animation-hover .wave-layer {
+	content: "";
+	position: absolute;
+	left: 0;
+	width: 400%; /* 足够宽以平滑循环 */
+	height: 120%;
+	top: 100%; /* 初始隐藏在底部 */
+	transition: top 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	background-repeat: repeat-x;
+}
+
+/* 后层波浪：浅色，速度快，2个循环波形 */
+#ray-home-menu-animation-hover::before {
+	z-index: 1;
+	opacity: 0.6;
+	/* SVG 路径中使用指定水体颜色 #d5e9b8 */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Cpath d='M0 20 Q25 5 50 20 T100 20 Q125 5 150 20 T200 20 V120 H0 Z' fill='%23d5e9b8'/%3E%3C/svg%3E");
+	animation: wave-flow 1.2s linear infinite;
+}
+
+/* 前层波浪：深色，速度慢，波形错开 */
+#ray-home-menu-animation-hover .wave-layer {
+	z-index: 2;
+	/* 使用相同颜色，通过 opacity 和错位产生层次感 */
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Cpath d='M0 25 Q25 10 50 25 T100 25 Q125 10 150 25 T200 25 V120 H0 Z' fill='%23d5e9b8'/%3E%3C/svg%3E");
+	animation: wave-flow 2s linear infinite reverse;
+	opacity: 0.9;
+	margin-left: -50px;
+}
+
+#ray-home-menu-animation-hover:hover::before,
+#ray-home-menu-animation-hover:hover .wave-layer {
+	top: -20%; /* 向上多移动一点，确保波峰也超过顶端，完全淹没背景 */
+}
+
+@keyframes wave-flow {
+	from { transform: translateX(0); }
+	to { transform: translateX(-50%); }
+}
+
+#ray-home-menu-animation-hover:active {
+	transform: scale(0.94);
+}
+
+/* Latest 菜单：恐怖风格交互 - 圆形中心扩散 */
+#ray-home-menu-latest .menu_icon_wrapper {
+	position: relative;
+	background: none;
+	overflow: hidden;
+	border-radius: 12px;
+}
+
+#ray-home-menu-latest .menu_icon_wrapper::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 10px;
+	height: 10px;
+	background-color: #f16666;
+	border-radius: 50%;
+	transform: translate(-50%, -50%) scale(0);
+	transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	z-index: 1;
+}
+
+#ray-home-menu-latest:hover .menu_icon_wrapper::before {
+	transform: translate(-50%, -50%) scale(25); /* 扩散覆盖背景 */
+}
+
+#ray-home-menu-latest .menu_icon_wrapper img {
+	position: relative;
+	z-index: 5;
+	transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	transform: scale(0.9);
+}
+
+#ray-home-menu-latest:hover .menu_icon_wrapper img {
+	transform: scale(1.1);
+}
+
+#ray-home-menu-latest:active .menu_icon_wrapper img {
+	transform: scale(0.95);
+}
+
+/* SketchBooks 菜单：3D 翻书效果 */
+#ray-home-menu-sketch-hover {
+	position: relative;
+	background: none !important; 
+	perspective: 800px;
+	overflow: visible !important; /* 允许封面翻出容器 */
+	transition: transform 0.3s ease;
+}
+
+/* 底层：打开后的内页 */
+#ray-home-menu-sketch-hover::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url(../images/back.jpg) no-repeat -400px -100px;
+	z-index: 1;
+	border-radius: 2px 5px 5px 2px;
+	/* box-shadow: inset 0 0 15px rgba(0,0,0,0.1); */
+	transition: transform 0.4s ease;
+}
+
+/* 顶层：闭合的封面 */
+#ray-home-menu-sketch-hover::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url(../images/back.jpg) no-repeat -400px 0;
+	z-index: 2;
+	transform-origin: left center; /* 以左侧边缘为轴翻开 */
+	transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s ease;
+	border-radius: 2px 5px 5px 2px;
+	backface-visibility: hidden; /* 翻过去后隐藏背面 */
+	/* box-shadow: 2px 0 10px rgba(0,0,0,0.1); */
+}
+
+#ray-home-menu-sketch-hover:hover::after {
+	transform: rotateY(-130deg); /* 翻开 130 度 */
+	/* box-shadow: 10px 5px 20px rgba(0,0,0,0.2); */
+}
+
+#ray-home-menu-sketch-hover:hover::before {
+	transform: translateX(5px) scale(1.02); /* 内页轻微向右移动，增加空间感 */
+}
+
+#ray-home-menu-sketch-hover:active {
+	transform: scale(0.95);
+}
+
+.menu-text{
+	height:20px;
+	width:100px;
+	text-align:center;
+	font-family:Arial, Helvetica, sans-serif; 
+	font-weight:900; 
+	color:#999;
+}
+/*menu ,css结束*/
+
+/* Fix for menu <img> baseline gap and sizing when using <img> instead of sprite */
+.menu_icon_wrapper{
+	width:100px;
+	height:100px;
+	overflow:hidden;  /* clip any overflow when animating */
+	margin:0;
+}
+.menu_icon{
+	display:block;      /* remove inline baseline gap */
+	width:100px;
+	height:100px;
+	object-fit:cover;   /* preserve aspect and fill box */
+}
+
+/* Default rotated state and smooth hover transition */
+#wordpress-logo{
+	display: block;
+	transform: rotate(20deg); /* default clockwise 20deg */
+	transform-origin: 50% 50%;
+	transition: transform 150ms ease-in-out;
+	overflow: hidden;
+}
+#ray-home-menu-blog:hover #wordpress-logo{
+	transform: rotate(0deg); /* on hover, return to upright */
+}
+
+/* Reflection and click animation styles */
+#ray-home-menu-blog{ position:relative; }
+
+/* Click shock animation: quick scale up then settle */
+#ray-home-menu-blog.clicked #wordpress-logo{
+	/* Hint browser to optimize these properties for animation */
+	will-change: transform, filter;
+	animation: icon-shock 100ms cubic-bezier(.2,.8,.2,1) both;
+}
+
+
+
+@keyframes icon-shock{
+	/*
+	主要帧说明：
+	- 0%: 起始状态，保持当前旋转/缩放。
+	- 20%: 快速放大到 peak（1.18），此时我们也轻微增加模糊以模拟冲击感。
+	- 60%: 回弹到略小于原始的尺寸（0.98），同时减少模糊，形成回弹效果。
+	- 100%: 回到原始尺寸并清除模糊。
+	*/
+	0% {
+		transform: rotate(0deg) scale(1);
+		filter: blur(0px);
+	}
+	20% {
+		transform: rotate(0deg) scale(1.18);
+		/* 在放大峰值时增加一点模糊，制造冲击瞬间的光学失焦感 */
+		filter: blur(1.6px);
+	}
+	60% {
+		transform: rotate(0deg) scale(0.58);
+		/* 回弹时快速减小模糊 */
+		filter: blur(0.6px);
+	}
+	100% {
+		transform: rotate(0deg) scale(1);
+		filter: blur(0px);
+	}
+}
+
+/* 当 ray-home-menu-icon 被点击时，允许 wrapper 溢出以免放大时被裁剪 */
+.ray-home-menu-icon.clicked .menu_icon_wrapper{
+	overflow: hidden;
+}
+
+/* Ensure specific menu items preserve rounded corners and clip blurred/ scaled image edges
+   Only targets by ID to avoid affecting other icons. */
+#ray-home-menu-latest .menu_icon_wrapper,
+#ray-home-menu-about .menu_icon_wrapper,
+#ray-home-menu-pictures .menu_icon_wrapper {
+	overflow: hidden;      /* clip any blur or transform that bleeds outside */
+	border-radius: 10px;   /* rounded corners applied to the container */
+	display: inline-block; /* keep layout stable */
+}
+
+/* Make sure images inside those wrappers don't introduce inline baseline gaps */
+#ray-home-menu-latest .menu_icon_wrapper img,
+#ray-home-menu-about .menu_icon_wrapper img,
+#ray-home-menu-pictures .menu_icon_wrapper img {
+	display: block;
+	width: 100%;
+	height: auto;
+}

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>CSS Test - Ray Comic Showbox</title>
+    <style>
+      html,body{height:100%;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f3f3f3}
+
+      #ray-anim-wapper{
+        display: flex;
+        justify-content: center;
+      }
+      #ray-anim-showbox {
+        display: inline-flex;
+        margin: 400px 0;
+        gap: 10px;
+      }
+      #ray-anim-showbox .anim-item {
+        width: 200px;
+        height: 363px;
+        border: #444 solid 2px;
+        background: #fff;
+        overflow: hidden;
+        flex: 0 0 auto;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+        position: relative;
+        /* 为卡片浮动增加 transition */
+        transition: transform 0.4s ease, box-shadow 0.4s ease, z-index 0.4s;
+        z-index: 1; /* 默认的层级 */
+      }
+      /* 为图片缩放增加 transition */
+      #ray-anim-showbox .anim-item img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
+        transition: transform 0.4s ease, filter 0.4s ease;
+      }
+
+      /* 滤镜效果保持不变 */
+      .anim-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        -webkit-backdrop-filter: blur(1px);
+        backdrop-filter: blur(1px);
+        opacity: 1;
+        transition: opacity 0.4s ease;
+      }
+
+      #anim-1::before { background-color: rgba(133, 0, 126, 0.3); }
+      #anim-2::before { background-color: rgba(0, 113, 173, 0.3); }
+      #anim-3::before { background-color: rgba(0, 115, 0, 0.3); }
+      #anim-4::before { background-color: rgba(176, 76, 0, 0.3); }
+
+      
+      /* --- 修改后的 Hover 效果 --- */
+
+      /* 滤镜层渐隐消失 */
+      .anim-item:hover::before {
+        opacity: 0;
+      }
+      
+      /* 图片放大效果减弱 */
+      .anim-item:hover img {
+        transform: scale(1.05); /* 放大效果从 1.1 减为 1.05 */
+        filter: brightness(1.1);
+      }
+
+      /* 统一的、无旋转的浮出效果 */
+      .anim-item:hover {
+        /* 增强的阴影效果 (保留) */
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        /* 移除旋转，只保留轻微放大来模拟 Z 轴提升 */
+        transform: scale(1.05);
+        /* 关键：提高层级，确保当前卡片在最上层 */
+        z-index: 10;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="ray-anim-wapper">
+      <div id="ray-anim-showbox" aria-label="Ray Comic Showbox">
+        <div class="anim-item" id="anim-1">
+          <img src="../../assets/images/anim-001.png" alt="comic 1">
+        </div>
+        <div class="anim-item" id="anim-2">
+          <img src="../../assets/images/anim-002.png" alt="comic 2">
+        </div>
+        <div class="anim-item" id="anim-3">
+          <img src="../../assets/images/anim-003.png" alt="comic 3">
+        </div>
+        <div class="anim-item" id="anim-4">
+          <img src="../../assets/images/anim-004.png" alt="comic 4">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
