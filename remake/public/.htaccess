@@ -1,0 +1,33 @@
+<IfModule mod_rewrite.c>
+    # -------------------------------------------------------------
+    # Apache 伪静态规则 - RZX.ME
+    # 放置位置: public/.htaccess
+    # -------------------------------------------------------------
+    
+    # 1. 开启 Rewrite 引擎
+    RewriteEngine On
+    
+    # 2. 基础环境设置
+    # FollowSymLinks: 允许跟踪符号链接（通常RewriteEngine必须）
+    # -MultiViews: 禁止智能文件名匹配（防止 /videos 自动匹配到 video.php 等意外文件）
+    Options +FollowSymLinks -MultiViews
+
+    # 3. 排除静态资源目录 (性能优化)
+    # 让 dev, admin/assets, assets 目录下的请求直接走文件系统，不经过 index.php
+    RewriteRule ^dev/ - [L]
+    RewriteRule ^admin/(assets|css|js|images)/ - [L]
+    RewriteRule ^assets/ - [L]
+
+    # 4. 核心路由转发规则
+    # 条件1: 请求的文件名不是一个真实存在的文件 (!-f)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    # 条件2: 请求的文件名不是一个真实存在的目录 (!-d)
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # 动作: 将所有符合上述条件的请求转发给 index.php
+    # ?route=/$1: 将路径作为参数传给 Router (适应 Config/app.php 的 use_pretty_urls)
+    # [QSA]: Query String Append, 保留原有的 URL 参数 (如 ?id=1)
+    # [L]: Last, 立即停止处理后续规则
+    RewriteRule ^(.*)$ index.php?route=/$1 [QSA,L]
+
+</IfModule>

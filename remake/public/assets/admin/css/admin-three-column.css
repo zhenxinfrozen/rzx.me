@@ -1,0 +1,252 @@
+/**
+ * Admin 三栏布局样式
+ * 提供标准化的三栏布局结构
+ *
+ * @version 1.0.0
+ * @date 2026-01-21
+ */
+
+/* ============================================
+   三栏容器
+   ============================================ */
+.admin-three-column {
+    display: flex;
+    gap: var(--admin-spacing-lg, 16px);
+    /* padding: var(--admin-spacing-lg, 16px); */
+    min-height: calc(100vh - 200px);
+}
+
+/* ============================================
+   左栏 - 列表区域 (25%)
+   ============================================ */
+.admin-left-panel {
+    flex: 0 0 25%;
+    min-width: 280px;
+    max-width: 350px;
+}
+
+.admin-left-panel .card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-left-panel .card-body {
+    flex: 1;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* 列表容器 */
+.admin-category-list {
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+    padding: var(--admin-spacing-md, 12px);
+}
+
+/* 滚动条美化 */
+.admin-category-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.admin-category-list::-webkit-scrollbar-track {
+    background: var(--admin-gray-100, #f8f9fa);
+    border-radius: 4px;
+}
+
+.admin-category-list::-webkit-scrollbar-thumb {
+    background: var(--admin-gray-400, #ced4da);
+    border-radius: 4px;
+}
+
+.admin-category-list::-webkit-scrollbar-thumb:hover {
+    background: var(--admin-gray-500, #adb5bd);
+}
+
+/* 添加按钮 */
+.admin-add-button {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: white;
+    color: var(--admin-success, #28a745);
+    border: 2px solid var(--admin-success, #28a745);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    transition: var(--admin-transition-fast, all 0.15s ease);
+    line-height: 1;
+}
+
+.admin-add-button:hover {
+    background: var(--admin-success, #28a745);
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* ============================================
+   中栏 - 编辑区域 (50%)
+   ============================================ */
+.admin-center-panel {
+    flex: 1;
+    min-width: 400px;
+}
+
+.admin-center-panel .card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-center-panel .card-body {
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* 编辑面板占位符 */
+.admin-edit-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--admin-spacing-xl, 24px);
+    color: var(--admin-gray-500, #adb5bd);
+    text-align: center;
+    min-height: 300px;
+}
+
+.admin-edit-placeholder i,
+.admin-edit-placeholder svg {
+    width: 64px;
+    height: 64px;
+    opacity: 0.3;
+    margin-bottom: var(--admin-spacing-lg, 16px);
+}
+
+/* 图片网格容器 */
+.admin-thumbnail-grid-container {
+    background: var(--admin-gray-100, #f8f9fa);
+    border: 1px dashed rgba(0,0,0,0.1);
+    border-radius: var(--admin-radius-lg, 8px);
+    padding: var(--admin-spacing-md, 12px);
+    min-height: 150px;
+}
+
+/* 添加图片按钮 */
+.admin-add-image-btn {
+    width: 80px;
+    height: 80px;
+    border: 2px dashed var(--admin-primary, #007bff);
+    border-radius: var(--admin-radius-md, 6px);
+    background: var(--admin-gray-100, #f8f9fa);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--admin-transition-fast, all 0.15s ease);
+    color: var(--admin-primary, #007bff);
+    font-size: 28px;
+    font-weight: bold;
+    margin: 5px;
+}
+
+.admin-add-image-btn:hover {
+    background: #e3f2fd;
+    border-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* ============================================
+   右栏 - 预览/工具区域 (25%)
+   ============================================ */
+.admin-right-panel {
+    flex: 0 0 25%;
+    min-width: 280px;
+    max-width: 350px;
+}
+
+.admin-right-panel .card {
+    margin-bottom: var(--admin-spacing-lg, 16px);
+}
+
+/* 预览区域 */
+.admin-preview-section {
+    padding: var(--admin-spacing-lg, 16px);
+}
+
+.admin-preview-section h6 {
+    margin-bottom: var(--admin-spacing-md, 12px);
+    color: var(--admin-gray-700, #495057);
+    font-weight: 600;
+}
+
+/* 统计卡片 */
+.admin-stat-card {
+    background: linear-gradient(135deg, var(--admin-primary, #007bff) 0%, #0056b3 100%);
+    color: white;
+    padding: var(--admin-spacing-lg, 16px);
+    border-radius: var(--admin-radius-lg, 8px);
+    margin-bottom: var(--admin-spacing-md, 12px);
+}
+
+.admin-stat-card h3 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.admin-stat-card p {
+    margin: var(--admin-spacing-xs, 4px) 0 0;
+    opacity: 0.9;
+}
+
+/* ============================================
+   响应式布局
+   ============================================ */
+@media (max-width: 1400px) {
+    .admin-left-panel,
+    .admin-right-panel {
+        flex: 0 0 280px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .admin-three-column {
+        flex-wrap: wrap;
+    }
+
+    .admin-left-panel {
+        flex: 0 0 100%;
+        max-width: 100%;
+        order: 1;
+    }
+
+    .admin-center-panel {
+        flex: 0 0 100%;
+        order: 2;
+    }
+
+    .admin-right-panel {
+        flex: 0 0 100%;
+        max-width: 100%;
+        order: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-three-column {
+        padding: var(--admin-spacing-sm, 8px);
+        gap: var(--admin-spacing-sm, 8px);
+    }
+
+    .admin-category-list {
+        max-height: 400px;
+    }
+}

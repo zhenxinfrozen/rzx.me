@@ -1,0 +1,469 @@
+@charset "utf-8";
+/* Videos Page CSS - 视频页面样式 */
+.title {
+    text-align: center;
+    color: #999999;
+    font-size: 30px;
+    font-weight: 800;
+    font-family: Tahoma, Geneva, sans-serif;
+}
+
+/* ==================== 视频分组菜单 ==================== */
+
+#ray-video-wapper {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+}
+
+#ray-video-showbox {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 1400px;
+    padding: 0 20px;
+    position: relative;
+    
+    /* CSS变量定义 */
+    --item-width: 200px;
+    --gap: 20px;
+}
+
+/* 视频分组项 */
+.video-group-item {
+    box-sizing: border-box;
+    width: var(--item-width);
+    height: 363px;
+    border: #444 solid 2px;
+    background: #fff;
+    overflow: hidden;
+    flex: 0 0 auto;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    position: relative;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}
+
+.video-group-item:hover {
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+/* 预览图容器 - 垂直排列，100%宽度 */
+.video-group-previews {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #000000;
+}
+
+.preview-thumb {
+    width: 100%;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    min-height: 0;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+}
+
+.preview-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(100%);
+    transition: filter 0.4s ease;
+}
+
+.video-group-item:hover .preview-thumb img {
+    filter: grayscale(0%);
+}
+
+/* 预览图占位符 */
+.preview-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 分组标题 - 恢复原版样式，只在hover时显示 */
+.video-group-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    padding: 40px 10px 10px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 200;
+}
+
+.video-group-item:hover .video-group-title {
+    opacity: 0.8;
+}
+
+.video-group-title h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+.video-group-title .video-count {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.9;
+    text-align: center;
+}
+
+/* Overlay蒙版效果 */
+#video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: var(--item-width);
+    height: 363px;
+    border: #444 solid 2px;
+    border-color: transparent;
+    background-color: rgba(26, 35, 126, 0.5);
+    mix-blend-mode: multiply;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+    transition: opacity 0.4s ease,
+                background-color 0.6s ease,
+                transform 0.2s cubic-bezier(0.65, 0, 0.35, 1) 0s;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Hover效果 - 蒙版变色（位置由JavaScript动态计算） */
+.video-group-item:hover ~ #video-overlay {
+    opacity: 0.85;
+}
+
+#video-group-1:hover ~ #video-overlay {
+    background-color: rgba(255, 0, 242, 0.3);
+}
+
+#video-group-2:hover ~ #video-overlay {
+    background-color: rgba(0, 166, 255, 0.3);
+}
+
+#video-group-3:hover ~ #video-overlay {
+    background-color: rgba(0, 255, 0, 0.3);
+}
+
+#video-group-4:hover ~ #video-overlay {
+    background-color: rgba(255, 153, 0, 0.3);
+}
+
+#video-group-5:hover ~ #video-overlay {
+    background-color: rgba(255, 0, 100, 0.3);
+}
+
+#video-group-6:hover ~ #video-overlay {
+    background-color: rgba(100, 255, 0, 0.3);
+}
+
+/* ==================== 视频显示区域 ==================== */
+
+#ray-video-displaybox {
+    display: block;
+    width: 90vw;
+    max-width: 1400px;
+    margin: 40px auto;
+}
+
+.video-section-title {
+    margin-bottom: 30px;
+}
+
+/* 视频网格 - 响应式布局 */
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 320px));
+    gap: 30px;
+    width: 100%;
+    margin: 20px auto;
+    justify-content: center;
+    justify-items: center;
+}
+
+/* 根据屏幕宽度调整列数 */
+@media (min-width: 1900px) {
+    .video-grid {
+        grid-template-columns: repeat(5, 320px);
+        max-width: 1750px;  /* 320*5 + 30*4 = 1720px */
+    }
+}
+
+@media (min-width: 1500px) and (max-width: 1899px) {
+    .video-grid {
+        grid-template-columns: repeat(4, 320px);
+        max-width: 1400px;  /* 320*4 + 30*3 = 1370px */
+    }
+}
+
+@media (min-width: 1100px) and (max-width: 1499px) {
+    .video-grid {
+        grid-template-columns: repeat(3, 320px);
+        max-width: 1050px;  /* 320*3 + 30*2 = 1020px */
+    }
+}
+
+@media (min-width: 700px) and (max-width: 1099px) {
+    .video-grid {
+        grid-template-columns: repeat(2, 320px);
+        max-width: 700px;   /* 320*2 + 30*1 = 670px */
+    }
+}
+
+@media (max-width: 699px) {
+    .video-grid {
+        grid-template-columns: repeat(1, 320px);
+        gap: 20px;
+        max-width: 320px;
+    }
+}
+
+/* 视频项 - 简洁样式，无圆角 */
+.video-item {
+    background: #fff;
+    border-radius: 0;
+    overflow: hidden;
+    width: 320px;
+    /* box-shadow: 0 2px 8px rgba(0,0,0,0.1); */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.video-item:hover {
+    /* transform: translateY(-5px); */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* 视频缩略图容器 */
+.video-thumbnail {
+    width: 320px;
+    height: 180px;
+    background-size: cover;
+    background-position: center;
+    background-color: #000;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* 播放按钮蒙版 */
+.play-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.video-thumbnail:hover .play-overlay {
+    opacity: 1;
+}
+
+/* 播放图标 */
+.play-icon {
+    width: 64px;
+    height: 64px;
+    color: rgba(255, 255, 255, 0.9);
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.video-thumbnail:hover .play-icon {
+    transform: scale(1.1);
+    color: rgba(255, 255, 255, 1);
+}
+
+/* 视频播放器 */
+.video-item video {
+    width: 320px;
+    height: 180px;  /* 16:9比例 */
+    display: block;
+    background: #000;
+}
+
+.video-item .video-title {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 15px 10px;
+    margin: 0;
+    color: #909090;
+    text-align: center;
+}
+
+.video-item .video-description {
+    font-size: 8px;
+    padding: 0 15px 10px;
+    margin: 0;
+    color: #666;
+    line-height: 1.4;
+    text-align: center;
+}
+
+/* HTML5提示 - 完全匹配视频项样式和尺寸 */
+.html5-tip {
+    background: #fff;
+    border-radius: 0;
+    overflow: hidden;
+    width: 320px;  /* 与视频项相同 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 0;
+    text-align: center;
+    margin: 0;
+}
+
+.html5-tip:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+.html5-tip .html5-poster {
+    width: 320px;
+    height: 180px;  /* 与视频相同的16:9比例 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(197, 148, 3);
+    padding: 0;
+}
+
+.html5-tip .html5-poster img {
+    max-width: 120px;
+    max-height: 120px;
+    height: auto;
+    display: block;
+}
+
+.html5-tip .html5-title {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 15px 10px;
+    margin: 0;
+    color: #909090;
+    text-align: center;
+}
+
+.html5-tip .html5-description {
+    font-size: 8px;
+    padding: 0 15px 10px;
+    margin: 0;
+    color: #666;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.html5-tip a {
+    color: #666;
+    text-decoration: underline;
+}
+
+/* ==================== 响应式调整 ==================== */
+
+@media (max-width: 1200px) {
+    #ray-video-showbox {
+        gap: 15px;
+        --gap: 15px;
+    }
+    
+    .video-group-item, #video-overlay {
+        width: 22%;
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    #ray-video-showbox {
+        gap: 10px;
+        --gap: 10px;
+    }
+    
+    .video-group-item, #video-overlay {
+        width: 48%;
+        height: 320px;
+    }
+    
+    /* 调整小屏幕下的overlay位置 - 2列布局 */
+    #video-group-2:hover ~ #video-overlay {
+        transform: translate3d(calc(100% + 10px), 0, 0);
+    }
+    
+    #video-group-3:hover ~ #video-overlay {
+        transform: translate3d(0, calc(100% + 10px), 0);
+    }
+    
+    #video-group-4:hover ~ #video-overlay {
+        transform: translate3d(calc(100% + 10px), calc(100% + 10px), 0);
+    }
+    
+    #video-group-5:hover ~ #video-overlay {
+        transform: translate3d(0, calc(2 * (100% + 10px)), 0);
+    }
+    
+    #video-group-6:hover ~ #video-overlay {
+        transform: translate3d(calc(100% + 10px), calc(2 * (100% + 10px)), 0);
+    }
+    
+    #ray-video-displaybox {
+        width: 95vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-group-item, #video-overlay {
+        width: 100%;
+        height: 280px;
+    }
+    
+    /* 单列布局 - overlay垂直移动 */
+    #video-group-2:hover ~ #video-overlay {
+        transform: translate3d(0, calc(100% + 10px), 0);
+    }
+    
+    #video-group-3:hover ~ #video-overlay {
+        transform: translate3d(0, calc(2 * (100% + 10px)), 0);
+    }
+    
+    #video-group-4:hover ~ #video-overlay {
+        transform: translate3d(0, calc(3 * (100% + 10px)), 0);
+    }
+    
+    #video-group-5:hover ~ #video-overlay {
+        transform: translate3d(0, calc(4 * (100% + 10px)), 0);
+    }
+    
+    #video-group-6:hover ~ #video-overlay {
+        transform: translate3d(0, calc(5 * (100% + 10px)), 0);
+    }
+    
+    .html5-tip {
+        padding: 20px 30px;
+        font-size: 9px;
+    }
+}

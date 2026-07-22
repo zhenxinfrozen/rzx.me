@@ -1,0 +1,51 @@
+{
+    "ray-small": {
+        "name": "测试用",
+        "width": 50,
+        "height": 50,
+        "quality": 85,
+        "format": "jpg",
+        "directory": "rzx-thumbs",
+        "suffix": "_rzx-thumbs",
+        "crop": true,
+        "builtin": false,
+        "created_at": "2025-09-25 20:34:33"
+    },
+    "test-129": {
+        "name": "test-129",
+        "width": 128,
+        "height": 128,
+        "quality": 85,
+        "format": "jpg",
+        "directory": "test-128",
+        "suffix": "_test-128",
+        "crop": true,
+        "builtin": false,
+        "created_at": "2025-09-25 20:42:23"
+    },
+    "test-hhhhh": {
+        "name": "ray-质量10%",
+        "width": 150,
+        "height": 150,
+        "quality": 10,
+        "format": "webp",
+        "directory": "thumbs",
+        "suffix": "",
+        "crop": false,
+        "builtin": false,
+        "created_at": "2025-09-25 20:54:09",
+        "updated_at": "2025-10-06 20:06:39"
+    },
+    "test-334234234": {
+        "name": "Synology",
+        "width": 49,
+        "height": 49,
+        "quality": 80,
+        "format": "jpg",
+        "directory": "rzx333",
+        "suffix": "_xxxxxxxxx",
+        "crop": true,
+        "builtin": false,
+        "created_at": "2025-09-26 18:10:57"
+    }
+}
