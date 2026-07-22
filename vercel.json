@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "public/**/*.php",
+      "use": "@vercel/php"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "dest": "/public/assets/$1"
+    },
+    {
+      "src": "/dev/(.*)",
+      "dest": "/public/dev/$1"
+    },
+    {
+      "src": "/admin-routes-test\.html",
+      "dest": "/public/admin-routes-test.html"
+    },
+    {
+      "src": "/dev-routes\.php",
+      "dest": "/public/dev-routes.php"
+    },
+    {
+      "src": "/dev-server\.php",
+      "dest": "/public/dev-server.php"
+    },
+    {
+      "src": "/fa-icons\.php",
+      "dest": "/public/fa-icons.php"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.php?route=/$1"
+    }
+  ]
+}
