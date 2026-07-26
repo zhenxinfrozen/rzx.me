@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<title>Speical</title>
+
+  <link rel="stylesheet" href="jquery.mobile-1.3.1.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+
+  <link href="../css/home_style.css" rel="stylesheet" type="text/css" />
+  <script src="../js/jquery-1.9.1.min.js" type="text/javascript"></script>
+  <link href="../testcss/style/csslab.css" rel="stylesheet" type="text/css" />
+</head> 
+<body> 
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-18450539-1', 'rzx.me');
+  ga('send', 'pageview');
+</script>
+<div data-role="page" id="demo-page" data-theme="d" data-url="demo-page">
+    <div data-role="header" data-theme="c">
+        <h1></h1>
+        <a href="#left-panel" data-icon="bars" data-iconpos="notext" data-shadow="false" data-iconshadow="false">Menu</a>
+    </div><!-- /header -->
+    <div data-role="content">
+        <div class="article">
+<!--             <p><img src="http://pic.rzx.me/rzxme/web/images/thumbnails/a_2.gif" alt="Fixed Gear bike"></p> -->
+            <div style="width:100%;height:100px;"></div>
+            <h2></h2>
+            <!-- <p>杂物堆放处！</p> -->
+            <!-- <p><a href="#right-panel" data-role="button" data-theme="b" data-inline="true" data-mini="true" data-shadow="false">目录</a></p> -->
+        </div><!-- /article -->
+
+
+
+<div style ="width:80%;  margin:0 auto;">
+<?php
+ 
+$imgtype=array('bmp','jpg','PNG','JPG','jpeg','png','gif');   //初始化图片文件扩展名
+ 
+$imgtype_count=count($imgtype);     //计算共有多少图片扩展名
+ 
+$path="pic"; //设定目录
+ 
+$handle=opendir($path);     //打开目录
+ 
+while ($file = readdir($handle))    //取得目录中的文件名
+{
+ 
+if (is_dir($file)) {continue;}      //如果$file为目录，则不做操作
+ 
+$type = explode(".",$file);         //分割字符串
+ 
+$type=$type[1];     //得到文件扩展名
+ 
+for($i=0;$i<$imgtype_count;$i++)
+{
+if($type==$imgtype[$i])     //判断文件扩展名是否为图片文件的扩展名,若是则做下列输出
+    {
+    echo"<a href=".$path."/".$file." target=\"_blank\" alt=\"点击打开新窗口浏览\"><img src=".$path."/".$file." border=\"0\" onload=\"if(this.height>150) {this.height=300;this.width=300*this.width/this.height;}\"></a>\n";
+    }
+}
+ 
+}
+closedir($handle);      //关闭目录
+ 
+?>
+</div>
+
+    </div><!-- /content -->
+
+
+
+
+
+
+
+
+
+</body>
+</html>
