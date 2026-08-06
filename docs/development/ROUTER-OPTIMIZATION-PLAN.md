@@ -48,13 +48,13 @@ HTTP请求 → dev-server.php → 静态文件直接返回 OR 转发到index.php
 ### 开发环境启动
 ```bash
 # Windows
-./start-dev-server.bat
+start-dev-server.bat
 
 # Linux/Mac  
-./start-dev-server.sh
+bash start-dev-server.sh
 
 # 手动启动
-php -S localhost:8000 -t public dev-server.php
+php -S 127.0.0.1:8000 -t public public/dev-server.php
 ```
 
 ### 添加新页面路由
