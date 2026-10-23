@@ -1,0 +1,369 @@
+/* =========================================================
+   RZX 拟物菜单 (rzx-skeuo)
+   复刻自 old.rzx.me 首页经典拟物化菜单（home_style.css）
+   全部选择器以 .rzx-skeuo 命名空间隔离，不影响 WP 全局样式
+   ========================================================= */
+
+.rzx-skeuo {
+	margin: 30px auto 10px;
+	max-width: 1000px;
+	box-sizing: border-box;
+}
+
+.rzx-skeuo * {
+	box-sizing: border-box;
+}
+
+.rzx-skeuo__menu {
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	flex-wrap: wrap;
+	gap: 42px 42px;
+}
+
+.rzx-skeuo__item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100px;
+	text-decoration: none !important;
+	box-shadow: none !important;
+	outline: none !important;
+	border: none !important;
+	background: none !important;
+	cursor: pointer;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* 键盘可达性焦点环（全局 focus 样式被站点规则禁用，这里用 box-shadow 兜底） */
+.rzx-skeuo__item:focus-visible {
+	box-shadow: 0 0 0 3px rgba(224, 91, 229, 0.45) !important;
+	border-radius: 4px;
+}
+
+/* 抵御站点全局粉色 hover 规则（body a:hover * { color:#e05be5 !important }） */
+.rzx-skeuo__item:hover,
+.rzx-skeuo__item:hover * {
+	color: #999 !important;
+	text-decoration: none !important;
+}
+
+.rzx-skeuo__icon {
+	position: relative;
+	display: block;
+	width: 100px;
+	height: 100px;
+	margin: 0;
+	overflow: hidden;
+}
+
+.rzx-skeuo__icon img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	margin: 0;
+}
+
+.rzx-skeuo__label {
+	display: block;
+	width: 100px;
+	height: 20px;
+	margin-top: 12px;
+	text-align: center;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: 900;
+	font-size: 13px;
+	line-height: 20px;
+	letter-spacing: 0;
+	color: #999;
+}
+
+/* =========================================================
+   1. Animation — 波浪淹没
+   ::before 后层浅色波浪（快）、.rzx-skeuo__wave 前层深色波浪（慢，反向）
+   ::after 顶部透明框架，hover 时两层波浪从底部上涌淹没图标
+   ========================================================= */
+.rzx-skeuo__item--animation .rzx-skeuo__icon {
+	position: relative;
+	background: none;
+	overflow: hidden;
+	border-radius: 12px;
+	transition: transform 0.2s ease;
+}
+
+.rzx-skeuo__item--animation .rzx-skeuo__icon::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url("__RZX_ANIM_ALPHA__") no-repeat center;
+	background-size: contain;
+	z-index: 5;
+	pointer-events: none;
+}
+
+.rzx-skeuo__item--animation .rzx-skeuo__icon::before,
+.rzx-skeuo__item--animation .rzx-skeuo__wave {
+	content: "";
+	position: absolute;
+	left: 0;
+	width: 400%;
+	height: 120%;
+	top: 100%;
+	transition: top 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	background-repeat: repeat-x;
+}
+
+.rzx-skeuo__item--animation .rzx-skeuo__icon::before {
+	z-index: 1;
+	opacity: 0.6;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Cpath d='M0 20 Q25 5 50 20 T100 20 Q125 5 150 20 T200 20 V120 H0 Z' fill='%23d5e9b8'/%3E%3C/svg%3E");
+	animation: rzx-wave-flow 1.2s linear infinite;
+}
+
+.rzx-skeuo__item--animation .rzx-skeuo__wave {
+	z-index: 2;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120' viewBox='0 0 200 120'%3E%3Cpath d='M0 25 Q25 10 50 25 T100 25 Q125 10 150 25 T200 25 V120 H0 Z' fill='%23d5e9b8'/%3E%3C/svg%3E");
+	animation: rzx-wave-flow 2s linear infinite reverse;
+	opacity: 0.9;
+	margin-left: -50px;
+}
+
+.rzx-skeuo__item--animation:hover .rzx-skeuo__icon::before,
+.rzx-skeuo__item--animation:hover .rzx-skeuo__wave {
+	top: -20%;
+}
+
+@keyframes rzx-wave-flow {
+	from { transform: translateX(0); }
+	to   { transform: translateX(-50%); }
+}
+
+.rzx-skeuo__item--animation:active .rzx-skeuo__icon {
+	transform: scale(0.94);
+}
+
+/* =========================================================
+   2. Latest — 红色圆形中心扩散（恐怖风）
+   ::before 红点 hover 时 scale(0 → 25) 淹没背景，图标上浮放大
+   ========================================================= */
+.rzx-skeuo__item--latest .rzx-skeuo__icon {
+	position: relative;
+	background: none;
+	overflow: hidden;
+	border-radius: 12px;
+}
+
+.rzx-skeuo__item--latest .rzx-skeuo__icon::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 10px;
+	height: 10px;
+	background-color: #f16666;
+	border-radius: 50%;
+	transform: translate(-50%, -50%) scale(0);
+	transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	z-index: 1;
+}
+
+.rzx-skeuo__item--latest:hover .rzx-skeuo__icon::before {
+	transform: translate(-50%, -50%) scale(25);
+}
+
+.rzx-skeuo__item--latest .rzx-skeuo__icon img {
+	position: relative;
+	z-index: 5;
+	transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	transform: scale(0.9);
+}
+
+.rzx-skeuo__item--latest:hover .rzx-skeuo__icon img {
+	transform: scale(1.1);
+}
+
+.rzx-skeuo__item--latest:active .rzx-skeuo__icon img {
+	transform: scale(0.95);
+}
+
+/* =========================================================
+   3. Comic — 弹跳（hover 与 click 一致）
+   随机上浮 70–130px + 随机方向/角度细微旋转（变量由 JS 每次随机设置）
+   overflow: visible 避免起跳被图标框顶部裁切
+   ========================================================= */
+.rzx-skeuo__item--comic .rzx-skeuo__icon {
+	overflow: visible;
+}
+
+@keyframes rzx-menu-bounce {
+	0%   { transform: translateY(0) rotate(0deg); }
+	30%  { transform: translateY(var(--rzx-comic-rise, -40px)) rotate(var(--rzx-comic-rot, 8deg)); }
+	50%  { transform: translateY(0) rotate(0deg); }
+	65%  { transform: translateY(calc(var(--rzx-comic-rise, -40px) * 0.25)) rotate(calc(var(--rzx-comic-rot, 8deg) * -0.5)); }
+	100% { transform: translateY(0) rotate(0deg); }
+}
+
+.rzx-skeuo__item--comic .rzx-skeuo__icon img.rzx-skeuo-bounce {
+	animation: rzx-menu-bounce 600ms cubic-bezier(0.22, 0.9, 0.39, 1) 1 both;
+}
+
+/* =========================================================
+   4. Blog — 默认倾斜 20°，hover 弹性回正（先回摆到 -60° 再震荡停在 12 点）+ 点击震动
+   ========================================================= */
+.rzx-skeuo__item--blog .rzx-skeuo__icon img {
+	display: block;
+	transform: rotate(20deg);
+	transform-origin: 50% 50%;
+	transition: transform 150ms ease-in-out;
+	overflow: hidden;
+}
+
+.rzx-skeuo__item--blog:hover .rzx-skeuo__icon img {
+	animation: rzx-blog-elastic 750ms cubic-bezier(0.22, 0.9, 0.39, 1) 1 both;
+}
+
+@keyframes rzx-blog-elastic {
+	0%   { transform: rotate(20deg); }
+	14%  { transform: rotate(-60deg); }
+	34%  { transform: rotate(24deg); }
+	52%  { transform: rotate(-14deg); }
+	70%  { transform: rotate(7deg); }
+	85%  { transform: rotate(-3deg); }
+	100% { transform: rotate(0deg); }
+}
+
+.rzx-skeuo__item--blog.rzx-skeuo-clicked .rzx-skeuo__icon img {
+	will-change: transform;
+	animation: rzx-icon-shock 500ms cubic-bezier(0.2, 0.8, 0.2, 1) 1 both;
+}
+
+/* 点击：随机方向摆到 ±50°，弹簧回弹越过 12 点后震荡停稳（纯旋转，无缩放）
+   --rzx-shock-rot 由 JS 随机设置为 ±50deg */
+@keyframes rzx-icon-shock {
+	0%   { transform: rotate(0deg); }
+	55%  { transform: rotate(var(--rzx-shock-rot, 50deg)); }
+	72%  { transform: rotate(calc(var(--rzx-shock-rot, 50deg) * -0.35)); }
+	88%  { transform: rotate(calc(var(--rzx-shock-rot, 50deg) * 0.12)); }
+	100% { transform: rotate(0deg); }
+}
+
+/* =========================================================
+   5. SketchBooks — 3D 翻书（双图状态：01 闭合封面 / 02 翻开内容）
+   ::after 封面(01) 绕左缘 rotateY(-130°) 翻开，露出 ::before 内页(02)
+   ========================================================= */
+.rzx-skeuo__item--sketch .rzx-skeuo__icon {
+	position: relative;
+	background: none !important;
+	perspective: 800px;
+	overflow: visible !important;
+	transition: transform 0.3s ease;
+}
+
+.rzx-skeuo__item--sketch .rzx-skeuo__icon::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url("__RZX_SKETCH_02__") no-repeat center / cover;
+	z-index: 1;
+	border-radius: 2px 5px 5px 2px;
+	transition: transform 0.4s ease;
+}
+
+.rzx-skeuo__item--sketch .rzx-skeuo__icon::after {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: url("__RZX_SKETCH__") no-repeat center / cover;
+	z-index: 2;
+	transform-origin: left center;
+	transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s ease;
+	border-radius: 2px 5px 5px 2px;
+	backface-visibility: hidden;
+}
+
+.rzx-skeuo__item--sketch:hover .rzx-skeuo__icon::after {
+	transform: rotateY(-130deg);
+	box-shadow: 10px 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.rzx-skeuo__item--sketch:hover .rzx-skeuo__icon::before {
+	transform: translateX(5px) scale(1.02);
+}
+
+.rzx-skeuo__item--sketch:active .rzx-skeuo__icon {
+	transform: scale(0.95);
+}
+
+/* =========================================================
+   6. Works — 横向动感模糊（JS + SVG feGaussianBlur 驱动）
+   ========================================================= */
+.rzx-skeuo__item--works .rzx-skeuo__icon img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* =========================================================
+   7. About — 中心放大 + 圆角渐变（默认 0.8/6px → hover 1.3/14px）
+   外层 icon 容器带圆角并 overflow 裁切，保证放大后圆角始终可见
+   点击反馈同 Animation/Latest：按下轻微缩小
+   ========================================================= */
+.rzx-skeuo__item--about .rzx-skeuo__icon {
+	position: relative;
+	overflow: hidden;
+	border-radius: 6px;
+	transition: border-radius 200ms ease, transform 120ms ease;
+}
+
+.rzx-skeuo__item--about:active .rzx-skeuo__icon {
+	transform: scale(0.94);
+}
+
+.rzx-skeuo__item--about .rzx-skeuo__icon img {
+	transform: scale(0.8);
+	transform-origin: 50% 50%;
+	transition: transform 180ms ease, border-radius 200ms ease;
+	will-change: transform;
+	border-radius: 6px;
+}
+
+.rzx-skeuo__item--about:hover .rzx-skeuo__icon {
+	border-radius: 14px;
+}
+
+.rzx-skeuo__item--about:hover .rzx-skeuo__icon img {
+	transform: scale(1.3);
+	border-radius: 14px;
+}
+
+/* =========================================================
+   窄屏适配：单行放不下时换行
+   ========================================================= */
+@media (max-width: 900px) {
+	.rzx-skeuo__menu {
+		gap: 30px 30px;
+	}
+	.rzx-skeuo__item {
+		width: 90px;
+	}
+	.rzx-skeuo__icon {
+		width: 90px;
+		height: 90px;
+	}
+	.rzx-skeuo__label {
+		width: 90px;
+	}
+}

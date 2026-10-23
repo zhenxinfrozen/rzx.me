@@ -1,0 +1,17 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "rzxme/skeuo-menu",
+	"title": "RZX 拟物菜单 (Skeuo Menu)",
+	"category": "design",
+	"icon": "menu",
+	"description": "经典老站拟物化图标菜单组件，含波浪淹没 / 圆形扩散 / 弹跳 / 回正震动 / 3D 翻书 / 动感模糊 / 放大等 hover 动效。类名全部以 rzx-skeuo 命名空间隔离，不影响站点全局样式。",
+	"keywords": [ "menu", "skeuomorphic", "rzx", "拟物" ],
+	"supports": {
+		"align": [ "wide", "full" ],
+		"html": false,
+		"color": false,
+		"typography": false
+	},
+	"textdomain": "rzxme-2025"
+}
