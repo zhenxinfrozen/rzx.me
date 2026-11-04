@@ -21,6 +21,17 @@ class AdminIndexController
             return;
         }
 
+        // 优先委托给 SharedAdmin 处理内置通用页面 (system-info, template-new, docs)
+        require_once __DIR__ . '/../../../shared-admin/src/AdminCore.php';
+        $adminConfig = require __DIR__ . '/../../Config/admin.php';
+        \SharedAdmin\AdminCore::init($adminConfig);
+
+        if (\SharedAdmin\AdminCore::handleBuiltinPage($page, [
+            'docsDir' => realpath(__DIR__ . '/../../../docs') ?: ''
+        ])) {
+            return;
+        }
+
         // 定义可用的页面和对应的控制器
         $pages = [
             'dashboard' => [
