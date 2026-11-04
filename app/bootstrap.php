@@ -6,6 +6,13 @@ if (!defined('APP_RUNNING')) {
     define('APP_RUNNING', true);
 }
 
+if (!defined('APP_ROOT')) {
+    define('APP_ROOT', dirname(__DIR__));
+}
+if (!defined('APP_PATH')) {
+    define('APP_PATH', __DIR__);
+}
+
 // 加载新的配置管理器
 require_once __DIR__ . '/Config/ConfigManager.php';
 

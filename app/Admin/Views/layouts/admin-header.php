@@ -18,8 +18,11 @@ if (!isset($_SESSION['admin_authenticated']) && !isset($_GET['dev'])) {
     exit;
 }
 
-require_once __DIR__ . '/../../../../shared-admin/src/AdminCore.php';
-$adminConfig = require __DIR__ . '/../../../Config/admin.php';
+$appRoot = defined('APP_ROOT') ? APP_ROOT : dirname(__DIR__, 4);
+$appPath = defined('APP_PATH') ? APP_PATH : dirname(__DIR__, 3);
+
+require_once $appRoot . '/shared-admin/src/AdminCore.php';
+$adminConfig = require $appPath . '/Config/admin.php';
 
 use SharedAdmin\AdminCore;
 AdminCore::init($adminConfig);

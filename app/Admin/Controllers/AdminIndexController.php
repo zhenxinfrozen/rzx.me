@@ -22,12 +22,15 @@ class AdminIndexController
         }
 
         // 优先委托给 SharedAdmin 处理内置通用页面 (system-info, template-new, docs)
-        require_once __DIR__ . '/../../../shared-admin/src/AdminCore.php';
-        $adminConfig = require __DIR__ . '/../../Config/admin.php';
+        $appRoot = defined('APP_ROOT') ? APP_ROOT : dirname(__DIR__, 3);
+        $appPath = defined('APP_PATH') ? APP_PATH : dirname(__DIR__, 2);
+
+        require_once $appRoot . '/shared-admin/src/AdminCore.php';
+        $adminConfig = require $appPath . '/Config/admin.php';
         \SharedAdmin\AdminCore::init($adminConfig);
 
         if (\SharedAdmin\AdminCore::handleBuiltinPage($page, [
-            'docsDir' => realpath(__DIR__ . '/../../../docs') ?: ''
+            'docsDir' => $appRoot . '/docs'
         ])) {
             return;
         }
