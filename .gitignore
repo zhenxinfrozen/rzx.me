@@ -12,6 +12,8 @@ app/storage/config/*.json
 # Media assets
 public/assets/images/*
 !public/assets/images/.gitkeep
+!public/assets/images/website-screenshot/
+!public/assets/images/website-screenshot/*
 public/assets/videos/*
 !public/assets/videos/.gitkeep
 
