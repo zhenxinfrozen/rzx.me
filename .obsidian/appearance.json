@@ -1,1 +1,5 @@
-{}
+{
+  "theme": "moonstone",
+  "accentColor": "#50af5b",
+  "cssTheme": "Evernote-Like"
+}
