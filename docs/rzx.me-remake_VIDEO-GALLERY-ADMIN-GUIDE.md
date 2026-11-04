@@ -34,21 +34,21 @@ Video Gallery 后台管理系统已成功集成到 RZX.ME 后台管理系统中�
 1. **启动开发服务器**
    ```bash
    cd d:\VS CODE\rzx-me
-   php -S localhost:8000 -t public
+   php -S 127.0.0.1:8000 -t public
    ```
 
 2. **访问后台管理**
    ```
-   http://localhost:8000/admin/
+   http://127.0.0.1:8000/admin/
    ```
 
 3. **登录（开发模式）**
    - 在 URL 后添加 `?dev=1` 可跳过登录验证
-   - 完整 URL: `http://localhost:8000/admin/?dev=1`
+   - 完整 URL: `http://127.0.0.1:8000/admin/?dev=1`
 
 4. **进入 Video Gallery 管理**
    - 在左侧菜单找到 **"Video Gallery管理"** (图标: 🎬 film)
-   - 或直接访问: `http://localhost:8000/admin/controllers/video-gallery.php?dev=1`
+   - 或直接访问: `http://127.0.0.1:8000/admin/controllers/video-gallery.php?dev=1`
 
 ---
 
@@ -290,7 +290,7 @@ Video Gallery 管理页面遵循与 Single-Works、Sketchbook 相同的设计模
 **后台管理功能已完整实现！**
 
 你现在可以：
-1. 访问 `http://localhost:8000/admin/?dev=1`
+1. 访问 `http://127.0.0.1:8000/admin/?dev=1`
 2. 点击左侧菜单的 **"Video Gallery管理"**
 3. 开始管理你的视频分组
 

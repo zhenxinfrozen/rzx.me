@@ -9,8 +9,28 @@
             "request": "launch",
             "port": 9003,
             "pathMappings": {
-                // 本地项目路径 -> 服务器上的路径（内建 server 就是一样的）
-                "D:/OneDrive/Backup-online/99-Websites/Backup-2017-01-09/个人网站备份/rzx.me-2017-03-13": "${workspaceFolder}"
+                "${workspaceFolder}": "${workspaceFolder}"
+            }
+        },
+        {
+            "name": "启动内置服务器 and Debug",
+            "type": "php",
+            "request": "launch",
+            "runtimeArgs": [
+                "-S",
+                "127.0.0.1:8000",
+                "-t",
+                "public",
+                "public/dev-server.php"
+            ],
+            "port": 9003,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "Development Server \\(http://127.0.0.1:8000\\) started",
+                "uriFormat": "http://127.0.0.1:8000/admin?page=dashboard"
+            },
+            "pathMappings": {
+                "${workspaceFolder}": "${workspaceFolder}"
             }
         }
     ]

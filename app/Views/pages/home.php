@@ -129,42 +129,56 @@
         document.addEventListener('click', function(ev){
             var el = ev.target;
             while(el && el !== document.body){
-                if (el.classList && el.classList.contains('ray-home-menu-blog')){
+                // 注意：菜单容器 class 是 ray-home-menu-icon，只有 id 是 ray-home-menu-blog
+                if (el.classList && (el.classList.contains('ray-home-menu-blog') || el.id === 'ray-home-menu-blog')){
+                    // 随机方向：顺时针 +50° 或逆时针 -50°；纯旋转弹簧回弹（无缩放）
+                    var img = el.querySelector('#wordpress-logo');
+                    if (img){
+                        var dir = Math.random() < 0.5 ? -1 : 1;
+                        img.style.setProperty('--rzx-shock-rot', (dir * 50) + 'deg');
+                    }
+                    // 重新触发动画（先移除 class 强制 reflow）；点击态保持到鼠标移出，
+                    // 避免旋转结束后 hover 弹性动画被重新触发
+                    el.classList.remove('clicked');
+                    void el.offsetWidth;
                     el.classList.add('clicked');
-                    setTimeout(function(){ el.classList.remove('clicked'); }, 600);
                     return;
                 }
                 el = el.parentNode;
             }
         }, false);
+        var blogEl = document.getElementById('ray-home-menu-blog');
+        if (blogEl){
+            blogEl.addEventListener('mouseenter', function(){ blogEl.classList.remove('clicked'); });
+            blogEl.addEventListener('mouseleave', function(){ blogEl.classList.remove('clicked'); });
+        }
     })();
     </script>
 
     <!-- Menu icon scale: center-based transform scaling, only affect specific IDs (no classes) -->
     <script>
     (function(){
-        function setupBounce(containerId){
+        function setupComicBounce(containerId){
             var cont = document.getElementById(containerId);
-            if (!cont) { console.log('[menu-bounce] no container', containerId); return; }
+            if (!cont) { console.log('[menu-comic] no container', containerId); return; }
             var img = cont.querySelector('img');
-            if (!img) { console.log('[menu-bounce] no img inside', containerId); return; }
-
-            if (!document.getElementById('menu-bounce-style')){
-                var style = document.createElement('style');
-                style.id = 'menu-bounce-style';
-                style.textContent = "@keyframes menu-bounce{0%{transform:translateY(0)}30%{transform:translateY(-15px)}50%{transform:translateY(0)}65%{transform:translateY(-5px)}100%{transform:translateY(0)}}.menu-bounce{animation:menu-bounce 420ms cubic-bezier(.22,.9,.39,1) 1 both;}";
-                document.head.appendChild(style);
-            }
+            if (!img) { console.log('[menu-comic] no img inside', containerId); return; }
 
             function doBounce(){
-                img.classList.remove('menu-bounce');
-                void img.offsetWidth;
-                img.classList.add('menu-bounce');
+                // 随机上浮 30–50px（40±10）；随机旋转：方向 ±，幅度 6°–14°
+                var rise = -(30 + Math.random() * 20);
+                img.style.setProperty('--rzx-comic-rise', rise + 'px');
+                var dir = Math.random() < 0.5 ? -1 : 1;
+                var mag = 6 + Math.random() * 8;
+                img.style.setProperty('--rzx-comic-rot', (dir * mag) + 'deg');
+                img.classList.remove('rzx-menu-bounce');
+                void img.offsetWidth; // 强制 reflow 以重置动画
+                img.classList.add('rzx-menu-bounce');
             }
 
             cont.addEventListener('mouseenter', doBounce);
             cont.addEventListener('focusin', doBounce);
-            cont.addEventListener('touchstart', function(e){ e.preventDefault(); doBounce(); }, {passive:false});
+            cont.addEventListener('click', doBounce);
         }
 
         function setupScale(containerId){
@@ -173,19 +187,19 @@
             var img = cont.querySelector('img');
             if (!img) { console.log('[menu-scale] no img inside', containerId); return; }
 
-            img.style.transition = 'transform 180ms ease';
+            img.style.transition = 'transform 180ms ease, border-radius 200ms ease';
             img.style.transformOrigin = img.style.transformOrigin || '50% 50%';
             img.style.willChange = 'transform';
             img.style.transform = 'scale(0.8)';
             img.style.display = img.style.display || 'block';
-            img.style.borderRadius = '10px';
+            img.style.borderRadius = '6px';
 
             var wrapper = img.parentElement || cont;
             try { if (getComputedStyle(wrapper).position === 'static') wrapper.style.position = 'relative'; } catch(e) { wrapper.style.position = 'relative'; }
             var overlay = null;
 
-            function expand(){ img.style.transform = 'scale(1.3)'; if (overlay) overlay.style.opacity = '0.38'; }
-            function shrink(){ img.style.transform = 'scale(0.9)'; if (overlay) overlay.style.opacity = '0'; }
+            function expand(){ img.style.transform = 'scale(1.3)'; img.style.borderRadius = '14px'; if (overlay) overlay.style.opacity = '0.38'; }
+            function shrink(){ img.style.transform = 'scale(0.9)'; img.style.borderRadius = '6px'; if (overlay) overlay.style.opacity = '0'; }
 
             cont.addEventListener('mouseenter', expand);
             cont.addEventListener('mouseleave', shrink);
@@ -196,7 +210,7 @@
         }
 
         setupScale('ray-home-menu-about');
-        setupBounce('ray-home-menu-comic');
+        setupComicBounce('ray-home-menu-comic');
     })();
     </script>
 
@@ -234,6 +248,8 @@
             img.addEventListener('blur', function(){ startAnim(readCur(), START_X); });
             img.addEventListener('touchstart', function(e){ e.preventDefault(); startAnim(readCur(), 0); }, {passive:false});
             img.addEventListener('touchend', function(){ startAnim(readCur(), START_X); });
+            // 点击：随机强度（6–14）的水平模糊脉冲，340ms 衰减回 0
+            img.addEventListener('click', function(){ startAnim(6 + Math.random() * 8, 0, 340); });
         }
 
         var targets = [];

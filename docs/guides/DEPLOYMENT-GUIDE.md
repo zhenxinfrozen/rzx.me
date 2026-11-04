@@ -38,8 +38,8 @@ systemctl restart php8.2-fpm
 - PHP模块或CGI支持
 
 ### 3. PHP内置服务器 (开发环境)
-- **启动脚本**: `start-dev-server.bat` / `start-dev-server.sh`
-- **路由文件**: `public/dev-server.php`
+- **启动脚本**: [`start-dev-server.bat`](<D:/VS CODE/rzx.me/start-dev-server.bat>) / [`start-dev-server.sh`](<D:/VS CODE/rzx.me/start-dev-server.sh>)
+- **路由文件**: [`public/dev-server.php`](<D:/VS CODE/rzx.me/public/dev-server.php>)
 - **适用场景**: 本地开发、快速测试
 
 ## 路由架构说明

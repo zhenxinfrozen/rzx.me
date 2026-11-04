@@ -79,7 +79,7 @@ function url($path = '', array $params = []) {
     }
 
     // 获取配置，默认开启伪静态
-    $usePrettyUrls = config('app.use_pretty_urls', true);
+    $usePrettyUrls = config('app.use_pretty_urls', false);
 
     // 构建基础 URL
     if ($usePrettyUrls) {

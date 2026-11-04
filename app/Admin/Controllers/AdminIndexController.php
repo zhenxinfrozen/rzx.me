@@ -102,10 +102,10 @@ class AdminIndexController
                 'subtitle' => '管理和生成缩略图'
             ],
             'system-info' => [
-                'view' => null,
-                'controller' => 'system-info',
+                'view' => 'system-info',
+                'controller' => null,
                 'title' => '系统信息',
-                'subtitle' => '查看服务器和PHP环境信息'
+                'subtitle' => '查看服务器与 PHP 运行环境指标'
             ],
             'docs' => [
                 'view' => 'admin-docs',
@@ -177,11 +177,15 @@ class AdminIndexController
         // 标准布局：header + content + footer
         require_once __DIR__ . '/../Views/layouts/admin-header.php';
 
-        // 加载视图内容
+        // 加载视图内容（优先本地视图，回退到 shared-admin 公共内置视图）
         if ($pageConfig['view']) {
             $viewFile = __DIR__ . '/../Views/pages/' . $pageConfig['view'] . '.php';
+            $sharedViewFile = (defined('APP_ROOT') ? APP_ROOT : dirname(__DIR__, 3)) . '/shared-admin/src/views/pages/' . $pageConfig['view'] . '.php';
+
             if (file_exists($viewFile)) {
                 require_once $viewFile;
+            } elseif (file_exists($sharedViewFile)) {
+                require_once $sharedViewFile;
             } else {
                 echo '<div class="admin-page-content">';
                 echo '<div class="alert alert-error">视图文件不存在: ' . htmlspecialchars($pageConfig['view']) . '</div>';

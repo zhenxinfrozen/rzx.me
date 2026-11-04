@@ -1,0 +1,3 @@
+[submodule "shared-admin"]
+	path = shared-admin
+	url = https://github.com/zhenxinfrozen/shared-admin.git

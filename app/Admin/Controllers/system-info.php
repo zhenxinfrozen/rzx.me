@@ -489,11 +489,15 @@ function animateNumbers() {
 }
 
 function animateValue(element, start, end, duration) {
+    if (end === start || duration <= 0) {
+        element.textContent = end.toFixed(2);
+        return;
+    }
     const increment = (end - start) / (duration / 16);
     let current = start;
     const timer = setInterval(() => {
         current += increment;
-        if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+        if (increment === 0 || (increment > 0 && current >= end) || (increment < 0 && current <= end)) {
             current = end;
             clearInterval(timer);
         }

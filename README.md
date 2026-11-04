@@ -18,7 +18,7 @@
 *   **PHP 8 兼容**：修复了所有过时的语法，全面支持 PHP 8.0+。
 *   **路由系统**：
     *   实现了灵活的路由分发机制。
-    *   支持 **伪静态 (Pretty URL)** 和 **查询参数 (Query Param)** 双模式，方便在不支持 URL Rewrite 的环境（如部分宝塔面板配置）中部署。
+*   支持 **伪静态 (Pretty URL)** 和 **查询参数 (Query Param)** 双模式，默认使用查询参数模式，方便在不支持 URL Rewrite 的环境（如部分宝塔面板拉取部署）中直接运行。
 *   **媒体管理**：
     *   重构了 **Sketchbook** 和 **Single Works** 画廊系统。
     *   重写了视频画廊 (Video Gallery) 的数据加载逻辑。
@@ -54,7 +54,7 @@
     ```php
     'use_pretty_urls' => true,
     ```
-    如果在宝塔等不支持 Rewrite 的简单环境，请关闭（默认）：
+    如果在宝塔等不支持 Rewrite 的简单环境，请保持关闭（默认）：
     ```php
     'use_pretty_urls' => false,
     ```

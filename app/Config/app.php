@@ -9,7 +9,7 @@ return [
     'debug' => true,
     'timezone' => 'Asia/Shanghai',
     'charset' => 'UTF-8',
-    'use_pretty_urls' => true, // Set to true if you have URL rewriting (pseudo-static) enabled
+    'use_pretty_urls' => false, // Set to true only when URL rewriting (pseudo-static) is enabled
 
     // 路径配置
     'paths' => [
