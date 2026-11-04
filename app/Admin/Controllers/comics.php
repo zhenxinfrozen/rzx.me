@@ -11,7 +11,13 @@ if (isset($_GET['dev'])) {
     ini_set('error_log', __DIR__ . '/../../../debug.log');
 }
 
-// ADMIN_ACCESS 和 comic_data.php 由 AdminIndexController 预加载
+// ADMIN_ACCESS 和 comic_data.php 由 AdminIndexController 预加载，防御性自加载
+if (!defined('ADMIN_ACCESS')) {
+    define('ADMIN_ACCESS', true);
+}
+if (!function_exists('get_all_comics_data')) {
+    require_once __DIR__ . '/../../Models/comic_data.php';
+}
 
 // 处理POST请求
 $message = '';
