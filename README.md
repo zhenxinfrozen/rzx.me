@@ -71,116 +71,39 @@
 
 ## 🖼️ 界面预览 (Interface Preview)
 
-以下为当前 **v5.0.1** 重构版本的全站高清页面截图，点击可查看原图。
+以下为当前 **v5.0.1** 重构版本的全站页面截图（800px 优化版）。
 
 ### 前台页面
 
-<table>
-<tr>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/01-home.png">
-<img src="public/assets/images/website-screenshot/01-home.png" alt="Home - 首页" width="100%"/>
-</a>
-<p align="center"><b>Home - 首页</b></p>
-</td>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/02-animation.png">
-<img src="public/assets/images/website-screenshot/02-animation.png" alt="Animation - 动画作品" width="100%"/>
-</a>
-<p align="center"><b>Animation - 动画作品</b></p>
-</td>
-</tr>
+| Home - 首页 | Animation - 动画作品 |
+| :---: | :---: |
+| [![Home - 首页](public/assets/images/website-screenshot/01-home.png)](public/assets/images/website-screenshot/01-home.png) | [![Animation - 动画作品](public/assets/images/website-screenshot/02-animation.png)](public/assets/images/website-screenshot/02-animation.png) |
 
-<tr>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/03-videos.png">
-<img src="public/assets/images/website-screenshot/03-videos.png" alt="Videos - 视频作品" width="100%"/>
-</a>
-<p align="center"><b>Videos - 视频作品</b></p>
-</td>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/04-latest.png">
-<img src="public/assets/images/website-screenshot/04-latest.png" alt="Latest - 最新作品" width="100%"/>
-</a>
-<p align="center"><b>Latest - 最新作品</b></p>
-</td>
-</tr>
+| Videos - 视频作品 | Latest - 最新作品 |
+| :---: | :---: |
+| [![Videos - 视频作品](public/assets/images/website-screenshot/03-videos.png)](public/assets/images/website-screenshot/03-videos.png) | [![Latest - 最新作品](public/assets/images/website-screenshot/04-latest.png)](public/assets/images/website-screenshot/04-latest.png) |
 
-<tr>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/05-comic.png">
-<img src="public/assets/images/website-screenshot/05-comic.png" alt="Comic - 漫画作品" width="100%"/>
-</a>
-<p align="center"><b>Comic - 漫画作品</b></p>
-</td>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/06-galleries.png">
-<img src="public/assets/images/website-screenshot/06-galleries.png" alt="Galleries - 精彩画廊" width="100%"/>
-</a>
-<p align="center"><b>Galleries - 精彩画廊</b></p>
-</td>
-</tr>
+| Comic - 漫画作品 | Galleries - 精彩画廊 |
+| :---: | :---: |
+| [![Comic - 漫画作品](public/assets/images/website-screenshot/05-comic.png)](public/assets/images/website-screenshot/05-comic.png) | [![Galleries - 精彩画廊](public/assets/images/website-screenshot/06-galleries.png)](public/assets/images/website-screenshot/06-galleries.png) |
 
-<tr>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/07-sketch.png">
-<img src="public/assets/images/website-screenshot/07-sketch.png" alt="Sketch - 手绘本" width="100%"/>
-</a>
-<p align="center"><b>Sketch - 手绘本</b></p>
-</td>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/08-drafts.png">
-<img src="public/assets/images/website-screenshot/08-drafts.png" alt="Drafts - 草稿箱" width="100%"/>
-</a>
-<p align="center"><b>Drafts - 草稿箱</b></p>
-</td>
-</tr>
+| Sketch - 手绘本 | Drafts - 草稿箱 |
+| :---: | :---: |
+| [![Sketch - 手绘本](public/assets/images/website-screenshot/07-sketch.png)](public/assets/images/website-screenshot/07-sketch.png) | [![Drafts - 草稿箱](public/assets/images/website-screenshot/08-drafts.png)](public/assets/images/website-screenshot/08-drafts.png) |
 
-<tr>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/09-about.png">
-<img src="public/assets/images/website-screenshot/09-about.png" alt="About - 关于我" width="100%"/>
-</a>
-<p align="center"><b>About - 关于我</b></p>
-</td>
-<td width="50%">
-</td>
-</tr>
-</table>
+| About - 关于我 | |
+| :---: | :---: |
+| [![About - 关于我](public/assets/images/website-screenshot/09-about.png)](public/assets/images/website-screenshot/09-about.png) | |
 
 ### 管理后台 (基于 SharedAdmin 通用套件)
 
-<table>
-<tr>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/10-admin-dashboard.png">
-<img src="public/assets/images/website-screenshot/10-admin-dashboard.png" alt="Admin - 控制台" width="100%"/>
-</a>
-<p align="center"><b>控制台仪表盘</b></p>
-</td>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/11-admin-sketchbook.png">
-<img src="public/assets/images/website-screenshot/11-admin-sketchbook.png" alt="Admin - Sketchbook 管理" width="100%"/>
-</a>
-<p align="center"><b>Sketchbook 管理工作台</b></p>
-</td>
-</tr>
+| 控制台仪表盘 | Sketchbook 管理工作台 |
+| :---: | :---: |
+| [![控制台仪表盘](public/assets/images/website-screenshot/10-admin-dashboard.png)](public/assets/images/website-screenshot/10-admin-dashboard.png) | [![Sketchbook 管理工作台](public/assets/images/website-screenshot/11-admin-sketchbook.png)](public/assets/images/website-screenshot/11-admin-sketchbook.png) |
 
-<tr>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/12-admin-comics.png">
-<img src="public/assets/images/website-screenshot/12-admin-comics.png" alt="Admin - 漫画管理" width="100%"/>
-</a>
-<p align="center"><b>漫画管理工作台</b></p>
-</td>
-<td width="50%">
-<a href="public/assets/images/website-screenshot/13-admin-thumbnail-manager.png">
-<img src="public/assets/images/website-screenshot/13-admin-thumbnail-manager.png" alt="Admin - 整站缩略图管理" width="100%"/>
-</a>
-<p align="center"><b>整站缩略图管理中心</b></p>
-</td>
-</tr>
-</table>
+| 漫画管理工作台 | 整站缩略图管理中心 |
+| :---: | :---: |
+| [![漫画管理工作台](public/assets/images/website-screenshot/12-admin-comics.png)](public/assets/images/website-screenshot/12-admin-comics.png) | [![整站缩略图管理中心](public/assets/images/website-screenshot/13-admin-thumbnail-manager.png)](public/assets/images/website-screenshot/13-admin-thumbnail-manager.png) |
 
 ## 📂 目录结构
 
