@@ -19,7 +19,8 @@ $allowDirectAccess = [
     '/admin/css/',
     '/admin/js/',
     '/admin/images/',
-    '/assets/'
+    '/assets/',
+    '/shared-admin/'
 ];
 
 // 检查是否为允许直接访问的目录

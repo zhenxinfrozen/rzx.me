@@ -28,29 +28,6 @@ try {
 // 初始化路由器
 $router = new Router();
 
-// 处理 shared-admin 静态资源请求
-$reqPath = parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH);
-if (strpos($reqPath, '/shared-admin/assets/') === 0) {
-    $filePath = dirname(__DIR__) . '/' . ltrim($reqPath, '/');
-    if (file_exists($filePath) && is_file($filePath)) {
-        $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-        $mimes = [
-            'css'   => 'text/css; charset=UTF-8',
-            'js'    => 'application/javascript; charset=UTF-8',
-            'json'  => 'application/json',
-            'svg'   => 'image/svg+xml',
-            'png'   => 'image/png',
-            'jpg'   => 'image/jpeg',
-            'jpeg'  => 'image/jpeg',
-            'woff'  => 'font/woff',
-            'woff2' => 'font/woff2',
-        ];
-        header('Content-Type: ' . ($mimes[$ext] ?? 'text/plain'));
-        readfile($filePath);
-        exit;
-    }
-}
-
 // 匹配当前路由
 $route = $router->match();
 

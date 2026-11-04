@@ -14,3 +14,7 @@ public/assets/images/*
 !public/assets/images/.gitkeep
 public/assets/videos/*
 !public/assets/videos/.gitkeep
+
+# SharedAdmin public junction/symlink
+public/shared-admin
+
