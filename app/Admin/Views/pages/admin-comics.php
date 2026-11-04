@@ -26,7 +26,13 @@ $_GET['page'] = $_GET['page'] ?? 'comics';
 
 // 加载数据
 if (!isset($comics)) {
-    require_once __DIR__ . '/../../../app/Models/comic_data.php';
+    if (!function_exists('get_all_comics_data')) {
+        $modelFile = defined('APP_PATH') ? APP_PATH . '/Models/comic_data.php' : __DIR__ . '/../../../Models/comic_data.php';
+        if (!file_exists($modelFile)) {
+            $modelFile = __DIR__ . '/../../Models/comic_data.php';
+        }
+        require_once $modelFile;
+    }
     $comics = get_all_comics_data();
 }
 
