@@ -19,4 +19,6 @@ public/assets/videos/*
 
 # SharedAdmin public junction/symlink
 public/shared-admin
+public/shared-header
+public/lab
 
