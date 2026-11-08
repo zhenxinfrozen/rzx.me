@@ -22,3 +22,6 @@ public/shared-admin
 public/shared-header
 public/lab
 
+# lab 实验目录 (含硬编码凭据, 待清理后再考虑纳入版本控制)
+/lab/
+
