@@ -1,34 +1,38 @@
-<!-- app/Views/layouts/footer.php - copied from includes/views/footer.php -->
-<footer class="site-footer">
-    <div class="site-footer__inner">
-        <div class="site-footer__left">
-            <small class="site-footer__meta">v0.7.4:2013-07-22</small>
-        </div>
-        <div class="site-footer__center">
-            <a class="site-footer__link" href="https://rzx.me" target="_blank" rel="noopener">About: rzx.me</a>
-        </div>
-        <div class="site-footer__right">
-            <small class="site-footer__copy">&copy; <span id="footer-year"><?php echo date('Y'); ?></span> Ray</small>
-        </div>
-    </div>
-</footer>
-<?php  ?>
 <?php
+/**
+ * 主站底部 - 基于 shared-layout 公共组件 SiteFooter 渲染
+ *
+ * 组件位置: shared-layout/src/SiteFooter.php
+ * 样式文件: shared-layout/assets/css/footer.css (经 public/shared-layout junction 暴露)
+ * 屏蔽逻辑: 由 public/index.php 根据 $hideFooterPages 控制是否渲染本文件
+ */
 
-    $publicCss = __DIR__ . '/../../../public/assets/css/footer.css';
-    if (file_exists($publicCss)) {
-        echo '<link rel="stylesheet" href="' . htmlspecialchars(rtrim(ASSET_URL, '/'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '/css/footer.css?v=' . filemtime($publicCss) . '">' . PHP_EOL;
-    } else {
-        $cssPath = __DIR__ . '/../css/footer.css';
-        if (file_exists($cssPath)) {
-            echo "<style>\n" . file_get_contents($cssPath) . "\n</style>\n";
-        }
-    }
-?>
+require_once __DIR__ . '/../../../shared-layout/src/SiteFooter.php';
 
-<?php if (!isset($page_id) || ($page_id !== 'sketch' && $page_id !== 'test-sketch-test')): ?>
+echo \SharedLayout\SiteFooter::render([
+    'logo'       => '/assets/images/Avatar100X100.jpg',
+    'logo_file'  => __DIR__ . '/../../../public/assets/images/Avatar100X100.jpg',
+    'brand'      => '颓废动画人',
+    'home_url'   => '/',
+    'description' => [
+        'This site is a portfolio of Ray.',
+        'Hope you enjoy it!',
+    ],
+    'nav' => [
+        '首页 HOME'   => '/',
+        '博客 BLOG'   => '/blog',
+        '常见问题'    => '/faq',
+        '作者 ABOUT'  => '/about',
+    ],
+    'copyright'  => '© 2009-' . date('Y') . ' RAY RUI. ALL RIGHTS RESERVED.',
+    'powered_by' => 'Powered by Ray',
+    // 主站链接走 url() 函数 (支持非伪静态模式)
+    'url_rewriter' => 'url',
+]);
+
+// jQuery CDN with local fallback; sketch 页面已在视图内加载, 跳过
+if (!isset($page_id) || ($page_id !== 'sketch' && $page_id !== 'test-sketch-test')): ?>
 <script>
-// jQuery CDN with local fallback; skip if already present
 (function(){
     function loadLocal(){
         if (window.jQuery) return;
