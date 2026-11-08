@@ -13,8 +13,8 @@ echo \SharedLayout\SiteHeader::render([
     'brand'       => 'RZX.ME',
     'tagline'     => '颓废动画人',
     'home_url'    => '/',
-    'avatar'      => '/assets/images/Avatar100X100.jpg',
-    'avatar_file' => __DIR__ . '/../../../public/assets/images/Avatar100X100.jpg',
+    'logo'      => '/assets/images/Avatar100X100.jpg',
+    'logo_file' => __DIR__ . '/../../../public/assets/images/Avatar100X100.jpg',
     'nav'         => [
         'Home'      => '/',
         'Animation' => '/animation',
