@@ -18,7 +18,7 @@
     RewriteRule ^admin/(assets|css|js|images)/ - [L]
     RewriteRule ^assets/ - [L]
     RewriteRule ^shared-admin/ - [L]
-    RewriteRule ^shared-header/ - [L]
+    RewriteRule ^shared-layout/ - [L]
 
     # 4. 核心路由转发规则
     # 条件1: 请求的文件名不是一个真实存在的文件 (!-f)

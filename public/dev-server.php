@@ -21,7 +21,7 @@ $allowDirectAccess = [
     '/admin/images/',
     '/assets/',
     '/shared-admin/',
-    '/shared-header/',
+    '/shared-layout/',
     '/lab/'
 ];
 

@@ -1,22 +1,22 @@
 <?php
 /**
- * SharedHeader - 可挂载的站点顶部菜单栏组件 (logo + 站点名 + 菜单)
+ * SharedLayout\SiteHeader - 可挂载的站点顶部菜单栏组件 (logo + 站点名 + 菜单)
  *
  * 与 shared-admin 同一思路: 组件独立存放, 各项目自行 require 并传入配置,
  * 样式/结构由组件统一维护, 保证多项目顶部菜单一致。
  *
  * 用法:
- *   require_once <root>/shared-header/src/SiteHeader.php;
- *   echo \SharedHeader\SiteHeader::render([
+ *   require_once <root>/shared-layout/src/SiteHeader.php;
+ *   echo \SharedLayout\SiteHeader::render([
  *       'brand' => 'RZX.ME',
  *       'nav'   => ['Home' => '/', 'About' => '/about'],
  *   ]);
  *
- * 样式文件: shared-header/assets/css/header.css
- *   通过 <root>/public/shared-header 联接(junction)暴露为 /shared-header/assets/...
+ * 样式文件: shared-layout/assets/css/header.css
+ *   通过 <root>/public/shared-layout 联接(junction)暴露为 /shared-layout/assets/...
  */
 
-namespace SharedHeader;
+namespace SharedLayout;
 
 class SiteHeader
 {
@@ -34,7 +34,7 @@ class SiteHeader
      *   active_map   array    'Label' => [额外视为激活的路径前缀...]
      *   current_path string   当前路径, 默认自动检测 (兼容 ?route= 模式)
      *   url_rewriter callable 链接改写函数(如主站的 url()), 默认 null (原样输出)
-     *   assets_url   string   静态资源 URL 前缀, 默认 '/shared-header/assets'
+     *   assets_url   string   静态资源 URL 前缀, 默认 '/shared-layout/assets'
      *   assets_path  string   静态资源磁盘路径, 默认组件自带 assets 目录
      *   fixed        bool     是否置顶(pin)并启用滚动样式, 默认 true
      * }
@@ -55,7 +55,7 @@ class SiteHeader
             $avatar = null;
         }
 
-        $assetsUrl  = rtrim($config['assets_url'] ?? '/shared-header/assets', '/');
+        $assetsUrl  = rtrim($config['assets_url'] ?? '/shared-layout/assets', '/');
         $assetsPath = rtrim($config['assets_path'] ?? (__DIR__ . '/../assets'), '/\\');
 
         $buildUrl = function ($href) use ($urlRewriter) {

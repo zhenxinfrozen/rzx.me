@@ -1,15 +1,15 @@
 <?php
 /**
- * 主站顶部菜单栏 - 基于 shared-header 公共组件渲染
+ * 主站顶部菜单栏 - 基于 shared-layout 公共组件渲染
  *
- * 组件位置: shared-header/src/SiteHeader.php
- * 样式文件: shared-header/assets/css/header.css (经 public/shared-header junction 暴露)
- * 其它项目接入方式见 shared-header/README.md
+ * 组件位置: shared-layout/src/SiteHeader.php
+ * 样式文件: shared-layout/assets/css/header.css (经 public/shared-layout junction 暴露)
+ * 其它项目接入方式见 shared-layout/README.md
  */
 
-require_once __DIR__ . '/../../../shared-header/src/SiteHeader.php';
+require_once __DIR__ . '/../../../shared-layout/src/SiteHeader.php';
 
-echo \SharedHeader\SiteHeader::render([
+echo \SharedLayout\SiteHeader::render([
     'brand'       => 'RZX.ME',
     'tagline'     => '颓废动画人',
     'home_url'    => '/',
