@@ -1,6 +1,23 @@
 {
     "sort_method": "custom_order",
-    "custom_order": [],
+    "custom_order": [
+        "2018-03-29-out",
+        "2022",
+        "Dreams-Wings",
+        "bwfs",
+        "cp",
+        "dgdh",
+        "ft-33343",
+        "jdtt-out",
+        "pic",
+        "png",
+        "ray-test",
+        "rei",
+        "sbpic",
+        "stbrd",
+        "testtesttesttest",
+        "yb"
+    ],
     "prefix_settings": {
         "remove_prefix": true,
         "separator": "-"

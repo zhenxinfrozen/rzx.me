@@ -1,6 +1,6 @@
 {
     "_comment": "统一图片排序配置文件 - 合并single-works和sketchbook的排序信息",
-    "_generated": "2026-03-02T23:14:29+08:00",
+    "_generated": "2026-11-04T21:08:08+08:00",
     "_description": "此文件统一管理所有模块的图片排序配置",
     "modules": {
         "single-works": {
@@ -148,7 +148,7 @@
         },
         "galleries": {
             "_comment": "统一图片排序配置文件 - 合并single-works和sketchbook的排序信息",
-            "_generated": "2026-03-02T23:14:29+08:00",
+            "_generated": "2026-11-04T21:08:08+08:00",
             "_description": "此文件统一管理所有模块的图片排序配置",
             "modules": {
                 "single-works": {
@@ -308,10 +308,16 @@
                     "透视6krita-2022-4-18.jpg"
                 ],
                 "bwfs": [
-                    "11111.jpg",
                     "bbbbf05.jpg",
+                    "11111.jpg",
                     "bbbbf07.jpg",
-                    "wp.gif"
+                    "wp.gif",
+                    "bbbbf01.jpg",
+                    "bbbbf02.jpg",
+                    "bbbbf03.jpg",
+                    "bbbbf04.jpg",
+                    "bbbbf06.jpg",
+                    "bbbbf08.jpg"
                 ]
             }
         },
