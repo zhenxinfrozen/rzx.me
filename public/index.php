@@ -207,8 +207,9 @@ if (isset($page_id) && in_array($page_id, $hideFooterPages)) {
     $hideFooter = true;
 }
 
-// 检查动态gallery页面 (匹配 /gallery-* 模式)
-if (preg_match('/^\/gallery-[^\/]+$/', $currentPath)) {
+// 检查动态gallery页面 (匹配 /gallery-* 模式, 支持 route= 参数和 URL 路径两种形式)
+$routeParam = $_GET['route'] ?? '';
+if (preg_match('/^\/gallery-[^\/]+$/', $currentPath) || preg_match('/^\/gallery-[^\/]+$/', $routeParam)) {
     $hideFooter = true;
 }
 
