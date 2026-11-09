@@ -36,9 +36,29 @@ $site_settings_save_cb = function(array $newSettings) use ($configFile) {
     return file_put_contents($configFile, $content) !== false;
 };
 
-// Git 分支信息
-$git_branch_display = null;
+// Git 分支信息 - 自动检测当前分支
+function detect_git_branch($projectRoot) {
+    $headFile = $projectRoot . '/.git/HEAD';
+    if (!file_exists($headFile)) return null;
+    $content = trim(file_get_contents($headFile));
+    if (strpos($content, 'ref: refs/heads/') === 0) {
+        $branch = substr($content, strlen('ref: refs/heads/'));
+        // main/master 不显示
+        if (in_array($branch, ['main', 'master'])) return null;
+        return $branch;
+    }
+    return null;
+}
+
+$projectRoot = dirname(__DIR__, 3);
+$git_branch_display = detect_git_branch($projectRoot);
 $git_branch_cache = $site_settings['git_branch_cache'] ?? '';
+
+// 如果检测到分支, 自动更新缓存
+if ($git_branch_display && $git_branch_display !== $git_branch_cache) {
+    // 延迟保存, 等用户手动保存时一起写入
+    $_SESSION['git_branch_auto_update'] = $git_branch_display;
+}
 
 // 图标上传配置
 $icon_upload_dir = dirname(__DIR__, 3) . '/public/assets/img/icon/';
