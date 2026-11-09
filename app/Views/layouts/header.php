@@ -15,7 +15,7 @@ $ss = file_exists($siteConfig) ? require $siteConfig : [];
 $logoUrl = $ss['site_icon'] ?? '/assets/images/Avatar100X100.jpg';
 $logoPath = __DIR__ . '/../../../public' . parse_url($logoUrl, PHP_URL_PATH);
 $brandText = $ss['site_name'] ?? 'RZX.ME';
-$taglineText = $ss['site_description'] ?? '颓废动画人';
+$taglineText = $ss['tagline'] ?? '颓废动画人';
 
 echo \SharedLayout\SiteHeader::render([
     'brand'       => $brandText,
