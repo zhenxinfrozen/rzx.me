@@ -49,7 +49,8 @@ if (empty($images)) {
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
 <style>
   /* Gallery专用样式 */
-  html,body{height:100%;margin:0;background:#ffffff;color:#222;overflow-x:hidden}
+  /* 注意: 不要在这里覆盖 body 的 height/display, 否则会破坏 shared-layout footer 的 sticky 布局 */
+  body{margin:0;background:#ffffff;color:#222;overflow-x:hidden}
   .gallery-wrap{
     height:95vh;display:flex;
     flex-direction:column;
