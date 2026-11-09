@@ -9,14 +9,19 @@
 
 require_once __DIR__ . '/../../../shared-layout/src/SiteFooter.php';
 
+// 读取网站配置
+$siteConfig = __DIR__ . '/../../../app/Config/site_settings.php';
+$ss = file_exists($siteConfig) ? require $siteConfig : [];
+$logoUrl = $ss['site_icon'] ?? '/assets/images/Avatar100X100.jpg';
+$logoPath = __DIR__ . '/../../../public' . parse_url($logoUrl, PHP_URL_PATH);
+
 echo \SharedLayout\SiteFooter::render([
-    'logo'       => '/assets/images/Avatar100X100.jpg',
-    'logo_file'  => __DIR__ . '/../../../public/assets/images/Avatar100X100.jpg',
-    'brand'      => '颓废动画人',
+    'logo'       => $logoUrl,
+    'logo_file'  => $logoPath,
+    'brand'      => $ss['site_name'] ?? 'RZX.ME',
     'home_url'   => '/',
     'description' => [
-        'This site is a portfolio of Ray.',
-        'Hope you enjoy it!',
+        $ss['site_description'] ?? '颓废动画人的个人网站，涂鸦和作品练习',
     ],
     'nav' => [
         '首页 HOME'   => '/',
