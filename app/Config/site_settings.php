@@ -8,7 +8,7 @@ return [
     'site_description' => '颓废动画人的个人网站，涂鸦和作品练习',
     'site_icon' => '/assets/images/Avatar100X100+1.png',
     'primary_color' => '#dfb84e',
-    'header_bg' => 'rgba(184,117,172,0.5)',
+    'header_bg' => 'rgba(255,255,255,0.5)',
     'brand_color' => '#58ee44',
     'nav_text_color' => '#696969',
     'show_version' => true,
