@@ -60,9 +60,9 @@ if ($git_branch_display && $git_branch_display !== $git_branch_cache) {
     $_SESSION['git_branch_auto_update'] = $git_branch_display;
 }
 
-// 图标上传配置
-$icon_upload_dir = dirname(__DIR__, 3) . '/public/assets/img/icon/';
-$icon_upload_url_prefix = '/assets/img/icon/';
+// 图标上传配置 - rzx.me 实际路径
+$icon_upload_dir = dirname(__DIR__, 3) . '/public/assets/images/';
+$icon_upload_url_prefix = '/assets/images/';
 
 // 页面标题
 $page_title = '网站配置';
