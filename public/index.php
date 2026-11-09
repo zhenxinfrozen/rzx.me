@@ -161,6 +161,24 @@ $meta_author = $pageData['meta_author'] ?? 'Ray';
     <?php if ($css_file): ?>
     <link rel="stylesheet" type="text/css" href="<?php echo htmlspecialchars($css_file, ENT_QUOTES, 'UTF-8'); ?>" />
     <?php endif; ?>
+    <?php
+    // 从 site_settings.php 读配色配置, 注入到 CSS 变量
+    $siteSettingsFile = __DIR__ . '/../app/Config/site_settings.php';
+    if (file_exists($siteSettingsFile)) {
+        $ss = require $siteSettingsFile;
+    } else {
+        $ss = [];
+    }
+    ?>
+    <style>
+        :root {
+            --primary-color: <?php echo htmlspecialchars($ss['primary_color'] ?? '#4e73df'); ?>;
+            --accent: <?php echo htmlspecialchars($ss['primary_color'] ?? '#4e73df'); ?>;
+            --site-bg: <?php echo htmlspecialchars($ss['header_bg'] ?? 'rgba(255,255,255,0.5)'); ?>;
+            --brand-color: <?php echo htmlspecialchars($ss['brand_color'] ?? '#333333'); ?>;
+            --text-muted: <?php echo htmlspecialchars($ss['nav_text_color'] ?? '#777777'); ?>;
+        }
+    </style>
 </head>
 <body id="<?php echo htmlspecialchars($page_id, ENT_QUOTES, 'UTF-8'); ?>">
 
@@ -207,8 +225,9 @@ if (isset($page_id) && in_array($page_id, $hideFooterPages)) {
     $hideFooter = true;
 }
 
-// 检查动态gallery页面 (匹配 /gallery-* 模式)
-if (preg_match('/^\/gallery-[^\/]+$/', $currentPath)) {
+// 检查动态gallery页面 (匹配 /gallery-* 模式, 支持 route= 参数和 URL 路径两种形式)
+$routeParam = $_GET['route'] ?? '';
+if (preg_match('/^\/gallery-[^\/]+$/', $currentPath) || preg_match('/^\/gallery-[^\/]+$/', $routeParam)) {
     $hideFooter = true;
 }
 
