@@ -11,7 +11,7 @@ return [
     'brand_color' => '#58ee44',
     'nav_text_color' => '#696969',
     'show_version' => true,
-    'version_text' => 'v0.8.1',
+    'version_text' => 'v5.0.3',
     'use_git_branch' => true,
     'git_branch_cache' => '',
 ];
